@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 namespace Starvers.BossSystem.Bosses.Clover
 {
 	using Base;
+	using Microsoft.Xna.Framework;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public partial class StarverManager : StarverBoss
 	{
-
+		
 	}
 }
