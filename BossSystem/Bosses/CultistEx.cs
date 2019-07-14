@@ -14,11 +14,13 @@ namespace Starvers.BossSystem.Bosses
 	public class CultistEx : StarverBoss
 	{
 		#region Fields
+		private bool TrackingTarget;
 		/// <summary>
 		/// 计算出生多久(确保邪教有图像)
 		/// </summary>
 		private int SpawnCount;
 		private IProjSet FireBalls = new ProjDelay();
+		private IProjSet ShadowBalls = new ProjDelay(90);
 		#endregion
 		#region ctor
 		public CultistEx() : base(3)
@@ -38,6 +40,7 @@ namespace Starvers.BossSystem.Bosses
 			SpawnCount = 0;
 			RealNPC.aiStyle = 84;
 			RealNPC.dontTakeDamage = true;
+			TrackingTarget = true;
 		}
 		#endregion
 		#region RealAI
@@ -45,7 +48,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			#region Common
 			#region StartAnimation
-			if (SpawnCount < 60 * 10)
+			if (SpawnCount < 60 * 15)
 			{
 				SpawnCount++;
 				return;
@@ -57,7 +60,7 @@ namespace Starvers.BossSystem.Bosses
 			}
 			#endregion
 			#region TrackingPlyer
-			if (Timer % 60 == 0)
+			if (TrackingTarget && Timer % 60 == 0) 
 			{
 				WhereToGo = (Vector)(TargetPlayer.Center);
 				WhereToGo.Y -= 16 * 15;
@@ -81,11 +84,11 @@ namespace Starvers.BossSystem.Bosses
 						ResetMode();
 						break;
 					}
-					if (Timer % 62 == 1)
+					if (Timer % 43 == 1)
 					{
 						PushFireBall();
 					}
-					if (Timer % 62 == 44)
+					if (Timer % 43 == 32)
 					{
 						FireBalls.Launch();
 						StarverAI[0]++;
@@ -109,14 +112,51 @@ namespace Starvers.BossSystem.Bosses
 				#endregion
 				#region ShadowFireBall
 				case BossMode.CultistShadowFireball:
+					if(StarverAI[0] > 7)
+					{
+						ShadowBalls.Launch();
+						StarverAI[0] = 0;
+						ResetMode();
+						break;
+					}
+					if (Timer % 55 == 0)
+					{
+						if (StarverAI[0]++ < 4)
+						{
+							FillShadowFireBall();
+						}
+						if(StarverAI[0] > 2)
+						{
+							ShadowBalls.Launch(30);
+						}
+					}
 					break;
 				#endregion
 				#region Mist
 				case BossMode.Mist:
+					if(modetime > 60 * 5)
+					{
+						ResetMode();
+						break;
+					}
+					if(Timer % 56 == 0)
+					{
+						Mist();
+					}
 					break;
 				#endregion
 				#region SummonFollows
 				case BossMode.SummonFollows:
+					if(modetime > 60 * 5)
+					{
+						SummonFollows();
+						ResetMode();
+						break;
+					}
+					if (Timer % 22 == 0)
+					{
+						Proj(Center + Rand.NextVector2(16 * 30, 16 * 30), Rand.NextVector2(5), ProjectileID.AncientDoomProjectile, 252);
+					}
 					break;
 					#endregion
 			}
@@ -124,6 +164,23 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region AIS
+		#region SummonFollows
+		private new void SummonFollows()
+		{
+			TrackingTarget = true;
+			for (int i = 0; i < 4; i++)
+			{
+				NewNPC((Vector)Center, NewByPolar(PI * i / 2, 33), NPCID.AncientCultistSquidhead, 30000, 60000);
+			}
+		}
+		#endregion
+		#region Mist
+		private unsafe void Mist()
+		{
+			StarverAI[2] = (float)(TargetPlayer.Center-Center).Angle();
+			ProjSector(Center, 16, 16 * 3, StarverAI[2], PI * 2 / 3, 258, ProjectileID.CultistBossIceMist, 7, 2, -6e3f, 1);
+		}
+		#endregion
 		#region Lightning
 		private unsafe void Lightning()
 		{
@@ -136,12 +193,22 @@ namespace Starvers.BossSystem.Bosses
 		#region PushFireBall
 		private void PushFireBall()
 		{
-			int[] result = ProjCircleWithReturn(Center, 1, 2, ProjectileID.CultistBossFireBall, 10, 243, 2);
+			int[] result = ProjCircleWithReturn(Center, 1, 6, ProjectileID.CultistBossFireBall, 10, 243, 2);
 			vector = (Vector)(TargetPlayer.Center - Center);
 			vector.Length = 18;
 			foreach(var idx in result)
 			{
 				FireBalls.Push(idx, vector);
+			}
+		}
+		#endregion
+		#region FillShadowFireBall
+		private void FillShadowFireBall()
+		{
+			int[] Indexes = ProjCircleWithReturn(Center, 16 * 10, Rand.NextVector2(4), ProjectileID.CultistBossFireBallClone, 30, 143);
+			for (int i = 0; i < Indexes.Length; i++)
+			{
+				ShadowBalls.Push(Indexes[i], NewByPolar(PI * 2 * i / Indexes.Length, 23));
 			}
 		}
 		#endregion
@@ -170,6 +237,7 @@ namespace Starvers.BossSystem.Bosses
 				#region Mist
 				case BossMode.Mist:
 					Mode = BossMode.SummonFollows;
+					TrackingTarget = false;
 					break;
 				#endregion
 				#region SummonFollows
