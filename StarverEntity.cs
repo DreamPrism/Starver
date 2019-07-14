@@ -209,6 +209,26 @@ namespace Starvers
 			}
 			return Indexes;
 		}
+		/// <summary>
+		/// 弹幕圆(返回所有索引)
+		/// </summary>
+		/// <param name="Center"></param>
+		/// <param name="r"></param>
+		/// <param name="Vel">速度</param>
+		/// <param name="Type"></param>
+		/// <param name="number">弹幕总数</param>
+		/// <param name="Damage">伤害(已被加成)</param>
+		/// <param name="direction">0:不动 1:向内 2:向外</param>
+		public int[] ProjCircleWithReturn(Vector2 Center, float r, Vector2 Vel, int Type, int number, int Damage, float ai0 = 0, float ai1 = 0)
+		{
+			int[] Indexes = new int[number];
+			double averagerad = Math.PI * 2 / number;
+			for (int i = 0; i < number; i++)
+			{
+				Indexes[i] = Proj(Center + NewByPolar(averagerad * i, r), Vel, Type, Damage, 4f, ai0, ai1);
+			}
+			return Indexes;
+		}
 		#endregion
 		#region NewProjSector
 		/// <summary>
