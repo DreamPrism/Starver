@@ -17,8 +17,8 @@ namespace Starvers.BossSystem.Bosses
 		#region Fields
 		protected Vector2 UnitY = new Vector2(0, 16 * 14);
 		protected Vector2 UnitX = new Vector2(16, 0);
-		protected short Ammo = ProjectileID.VortexLaser;
-		protected short wait = 1;
+		protected int Ammo = ProjectileID.VortexLaser;
+		protected int wait = 1;
 		#endregion
 		#region ctor
 		public unsafe StarverWander():base(4)
@@ -42,7 +42,7 @@ namespace Starvers.BossSystem.Bosses
 			StarverAI[0] = 1;
 			UnitX.X = ExVersion ? 26 : 16;
 			Ammo = ExVersion ? ProjectileID.VortexLaser : ProjectileID.VortexAcid;
-			wait = ExVersion ? (short)2 : (short)1;
+			wait = ExVersion ? 2 : 1;
 		}
 		#endregion
 		#region RealAI
@@ -184,7 +184,6 @@ namespace Starvers.BossSystem.Bosses
 				WhereToGo = new Vector(16 * 30, 0);
 			}
 			WhereToGo += (Vector)TargetPlayer.Center;
-
 			FakeVelocity = WhereToGo - (Vector)Center;
 			FakeVelocity /= 10;
 			#endregion

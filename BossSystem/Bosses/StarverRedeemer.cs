@@ -46,11 +46,11 @@ namespace Starvers.BossSystem.Bosses
 		protected void Spawn(Vector2 where, int lvl = Criticallevel, double AngleStart = 0, float radium = -1)
 		{
 			Spawn(where, lvl);
-			vector.Angle = AngleStart;
 			if (radium > 0)
 			{
 				vector.X = radium;
 			}
+			vector.Angle = AngleStart;
 		}
 		#endregion
 		#region RealAI
@@ -135,7 +135,7 @@ namespace Starvers.BossSystem.Bosses
 					#endregion
 			}
 			SummonFollows();
-			vector.Angle+= PI / 90;
+			vector.Angle += PI / 120;
 			Center = TargetPlayer.Center +  vector;
 		}
 		#endregion
