@@ -111,6 +111,7 @@
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.ProjSet.cs" />
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.ProjStack.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.cs" />
+    <Compile Include="BossSystem\Bosses\Clover\StarverManager.FinalAdjudicator.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.FinalRedeemer.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.FinalWander.cs" />
     <Compile Include="BossSystem\Bosses\CultistEx.cs" />

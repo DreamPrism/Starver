@@ -10,5 +10,6 @@ namespace Starvers.BossSystem.Bosses.Clover
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public partial class StarverManager : StarverBoss
 	{
+
 	}
 }

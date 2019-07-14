@@ -17,6 +17,9 @@ namespace Starvers.BossSystem.Bosses.Clover
 			private StarverManager Manager;
 			private Vector ForRounding;
 			#endregion
+			#region DamageIndex
+			public override float DamageIndex => Manager.DamageIndex;
+			#endregion
 			#region Spawn
 			public void Spawn(Vector2 where, int lvl = 2000,StarverManager manager = null)
 			{

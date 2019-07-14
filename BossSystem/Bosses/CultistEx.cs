@@ -50,6 +50,8 @@ namespace Starvers.BossSystem.Bosses
 			#region StartAnimation
 			if (SpawnCount < 60 * 15)
 			{
+				RealNPC.Center = TargetPlayer.Center;
+				RealNPC.position.Y -= 16 * 16;
 				SpawnCount++;
 				return;
 			}
