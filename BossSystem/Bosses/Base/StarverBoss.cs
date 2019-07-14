@@ -305,6 +305,72 @@ namespace Starvers.BossSystem.Bosses.Base
 			mode = BossMode.WaitForMode;
 		}
 		#endregion
+		#region Spawn_Clover
+		protected unsafe void Spawn_Clover(Vector2 where, int lvl = Criticallevel)
+		{
+			if (_active)
+			{
+				return;
+			}
+			_active = true;
+			Level = lvl;
+			ExVersion = Level > Criticallevel;
+			AliveBoss++;
+			Index = 0;
+			for(int i=0;i<Main.npc.Length;i++)
+			{
+				if(!Main.npc[i].active)
+				{
+					Index = i;
+					break;
+				}
+			}
+			Main.npc[Index] = new NPC
+			{
+				type = NPCID.MoonLordCore
+			};
+			SendData();
+			Defense = DefaultDefense * (int)(100 * Math.Log(Level));
+			RealNPC.aiStyle = -1;
+			RealNPC.Center += Rand.NextVector2(54f, 54f);
+			RealNPC.noTileCollide = true;
+			//FakeVelocity = new Vector(ref RealNPC.velocity);
+			LifeMax = DefaultLife;
+			LifesMax = (int)(Level / (float)Criticallevel * DefaultLifes);
+			int count = TShock.Utils.ActivePlayers();
+			switch (LifeperPlayerType)
+			{
+				case ByLife:
+					LifeMax *= count;
+					break;
+				case ByLifes:
+					LifesMax *= count;
+					break;
+			}
+			Lifes = LifesMax;
+			LastCenter = Center;
+			Timer = 0;
+			if (ExVersion && FullName != null)
+			{
+				DisplayName = FullName;
+			}
+			else
+			{
+				DisplayName = Name;
+			}
+			if (!Silence)
+			{
+				TSPlayer.All.SendMessage(Language.GetTextValue("Announcement.HasAwoken", DisplayName), Color.MediumPurple);
+			}
+			modetime = 0;
+			LastCenter = Center;
+			for (float* begin = StarverAI, end = StarverAI + NumOfAIs; begin != end;)
+			{
+				*begin++ = 0;
+			}
+			mode = BossMode.WaitForMode;
+		}
+		#endregion
 		#region ToString
 		public override string ToString()
 		{
