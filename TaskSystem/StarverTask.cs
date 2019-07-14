@@ -106,7 +106,7 @@ namespace Starvers.TaskSystem
 						Story = "血肉与脊骨";
 						meterial = ItemID.Vertebrae;
 						mushroom = ItemID.ViciousMushroom;
-						Rewards[0] = new TaskItem(ItemID.BloodSpine, 5);
+						Rewards[0] = new TaskItem(ItemID.BloodySpine, 5);
 					}
 					else
 					{
@@ -505,7 +505,7 @@ namespace Starvers.TaskSystem
 					Needs = new TaskItem[]
 					{
 						new TaskItem(ItemID.Ichor, 99),
-						new TaskItem(ItemID.CrimsonCrate, 20),
+						new TaskItem(ItemID.CrimsonFishingCrate, 20),
 						new TaskItem(ItemID.SoulofNight, 200),
 						new TaskItem(ItemID.SoulofLight, 200),
 						new TaskItem(ItemID.Vertebrae, 99)
@@ -561,7 +561,7 @@ namespace Starvers.TaskSystem
 					{
 						new TaskItem(3817, 500, 0),
 						new TaskItem(109, 50, 0),
-						new TaskItem(ItemID.EtherianMana, 500).
+						new TaskItem(ItemID.DD2EnergyCrystal, 500),
 						new TaskItem(3580)
 					};
 					Rewards = new TaskItem[]
@@ -578,7 +578,7 @@ namespace Starvers.TaskSystem
 					Needs = new TaskItem[]
 					{
 						new TaskItem(3456, 400, 0),
-						new TaskItem(ItemID.TruffleWorm, 10).
+						new TaskItem(ItemID.TruffleWorm, 10),
 						new TaskItem(1164, 1, 0),
 						new TaskItem(1553, 1, 82)
 					};
@@ -598,7 +598,7 @@ namespace Starvers.TaskSystem
 					Needs = new TaskItem[]
 					{
 						new TaskItem(3459, 400, 0),
-						new TaskItem(ItemID.TruffleWorm, 10).
+						new TaskItem(ItemID.TruffleWorm, 10),
 						new TaskItem(2676, 200, 0),
 						new TaskItem(3571, 1, 83)
 					};
@@ -618,7 +618,7 @@ namespace Starvers.TaskSystem
 					Needs = new TaskItem[]
 					{
 						new TaskItem(3457, 400, 0),
-						new TaskItem(ItemID.TruffleWorm, 10).
+						new TaskItem(ItemID.TruffleWorm, 10),
 						new TaskItem(1101, 300, 0),
 						new TaskItem(905, 1, 0),
 						new TaskItem(3541, 1, 60)
@@ -639,7 +639,7 @@ namespace Starvers.TaskSystem
 					Needs = new TaskItem[]
 					{
 						new TaskItem(3458, 400, 0),
-						new TaskItem(ItemID.TruffleWorm, 10).
+						new TaskItem(ItemID.TruffleWorm, 10),
 						new TaskItem(3801, 1, 0),
 						new TaskItem(3872, 1, 0),
 						new TaskItem(3873, 1, 0),
