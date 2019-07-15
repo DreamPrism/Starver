@@ -81,7 +81,7 @@ namespace Starvers.BossSystem.Bosses
 			Mode = BossMode.DeathsTwinkle;
 			RealNPC.type = NPCID.LunarTowerStardust;
 			vector.Y = 0;
-			vector.X = ExVersion ? 16 * 23 : 16 * 16;
+			vector.X = ExVersion ? 16 * 33 : 16 * 26;
 			Drops = ExVersion ? DropsEx : DropsNormal;
 		}
 		protected void Spawn(Vector2 where, int lvl, double AngleStart, float radium = -1)
@@ -177,7 +177,7 @@ namespace Starvers.BossSystem.Bosses
 					#endregion
 			}
 			SummonFollows();
-			if (Level == 4000)
+			if (Level > 3000)
 			{
 				vector.Angle += PI / 120;
 			}

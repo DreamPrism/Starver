@@ -240,11 +240,31 @@ namespace Starvers
 			{
 				MoonIndex = NewMoon();
 			}
-			else if(Main.npc[MoonIndex].type == NPCID.MoonLordCore && Main.npc[MoonIndex].active != false)
+			else if(
+				Main.npc[MoonIndex].type == NPCID.MoonLordCore &&
+				Main.npc[MoonIndex].active == false)
 			{
 				Main.npc[MoonIndex].active = true;
 			}
 			Main.npc[MoonIndex].type = NPCID.MoonLordCore;
+			Main.npc[MoonIndex].aiStyle = -1;
+			Main.npc[MoonIndex].Center = Center;
+			NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, MoonIndex);
+		}
+		public void UpdateMoonClear()
+		{
+			if (MoonIndex < 0)
+			{
+				return;
+			}
+			else if (
+				Main.npc[MoonIndex].type == NPCID.MoonLordCore &&
+				Main.npc[MoonIndex].active != false &&
+				Main.npc[MoonIndex].aiStyle == -1)
+			{
+				Main.npc[MoonIndex].active = false;
+			}
+			Main.npc[MoonIndex].type = 0;
 			Main.npc[MoonIndex].aiStyle = -1;
 			Main.npc[MoonIndex].Center = Center;
 			NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, MoonIndex);

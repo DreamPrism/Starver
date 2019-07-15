@@ -29,6 +29,7 @@ namespace Starvers.WeaponSystem.Weapons
 		/// </summary>
 		public int Career { get; protected set; }
 		public int Index { get; private set; }
+		public string Name { get; private set; }
 		#endregion
 		#region ctor
 		public Weapon(int index,int ItemType,int ProjType,int WhichCareer,int damage)
@@ -38,6 +39,7 @@ namespace Starvers.WeaponSystem.Weapons
 			ProjID = ProjType;
 			Career = WhichCareer;
 			Damage = damage;
+			Name = GetType().Name;
 		}
 		#endregion
 		#region Methods

@@ -77,7 +77,7 @@ namespace Starvers.BossSystem.Bosses
 			base.BeDown();
 			if(ExVersion && EndTrial)
 			{
-				StarverPlayer.All.sendmesage("你们不过是侥幸罢了...", Color.HotPink);
+				StarverPlayer.All.SendMessage("你们不过是侥幸罢了...", Color.HotPink);
 				EndTrialProcess++;
 			}
 		}

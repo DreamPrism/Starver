@@ -420,6 +420,17 @@ namespace Starvers
 					player.UpdateMoon();
 				}
 			}
+			else
+			{
+				foreach (var player in Players)
+				{
+					if (player is null)
+					{
+						continue;
+					}
+					player.UpdateMoonClear();
+				}
+			}
 			#endregion
 			#region SetSkillCanUse
 			if(Config.EnableBoss)

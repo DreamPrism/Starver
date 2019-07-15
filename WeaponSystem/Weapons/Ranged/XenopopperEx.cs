@@ -15,7 +15,7 @@ namespace Starvers.WeaponSystem.Weapons.Ranged
 		#region Fields
 		#endregion
 		#region ctor
-		public XenopopperEx() : base(3, Terraria.ID.ItemID.Xenopopper, Terraria.ID.ProjectileID.Xenopopper, CareerType.Ranged, 223)
+		public XenopopperEx() : base(3, Terraria.ID.ItemID.Xenopopper, Terraria.ID.ProjectileID.ElectrosphereMissile, CareerType.Ranged, 223)
 		{
 			
 		}
@@ -29,7 +29,7 @@ namespace Starvers.WeaponSystem.Weapons.Ranged
 		#region UseItem
 		public override void UseWeapon(StarverPlayer player, Vector Velocity, int lvl, TShockAPI.GetDataHandlers.NewProjectileEventArgs args)
 		{
-			Thread.Sleep(110);
+			Thread.Sleep(90);
 			player.ProjCircle(Terraria.Main.projectile[args.Index].Center, 16 * 5, 23, ProjID, 6, CalcDamage(lvl));
 		}
 		#endregion

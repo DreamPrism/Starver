@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+ using System.Threading;
+using Microsoft.Xna.Framework;
 
 namespace Starvers.BossSystem.Bosses.Clover
 {
 	using Base;
-	using Microsoft.Xna.Framework;
 	using Starvers.WeaponSystem;
-	using Terraria.ID;
+    using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public partial class StarverManager : StarverBoss
 	{
@@ -48,6 +49,38 @@ namespace Starvers.BossSystem.Bosses.Clover
 			Deaths.KillMe();
 			Wither.KillMe();
 			TOFOUT.KillMe();
+		}
+		#endregion
+		#region Fail
+		public override void OnFail()
+		{
+			base.OnFail();
+			if (ExVersion && EndTrial)
+			{
+				StarverPlayer.All.SendMessage("世界正在崩塌...", Color.Black);
+				int idx;
+				for (int i = 0; i < 10; i++)
+				{
+					foreach (var ply in Starver.Players)
+					{
+						idx = Terraria.NPC.NewNPC((int)ply.Center.X, (int)ply.Center.Y, NPCID.MoonLordCore);
+						Terraria.NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, idx);
+						Terraria.Main.npc[idx].aiStyle = -1;
+					}
+					Thread.Sleep(1000);
+				}
+				TShockAPI.TShock.Utils.StopServer(true, "你们失败了...");
+			}
+		}
+		#endregion
+		#region Downed
+		protected override void BeDown()
+		{
+			base.BeDown();
+			if(ExVersion && EndTrial)
+			{
+				EndTrialProcess++;
+			}
 		}
 		#endregion
 		#region Spawn
