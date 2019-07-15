@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class DarkMageEx : StarverBoss
@@ -36,6 +37,10 @@ namespace Starvers.BossSystem.Bosses
 			DamagedIndex = 0.04f;
 			DefaultLife = 32500;
 			IgnoreDistance = true;
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[]{Currency.Magic},18,19,1)
+			};
 		}
 		#endregion
 		#region RealAI

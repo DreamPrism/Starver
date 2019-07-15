@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public partial class StarverManager : StarverBoss
@@ -29,6 +30,14 @@ namespace Starvers.BossSystem.Bosses.Clover
 			DefaultDefense = 100;
 			DefaultLife = 6000000;
 			DefaultLifes = 1000;
+			Drops = new DropItem[] 
+			{
+				new DropItem(new int[] { ItemID.CultistBossBag }, 20, 21),
+				new DropItem(new int[] { Currency.Melee }, 99 / 4, 80),
+				new DropItem(new int[] { Currency.Ranged }, 99 / 4, 80),
+				new DropItem(new int[] { Currency.Magic }, 99 / 4, 80),
+				new DropItem(new int[] { Currency.Minion }, 99 / 4, 80),
+			};
 		}
 		#endregion
 		#region KillMe

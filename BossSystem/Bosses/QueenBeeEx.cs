@@ -10,6 +10,7 @@ namespace Starvers.BossSystem.Bosses
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using BigInt = System.Numerics.BigInteger;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 
 	public class QueenBeeEx : Base.StarverBoss
 	{
@@ -28,6 +29,10 @@ namespace Starvers.BossSystem.Bosses
 			{
 				StarverAI[0] = 0;
 			}
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[]{Currency.Ranged,Currency.Melee }, 3, 7, 0.53f)
+			};
 		}
 		#endregion
 		#region Spawn

@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
@@ -50,6 +51,11 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLife = 262500;
 			DefaultLifes = 60;
 			RawType = NPCID.BrainofCthulhu;
+			Drops = new DropItem[] 
+			{
+				new DropItem(new int[] { Currency.Magic, Currency.Melee }, 3, 7, 0.55555f),
+				new DropItem(new int[] { Currency.Ranged }, 1, 3, 0.16f)
+			};
 		}
 		#endregion
 		#region dtor

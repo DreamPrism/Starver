@@ -8,7 +8,8 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using System.Reflection;
+	using Starvers.WeaponSystem;
+	using System.Reflection;
     using System.Runtime.InteropServices;
 	using Terraria;
 	using Terraria.ID;
@@ -69,6 +70,14 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLife = 425000;
 			DefaultLifes = 100;
 			DefaultDefense = 28;
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[]{ Currency.Minion, Currency.Magic }, 1, 28),
+				new DropItem(new int[]{ Currency.Minion, Currency.Magic }, 1, 28),
+				new DropItem(new int[]{ Currency.Minion, Currency.Magic }, 1, 28),
+				new DropItem(new int[]{ Currency.Minion, Currency.Magic }, 1, 28),
+				new DropItem(new int[]{ Currency.Minion, Currency.Magic }, 1, 28),
+			};
 		}
 		#endregion
 		#region Spawn

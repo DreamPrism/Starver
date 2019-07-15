@@ -31,6 +31,12 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLife = 505000;
 			DefaultLifes = 150;
 			DefaultDefense = 28;
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[]{ ItemID.WhiteCultistArcherBanner }, 23, 49, 0.35f),
+				new DropItem(new int[]{ ItemID.WhiteCultistFighterBanner }, 23, 49, 0.35f),
+				new DropItem(new int[]{ ItemID.WhiteCultistCasterBanner }, 23, 49, 0.35f),
+			};
 		}
 		#endregion
 		#region Spawn

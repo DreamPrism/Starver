@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
@@ -19,6 +20,18 @@ namespace Starvers.BossSystem.Bosses
 		protected List<int> SummonList = new List<int>();
 		protected int[] param1 = new int[2] { -1, 1 };
 		protected short inter;
+		private DropItem[] DropsNormal = new DropItem[]
+		{
+			new DropItem(new int[]{ Currency.Minion }, 15, 30, 0.73f),
+			new DropItem(new int[]{ Currency.Minion }, 15, 30, 0.73f),
+			new DropItem(new int[]{ Currency.Minion }, 15, 30, 0.73f),
+		};
+		private DropItem[] DropsEx = new DropItem[]
+		{
+			new DropItem(new int[]{ Currency.Minion }, 30, 55),
+			new DropItem(new int[]{ Currency.Minion }, 30, 55),
+			new DropItem(new int[]{ Currency.Minion }, 30, 55),
+		};
 		#endregion
 		#region ctor
 		public StarverRedeemer():base(4)
@@ -43,6 +56,7 @@ namespace Starvers.BossSystem.Bosses
 			RealNPC.type = NPCID.LunarTowerStardust;
 			vector.Y = 0;
 			vector.X = ExVersion ? 16 * 10 : 16 * 16;
+			Drops = ExVersion ? DropsEx : DropsNormal;
 		}
 		protected void Spawn(Vector2 where, int lvl, double AngleStart, float radium = -1)
 		{

@@ -71,7 +71,7 @@ namespace Starvers.WeaponSystem
 			new VortexBeaterEx(),
 			new PhantasmEx(),
 			new PhantomPhoenix(),
-
+			new XenopopperEx()
 		};
 		private static Weapon[] Magic =
 		{

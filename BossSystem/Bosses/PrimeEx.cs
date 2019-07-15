@@ -8,7 +8,9 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using Terraria.ID;
+	using Starvers.WeaponSystem;
+	using System.Threading;
+	using Terraria.ID;
     using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class PrimeEx : StarverBoss
 	{
@@ -34,6 +36,11 @@ namespace Starvers.BossSystem.Bosses
 			{
 				Arms[i] = new NPCSystem.NPCs.PrimeExArm();
 			}
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[] {Currency.Melee },9,15,0.75f),
+				new DropItem(new int[] {Currency.Ranged, Currency.Minion },9,15,0.75f),
+			};
 		}
 		#endregion
 		#region LifeDown

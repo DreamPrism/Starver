@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class RetinazerEx : StarverBoss
@@ -29,6 +30,14 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLife = 425000;
 			DefaultLifes = 100;
 			DefaultDefense = 28;
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[]{ Currency.Ranged }, 1, 28, 0.5f),
+				new DropItem(new int[]{ Currency.Ranged }, 1, 28, 0.5f),
+				new DropItem(new int[]{ Currency.Ranged }, 1, 28, 0.5f),
+				new DropItem(new int[]{ Currency.Ranged }, 1, 28, 0.5f),
+				new DropItem(new int[]{ Currency.Ranged }, 1, 28, 0.5f),
+			};
 		}
 		#endregion
 		#region Spawn

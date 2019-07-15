@@ -8,7 +8,8 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
     using Microsoft.Xna.Framework;
-    using System.Threading;
+	using Starvers.WeaponSystem;
+	using System.Threading;
     using Terraria;
     using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
@@ -27,6 +28,10 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLife = 230000;
 			DefaultLifes = 50;
 			vector.X = 16 * 20;
+			Drops = new DropItem[] 
+			{
+				new DropItem(new int[] { Currency.Melee }, 1, 5, 0.4f)
+			};
 		}
 		#endregion
 		#region Spawn

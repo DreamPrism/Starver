@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class PigronEx : StarverBoss
@@ -32,6 +33,11 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLifes = 80;
 			DamagedIndex = 0.017f;
 			LifeperPlayerType = ByLifes;
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[] { Currency.Ranged,Currency.Melee }, 7, 12, 0.7f),
+				new DropItem(new int[] { Currency.Magic }, 7, 10, 0.8f),
+			};
 		}
 		#endregion
 		#region Spawn

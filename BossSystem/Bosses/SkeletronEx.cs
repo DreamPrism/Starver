@@ -8,7 +8,8 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using Terraria;
+	using Starvers.WeaponSystem;
+	using Terraria;
     using Terraria.ID;
     using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class SkeletronEx : StarverBoss
@@ -26,6 +27,11 @@ namespace Starvers.BossSystem.Bosses
 			DefaultDefense = 30;
 			DefaultLife = 310000;
 			DefaultLifes = 70;
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[]{Currency.Melee},3,5,0.8f),
+				new DropItem(new int[]{ Currency.Magic},1,11,1,false)
+			};
 		}
 		#endregion
 		#region Spawn

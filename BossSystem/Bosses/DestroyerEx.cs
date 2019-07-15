@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class DestroyerEx : StarverBoss
@@ -27,6 +28,14 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLife = 560000;
 			DefaultLifes = 100;
 			DefaultDefense = 40;
+			Drops = new DropItem[]
+			{
+				new DropItem(new int[]{ Currency.Melee }, 1, 28, 0.5f),
+				new DropItem(new int[]{ Currency.Melee }, 1, 28, 0.5f),
+				new DropItem(new int[]{ Currency.Melee }, 1, 28, 0.5f),
+				new DropItem(new int[]{ Currency.Melee }, 1, 28, 0.5f),
+				new DropItem(new int[]{ Currency.Melee }, 1, 28, 0.5f),
+			};
 		}
 		#endregion
 		#region Spawn

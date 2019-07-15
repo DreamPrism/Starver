@@ -9,6 +9,7 @@ namespace Starvers.BossSystem.Bosses
 	using System.Runtime.InteropServices;
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class StarverAdjudicator : StarverBoss
@@ -16,6 +17,18 @@ namespace Starvers.BossSystem.Bosses
 		#region Field
 		protected Vector GravityVel = new Vector(0, 25);
 		protected unsafe short* InvTypes; //{ ProjectileID.RocketSkeleton, ProjectileID.NebulaLaser, ProjectileID.SaucerScrap, ProjectileID.SaucerMissile };
+		private DropItem[] DropsNormal = new DropItem[]
+		{
+			new DropItem(new int[]{ Currency.Magic }, 15, 30, 0.73f),
+			new DropItem(new int[]{ Currency.Magic }, 15, 30, 0.73f),
+			new DropItem(new int[]{ Currency.Magic }, 15, 30, 0.73f),
+		};
+		private DropItem[] DropsEx = new DropItem[]
+		{
+			new DropItem(new int[]{ Currency.Magic }, 30, 55),
+			new DropItem(new int[]{ Currency.Magic }, 30, 55),
+			new DropItem(new int[]{ Currency.Magic }, 30, 55),
+		};
 		#endregion
 		#region ctor
 		public StarverAdjudicator() : base(4)
@@ -59,11 +72,13 @@ namespace Starvers.BossSystem.Bosses
 				{
 					StarverAI[0] = 30;
 					Vel.X = 16 * 10;
+					Drops = DropsEx;
 				}
 				else
 				{
 					StarverAI[0] = 50;
 					Vel.X = 16 * 16;
+					Drops = DropsNormal;
 				}
 			}
 		}

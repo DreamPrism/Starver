@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class RedDevilEx : StarverBoss
@@ -29,9 +30,11 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLifes = 70;
 			DamagedIndex = 0.02f;
 			LifeperPlayerType = ByLifes;
-			Drops = new DropItem[] 
+			Drops = new DropItem[]
 			{
-				new DropItem(new int[] { ItemID.DirtBlock,/*Weapon.Weapon_base.Currency_Summon,Weapon.Weapon_base.Currency_Melee*/}, 2, 6,  0.4f)
+				new DropItem(new int[] { Currency.Minion}, 2, 6,  0.4f),
+				new DropItem(new int[] { Currency.Ranged}, 4, 9,  0.4f),
+				new DropItem(new int[] { Currency.Melee}, 7, 10,  0.4f),
 			};
 		}
 		#endregion

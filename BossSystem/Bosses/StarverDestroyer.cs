@@ -8,7 +8,8 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using Terraria;
+	using Starvers.WeaponSystem;
+	using Terraria;
     using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class StarverDestroyer : StarverBoss
@@ -16,6 +17,18 @@ namespace Starvers.BossSystem.Bosses
 		#region Fields
 		protected bool flag;
 		protected int idx;
+		private DropItem[] DropsNormal = new DropItem[]
+		{
+			new DropItem(new int[]{ Currency.Melee }, 15, 30, 0.73f),
+			new DropItem(new int[]{ Currency.Melee }, 15, 30, 0.73f),
+			new DropItem(new int[]{ Currency.Melee }, 15, 30, 0.73f),
+		};
+		private DropItem[] DropsEx = new DropItem[]
+		{
+			new DropItem(new int[]{ Currency.Melee }, 30, 55),
+			new DropItem(new int[]{ Currency.Melee }, 30, 55),
+			new DropItem(new int[]{ Currency.Melee }, 30, 55),
+		};
 		#endregion
 		#region ctor
 		public StarverDestroyer() : base(1)
@@ -42,6 +55,7 @@ namespace Starvers.BossSystem.Bosses
 			Mode = BossMode.Present;
 			RushBegin(flag);
 			Center = where + Rand.NextVector2(16 * 60);
+			Drops = ExVersion ? DropsEx : DropsNormal;
 		}
 		#endregion
 		#region RealAI

@@ -8,6 +8,7 @@ namespace Starvers.BossSystem.Bosses
 {
 	using Base;
 	using Microsoft.Xna.Framework;
+	using Starvers.WeaponSystem;
 	using Terraria;
 	using Terraria.ID;
 	using TShockAPI;
@@ -22,6 +23,18 @@ namespace Starvers.BossSystem.Bosses
 		protected Vector2 UnitX = new Vector2(16, 0);
 		protected int Ammo = ProjectileID.VortexLaser;
 		protected int wait = 1;
+		private DropItem[] DropsNormal = new DropItem[]
+		{
+			new DropItem(new int[]{ Currency.Ranged }, 15, 30, 0.73f),
+			new DropItem(new int[]{ Currency.Ranged }, 15, 30, 0.73f),
+			new DropItem(new int[]{ Currency.Ranged }, 15, 30, 0.73f),
+		};
+		private DropItem[] DropsEx = new DropItem[]
+		{
+			new DropItem(new int[]{ Currency.Ranged }, 30, 55),
+			new DropItem(new int[]{ Currency.Ranged }, 30, 55),
+			new DropItem(new int[]{ Currency.Ranged }, 30, 55),
+		};
 		#endregion
 		#region ctor
 		public unsafe StarverWander():base(4)
@@ -47,6 +60,7 @@ namespace Starvers.BossSystem.Bosses
 			UnitX.X = ExVersion ? 26 : 16;
 			Ammo = ExVersion ? ProjectileID.VortexLaser : ProjectileID.VortexAcid;
 			wait = ExVersion ? 2 : 1;
+			Drops = ExVersion ? DropsEx : DropsNormal;
 		}
 		#endregion
 		#region RealAI
