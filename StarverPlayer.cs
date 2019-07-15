@@ -236,14 +236,16 @@ namespace Starvers
 		#region UpdateMoon
 		public void UpdateMoon()
 		{
-			if(!BossSystem.Bosses.Base.StarverBoss.EndTrial)
-			{
-				return;
-			}
-			if(MoonIndex < 0 || Main.npc[MoonIndex].type != NPCID.MoonLordCore || Main.npc[MoonIndex].active != false)
+			if(MoonIndex < 0 ) 
 			{
 				MoonIndex = NewMoon();
 			}
+			else if(Main.npc[MoonIndex].type == NPCID.MoonLordCore && Main.npc[MoonIndex].active != false)
+			{
+				Main.npc[MoonIndex].active = true;
+			}
+			Main.npc[MoonIndex].type = NPCID.MoonLordCore;
+			Main.npc[MoonIndex].aiStyle = -1;
 			Main.npc[MoonIndex].Center = Center;
 			NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, MoonIndex);
 		}

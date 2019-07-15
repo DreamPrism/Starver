@@ -50,6 +50,14 @@ namespace Starvers.BossSystem.Bosses
 			TrackingTarget = true;
 		}
 		#endregion
+		#region BeDown
+		protected override void BeDown()
+		{
+			base.BeDown();
+			//WorldGen.TriggerLunarApocalypse();
+			EndTrial = true;
+		}
+		#endregion
 		#region RealAI
 		public unsafe override void RealAI()
 		{

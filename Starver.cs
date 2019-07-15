@@ -409,7 +409,7 @@ namespace Starvers
 			}
 			#endregion
 			#region UpdateMoon
-			if(Timer % 30 == 0)
+			if (BossSystem.Bosses.Base.StarverBoss.EndTrial && Timer % 30 == 0)
 			{
 				foreach(var player in Players)
 				{

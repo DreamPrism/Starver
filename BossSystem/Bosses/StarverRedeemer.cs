@@ -47,6 +47,32 @@ namespace Starvers.BossSystem.Bosses
 			RawType = NPCID.DukeFishron;
 		}
 		#endregion
+		#region Fail
+		public override void OnFail()
+		{
+			base.OnFail();
+			if(ExVersion && EndTrial)
+			{
+				StarverPlayer.All.SendMessage("都给我消停一下", Color.Pink);
+				StarverPlayer.All.SendMessage("好好待着别动", Color.Pink);
+				EndTrial = false;
+				EndTrialProcess = 0;
+			}
+		}
+		#endregion
+		#region Downed
+		protected override void BeDown()
+		{
+			base.BeDown();
+			if(EndTrial && ExVersion)
+			{
+				StarverPlayer.All.SendMessage("好吧,你们赢了", Color.HotPink);
+				StarverPlayer.All.SendMessage("不过还有几个最难对付的在后边等着你们呢", Color.HotPink);
+				StarverPlayer.All.SendMessage("我就待在这看着", Color.HotPink);
+				EndTrialProcess++;
+			}
+		}
+		#endregion
 		#region Spawn
 		public override void Spawn(Vector2 where, int lvl = 2000)
 		{
@@ -55,7 +81,7 @@ namespace Starvers.BossSystem.Bosses
 			Mode = BossMode.DeathsTwinkle;
 			RealNPC.type = NPCID.LunarTowerStardust;
 			vector.Y = 0;
-			vector.X = ExVersion ? 16 * 10 : 16 * 16;
+			vector.X = ExVersion ? 16 * 23 : 16 * 16;
 			Drops = ExVersion ? DropsEx : DropsNormal;
 		}
 		protected void Spawn(Vector2 where, int lvl, double AngleStart, float radium = -1)
@@ -151,7 +177,14 @@ namespace Starvers.BossSystem.Bosses
 					#endregion
 			}
 			SummonFollows();
-			vector.Angle += PI / 120;
+			if (Level == 4000)
+			{
+				vector.Angle += PI / 120;
+			}
+			else
+			{
+				vector.Angle += PI * 2 / 100;
+			}
 			Center = TargetPlayer.Center +  vector;
 		}
 		#endregion

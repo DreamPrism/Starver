@@ -51,6 +51,38 @@ namespace Starvers.BossSystem.Bosses
 			Vel.X = Vel.Y = 10;
 		}
 		#endregion
+		#region Downed
+		protected override void BeDown()
+		{
+			base.BeDown();
+			if (ExVersion && EndTrial)
+			{
+				EndTrialProcess++;
+				StarverPlayer.All.SendMessage("...", Color.HotPink);
+				StarverPlayer.All.SendMessage("你们等着", Color.HotPink);
+			}
+		}
+		#endregion
+		#region Fail
+		public override void OnFail()
+		{
+			base.OnFail();
+			if(ExVersion && EndTrial)
+			{
+				StarverPlayer.All.SendMessage("你们还是太弱了...", Color.Pink);
+				if (Lifes > LifesMax / 2)
+				{
+					StarverPlayer.All.SendMessage("这么轻易就死了...", Color.Pink);
+				}
+				if(Lifes < 20)
+				{
+					StarverPlayer.All.SendMessage("好可惜,你们就差一点...", Color.Pink);
+				}
+				EndTrial = false;
+				EndTrialProcess = 0;
+			}
+		}
+		#endregion
 		#region Spawn
 		public unsafe override void Spawn(Vector2 where, int lvl = Criticallevel)
 		{
@@ -236,13 +268,13 @@ namespace Starvers.BossSystem.Bosses
 			vector.X += 16 * 4;
 			Vel = (Vector)TargetPlayer.Center - vector;
 			Vel.Length = 10;
-			int idx = Proj(vector, Vel, ProjectileID.VortexVortexLightning, 260, 3f);
+			int idx = Proj(vector, Vel, ProjectileID.VortexVortexLightning, 360, 3f);
 			Main.projectile[idx].velocity += (TargetPlayer.Center - Main.projectile[idx].Center).ToLenOf(14);
 			//Proj(vector, (TargetPlayer.Center -  vector).ToLenOf(22), ProjectileID.VortexLightning, 120, 3f, Main.projectile[idx].ai[1], Rand.Next(80));
 			vector.Y -= 16 * 20;
 			Vel = (Vector)TargetPlayer.Center - vector;
 			Vel.Length = 10;
-			idx = Proj(vector, Vel, ProjectileID.VortexVortexLightning, 260, 3f);
+			idx = Proj(vector, Vel, ProjectileID.VortexVortexLightning, 360, 3f);
 			Main.projectile[idx].velocity += (TargetPlayer.Center - Main.projectile[idx].Center).ToLenOf(14);
 			//Proj(vector, (TargetPlayer.Center -  vector).ToLenOf(22), ProjectileID.VortexLightning, 120, 3f, Main.projectile[idx].ai[1], Rand.Next(80));
 			vector.Y += 16 * 20;
@@ -251,11 +283,11 @@ namespace Starvers.BossSystem.Bosses
 		#region Shoot4
 		protected void Shoot4()
 		{
-			Proj(Center, Rand.NextVector2(22), Ammo, 122 * wait, 3f);
+			Proj(Center, Rand.NextVector2(22), Ammo, 232 * wait, 3f);
 			if (ExVersion)
 			{
-				Proj(Center, Rand.NextVector2(22), Ammo, 250, 3f);
-				Proj(Center, Rand.NextVector2(22), Ammo, 222, 3f);
+				Proj(Center, Rand.NextVector2(22), Ammo, 350, 3f);
+				Proj(Center, Rand.NextVector2(22), Ammo, 352, 3f);
 			}
 		}
 		#endregion
@@ -275,10 +307,10 @@ namespace Starvers.BossSystem.Bosses
 			UnitY = (TargetPlayer.Center - Center).Vertical();
 			UnitY.Length(16 * 14);
 			ProjSector(Center + UnitY, ExVersion ? 23 : 16, 3, StarverAI[1], PI / 4, 220, Ammo, 12);
-			ProjSector(Center - UnitY, ExVersion ? 23 : 16, 3, StarverAI[1], PI / 4, 1220, Ammo, 12);
+			ProjSector(Center - UnitY, ExVersion ? 23 : 16, 3, StarverAI[1], PI / 4, 220, Ammo, 12);
 			if (ExVersion)
 			{
-				ProjSector(Center, 23, 3, StarverAI[1], PI / 4, 2260, Ammo, 12);
+				ProjSector(Center, 23, 3, StarverAI[1], PI / 4, 260, Ammo, 12);
 			}
 		}
 		#endregion

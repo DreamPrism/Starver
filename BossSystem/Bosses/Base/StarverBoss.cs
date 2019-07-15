@@ -162,9 +162,9 @@ namespace Starvers.BossSystem.Bosses.Base
 				return;
 			}
 			AliveBoss--;
-			_active = false;
 			Lifes = 0;
 			base.KillMe();
+			_active = false;
 			Index = -1;
 		}
 		#endregion
@@ -609,8 +609,9 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region statics
-		public static bool EndTrial;
-		public static int AliveBoss { get; internal set; } = 0;
+		public static int EndTrialProcess { get; internal set; }
+		public static bool EndTrial { get; internal set; }
+		public static int AliveBoss { get; internal set; }
 		protected const byte ByLife = 0;
 		protected const byte ByLifes = 1;
 		#endregion
