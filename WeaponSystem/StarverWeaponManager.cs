@@ -49,17 +49,17 @@ namespace Starvers.WeaponSystem
 			}
 			foreach(var weapon in weapons)
 			{
-				if(weapon.IsThis(args.Index))
+				if(weapon.Check(args))
 				{
 					if (Starver.Players[args.Owner].HasWeapon(weapon))
 					{
-						weapon.UseWeapon(Starver.Players[args.Owner], (Vector)args.Velocity);
+						weapon.UseWeapon(Starver.Players[args.Owner], (Vector)args.Velocity, Starver.Players[args.Owner].Weapon[weapon.Career, weapon.Index],args);
 					}
 					break;
 				}
 			}
 		}
-		private delegate void WeaponDelegate(StarverPlayer player,Vector Velocity);
+		private delegate void WeaponDelegate(StarverPlayer player,Vector Velocity, TShockAPI.GetDataHandlers.NewProjectileEventArgs args);
 		#endregion
 		#region Fields
 		private static Weapon[] Melee =
@@ -68,7 +68,10 @@ namespace Starvers.WeaponSystem
 		};
 		private static Weapon[] Ranged =
 		{
-			new VortexBeaterEx()
+			new VortexBeaterEx(),
+			new PhantasmEx(),
+			new PhantomPhoenix(),
+
 		};
 		private static Weapon[] Magic =
 		{

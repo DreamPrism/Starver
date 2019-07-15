@@ -169,9 +169,13 @@
     <Compile Include="TaskSystem\StarverTaskManager.cs" />
     <Compile Include="TaskSystem\TaskItem.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="WeaponSystem\Currency.cs" />
     <Compile Include="WeaponSystem\StarverWeaponManager.cs" />
     <Compile Include="WeaponSystem\Weapons\CareerType.cs" />
+    <Compile Include="WeaponSystem\Weapons\Ranged\PhantasmEx.cs" />
+    <Compile Include="WeaponSystem\Weapons\Ranged\PhantomPhoenix.cs" />
     <Compile Include="WeaponSystem\Weapons\Ranged\VortexBeaterEx.cs" />
+    <Compile Include="WeaponSystem\Weapons\Ranged\XenopopperEx.cs" />
     <Compile Include="WeaponSystem\Weapons\Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

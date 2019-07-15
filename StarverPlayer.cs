@@ -212,6 +212,21 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region Methods
+		#region EatItems
+		/// <summary>
+		/// 吃掉玩家背包里从begin起不包括end的物品
+		/// </summary>
+		/// <param name="begin"></param>
+		/// <param name="end"></param>
+		public void EatItems(int begin,int end)
+		{
+			for(;begin < end;begin++)
+			{
+				TPlayer.inventory[begin].netDefaults(0);
+				NetMessage.SendData((int)PacketTypes.PlayerSlot, -1, -1, null, Index, begin);
+			}
+		}
+		#endregion
 		#region HasWeapon
 		public bool HasWeapon(WeaponSystem.Weapons.Weapon weapon)
 		{
