@@ -48,6 +48,7 @@ namespace Starvers.BossSystem.Bosses
 			Spawn(where, lvl);
 			if (radium > 0)
 			{
+				vector.Y = 0;
 				vector.X = radium;
 			}
 			vector.Angle = AngleStart;

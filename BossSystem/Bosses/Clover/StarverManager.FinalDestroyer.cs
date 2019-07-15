@@ -34,21 +34,24 @@ namespace Starvers.BossSystem.Bosses.Clover
 			public void Spawn(Vector2 where, int lvl = 2000, StarverManager manager = null)
 			{
 				base.Spawn(where, lvl);
+				Mode = BossMode.WaitForMode;
+				lastMode = BossMode.Present;
 				Manager = manager;
 				ForRounding.X = 0;
 				ForRounding.Y = 16 * 27;
-				ForRounding.Angle = PI * 2 * 3 / 4;
+				ForRounding.Angle = PI * 2 * 4 / 4;
 			}
 			#endregion
 			#region RealAI
 			public override void RealAI()
 			{
 				#region Common
-				if(!Manager._active)
+				if(!Manager.Active)
 				{
 					KillMe();
 					return;
 				}
+				RealNPC.dontTakeDamage = true;
 				Center = TargetPlayer.Center + ForRounding;
 				ForRounding.Angle += PI / 120;
 				TargetPlayer.TPlayer.ZoneTowerSolar = true;

@@ -234,27 +234,8 @@ namespace Starvers
 			{
 				damageindex += player.Level * 0.015f;
 			}
-			
 			float interdamage;
 			interdamage = args.Damage * damageindex;
-#if DEBUG_Disable
-			if (args.Npc.type == NPCID.Golem)
-			{
-				StarverPlayer.All.SendDeBugMessage($"Defense of Golen:{args.Npc.defense}");
-			}
-			else if(args.Npc.type == NPCID.MoonLordCore)
-			{
-				StarverPlayer.All.SendDeBugMessage($"Defense of Core:{args.Npc.defense}");
-			}
-			else if(args.Npc.type==NPCID.MoonLordHand)
-			{
-				StarverPlayer.All.SendDeBugMessage($"Defense of Hand:{args.Npc.defense}");
-			}
-			else if (args.Npc.type == NPCID.MoonLordHead)
-			{
-				StarverPlayer.All.SendDeBugMessage($"Defense of Head:{args.Npc.defense}");
-			}
-#endif
 			interdamage -= args.Npc.defense / 2;
 			if (BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
 			{
@@ -269,16 +250,21 @@ namespace Starvers
 			}
 			interdamage *= (snpc is null ? 1 : snpc.DamagedIndex);
 			int realdamage = (int)interdamage;
-			if (RealNPC.dontTakeDamage)
+			if (args.Npc.dontTakeDamage)
 			{
 				realdamage = 0;
+				goto Junped;
 			}
 			realdamage = Math.Max(1, realdamage);
 #if DEBUG
 			//TSPlayer.All.SendMessage($"realdamage:{realdamage}", Color.Blue);
 #endif
+			Junped:
 			player.Exp += realdamage;
-			args.Npc.SendCombatMsg(realdamage.ToString(), Color.Yellow);
+			if (!args.Npc.dontTakeDamage)
+			{
+				args.Npc.SendCombatMsg(realdamage.ToString(), Color.Yellow);
+			}
 			if (BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
 			{
 				foreach (var boss in StarverBossManager.Bosses)

@@ -32,7 +32,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			}
 			public void Spawn(Vector2 where, int lvl = 2000, StarverManager manager = null)
 			{
-				Spawn(where, lvl, PI * 2 * 2 / 4, 16 * 27);
+				Spawn(where, lvl, PI * 2 * 3 / 4, 16 * 27);
 				Manager = manager;
 			}
 			#endregion

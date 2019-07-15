@@ -15,6 +15,9 @@ namespace Starvers.BossSystem.Bosses
 	public class StarverWander : StarverBoss
 	{
 		#region Fields
+		/// <summary>
+		/// len = 16 * 14
+		/// </summary>
 		protected Vector2 UnitY = new Vector2(0, 16 * 14);
 		protected Vector2 UnitX = new Vector2(16, 0);
 		protected int Ammo = ProjectileID.VortexLaser;
@@ -254,6 +257,8 @@ namespace Starvers.BossSystem.Bosses
 #if DEBUG
 			TSPlayer.All.SendInfoMessage("Shoot2 shooting");
 #endif
+			UnitY = (TargetPlayer.Center - Center).Vertical();
+			UnitY.Length(16 * 14);
 			ProjSector(Center + UnitY, ExVersion ? 23 : 16, 3, StarverAI[1], PI / 4, 220, Ammo, 12);
 			ProjSector(Center - UnitY, ExVersion ? 23 : 16, 3, StarverAI[1], PI / 4, 1220, Ammo, 12);
 			if (ExVersion)

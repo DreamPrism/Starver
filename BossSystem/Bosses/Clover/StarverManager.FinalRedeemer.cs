@@ -33,7 +33,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			public void Spawn(Vector2 where, int lvl = 2000,StarverManager manager = null)
 			{
 				Manager = manager;
-				Spawn(where, lvl, PI * 2 * 1 / 4, 16 * 27);
+				Spawn(where, lvl, PI * 2 * 2 / 4, 16 * 27);
 			}
 			#endregion
 			#region RealAI

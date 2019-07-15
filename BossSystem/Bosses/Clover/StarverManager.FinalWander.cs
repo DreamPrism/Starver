@@ -34,7 +34,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			public void Spawn(Vector2 where, int lvl = 2000,StarverManager manager = null)
 			{
 				Manager = manager;
-				Spawn(where, lvl, PI * 2 * 0 / 4, 16 * 27);
+				Spawn(where, lvl, PI * 2 * 1 / 4, 16 * 27);
 				Ammo = ProjectileID.VortexLaser;
 				ExVersion = true;
 			}
@@ -190,6 +190,35 @@ namespace Starvers.BossSystem.Bosses.Clover
 				}
 				#endregion
 			}
+			#endregion
+			#region AIs
+			#region Shoot1
+			private unsafe new void Shoot1()
+			{
+				StarverAI[1] += PI / 40;
+				vector.Angle = (TargetPlayer.Center - Center).Angle();
+				UnitX = vector;
+				if (StarverAI[1] > PI)
+				{
+					StarverAI[1] -= PI;
+				}
+				else if (StarverAI[1] > PI / 2)
+				{
+					vector.Angle += PI - StarverAI[1];
+					UnitX.AngleAdd(-(PI - StarverAI[1]));
+				}
+				else
+				{
+					vector.Angle += StarverAI[1];
+					UnitX.AngleAdd(-StarverAI[1]);
+				}
+				Vel = vector;
+				Vel.Y *= -1;
+				Proj(Center, UnitX, Ammo, 240, 2f);
+				Proj(Center, vector, Ammo, 240, 2f);
+				Proj(Center, Vel, Ammo, 200, 2f);
+			}
+			#endregion
 			#endregion
 		}
 	}

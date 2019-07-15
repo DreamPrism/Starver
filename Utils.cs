@@ -210,7 +210,7 @@ namespace Starvers
 		#region SendCombatText
 		public static void SendCombatMsg(this Entity entity, string msg, Color color)
 		{
-			NetMessage.SendData((int)PacketTypes.CreateCombatTextExtended, -1, -1, NetworkText.FromLiteral(msg), (int)color.PackedValue, entity.position.X, entity.position.Y, 0.0f, 0, 0, 0);
+			NetMessage.SendData((int)PacketTypes.CreateCombatTextExtended, -1, -1, NetworkText.FromLiteral(msg), (int)color.PackedValue, entity.position.X + Rand.Next(entity.width), entity.position.Y + Rand.Next(entity.height), 0.0f, 0, 0, 0);
 		}
 		#endregion
 		#region Vector2
