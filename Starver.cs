@@ -32,6 +32,9 @@ namespace Starvers
 	[ApiVersion(2, 1)]
 	public class Starver : TerrariaPlugin
 	{
+		#region Fields
+		internal static bool Cleared;
+		#endregion
 		#region BaseProperties
 		public override string Name { get { return "Starver"; } }
 		public override Version Version { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
@@ -432,26 +435,37 @@ namespace Starvers
 			}
 			#endregion
 			#region UpdateMoon
-			if (BossSystem.Bosses.Base.StarverBoss.EndTrial && Timer % 30 == 0)
+			if (!TShock.Config.DisableHardmode)
 			{
-				foreach(var player in Players)
+				if (BossSystem.Bosses.Base.StarverBoss.EndTrial )
 				{
-					if(player is null)
+					Cleared = false;
+					if (Timer % 30 == 0)
 					{
-						continue;
+						foreach (var player in Players)
+						{
+							if (player is null)
+							{
+								continue;
+							}
+							player.UpdateMoon();
+						}
 					}
-					player.UpdateMoon();
 				}
-			}
-			else
-			{
-				foreach (var player in Players)
+				else
 				{
-					if (player is null)
+					if (!Cleared)
 					{
-						continue;
+						Cleared = true;
+						foreach (var player in Players)
+						{
+							if (player is null)
+							{
+								continue;
+							}
+							player.UpdateMoonClear();
+						}
 					}
-					player.UpdateMoonClear();
 				}
 			}
 			#endregion
@@ -587,8 +601,7 @@ namespace Starvers
 					switch (npc.type)
 					{
 						case NPCID.KingSlime:
-							scale += 1f;
-							break;
+							return;
 						case NPCID.EyeofCthulhu:
 							scale += 1.5f;
 							break;
