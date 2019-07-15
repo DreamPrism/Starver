@@ -27,20 +27,24 @@ namespace Starvers.BossSystem.Bosses.Clover
 			public override float DamageIndex => Manager.DamageIndex;
 			#endregion
 			#region Spawn
+			public void Respawn()
+			{
+				base.Spawn(LastCenter, Level);
+			}
 			public void Spawn(Vector2 where, int lvl = 2000, StarverManager manager = null)
 			{
 				base.Spawn(where, lvl);
 				Manager = manager;
 				ForRounding.X = 0;
 				ForRounding.Y = 16 * 27;
-				ForRounding.Angle = PI * 2 * 4 / 2;
+				ForRounding.Angle = PI * 2 * 3 / 4;
 			}
 			#endregion
 			#region RealAI
 			public override void RealAI()
 			{
 				#region Common
-				if(!Manager.Active)
+				if(!Manager._active)
 				{
 					KillMe();
 					return;
@@ -62,7 +66,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 					case BossMode.DemonSickle:
 						if (modetime > 60 * 15)
 						{
-							RushBegin();
+							ResetMode();
 						}
 						if (Timer % 2 == 0)
 						{
@@ -74,7 +78,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 					case BossMode.Fire:
 						if (modetime > 60 * 12)
 						{
-							RushBegin();
+							ResetMode();
 						}
 						if (Timer % 2 == 0)
 						{
@@ -89,7 +93,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 							if (StarverAI[0] > 8)
 							{
 								StarverAI[0] = 0;
-								RushBegin();
+								ResetMode();
 							}
 							if (Timer % 90 == 0)
 							{
@@ -102,7 +106,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 					case BossMode.Present:
 						if (modetime > 60 * 12)
 						{
-							RushBegin();
+							ResetMode();
 						}
 						if (Timer % 75 == 0)
 						{

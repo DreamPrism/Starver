@@ -29,10 +29,23 @@ namespace Starvers.BossSystem.Bosses.Clover
 			DefaultLifes = 250;
 		}
 		#endregion
+		#region KillMe
+		public override void KillMe()
+		{
+			base.KillMe();
+			CrazyWang.KillMe();
+			Deaths.KillMe();
+			Wither.KillMe();
+			TOFOUT.KillMe();
+		}
+		#endregion
 		#region Spawn
 		public override void Spawn(Vector2 where, int lvl = 5000)
 		{
-			Spawn_Clover(where, lvl);
+			base.Spawn(where, lvl);
+			_active = true;
+			RealNPC.dontTakeDamage = false;
+			SendData();
 			#region TheFollows
 			CrazyWang.Spawn(where, 40000, this);
 			Deaths.Spawn(where, 40000, this);
@@ -45,10 +58,30 @@ namespace Starvers.BossSystem.Bosses.Clover
 		public override void RealAI()
 		{
 			#region TheFollows
+			#region CheckActive
+			if (!CrazyWang.Active)
+			{
+				CrazyWang.Respawn();
+			}
+			if(!Deaths.Active)
+			{
+				Deaths.Respawn();
+			}
+			if(!Wither.Active)
+			{
+				Wither.Respawn();
+			}
+			if(!TOFOUT.Active)
+			{
+				TOFOUT.Respawn();
+			}
+			#endregion
+			#region AIUpdate
 			CrazyWang.AI();
 			Deaths.AI();
 			Wither.AI();
 			TOFOUT.AI();
+			#endregion
 			#endregion
 		}
 		#endregion

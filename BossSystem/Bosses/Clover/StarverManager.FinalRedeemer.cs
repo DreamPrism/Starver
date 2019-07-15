@@ -26,10 +26,14 @@ namespace Starvers.BossSystem.Bosses.Clover
 			public override float DamageIndex => Manager.DamageIndex;
 			#endregion
 			#region Spawn
+			public void Respawn()
+			{
+				base.Spawn(LastCenter, Level);
+			}
 			public void Spawn(Vector2 where, int lvl = 2000,StarverManager manager = null)
 			{
 				Manager = manager;
-				Spawn(where, lvl, PI * 2 * 1 / 2, 16 * 27);
+				Spawn(where, lvl, PI * 2 * 1 / 4, 16 * 27);
 			}
 			#endregion
 			#region RealAI
