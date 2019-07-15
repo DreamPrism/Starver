@@ -59,6 +59,29 @@ namespace Starvers.BossSystem.Bosses
 			Marshal.FreeHGlobal(new IntPtr(InvTypes));
 		}
 		#endregion
+		#region Fail
+		public override void OnFail()
+		{
+			base.OnFail();
+			if(ExVersion && EndTrial)
+			{
+				StarverPlayer.All.SendMessage("再去中核世界经历几百次轮回吧", Color.Pink);
+				EndTrial = false;
+				EndTrialProcess = 0;
+			}
+		}
+		#endregion
+		#region Downed
+		protected override void BeDown()
+		{
+			base.BeDown();
+			if(ExVersion && EndTrial)
+			{
+				StarverPlayer.All.sendmesage("你们不过是侥幸罢了...", Color.HotPink);
+				EndTrialProcess++;
+			}
+		}
+		#endregion
 		#region Spawn
 		public override void Spawn(Vector2 where, int lvl = Criticallevel)
 		{

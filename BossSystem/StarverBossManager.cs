@@ -324,49 +324,136 @@ namespace Starvers.BossSystem
 					case 6:
 						if (EndBossDelay-- == 60 * 30)
 						{
-							StarverPlayer.All.SendMessage("你们可曾记得", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("是谁?", Color.DeepPink);
 						}
 						else if (EndBossDelay == 60 * 28)
 						{
-							StarverPlayer.All.SendMessage("在那个世界里", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("噩梦可不只一个", Color.DeepPink);
 						}
 						else if (EndBossDelay == 60 * 26)
 						{
-							StarverPlayer.All.SendMessage("你们的噩梦吗", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("我还曾是另一个噩梦的噩梦", Color.DeepPink);
 						}
 						else if (EndBossDelay == 60 * 23)
 						{
-							StarverPlayer.All.SendMessage("是的", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("人都去哪了", Color.DeepPink);
 						}
 						else if (EndBossDelay == 60 * 20)
 						{
-							StarverPlayer.All.SendMessage("这次", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("别让我找到你", Color.DeepPink);
 						}
 						else if (EndBossDelay == 60 * 18)
 						{
-							StarverPlayer.All.SendMessage("你们要对付的第一个", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("我们遇到大麻烦了", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 13)
 						{
-							StarverPlayer.All.SendMessage("就是他", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("快跑", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 10)
 						{
-							StarverPlayer.All.SendMessage("越来越近了", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("我们不是他的对手的", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 7)
 						{
-							StarverPlayer.All.SendMessage("是他来了", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("除非...", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 3)
 						{
-							StarverPlayer.All.SendMessage("祝你们好运", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("用上那个", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 1)
 						{
-							Bosses[Bosses.Length - 6].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 3000);
+							Bosses[Bosses.Length - 4].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 3000);
 							EndBossDelay = -1;
 						}
+						break;
+					#endregion
+					#region 7(Solar Invading)
+					case 7:
+						if (EndBossDelay < 0)
+						{
+							EndBossDelay = 0;
+							SummonTower(NPCID.LunarTowerSolar);
+							StarverPlayer.All.SendMessage("战斗已接近尾声...", Color.DarkGreen);
+						}
+						if (!NPC.TowerActiveSolar)
+						{
+							KillTower();
+							EndBossDelay = 60 * 30;
+							EndTrialProcess++;
+						}
+						break;
+					#endregion
+					#region 8(TOFOUT)
+					case 8:
+						if (EndBossDelay-- == 60 * 30)
+						{
+							StarverPlayer.All.SendMessage("他正在逐步接近", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 28)
+						{
+							StarverPlayer.All.SendMessage("那个世界是另一个世界的复制品", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 26)
+						{
+							StarverPlayer.All.SendMessage("他在那个空无一人的世界里", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 23)
+						{
+							StarverPlayer.All.SendMessage("将整个世界作为了实验品", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 20)
+						{
+							StarverPlayer.All.SendMessage("开始了他的实验", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 18)
+						{
+							StarverPlayer.All.SendMessage("一开始他的实验品经常变成空气", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 13)
+						{
+							StarverPlayer.All.SendMessage("但是到了后来他已经能够随心所欲的控制它们", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 10)
+						{
+							StarverPlayer.All.SendMessage("会爆炸的僵尸...会射箭的魔化盔甲...四处射激光的眼球", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 7)
+						{
+							StarverPlayer.All.SendMessage("还有那四处漂浮的骷髅...都是他的作品", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 3)
+						{
+							StarverPlayer.All.SendMessage("你们也许也会", Color.BlueViolet);
+						}
+						else if (EndBossDelay == 60 * 1)
+						{
+							Bosses[Bosses.Length - 3].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 3000);
+							EndBossDelay = -1;
+						}
+						break;
+					#endregion
+					#region 9(Clover Coming)
+					case 9:
+						EndBossDelay = 60 * 30;
+						EndTrialProcess++;
+						break;
+					#endregion
+					#region 10(Clover)
+					case 10:
+						if(EndBossDelay-- == 0)
+						{
+							StarverPlayer.All.SendMessage("这是你们的最后一战", Color.Black);
+							Bosses[Bosses.Length - 2].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 5000);
+						}
+						break;
+					#endregion
+					#region 11(Victory)
+					case 11:
+						EndTrial = false;
+						StarverPlayer.All.SendMessage("这是...赢了?", Color.Aqua);
+						EndTrialProcess = 0;
 						break;
 						#endregion
 				}

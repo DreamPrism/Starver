@@ -58,6 +58,39 @@ namespace Starvers.BossSystem.Bosses
 			Drops = ExVersion ? DropsEx : DropsNormal;
 		}
 		#endregion
+		#region Fail
+		public override void OnFail()
+		{
+			base.OnFail();
+			if(ExVersion && EndTrial)
+			{
+				EndTrial = false;
+				EndTrialProcess = 0;
+				StarverPlayer.All.SendMessage("你们准备好了吗?", Color.HotPink);
+				StarverPlayer.All.SendMessage("你们就是下一个", Color.HotPink);
+			}
+		}
+		#endregion
+		#region Downed
+		protected override void BeDown()
+		{
+			base.BeDown();
+			if(ExVersion && EndTrial)
+			{
+				StarverPlayer.All.SendMessage("连我都拦不住你们了...", Color.HotPink);
+				StarverPlayer.All.SendMessage("告诉你们一个很不好的消息...", Color.HotPink);
+				StarverPlayer.All.SendMessage("??��&�%�Qv��", Color.HotPink);
+				StarverPlayer.All.SendMessage("关于他的出现", Color.HotPink);
+				StarverPlayer.All.SendMessage("���b�D#rʃ�Y�", Color.HotPink);
+				StarverPlayer.All.SendMessage("�-�ovGo�5�K�", Color.HotPink);
+				StarverPlayer.All.SendMessage("但是后来去发生了另一件事...", Color.HotPink);
+				StarverPlayer.All.SendMessage("U�Ϯr}v�c��̋=�", Color.HotPink);
+				StarverPlayer.All.SendMessage("没有任何事物能阻挡他了...没有...", Color.HotPink);
+				StarverPlayer.All.SendMessage("包括你们...", Color.HotPink);
+				EndTrialProcess++;
+			}
+		}
+		#endregion
 		#region RealAI
 		public override void RealAI()
 		{
