@@ -373,6 +373,29 @@ namespace Starvers
 		private static void OnUpdate(EventArgs args)
 		{
 			Timer++;
+			#region clearNPC
+			if(TShock.Config.DisableHardmode && Timer % 60 == 0)
+			{
+				foreach (var npc in Main.npc)
+				{
+					if (!npc.active)
+					{
+						continue;
+					}
+					if (
+						npc.type == NPCID.DukeFishron ||
+						npc.type == NPCID.SkeletronPrime ||
+						npc.type == NPCID.TheDestroyer ||
+						npc.type == NPCID.Spazmatism ||
+						npc.type == NPCID.Retinazer
+						)
+					{
+						npc.active = false;
+						NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);
+					}
+				}
+			}
+			#endregion
 			#region Save
 			if ((DateTime.Now - StarverConfig.LastSave).TotalSeconds > Config.SaveInterval)
 			{
