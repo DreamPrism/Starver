@@ -15,6 +15,14 @@ namespace Starvers.BossSystem
 
     public class StarverBossManager : IStarverPlugin
 	{
+		#region Fields
+		private bool TriedSpawn = false;
+		/// <summary>
+		/// 生成那个boss?
+		/// </summary>
+		private int SpawnIndex;
+		private int SpawnDelay;
+		#endregion
 		#region ctor
 		static StarverBossManager()
 		{
@@ -71,7 +79,64 @@ namespace Starvers.BossSystem
 		#region OnUpdate
 		private void OnUpdate(EventArgs args)
 		{
-			foreach(var AI in BossAIs)
+			#region SpawnBoss
+			if (Main.dayTime)
+			{
+				TriedSpawn = false;
+				SpawnDelay = 0;
+			}
+			else
+			{
+				#region SelectWhichToSpawn
+				if (!TriedSpawn)
+				{
+					TriedSpawn = true;
+					bool CanSpawn = false;
+					foreach (var ply in Starver.Players)
+					{
+						if (ply is null)
+						{
+							continue;
+						}
+						CanSpawn |= ply.Active;
+					}
+					if (CanSpawn && Rand.Next(100) >= 10)
+					{
+						SpawnDelay = 60 * 30;
+						SpawnIndex = Rand.Next(Bosses.Length - 2);
+						if (!Bosses[SpawnIndex].CanSpawn)
+						{
+							do
+							{
+								SpawnIndex = Rand.Next(Bosses.Length - 2);
+							}
+							while (!Bosses[SpawnIndex].CanSpawn);
+						}
+						StarverPlayer.All.SendMessage(Bosses[SpawnIndex].CommingMessage, Bosses[SpawnIndex].CommingMessageColor);
+					}
+				}
+				#endregion
+				#region Spawning
+				if(SpawnDelay > 0)
+				{
+					SpawnDelay--;
+					if(SpawnDelay == 0)
+					{
+						foreach(var ply in Starver.Players)
+						{
+							if(!ply.Active)
+							{
+								continue;
+							}
+							Bosses[SpawnIndex].Spawn(ply.Center + Rand.NextVector2(16 * 20));
+						}
+					}
+				}
+				#endregion
+			}
+			#endregion
+			#region BossAI
+			foreach (var AI in BossAIs)
 			{
 				try
 				{
@@ -82,6 +147,7 @@ namespace Starvers.BossSystem
 					StarverPlayer.Server.SendInfoMessage(e.ToString());
 				}
 			}
+			#endregion
 		}
 		#endregion
 		#region OnKilled

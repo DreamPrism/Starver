@@ -14,6 +14,8 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Security;
+using System.IO;
+
 namespace Starvers.BossSystem.Bosses.Base
 {
 	using Vector = TOFOUT.Terraria.Server.Vector2;
@@ -28,13 +30,16 @@ namespace Starvers.BossSystem.Bosses.Base
 		public int RawType { get; protected set; } = NPCID.BlueSlime;
 		public float MaxDistance { get; protected set; } = 500f;
 		public bool IgnoreDistance { get; protected set; } = true;
-		public bool Downed { get; protected set; } 
+		public bool Downed { get; protected set; }
+		public virtual bool CanSpawn => StarverConfig.Config.TaskNow >= TaskNeed;
 		/// <summary>
 		/// 召唤时无提示
 		/// </summary>
 		public bool Silence { get; protected set; } 
 		public string Name { get; protected set; }
 		public Vector2 LastCenter { get; protected set; }
+		public string CommingMessage { get; protected set; } = "这将是一场灾难...";
+		public Color CommingMessageColor { get; protected set; } = Color.DarkGreen;
 		/// <summary>
 		/// boss伤害系数
 		/// </summary>
@@ -95,6 +100,8 @@ namespace Starvers.BossSystem.Bosses.Base
 		protected Vector vector = new Vector(10, 10);
 		protected Vector WhereToGo;
 		protected BossMode lastMode;
+		private string DataPath;
+		private string TypeName;
 		private int[] Walls;
 		private int TimeSpan;
 		private bool WallStop;
@@ -110,10 +117,26 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region ctor
 		private StarverBoss()
 		{
-			Name = GetType().Name;
+			TypeName = Name = GetType().Name;
 		}
-		protected unsafe StarverBoss(int ainum):this()
+		protected unsafe StarverBoss(int ainum) : this()
 		{
+			string path = Path.Combine(Starver.SavePathBosses, TypeName);
+			DataPath = path;
+			if (!File.Exists(path))
+			{
+				using (BinaryWriter writer = new BinaryWriter(new FileStream(path, FileMode.Create)))
+				{
+					writer.Write(Downed);
+				}
+			}
+			else
+			{
+				using (BinaryReader reader = new BinaryReader(new FileStream(path, FileMode.Open)))
+				{
+					Downed = reader.ReadBoolean();
+				}
+			}
 			NumOfAIs = ainum;
 			StarverAI = (float*)Marshal.AllocHGlobal(sizeof(float) * NumOfAIs).ToPointer();
 			Level = Criticallevel;
@@ -148,7 +171,13 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region BeDown
 		protected virtual void BeDown()
 		{
-			Downed = true;
+			if(Downed != true)
+			{
+				using(BinaryWriter writer = new BinaryWriter(new FileStream(DataPath,FileMode.Create)))
+				{
+					writer.Write(Downed = true);
+				}
+			}
 			_active = false;
 			ExpGive = LifeMax;
 			ExpGive *= LifesMax;
