@@ -19,12 +19,12 @@ namespace Starvers.BossSystem
 	{
 		#region Fields
 		private int EndBossDelay = 0;
-		private bool TriedSpawn = false;
+		internal static bool TriedSpawn;
 		/// <summary>
 		/// 生成那个boss?
 		/// </summary>
-		private int SpawnIndex;
-		private int SpawnDelay;
+		internal static int SpawnIndex;
+		internal static int SpawnDelay;
 		#endregion
 		#region ctor
 		static StarverBossManager()

@@ -42,6 +42,8 @@ namespace Starvers.BossSystem.Bosses
 		#region Spawn
 		public override void Spawn(Vector2 where, int lvl = 2000)
 		{
+			StarverBossManager.TriedSpawn = true;
+			StarverBossManager.SpawnDelay = 0;
 			base.Spawn(where, lvl);
 			Mode = BossMode.CultistFireBall;
 			SpawnCount = 0;
@@ -57,6 +59,7 @@ namespace Starvers.BossSystem.Bosses
 			//WorldGen.TriggerLunarApocalypse();
 			Starver.Cleared = true;
 			EndTrial = true;
+			EndTrialProcess = 0;
 		}
 		#endregion
 		#region RealAI

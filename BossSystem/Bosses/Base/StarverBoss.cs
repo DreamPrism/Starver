@@ -492,6 +492,10 @@ namespace Starvers.BossSystem.Bosses.Base
 				TargetClosest();
 				if (Target < 0 || Target >= 40 || TargetPlayer == null || !TargetPlayer.Active)
 				{
+					//if (TShock.Utils.ActivePlayers() > 0)
+					{
+						OnFail();
+					}
 					KillMe();
 					return;
 				}

@@ -236,6 +236,14 @@ namespace Starvers
 		#region UpdateMoon
 		public void UpdateMoon()
 		{
+			if(Dead)
+			{
+				if (MoonIndex > 0)
+				{
+					Main.npc[MoonIndex].active = false;
+				}
+				return;
+			}
 			if(MoonIndex < 0 ) 
 			{
 				MoonIndex = NewMoon();
@@ -245,6 +253,7 @@ namespace Starvers
 				Main.npc[MoonIndex].active == false)
 			{
 				Main.npc[MoonIndex].active = true;
+				Main.npc[MoonIndex].SetDefaults(NPCID.MoonLordCore);
 			}
 			Main.npc[MoonIndex].type = NPCID.MoonLordCore;
 			Main.npc[MoonIndex].aiStyle = -1;
