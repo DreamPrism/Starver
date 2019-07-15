@@ -16,6 +16,12 @@ namespace Starvers.BossSystem.Bosses.Clover
 			#region Fields
 			private StarverManager Manager;
 			#endregion
+			#region ctor
+			public FinalRedeemer()
+			{
+				Silence = true;
+			}
+			#endregion
 			#region DamageIndex
 			public override float DamageIndex => Manager.DamageIndex;
 			#endregion

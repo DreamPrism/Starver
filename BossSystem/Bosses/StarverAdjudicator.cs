@@ -66,7 +66,7 @@ namespace Starvers.BossSystem.Bosses
 				}
 			}
 		}
-		protected void Spawn(Vector2 where, int lvl = Criticallevel,double AngleStart = 0,float radium = -1)
+		protected void Spawn(Vector2 where, int lvl, double AngleStart, float radium = -1)
 		{
 			Spawn(where, lvl);
 			if(radium > 0)

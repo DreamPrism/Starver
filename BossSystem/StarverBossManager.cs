@@ -11,7 +11,9 @@ namespace Starvers.BossSystem
 {
 	using Bosses;
 	using Bosses.Base;
-	public class StarverBossManager : IStarverPlugin
+    using Starvers.BossSystem.Bosses.Clover;
+
+    public class StarverBossManager : IStarverPlugin
 	{
 		#region ctor
 		static StarverBossManager()
@@ -58,8 +60,10 @@ namespace Starvers.BossSystem
 			new StarverRedeemer(),
 			new StarverAdjudicator(),
 			new StarverDestroyer(),
+			new StarverManager(),
 			new CultistEx()
 		};
+		public static StarverManager Clover => Bosses[Bosses.Length - 2] as StarverManager;
 		public static Random Rand => Starver.Rand;
 		public static List<AIDelegate> BossAIs = new List<AIDelegate>();
 		#endregion

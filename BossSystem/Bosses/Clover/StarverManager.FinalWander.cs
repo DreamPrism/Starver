@@ -17,6 +17,12 @@ namespace Starvers.BossSystem.Bosses.Clover
 			private StarverManager Manager;
 			private Vector ForRounding;
 			#endregion
+			#region ctor
+			public FinalWander()
+			{
+				Silence = true;
+			}
+			#endregion
 			#region DamageIndex
 			public override float DamageIndex => Manager.DamageIndex;
 			#endregion

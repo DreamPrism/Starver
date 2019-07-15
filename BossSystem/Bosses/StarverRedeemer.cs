@@ -43,7 +43,7 @@ namespace Starvers.BossSystem.Bosses
 			vector.Y = 0;
 			vector.X = ExVersion ? 16 * 10 : 16 * 16;
 		}
-		protected void Spawn(Vector2 where, int lvl = Criticallevel, double AngleStart = 0, float radium = -1)
+		protected void Spawn(Vector2 where, int lvl, double AngleStart, float radium = -1)
 		{
 			Spawn(where, lvl);
 			if (radium > 0)

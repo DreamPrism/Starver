@@ -359,7 +359,7 @@ namespace Starvers.TaskSystem
 					Story = "灾难的化身";
 					Needs = new TaskItem[]
 					{
-						new TaskItem(ItemID.MartianConduitPlating,999),	
+						new TaskItem(ItemID.MartianConduitPlating,999),
 						new TaskItem(ItemID.BeetleHusk,99)
 					};
 					break;
@@ -950,6 +950,8 @@ namespace Starvers.TaskSystem
 						new TaskItem(3725, 50, 0)
 					};
 					break;
+				#endregion
+				#region End
 				case 43:
 					Name = "末世预言--终末";
 					Story = "THE STARDUST KARMA SACRIFICE--T.S.K.S:终于...我找到了...";
