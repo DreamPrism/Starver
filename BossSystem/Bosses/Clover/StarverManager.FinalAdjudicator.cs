@@ -14,6 +14,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 		private class FinalAdjudicator : StarverAdjudicator
 		{
 			#region Fields
+			private float Radium = 16 * 37;
 			private StarverManager Manager;
 			#endregion
 			#region ctor
@@ -32,7 +33,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			}
 			public void Spawn(Vector2 where, int lvl = 2000, StarverManager manager = null)
 			{
-				Spawn(where, lvl, PI * 2 * 3 / 4, 16 * 27);
+				Spawn(where, lvl, PI * 2 * 3 / 4, Radium);
 				Manager = manager;
 			}
 			#endregion
@@ -47,6 +48,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 				}
 				RealNPC.dontTakeDamage = true;
 				vector.Angle += PI / 120;
+				vector.Length = Radium;
 				Center = vector + TargetPlayer.Center;
 				#endregion
 				#region Mode

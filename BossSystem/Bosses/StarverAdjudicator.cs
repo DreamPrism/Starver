@@ -20,6 +20,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public StarverAdjudicator() : base(4)
 		{
+			TaskNeed = 29;
 			Name = "The Starver Adjudicator";
 			FullName = "Iesnet The Starver Adjudicator";
 			DefaultLife = 900000;

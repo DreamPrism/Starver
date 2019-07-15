@@ -44,6 +44,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public BrainEx() : base(2)
 		{
+			TaskNeed = 23;
 			Name = "克苏鲁之脑";
 			IgnoreDistance = true;
 			DefaultLife = 262500;

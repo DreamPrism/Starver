@@ -28,6 +28,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public DarkMageEx() : base(1)
 		{
+			TaskNeed = 26;
 			Name = "dark膜法师";
 			LifeperPlayerType = ByLifes;
 			RawType = NPCID.DD2DarkMageT3;

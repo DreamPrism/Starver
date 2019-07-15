@@ -21,6 +21,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public SkeletronEx() : base(2)
 		{
+			TaskNeed = 25;
 			RawType = NPCID.SkeletronHead;
 			DefaultDefense = 30;
 			DefaultLife = 310000;

@@ -24,6 +24,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public PigronEx() : base(1)
 		{
+			TaskNeed = 33;
 			Name = "猪龙";
 			RawType = NPCID.PigronHallow;
 			DefaultDefense = 23;

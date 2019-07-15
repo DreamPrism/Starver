@@ -21,6 +21,7 @@ namespace Starvers.BossSystem.Bosses.Base
 	public abstract partial class StarverBoss : StarverEntity
 	{
 		#region Properties
+		public int TaskNeed { get; protected set; } = 0;
 		public int Life { get { return RealNPC.life; } set { RealNPC.life = value; } }
 		public int LifeMax { get { return RealNPC.lifeMax; } set { RealNPC.lifeMax = value; } }
 		public int Defense { get { return RealNPC.defense; } set { RealNPC.defense = value; } }

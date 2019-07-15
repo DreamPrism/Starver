@@ -21,6 +21,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public RedDevilEx():base(1)
 		{
+			TaskNeed = 32;
 			Name = "红魔王";
 			RawType = NPCID.RedDevil;
 			DefaultDefense = 18;

@@ -22,6 +22,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public DestroyerEx() : base(1)
 		{
+			TaskNeed = 35;
 			RawType = NPCID.TheDestroyer;
 			DefaultLife = 560000;
 			DefaultLifes = 100;

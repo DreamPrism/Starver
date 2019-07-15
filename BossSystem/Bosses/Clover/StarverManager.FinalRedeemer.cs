@@ -14,6 +14,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 		private class FinalRedeemer : StarverRedeemer
 		{
 			#region Fields
+			private float Radium = 16 * 37;
 			private StarverManager Manager;
 			#endregion
 			#region ctor
@@ -33,7 +34,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			public void Spawn(Vector2 where, int lvl = 2000,StarverManager manager = null)
 			{
 				Manager = manager;
-				Spawn(where, lvl, PI * 2 * 2 / 4, 16 * 27);
+				Spawn(where, lvl, PI * 2 * 2 / 4, Radium);
 			}
 			#endregion
 			#region RealAI
@@ -44,6 +45,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 					KillMe();
 					return;
 				}
+				vector.Length = Radium;
 				base.RealAI();
 				RealNPC.dontTakeDamage = true;
 			}

@@ -24,6 +24,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public RetinazerEx() : base(2)
 		{
+			TaskNeed = 36;
 			RawType = NPCID.Retinazer;
 			DefaultLife = 425000;
 			DefaultLifes = 100;

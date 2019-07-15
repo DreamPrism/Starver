@@ -64,6 +64,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public SpazmatismEx() : base(3)
 		{
+			TaskNeed = 37;
 			RawType = NPCID.Spazmatism;
 			DefaultLife = 425000;
 			DefaultLifes = 100;

@@ -248,6 +248,7 @@ namespace Starvers
 					}
 				}
 			}
+			interdamage += Rand.Next(10);
 			interdamage *= (snpc is null ? 1 : snpc.DamagedIndex);
 			int realdamage = (int)interdamage;
 			if (args.Npc.dontTakeDamage)

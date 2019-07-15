@@ -20,6 +20,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public StarverDestroyer() : base(1)
 		{
+			TaskNeed = 30;
 			Name = "The Starver Destroyer";
 			FullName = "Eniltuo The Starver Destroyer";
 			RawType = NPCID.DukeFishron;

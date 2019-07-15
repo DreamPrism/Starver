@@ -24,6 +24,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public PrimeEx() : base(2)
 		{
+			TaskNeed = 34;
 			RawType = NPCID.SkeletronPrime;
 			DefaultLife = 410000;
 			DefaultLifes = 90;

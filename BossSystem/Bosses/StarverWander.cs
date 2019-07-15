@@ -26,6 +26,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public unsafe StarverWander():base(4)
 		{
+			TaskNeed = 27;
 			DefaultLife = 2000000;
 			DefaultLifes = 150;
 			DefaultDefense = 10;

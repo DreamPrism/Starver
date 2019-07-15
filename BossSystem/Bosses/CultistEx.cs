@@ -25,6 +25,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public CultistEx() : base(3)
 		{
+			TaskNeed = 42;
 			RawType = NPCID.CultistBoss;
 			Name = Lang.GetNPCNameValue(NPCID.CultistBoss);
 			DefaultLife = 505000;

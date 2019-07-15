@@ -23,6 +23,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public StarverRedeemer():base(4)
 		{
+			TaskNeed = 28;
 			Name = "The Starver Redeemer";
 			FullName = "Shtaed The Starver Redeemer";
 			DefaultLife = 3650000;

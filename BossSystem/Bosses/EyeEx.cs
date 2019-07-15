@@ -20,6 +20,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public EyeEx() : base(3)
 		{
+			TaskNeed = 22;
 			RawType = NPCID.EyeofCthulhu;
 			Name = "克苏鲁之眼";
 			DefaultDefense = 40;

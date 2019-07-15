@@ -18,6 +18,7 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public QueenBeeEx():base(2)
 		{
+			TaskNeed = 24;
 			RawType = NPCID.QueenBee;
 			Name = "蜂后";
 			DefaultLife = 265500;
