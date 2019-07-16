@@ -487,8 +487,8 @@ namespace Starvers
 		#region OnLogin
 		public static void OnLogin(PlayerPostLoginEventArgs args)
 		{
-			new Thread(() =>
-			{
+			//new Thread(() =>
+			//{
 				try
 				{
 					//Thread.Sleep(2000);
@@ -510,7 +510,7 @@ namespace Starvers
 				{
 					TShock.Log.Info(E.ToString());
 				}
-			}).Start();
+			//}).Start();
 		}
 		#endregion
 		#region OnGreet
@@ -534,7 +534,7 @@ namespace Starvers
 					Players[args.Who] = StarverPlayer.Guest;
 					Players[args.Who].Index = args.Who;
 				}
-				if (Players[args.Who].Level < Config.LevelNeed)
+				if (player.IsLoggedIn != false && Players[args.Who].Level < Config.LevelNeed)
 				{
 					Players[args.Who].TSPlayer.Disconnect($"你的等级不足,该端口要求玩家最低等级为{Config.LevelNeed}");
 				}
