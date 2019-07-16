@@ -400,9 +400,8 @@ namespace Starvers
 			}
 			#endregion
 			#region Save
-			if ((DateTime.Now - StarverConfig.LastSave).TotalSeconds > Config.SaveInterval)
+			if ((Timer / 60) % Config.SaveInterval == 0) 
 			{
-				StarverConfig.LastSave = DateTime.Now;
 				Utils.SaveAll();
 			}
 			if ((DateTime.Now - Last).TotalSeconds > 5)
@@ -422,14 +421,18 @@ namespace Starvers
 						{
 							liferegen = (int)(50 * Math.Log((player.TPlayer.lifeRegen + player.TPlayer.statDefense) * (player.Level / 100)));
 							liferegen = Math.Min(liferegen, player.TPlayer.statLife / 10);
-							player.TPlayer.statLife = Math.Min(player.TPlayer.statLifeMax2, player.TPlayer.statLife + liferegen);
-							player.SendData(PacketTypes.PlayerHp, "", player.Index);
+							if (liferegen > 0)
+							{
+								player.TPlayer.statLife = Math.Min(player.TPlayer.statLifeMax2, player.TPlayer.statLife + liferegen);
+								player.SendData(PacketTypes.PlayerHp, "", player.Index);
+							}
 						}
 						player.SendStatusMSG(string.Format("MP:  [{0}/{1}]\nLevel:  [{2}]\nExp:  [{3}/{4}]", player.MP, player.MaxMP, player.Level, player.Exp, StarverAuraManager.UpGradeExp(player.Level)));
 					}
-					catch
+					catch(Exception e)
 					{
-
+						StarverPlayer.All.SendMessage(e.ToString(), Color.Red);
+						StarverPlayer.Server.SendInfoMessage(e.ToString());
 					}
 				}
 			}
@@ -536,7 +539,7 @@ namespace Starvers
 				}
 				if (player.IsLoggedIn != false && Players[args.Who].Level < Config.LevelNeed)
 				{
-					Players[args.Who].TSPlayer.Disconnect($"你的等级不足,该端口要求玩家最低等级为{Config.LevelNeed}");
+					Players[args.Who].Kick($"你的等级不足,该处需要至少{Config.LevelNeed}级");
 				}
 
 			}
@@ -950,9 +953,9 @@ namespace Starvers
 					}
 					Manager.PlayerList.Items[player.Index] = string.Empty;
 				}
-				catch
+				catch(Exception e)
 				{
-
+					StarverPlayer.Server.SendInfoMessage(e.ToString());
 				}
 				return;
 			}
