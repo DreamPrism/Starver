@@ -668,7 +668,7 @@ namespace Starvers
 						case NPCID.GolemHead:
 							return;
 						case NPCID.TheDestroyerBody:
-							npc.defense *= 600;
+							npc.defense *= 60;
 							goto senddata;
 						default:
 							npc.life = npc.lifeMax = StarverAuraManager.NPCLife(npc.lifeMax);
@@ -676,7 +676,7 @@ namespace Starvers
 							goto senddata;
 					}
 					scale *= 10;
-					npc.defense = (int)(npc.defense * scale * 100);
+					npc.defense = (int)(npc.defense * scale);
 					npc.life = npc.lifeMax = (int)(scale * npc.lifeMax);
 				senddata:
 					NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);

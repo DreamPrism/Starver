@@ -16,7 +16,7 @@ namespace Starvers.AuraSystem.Skills
 			BossBan = true;
 			MP = 200;
 			CD = 120;
-			Lvl = 2000;
+			Lvl = 10000;
 			Description = "三叶草制作的最强技能";
 			Author = "三叶草";
 			SetText();

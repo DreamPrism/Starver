@@ -17,7 +17,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			MP = 350;
 			CD = 120;
-			Lvl = 1000;
+			Lvl = 10000;
 			Author = "wither";
 			Description = "能够和咖喱棒平起平坐的技能!\n对一定范围内的敌对生物发动攻击";
 			BossBan = true;

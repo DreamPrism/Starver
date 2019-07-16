@@ -92,6 +92,10 @@ namespace Starvers.BossSystem
 		#region OnUpdate
 		private void OnUpdate(EventArgs args)
 		{
+			if(Config.TaskNow < 20)
+			{
+				return;
+			}
 			#region SpawnBoss
 			if (Main.dayTime)
 			{

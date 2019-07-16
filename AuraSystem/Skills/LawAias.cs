@@ -16,7 +16,7 @@ namespace Starvers.AuraSystem.Skills
 			MP = 300;
 			CD = 120;
 			BossBan = true;
-			Lvl = 100;
+			Lvl = 5000;
 			Author = "三叶草";
 			Description = "这是三叶草没做好的技能,\n但是1413完成这个技能的同时偏离了三叶草的原版设计意图\n以释放者为圆心制造一个由弹幕组成的逐渐缩小的圆";
 			SetText();
@@ -24,13 +24,13 @@ namespace Starvers.AuraSystem.Skills
 		public override void Release(StarverPlayer player, Vector2 vel)
 		{
 			int proj = ProjectileID.DemonScythe;
-			if(player.Level > 1000)
-			{
-				proj = ProjectileID.Typhoon;
-			}
-			if(player.Level > 2000)
+			if(player.Level > 15000)
 			{
 				proj = ProjectileID.NebulaArcanum;
+			}
+			else if(player.Level > 10000)
+			{
+				proj = ProjectileID.Typhoon;
 			}
 			player.ProjCircle(player.Center, 16 * 40, 15, proj, 25,200);
 		}
