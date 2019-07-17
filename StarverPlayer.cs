@@ -255,6 +255,7 @@ namespace Starvers
 				Main.npc[MoonIndex].active = true;
 				Main.npc[MoonIndex].SetDefaults(NPCID.MoonLordCore);
 			}
+            Main.npc[MoonIndex].dontTakeDamage = true;
 			Main.npc[MoonIndex].type = NPCID.MoonLordCore;
 			Main.npc[MoonIndex].aiStyle = -1;
 			Main.npc[MoonIndex].Center = Center;
