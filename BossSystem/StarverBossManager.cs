@@ -142,6 +142,7 @@ namespace Starvers.BossSystem
 								continue;
 							}
 							Bosses[SpawnIndex].Spawn(ply.Center + Rand.NextVector2(16 * 20));
+							break;
 						}
 					}
 				}
