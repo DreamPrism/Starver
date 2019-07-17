@@ -13,11 +13,11 @@ namespace Starvers.AuraSystem.Skills
 	public class NStrike:Skill
 	{
 		private const float rec = 16 * 30;
-		public NStrike():base(SkillID.NStrike)
+		public NStrike() : base(SkillID.NStrike)
 		{
 			MP = 350;
 			CD = 120;
-			Lvl = 10000;
+			Lvl = 50000;
 			Author = "wither";
 			Description = "能够和咖喱棒平起平坐的技能!\n对一定范围内的敌对生物发动攻击";
 			BossBan = true;
