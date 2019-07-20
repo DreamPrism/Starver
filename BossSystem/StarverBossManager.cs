@@ -47,12 +47,14 @@ namespace Starvers.BossSystem
 			ServerApi.Hooks.NpcLootDrop.Register(Starver.Instance, OnDrop);
 			Commands.ChatCommands.Add(new Command(Perms.Boss.Spawn, BossCommand, "stboss"));
 			ServerApi.Hooks.GameUpdate.Register(Starver.Instance, OnUpdate);
+			GetDataHandlers.PlayerSlot += OnSlot;
 		}
 		public void UnLoad()
 		{
 			ServerApi.Hooks.NpcKilled.Deregister(Starver.Instance, OnKilled);
 			ServerApi.Hooks.NpcLootDrop.Deregister(Starver.Instance, OnDrop);
 			ServerApi.Hooks.GameUpdate.Deregister(Starver.Instance, OnUpdate);
+			GetDataHandlers.PlayerSlot -= OnSlot;
 		}
 		#endregion
 		#region Properties
@@ -91,6 +93,20 @@ namespace Starvers.BossSystem
 		public static List<AIDelegate> BossAIs = new List<AIDelegate>();
 		#endregion
 		#region Events
+		#region OnSlot
+		private void OnSlot(object sender, GetDataHandlers.PlayerSlotEventArgs args)
+		{
+			if (args.Slot == 49)
+			{
+				if (Bosses[Bosses.Length - 1].CanSpawn && !Bosses[Bosses.Length - 1].Active)
+				{
+					Main.player[args.PlayerId].inventory[args.Slot].stack -= 1; ;
+					NetMessage.SendData((int)PacketTypes.PlayerSlot, -1, -1, null, args.PlayerId, args.Slot);
+					Bosses[Bosses.Length - 1].Spawn(Main.player[args.PlayerId].Center + Rand.NextVector2(16 * 20));
+				}
+			}
+		}
+		#endregion
 		#region OnUpdate
 		private void OnUpdate(EventArgs args)
 		{
