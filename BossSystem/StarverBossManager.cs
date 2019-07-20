@@ -19,12 +19,14 @@ namespace Starvers.BossSystem
 	{
 		#region Fields
 		private int EndBossDelay = 0;
+		private uint Timer;
 		internal static bool TriedSpawn;
 		/// <summary>
 		/// 生成那个boss?
 		/// </summary>
 		internal static int SpawnIndex;
 		internal static int SpawnDelay;
+		internal static bool Cleared;
 		#endregion
 		#region ctor
 		static StarverBossManager()
@@ -92,80 +94,135 @@ namespace Starvers.BossSystem
 		#region OnUpdate
 		private void OnUpdate(EventArgs args)
 		{
-			#region SpawnBoss
-			if (Main.dayTime)
+			Timer++;
+			#region UpdateMoon
+			if (!TShock.Config.DisableHardmode)
 			{
-				TriedSpawn = false;
-				SpawnDelay = 0;
-			}
-			else
-			{
-				#region SelectWhichToSpawn
-				if (!TriedSpawn)
+				if (EndTrial)
 				{
-					TriedSpawn = true;
-					bool CanSpawn = false;
-					foreach (var ply in Starver.Players)
+					Cleared = false;
+					if (Timer % 30 == 0)
 					{
-						if (ply is null)
+						foreach (var player in Starver.Players)
 						{
-							continue;
-						}
-						CanSpawn |= ply.Active;
-					}
-					if (EndTrial == false && CanSpawn && Rand.Next(100) >= 10) 
-					{
-						SpawnDelay = 60 * 30;
-						SpawnIndex = Rand.Next(Bosses.Length - 2);
-						if (!Bosses[SpawnIndex].CanSpawn)
-						{
-							do
-							{
-								SpawnIndex = Rand.Next(Bosses.Length - 2);
-							}
-							while (!Bosses[SpawnIndex].CanSpawn);
-						}
-						StarverPlayer.All.SendMessage(Bosses[SpawnIndex].CommingMessage, Bosses[SpawnIndex].CommingMessageColor);
-					}
-				}
-				#endregion
-				#region Spawning
-				if(SpawnDelay > 0)
-				{
-					SpawnDelay--;
-					if(SpawnDelay == 0)
-					{
-						foreach(var ply in Starver.Players)
-						{
-							if(!ply.Active)
+							if (player is null)
 							{
 								continue;
 							}
-							Bosses[SpawnIndex].Spawn(ply.Center + Rand.NextVector2(16 * 20));
-							break;
+							player.UpdateMoon();
 						}
 					}
 				}
-				#endregion
+				else
+				{
+					if (!Cleared)
+					{
+						Cleared = true;
+						foreach (var player in Starver.Players)
+						{
+							if (player is null)
+							{
+								continue;
+							}
+							player.UpdateMoonClear();
+						}
+					}
+				}
+			}
+			#endregion
+			#region SetSkillCanUse
+			if (Config.EnableBoss)
+			{
+				StarverBoss.AliveBoss = 0;
+				foreach (var boss in Bosses)
+				{
+					if (boss.Active)
+					{
+						StarverBoss.AliveBoss += 1;
+					}
+				}
+			}
+			#endregion
+			#region SpawnBoss
+			if (Config.TaskNow < 22)
+			{
+				if (Main.dayTime)
+				{
+					TriedSpawn = false;
+					SpawnDelay = 0;
+				}
+				else
+				{
+					#region SelectWhichToSpawn
+					if (!TriedSpawn)
+					{
+						TriedSpawn = true;
+						bool CanSpawn = false;
+						foreach (var ply in Starver.Players)
+						{
+							if (ply is null)
+							{
+								continue;
+							}
+							CanSpawn |= ply.Active;
+						}
+						if (EndTrial == false && CanSpawn && Rand.Next(100) >= 10)
+						{
+							SpawnDelay = 60 * 30;
+							SpawnIndex = Rand.Next(Bosses.Length - 2);
+							if (!Bosses[SpawnIndex].CanSpawn)
+							{
+								do
+								{
+									SpawnIndex = Rand.Next(Bosses.Length - 2);
+								}
+								while (!Bosses[SpawnIndex].CanSpawn);
+							}
+							StarverPlayer.All.SendMessage(Bosses[SpawnIndex].CommingMessage, Bosses[SpawnIndex].CommingMessageColor);
+						}
+					}
+					#endregion
+					#region Spawning
+					if (SpawnDelay > 0)
+					{
+						SpawnDelay--;
+						if (SpawnDelay == 0)
+						{
+							foreach (var ply in Starver.Players)
+							{
+								if (!ply.Active)
+								{
+									continue;
+								}
+								Bosses[SpawnIndex].Spawn(ply.Center + Rand.NextVector2(16 * 20));
+								break;
+							}
+						}
+					}
+					#endregion
+				}
 			}
 			#endregion
 			#region BossAI
-			foreach (var AI in BossAIs)
+			foreach (var boss in Bosses)
 			{
 				try
 				{
-					AI(null);
+					if (boss.Active)
+					{
+						boss.AI();
+					}
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					StarverPlayer.Server.SendInfoMessage(e.ToString());
 				}
 			}
 			#endregion
 			#region EndTrial
-			if(EndTrial)
+			if (EndTrial)
 			{
-				switch(EndTrialProcess)
+				switch (EndTrialProcess)
 				{
 					#region 0(Starting)
 					case 0:
@@ -178,11 +235,11 @@ namespace Starvers.BossSystem
 					#endregion
 					#region 1(Vortex Invading)
 					case 1:
-						if(NPC.ShieldStrengthTowerVortex < 1)
+						if (NPC.ShieldStrengthTowerVortex < 1)
 						{
 							TowerTakeDamage();
 						}
-						if(!NPC.TowerActiveVortex)
+						if (!NPC.TowerActiveVortex)
 						{
 							KillTower();
 							EndBossDelay = 60 * 30;
@@ -192,47 +249,47 @@ namespace Starvers.BossSystem
 					#endregion
 					#region 2(CrazyWang)
 					case 2:
-						if(EndBossDelay-- == 60 * 30)
+						if (EndBossDelay-- == 60 * 30)
 						{
 							StarverPlayer.All.SendMessage("你们可曾记得", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 28)
+						else if (EndBossDelay == 60 * 28)
 						{
 							StarverPlayer.All.SendMessage("在那个世界里", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 26)
+						else if (EndBossDelay == 60 * 26)
 						{
 							StarverPlayer.All.SendMessage("你们的噩梦吗", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 23)
+						else if (EndBossDelay == 60 * 23)
 						{
 							StarverPlayer.All.SendMessage("是的", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 20)
+						else if (EndBossDelay == 60 * 20)
 						{
 							StarverPlayer.All.SendMessage("这次", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 18)
+						else if (EndBossDelay == 60 * 18)
 						{
 							StarverPlayer.All.SendMessage("你们要对付的第一个", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 13)
+						else if (EndBossDelay == 60 * 13)
 						{
 							StarverPlayer.All.SendMessage("就是他", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 10)
+						else if (EndBossDelay == 60 * 10)
 						{
 							StarverPlayer.All.SendMessage("越来越近了", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 7)
+						else if (EndBossDelay == 60 * 7)
 						{
 							StarverPlayer.All.SendMessage("是他来了", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 3)
+						else if (EndBossDelay == 60 * 3)
 						{
 							StarverPlayer.All.SendMessage("祝你们好运", Color.BlueViolet);
 						}
-						else if(EndBossDelay == 60 * 1)
+						else if (EndBossDelay == 60 * 1)
 						{
 							Bosses[Bosses.Length - 6].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 3000);
 							EndBossDelay = -1;
@@ -241,14 +298,14 @@ namespace Starvers.BossSystem
 					#endregion
 					#region 3(Stardust Invading)
 					case 3:
-						if(EndBossDelay < 0)
+						if (EndBossDelay < 0)
 						{
 							EndBossDelay = 0;
 							WorldGen.TriggerLunarApocalypse();
 							SummonTower(NPCID.LunarTowerStardust);
 							StarverPlayer.All.SendMessage("战斗还在继续...", Color.DarkGreen);
 						}
-						if(!NPC.TowerActiveStardust)
+						if (!NPC.TowerActiveStardust)
 						{
 							KillTower();
 							EndBossDelay = 60 * 30;
@@ -313,7 +370,7 @@ namespace Starvers.BossSystem
 							SummonTower(NPCID.LunarTowerNebula);
 							StarverPlayer.All.SendMessage("战斗还将延续...", Color.DarkGreen);
 						}
-						if(!NPC.TowerActiveNebula)
+						if (!NPC.TowerActiveNebula)
 						{
 							KillTower();
 							EndBossDelay = 60 * 30;
@@ -443,7 +500,7 @@ namespace Starvers.BossSystem
 					#endregion
 					#region 10(Clover)
 					case 10:
-						if(EndBossDelay-- == 0)
+						if (EndBossDelay-- == 0)
 						{
 							StarverPlayer.All.SendMessage("这是你们的最后一战", Color.Black);
 							Bosses[Bosses.Length - 2].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 5000);
