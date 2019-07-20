@@ -21,6 +21,8 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public EyeEx() : base(3)
 		{
+			ComingMessage = "你感到一种令人恐惧的注视...";
+			ComingMessageColor = Color.LightGreen;
 			TaskNeed = 22;
 			RawType = NPCID.EyeofCthulhu;
 			Name = "克苏鲁之眼";

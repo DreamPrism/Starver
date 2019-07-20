@@ -45,6 +45,8 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public BrainEx() : base(2)
 		{
+			ComingMessage = "血液在沸腾...";
+			ComingMessageColor = Color.Red;
 			TaskNeed = 23;
 			Name = "克苏鲁之脑";
 			IgnoreDistance = true;

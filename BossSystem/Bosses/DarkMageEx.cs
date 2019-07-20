@@ -29,6 +29,10 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public DarkMageEx() : base(1)
 		{
+			ComingMessage = "远古的力量正在缓缓凝聚...";
+			ComingMessageColor = Color.Pink;
+			DownedMessage = "守护者们自沉睡中苏醒...";
+			DownedMessageColor = Color.Yellow;
 			TaskNeed = 26;
 			Name = "dark膜法师";
 			LifeperPlayerType = ByLifes;

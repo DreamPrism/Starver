@@ -22,6 +22,8 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public SkeletronEx() : base(2)
 		{
+			ComingMessage = "你感到全身上下的骨头都在战粟...";
+			ComingMessageColor = Color.Gray;
 			TaskNeed = 25;
 			RawType = NPCID.SkeletronHead;
 			DefaultDefense = 30;

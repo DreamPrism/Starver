@@ -60,6 +60,13 @@ namespace Starvers.AuraSystem
 			if (args.Type == ProjectileID.RocketII || args.Type == ProjectileID.RocketIV || args.Type == ProjectileID.RocketSnowmanII || args.Type == ProjectileID.RocketSnowmanIV)
 			{
 				Main.projectile[args.Index].active = false;
+				return;
+			}
+			if ((!Main.projectile[args.Index].friendly) && Main.projectile[args.Index].damage <= 300)
+			{
+				Main.projectile[args.Index].damage = (int)(Config.TaskNow / 4D);
+				NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, args.Index);
+				return;
 			}
 			int slot = Skill.GetSlot(args.Type);
 			if (slot > 0 && slot < 6 && (DateTime.Now - Starver.Players[args.Owner].LastHandle).TotalSeconds > 1) 

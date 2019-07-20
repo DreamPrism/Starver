@@ -1,5 +1,4 @@
-﻿using Starvers.WeaponSystem.Weapons;
-using Starvers.WeaponSystem.Weapons.Ranged;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +8,19 @@ using TShockAPI;
 
 namespace Starvers.WeaponSystem
 {
+	using Starvers.WeaponSystem.Weapons;
+	using Starvers.WeaponSystem.Weapons.Ranged;
+	using Starvers.WeaponSystem.Weapons.Magic;
+	using Starvers.WeaponSystem.Weapons.Melee;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class StarverWeaponManager : IStarverPlugin
 	{
 		#region Fields
 		private static Weapon[] Melee =
 		{
-
+			new NorthPoleEx(),
+			new TerraBladeEx(),
+			new MushroomSpearEx()
 		};
 		private static Weapon[] Ranged =
 		{
@@ -26,7 +31,10 @@ namespace Starvers.WeaponSystem
 		};
 		private static Weapon[] Magic =
 		{
-			
+			new NebulaArcanumEx(),
+			new NebulaBlazeEx(),
+			new LastPrismEx(),
+			new LaserMachinegunEx()
 		};
 		private static Weapon[] Minion =
 		{
@@ -124,9 +132,9 @@ namespace Starvers.WeaponSystem
 						}
 						catch
 						{
-							foreach(var wp in weapons)
+							foreach (var wp in weapons)
 							{
-								if(wp.Name.ToLower().IndexOf(read)==0)
+								if (wp.Name.ToLower().IndexOf(read) == 0)
 								{
 									weapon = wp;
 									break;
@@ -143,12 +151,12 @@ namespace Starvers.WeaponSystem
 		#region Hooks
 		private void OnProj(object sender, GetDataHandlers.NewProjectileEventArgs args)
 		{
-			if(args.Owner > 40 || Terraria.Main.projectile[args.Index].hostile)
+			if (args.Owner > 40 || Terraria.Main.projectile[args.Index].hostile)
 			{
 				return;
 			}
 			Weapon[] weapons;
-			if(Terraria.Main.projectile[args.Index].melee)
+			if (Terraria.Main.projectile[args.Index].melee)
 			{
 				weapons = WeaponList[CareerType.Melee];
 			}
@@ -164,13 +172,13 @@ namespace Starvers.WeaponSystem
 			{
 				weapons = WeaponList[CareerType.Minion];
 			}
-			foreach(var weapon in weapons)
+			foreach (var weapon in weapons)
 			{
-				if(weapon.Check(args))
+				if (weapon.Check(args))
 				{
 					if (Starver.Players[args.Owner].HasWeapon(weapon))
 					{
-						weapon.UseWeapon(Starver.Players[args.Owner], (Vector)args.Velocity, Starver.Players[args.Owner].Weapon[weapon.Career, weapon.Index],args);
+						weapon.UseWeapon(Starver.Players[args.Owner], (Vector)args.Velocity, Starver.Players[args.Owner].Weapon[weapon.Career, weapon.Index], args);
 					}
 					break;
 				}

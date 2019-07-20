@@ -307,6 +307,7 @@ namespace Starvers
 				}
 			}
 			Level = lvl;
+			exp += (int)ExpGet;
 		}
 		#endregion
 		#region DataOperations

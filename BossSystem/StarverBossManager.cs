@@ -160,7 +160,7 @@ namespace Starvers.BossSystem
 			}
 			#endregion
 			#region SpawnBoss
-			if (Config.TaskNow < 22)
+			if (Config.TaskNow >= 22)
 			{
 				if (Main.dayTime)
 				{
@@ -194,7 +194,7 @@ namespace Starvers.BossSystem
 								}
 								while (!Bosses[SpawnIndex].CanSpawn);
 							}
-							StarverPlayer.All.SendMessage(Bosses[SpawnIndex].CommingMessage, Bosses[SpawnIndex].CommingMessageColor);
+							StarverPlayer.All.SendMessage(Bosses[SpawnIndex].ComingMessage, Bosses[SpawnIndex].ComingMessageColor);
 						}
 					}
 					#endregion

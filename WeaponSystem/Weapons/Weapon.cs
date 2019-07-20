@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace Starvers.WeaponSystem.Weapons
 {
+	using IID = Terraria.ID.ItemID;
+	using PID = Terraria.ID.ProjectileID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public abstract class Weapon
 	{
@@ -90,7 +92,7 @@ namespace Starvers.WeaponSystem.Weapons
 		#region Check
 		public virtual bool Check(TShockAPI.GetDataHandlers.NewProjectileEventArgs args)
 		{
-			return args.Type == CatchID;
+			return args.Type == CatchID && Terraria.Main.player[args.Owner].HeldItem.type == ItemID;
 		}
 		#endregion
 		#region UseWeapon
