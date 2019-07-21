@@ -70,7 +70,7 @@ namespace Starvers.WeaponSystem
 				args.Player.SendErrorMessage("正确用法:");
 				args.Player.SendErrorMessage("    <Career> <Name> : Career 武器类型;Name 武器名");
 				args.Player.SendErrorMessage("武器类型为:");
-				args.Player.SendErrorMessage("  Melee\n  Rangd\n  Magic\n  Minion");
+				args.Player.SendErrorMessage("  Melee\n  Ranged\n  Magic\n  Minion");
 				args.Player.SendErrorMessage("    <Career> : 查看该类型武器");
 				return;
 			}

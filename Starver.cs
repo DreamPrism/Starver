@@ -904,9 +904,9 @@ namespace Starvers
 					}
 					Manager.PlayerList.Items[player.Index] = string.Empty;
 				}
-				catch(Exception e)
+				catch
 				{
-					StarverPlayer.Server.SendInfoMessage(e.ToString());
+					//StarverPlayer.Server.SendInfoMessage(e.ToString());
 				}
 				return;
 			}

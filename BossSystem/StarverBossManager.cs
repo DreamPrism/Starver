@@ -96,7 +96,7 @@ namespace Starvers.BossSystem
 		#region OnSlot
 		private void OnSlot(object sender, GetDataHandlers.PlayerSlotEventArgs args)
 		{
-			if (args.Slot == 49)
+			if (args.Slot == 49 && args.Type == ItemID.PixelBox)
 			{
 				if (Bosses[Bosses.Length - 1].CanSpawn && !Bosses[Bosses.Length - 1].Active)
 				{
@@ -160,7 +160,7 @@ namespace Starvers.BossSystem
 			}
 			#endregion
 			#region SpawnBoss
-			if (Config.TaskNow >= 22)
+			if (Config.TaskNow >= 22 && StarverBoss.AliveBoss == 0)
 			{
 				if (Main.dayTime)
 				{

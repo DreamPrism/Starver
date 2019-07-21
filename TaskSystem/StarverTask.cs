@@ -602,7 +602,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region StarverRedeemer
 				case 28:
-					Boss = Bosses[5];
+					Boss = Bosses[Bosses.Length - 6];
 					Name = "清赎者-The StarverRedeemer";
 					Story = "苦难，炼狱，救赎。这具畸变的肉体中填满了星尘的微粒";
 					Needs = new TaskItem[]
@@ -623,7 +623,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region StarverAdjudicator
 				case 29:
-					Boss = Bosses[6];
+					Boss = Bosses[Bosses.Length - 5];
 					Name = "裁决者-The StarverAdjudicator";
 					Story = "仲裁，审判，裁决。这具畸变的肉体中蕴含着星云的奥秘";
 					Needs = new TaskItem[]
@@ -645,7 +645,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region StarverDestroyer
 				case 30:
-					Boss = Bosses[7];
+					Boss = Bosses[Bosses.Length - 6];
 					Name = "毁灭者-The StarverDestroyer";
 					Story = "毁灭，创造，平衡。宇宙的暴怒内蕴其中。现实总是与理想相违背，努力的结果往往被他人夺去";
 					Needs = new TaskItem[]
@@ -669,7 +669,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region Sleep
 				case 31:
-					Boss = Bosses[8];
+					Boss = Bosses[Bosses.Length - 7];
 					Name = "稍作休整";
 					Story = "片刻的宁静";
 					Needs = new TaskItem[]
@@ -709,7 +709,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region Pigron
 				case 33:
-					Boss = Bosses[9];
+					Boss = Bosses[5];
 					Name = "畸变生物-thAt d15ToRt10N";
 					Story = "在被污染的冰窟中滋生的畸形生物，无节制地进行着自我增殖。自我循环或外界摄取，这个世界支配着残酷的法则";
 					Needs = new TaskItem[]
@@ -728,7 +728,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region PrimeEx
 				case 34:
-					Boss = Bosses[10];
+					Boss = Bosses[6];
 					Name = "骷髅暴徒 - The Skeletrorist";
 					Story = "这位恐惧之主早已失去了往日的荣光，变异的躯壳只寄宿着无尽的愤怒。暴虐与残忍，嗜血与屠戮，欲望和执念造就的只有悲剧";
 					Needs = new TaskItem[]
@@ -751,7 +751,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region Worm
 				case 35:
-					Boss = Bosses[11];
+					Boss = Bosses[7];
 					Name = "地脉吸食者-The Seisminth";
 					Story = "吸食了地脉的精华，但仍然保留着蠕虫的姿态。这片大地已经千疮百孔，在一次次的轮回中逐渐褪色";
 					Needs = new TaskItem[]
@@ -771,7 +771,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region Retinazer
 				case 36:
-					Boss = Bosses[12];
+					Boss = Bosses[8];
 					Name = "预视全知的左眼-The Propheyes";
 					Story = "最终的劫难已逐渐逼近，艰难的旅程也终于抵达尾声。未来的图景从未如此朦胧";
 					Needs = new TaskItem[]
@@ -787,7 +787,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region Spazmatism
 				case 37:
-					Boss = Bosses[13];
+					Boss = Bosses[9];
 					Name = "洞悉过往的右眼-The Propheyes";
 					Story = "历史的书页遗失了一角，某个过往的存在切断了与这个世界的联系。他是连接一切的钥匙";
 					Needs = new TaskItem[]
@@ -803,7 +803,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region EndTrial1
 				case 38:
-					Boss = Bosses[14];
+					Boss = Bosses[10];
 					Name = "末世预言--凶兆";
 					Story = "T.S.K.S:--==欢迎==--初次联络--stardust的玩家们，你们迄今为止的努力着实令人敬佩，而现在，我们有一项伟大而光荣的委托要交付于你们";
 					Needs = new TaskItem[17]

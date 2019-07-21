@@ -287,18 +287,15 @@ namespace Starvers
 		public void UPGrade(BigInt ExpGet)
 		{
 			int lvl = level;
+			ExpGet += exp;
 			int need = AuraSystem.StarverAuraManager.UpGradeExp(lvl);
 			if (HasPerm(Perms.VIP.LessCost))
 			{
 				need /= 3;
 			}
-			while (true)
+			while (ExpGet > need)
 			{
 				ExpGet -= need;
-				if(ExpGet < BigInt.Zero)
-				{
-					break;
-				}
 				++lvl;
 				need = AuraSystem.StarverAuraManager.UpGradeExp(lvl);
 				if (HasPerm(Perms.VIP.LessCost))
@@ -307,7 +304,7 @@ namespace Starvers
 				}
 			}
 			Level = lvl;
-			exp += (int)ExpGet;
+			exp = (int)ExpGet;
 		}
 		#endregion
 		#region DataOperations

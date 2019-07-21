@@ -61,6 +61,7 @@ namespace Starvers.WeaponSystem.Weapons
 			{
 				if(player.TPlayer.inventory[i].type != Currency.Shards[Career])
 				{
+					i--;
 					break;
 				}
 				else

@@ -23,7 +23,7 @@ namespace Starvers.WeaponSystem.Weapons.Melee
 		#region UseWeapon
 		public override void UseWeapon(StarverPlayer player, Vector Velocity, int lvl, GetDataHandlers.NewProjectileEventArgs args)
 		{
-			player.ProjSector(args.Position, Velocity.Length, 16 * 3, Velocity.Angle, Math.PI / 3, CalcDamage(lvl), ProjID, lvl > 20 ? 5 : 3);
+			player.ProjSector(args.Position, 19, 16 * 3, Velocity.Angle, Math.PI / 3, CalcDamage(lvl), ProjID, lvl > 20 ? 5 : 3);
 		}
 		#endregion
 	}

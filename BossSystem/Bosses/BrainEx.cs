@@ -87,6 +87,14 @@ namespace Starvers.BossSystem.Bosses
 		#region BeDown
 		protected override void BeDown()
 		{
+			foreach(var ply in Starver.Players)
+			{
+				if(ply is null)
+				{
+					continue;
+				}
+				RealNPC.playerInteraction[ply.Index] = true;
+			}
 			base.BeDown();
 			for (i = 0; i < Inter; ++i)
 			{

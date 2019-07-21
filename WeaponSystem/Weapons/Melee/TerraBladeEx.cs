@@ -22,7 +22,7 @@ namespace Starvers.WeaponSystem.Weapons.Melee
 		public override void UseWeapon(StarverPlayer player, Vector Velocity, int lvl, GetDataHandlers.NewProjectileEventArgs args)
 		{
 			player.ProjCircle(player.Center, 16 * 6, 15, ProjID, 8, CalcDamage(lvl) * 3 / 4, 2);
-			player.ProjLine(player.Center, player.Center + args.Velocity.ToLenOf(16 * 20), args.Velocity.ToLenOf(1), 10, CalcDamage(lvl), ProjID);
+			player.ProjLine(player.Center, player.Center + args.Velocity.ToLenOf(16 * 20), args.Velocity.ToLenOf(1), 10, CalcDamage(lvl), PID.SolarWhipSwordExplosion);
 		}
 		#endregion
 	}
