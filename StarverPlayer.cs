@@ -212,6 +212,33 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region Methods
+		public NPCSystem.BiomeType GetBiomes()
+		{
+			NPCSystem.BiomeType biome = default;
+			bool Grass = true;
+			if(TPlayer.ZoneDesert)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Dessert;
+			}
+			if(TPlayer.ZoneHoly)
+			{
+				biome |= NPCSystem.BiomeType.Holy;
+			}
+			if(Grass)
+			{
+				biome |= NPCSystem.BiomeType.Grass;
+			}
+			throw new NotImplementedException();
+		}
+		#region GetBiomes
+		#endregion
+		#region GetSpawnChecker
+		public NPCSystem.SpawnChecker GetSpawnChecker()
+		{
+			throw new NotImplementedException();
+		}
+		#endregion
 		#region EatItems
 		/// <summary>
 		/// 吃掉玩家背包里从begin起不包括end的物品

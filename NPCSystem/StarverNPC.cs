@@ -14,12 +14,11 @@ namespace Starvers.NPCSystem
 		#region Fields
 		protected float[] AIUsing;
 		protected int RawType;
-		protected int SpawnRate = 5;
-		protected int SpawnChance = 50;
 		protected int DefaultLife;
 		protected int DefaultDefense;
 		protected DateTime LastSpawn = DateTime.Now;
 		protected StarverNPC Root;
+		protected SpawnChecker Checker;
 		protected abstract void RealAI();
 		#endregion
 		#region ctor
@@ -39,10 +38,7 @@ namespace Starvers.NPCSystem
 		#region CheckSpawn
 		protected virtual bool CheckSpawn(StarverPlayer player)
 		{
-			return
-			player.Active &
-			(DateTime.Now - Root.LastSpawn).TotalSeconds > SpawnRate &
-			Rand.Next(100) >= SpawnChance;
+			return Checker.Match();
 		}
 		#endregion
 		#region AI
@@ -60,15 +56,14 @@ namespace Starvers.NPCSystem
 					if (Target == None || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 400)
 					{
 						KillMe();
+						return;
 					}
 				}
-			}
-			{
-				++Timer;
-				RealAI();
 				Velocity = FakeVelocity;
-				SendData();
 			}
+			RealAI();
+			SendData();
+			++Timer;
 		}
 		#endregion
 	}

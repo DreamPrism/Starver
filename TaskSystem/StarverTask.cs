@@ -645,7 +645,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region StarverDestroyer
 				case 30:
-					Boss = Bosses[Bosses.Length - 6];
+					Boss = Bosses[Bosses.Length - 4];
 					Name = "毁灭者-The StarverDestroyer";
 					Story = "毁灭，创造，平衡。宇宙的暴怒内蕴其中。现实总是与理想相违背，努力的结果往往被他人夺去";
 					Needs = new TaskItem[]
@@ -669,7 +669,7 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region Sleep
 				case 31:
-					Boss = Bosses[Bosses.Length - 7];
+					Boss = Bosses[Bosses.Length - 3];
 					Name = "稍作休整";
 					Story = "片刻的宁静";
 					Needs = new TaskItem[]

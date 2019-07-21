@@ -151,7 +151,7 @@ namespace Starvers.WeaponSystem
 		#region Hooks
 		private void OnProj(object sender, GetDataHandlers.NewProjectileEventArgs args)
 		{
-			if (args.Owner > 40 || Terraria.Main.projectile[args.Index].hostile)
+			if (args.Owner > 40 || !Terraria.Main.projectile[args.Index].friendly)
 			{
 				return;
 			}
