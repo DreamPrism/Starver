@@ -20,7 +20,7 @@ namespace Starvers.NPCSystem
 		TowerStardust = Tower | 1 << 7,
 		TowerNebula = Tower | 1 << 8,
 		TowerSolar = Tower | 1 << 9,
-		Ocean = 1 << 10,
+		Beach = 1 << 10,
 		Sky = 1 << 11,
 		Hell = 1 << 12,
 		Holy = 1 << 13,

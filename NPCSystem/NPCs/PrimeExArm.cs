@@ -30,9 +30,10 @@ namespace Starvers.NPCSystem.NPCs
 		#region Spawn
 		public unsafe void Spawn(Vector where,PrimeEx prime,float ID)
 		{
+			base.Spawn(where);
+			Starver.NPCs[Index] = NPCs[Index] = this;
 			AIUsing[0] = PI * 2 * ID / PrimeEx.MaxArms;
 			Prime = prime;
-			base.Spawn(where);
 			Vel = NewByPolar(PI * 2 * (ID / PrimeEx.MaxArms),Distance);
 			Center = Prime.Center + Vel;
 			RealNPC.aiStyle = None;

@@ -12,6 +12,9 @@ namespace Starvers.NPCSystem.NPCs
 {
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using BrainEx = BossSystem.Bosses.BrainEx;
+	/// <summary>
+	/// 请勿使用StarverNPC.NewNPC生成
+	/// </summary>
 	public class BrainFollow : StarverNPC
 	{
 		#region Fields
@@ -49,7 +52,7 @@ namespace Starvers.NPCSystem.NPCs
 		public bool Spawn(Vector where,BrainEx owner,float start,float Radium = 16 * 10,int roundtype = 0)
 		{
 			bool flag = base.Spawn(where);
-			Starver.NPCs[Index] = this;
+			Starver.NPCs[Index] = NPCs[Index] = this;
 			RealNPC.aiStyle = None;
 			Brain = owner;
 			Target = Brain.Target;

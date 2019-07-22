@@ -436,6 +436,9 @@ namespace Starvers
 				}
 			}
 			#endregion
+			#region NPC
+			UpdateNPCAI();
+			#endregion
 		}
 		#endregion
 		#region OnLogin
@@ -639,6 +642,19 @@ namespace Starvers
 			//snpc.SendData();
 		}
 		#endregion
+		#endregion
+		#region UpdateNPCAI
+		private static void UpdateNPCAI()
+		{
+			foreach(var npc in NPCs)
+			{
+				if(npc is null || !npc.Active)
+				{
+					continue;
+				}
+				npc.AI();
+			}
+		}
 		#endregion
 		#region LvlPrefixColor
 		public static string LvlPrefixColor(int lvl)
