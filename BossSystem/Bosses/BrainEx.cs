@@ -45,6 +45,8 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public BrainEx() : base(2)
 		{
+			ComingMessage = "血液在沸腾...";
+			ComingMessageColor = Color.Red;
 			TaskNeed = 23;
 			Name = "克苏鲁之脑";
 			IgnoreDistance = true;
@@ -85,6 +87,14 @@ namespace Starvers.BossSystem.Bosses
 		#region BeDown
 		protected override void BeDown()
 		{
+			foreach(var ply in Starver.Players)
+			{
+				if(ply is null)
+				{
+					continue;
+				}
+				RealNPC.playerInteraction[ply.Index] = true;
+			}
 			base.BeDown();
 			for (i = 0; i < Inter; ++i)
 			{

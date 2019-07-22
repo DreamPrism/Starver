@@ -105,6 +105,7 @@
     <Compile Include="AuraSystem\Skills\TrackingMissle.cs" />
     <Compile Include="AuraSystem\Skills\Whirlwind.cs" />
     <Compile Include="AuraSystem\Skills\WindRealm.cs" />
+    <Compile Include="BlockSystem\StarverBlockManager.cs" />
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.cs" />
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.IProjSet.cs" />
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.ProjPair.cs" />
@@ -131,7 +132,7 @@
     <Compile Include="BossSystem\Bosses\StarverDestroyer.cs" />
     <Compile Include="BossSystem\Bosses\StarverRedeemer.cs" />
     <Compile Include="BossSystem\Bosses\DarkMageEx.cs" />
-    <Compile Include="BossSystem\DropItem.cs" />
+    <Compile Include="DropItem.cs" />
     <Compile Include="BossSystem\StarverBossManager.cs" />
     <Compile Include="BossSystem\Bosses\StarverWander.cs" />
     <Compile Include="DB\Ext.cs" />
@@ -148,9 +149,13 @@
       <DependentUpon>StarverManagerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IStarverPlugin.cs" />
+    <Compile Include="NPCSystem\BiomeType.cs" />
     <Compile Include="NPCSystem\NPCs\BrainFollow.cs" />
     <Compile Include="NPCSystem\NPCs\PrimeExArm.cs" />
+    <Compile Include="NPCSystem\SpawnChecker.cs" />
+    <Compile Include="NPCSystem\SpawnConditions.cs" />
     <Compile Include="NPCSystem\StarverNPC.cs" />
+    <Compile Include="NPCSystem\StarverNPCManager.cs" />
     <Compile Include="Perms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -172,6 +177,13 @@
     <Compile Include="WeaponSystem\Currency.cs" />
     <Compile Include="WeaponSystem\StarverWeaponManager.cs" />
     <Compile Include="WeaponSystem\Weapons\CareerType.cs" />
+    <Compile Include="WeaponSystem\Weapons\Magic\LaserMachinegunEx.cs" />
+    <Compile Include="WeaponSystem\Weapons\Magic\LastPrismEx.cs" />
+    <Compile Include="WeaponSystem\Weapons\Magic\NebulaArcanumEx.cs" />
+    <Compile Include="WeaponSystem\Weapons\Magic\NebulaBlazeEx.cs" />
+    <Compile Include="WeaponSystem\Weapons\Melee\MushroomSpearEx.cs" />
+    <Compile Include="WeaponSystem\Weapons\Melee\NorthPoleEx.cs" />
+    <Compile Include="WeaponSystem\Weapons\Melee\TerraBladeEx.cs" />
     <Compile Include="WeaponSystem\Weapons\Ranged\PhantasmEx.cs" />
     <Compile Include="WeaponSystem\Weapons\Ranged\PhantomPhoenix.cs" />
     <Compile Include="WeaponSystem\Weapons\Ranged\VortexBeaterEx.cs" />
@@ -186,8 +198,6 @@
     <Content Include="lib\TShockAPI.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="WeaponSystem\Weapons\Magic\" />
-    <Folder Include="WeaponSystem\Weapons\Melee\" />
     <Folder Include="WeaponSystem\Weapons\Minion\" />
   </ItemGroup>
   <ItemGroup>

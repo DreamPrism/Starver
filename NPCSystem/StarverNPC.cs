@@ -14,18 +14,30 @@ namespace Starvers.NPCSystem
 		#region Fields
 		protected float[] AIUsing;
 		protected int RawType;
-		protected int SpawnRate = 5;
-		protected int SpawnChance = 50;
 		protected int DefaultLife;
 		protected int DefaultDefense;
 		protected DateTime LastSpawn = DateTime.Now;
 		protected StarverNPC Root;
+		protected SpawnChecker Checker;
 		protected abstract void RealAI();
 		#endregion
 		#region ctor
 		protected StarverNPC(int AIs = 0)
 		{
 			AIUsing = new float[AIs];
+		}
+		static StarverNPC()
+		{
+			Type[] types = System.Reflection.Assembly.GetExecutingAssembly().GetTypes();
+			foreach(var type in types)
+			{
+				if (type.IsAbstract || IsBossFollow(type) || !type.IsSubclassOf(typeof(StarverNPC))) 
+				{
+					continue;
+				}
+				NPCTypes.Add(type);
+				RootNPCs.Add(Activator.CreateInstance(type) as StarverNPC);
+			}
 		}
 		#endregion
 		#region Spawn
@@ -37,12 +49,14 @@ namespace Starvers.NPCSystem
 		}
 		#endregion
 		#region CheckSpawn
+		/// <summary>
+		/// 检查是否满足创建NPC条件
+		/// </summary>
+		/// <param name="player"></param>
+		/// <returns></returns>
 		protected virtual bool CheckSpawn(StarverPlayer player)
 		{
-			return
-			player.Active &
-			(DateTime.Now - Root.LastSpawn).TotalSeconds > SpawnRate &
-			Rand.Next(100) >= SpawnChance;
+			return StarverConfig.Config.TaskNow >= Checker.Task && Checker.Match(player.GetSpawnChecker()) && Timer % Checker.SpawnRate == 0 && Rand.NextDouble() < Checker.SpawnChance;
 		}
 		#endregion
 		#region AI
@@ -60,14 +74,86 @@ namespace Starvers.NPCSystem
 					if (Target == None || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 400)
 					{
 						KillMe();
+						return;
 					}
 				}
-			}
-			{
-				++Timer;
-				RealAI();
 				Velocity = FakeVelocity;
-				SendData();
+			}
+			RealAI();
+			SendData();
+			++Timer;
+		}
+		#endregion
+		#region Globals
+		protected static int SpawnTimer;
+		protected static List<Type> NPCTypes = new List<Type>();
+		protected static List<StarverNPC> RootNPCs = new List<StarverNPC>();
+		protected static int NewNPC<T>(Vector where, Vector Velocity)
+			where T : StarverNPC, new()
+		{
+			StarverNPC npc = new T();
+			npc._active = true;
+			npc.Index = NewNPCStatic(where, Velocity, npc.RawType, npc.DefaultLife, npc.DefaultDefense);
+			npc.RealNPC.life = npc.DefaultDefense;
+			npc.RealNPC.defense = npc.DefaultDefense;
+			npc.OnSpawn();
+			Starver.NPCs[npc.Index] = NPCs[npc.Index] = npc;
+			return npc.Index;
+		}
+		protected static int NewNPC(Vector where, Vector Velocity,Type NPCType)
+		{
+			if(NPCType.IsAbstract == false && NPCType.IsSubclassOf(typeof(StarverNPC)))
+			{
+				StarverNPC npc = Activator.CreateInstance(NPCType) as StarverNPC;
+				npc._active = true;
+				npc.Index = NewNPCStatic(where, Velocity, npc.RawType, npc.DefaultLife, npc.DefaultDefense);
+				npc.RealNPC.life = npc.DefaultDefense;
+				npc.RealNPC.defense = npc.DefaultDefense;
+				npc.OnSpawn();
+				Starver.NPCs[npc.Index] = NPCs[npc.Index] = npc;
+				return npc.Index;
+			}
+			else
+			{
+				throw new ArgumentException($"{NPCType.Name}不是StarverNPC的子类或是抽象类");
+			}
+		}
+		protected static int NewNPC(Vector where, Vector Velocity, StarverNPC Root)
+		{
+			StarverNPC npc = Root.MemberwiseClone() as StarverNPC;
+			npc._active = true;
+			npc.Index = NewNPCStatic(where, Velocity, npc.RawType, npc.DefaultLife, npc.DefaultDefense);
+			npc.RealNPC.life = npc.DefaultDefense;
+			npc.RealNPC.defense = npc.DefaultDefense;
+			npc.OnSpawn();
+			Starver.NPCs[npc.Index] = NPCs[npc.Index] = npc;
+			return npc.Index;
+		}
+		protected static bool IsBossFollow(Type type)
+		{
+			return type == typeof(NPCs.BrainFollow) || type == typeof(NPCs.PrimeExArm);
+		}
+
+
+
+
+		public static StarverNPC[] NPCs = new StarverNPC[Terraria.Main.maxNPCs];
+		public static void DoUpDate(object args)
+		{
+			SpawnTimer++;
+			foreach (var player in Starver.Players)
+			{
+				if (player is null || !player.Active)
+				{
+					continue;
+				}
+				foreach (var npc in RootNPCs)
+				{
+					if (npc.CheckSpawn(player))
+					{
+						NewNPC((Vector)(player.Center + Rand.NextVector2(16 * 8)), Vector.Zero, npc);
+					}
+				}
 			}
 		}
 		#endregion

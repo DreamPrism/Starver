@@ -463,6 +463,16 @@ namespace Starvers
 			SendData(idx);
 			return idx;
 		}
+		protected static int NewNPCStatic(Vector pos, Vector vel, int type, int lifeMax, int defense)
+		{
+			int idx = NPC.NewNPC((int)pos.X, (int)pos.Y, type, start);
+			Main.npc[idx].velocity = vel;
+			Main.npc[idx].lifeMax = lifeMax;
+			Main.npc[idx].life = lifeMax;
+			Main.npc[idx].defense = defense;
+			NetMessage.SendData((int)PacketTypes.NpcUpdate,, -1, -1, null, idx);
+			return idx;
+		}
 		#endregion
 		#region CheckTime
 		protected bool CheckTime()

@@ -57,7 +57,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			base.BeDown();
 			//WorldGen.TriggerLunarApocalypse();
-			Starver.Cleared = true;
+			StarverBossManager.Cleared = true;
 			EndTrial = true;
 			EndTrialProcess = 0;
 		}

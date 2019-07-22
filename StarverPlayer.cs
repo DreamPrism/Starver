@@ -212,6 +212,127 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region Methods
+		#region GetBiomes
+		public NPCSystem.BiomeType GetBiomes()
+		{
+			NPCSystem.BiomeType biome = default;
+			bool Grass = true;
+			#region Zones
+			if (TPlayer.ZoneDesert)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Dessert;
+			}
+			if(TPlayer.ZoneHoly)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Holy;
+			}
+			if(TPlayer.ZoneCorrupt)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Corrupt;
+			}
+			if(TPlayer.ZoneCrimson)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Crimson;
+			}
+			if(TPlayer.ZoneRockLayerHeight || TPlayer.ZoneDirtLayerHeight)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.UnderGround;
+			}
+			if(TPlayer.ZoneJungle)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Jungle;
+			}
+			if(TPlayer.ZoneSnow)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Icy;
+			}
+			if(TPlayer.ZoneMeteor)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Metor;
+			}
+			if(TPlayer.ZoneRain)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Rain;
+			}
+			if(TPlayer.ZoneUnderworldHeight)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.Hell;
+			}
+			if(TPlayer.ZoneTowerSolar)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.TowerSolar;
+			}
+			if(TPlayer.ZoneTowerNebula)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.TowerNebula;
+			}
+			if(TPlayer.ZoneTowerStardust)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.TowerStardust;
+			}
+			if(TPlayer.ZoneTowerVortex)
+			{
+				Grass = false;
+				biome |= NPCSystem.BiomeType.TowerVortex;
+			}
+			if(TPlayer.ZoneSkyHeight)
+			{
+				biome |= NPCSystem.BiomeType.Sky;
+			}
+			if(TPlayer.ZoneBeach)
+			{
+				biome |= NPCSystem.BiomeType.Beach;
+			}
+			if(Grass)
+			{
+				biome |= NPCSystem.BiomeType.Grass;
+			}
+			#endregion
+			return biome;
+		}
+		#endregion
+		#region GetConditions
+		public NPCSystem.SpawnConditions GetConditions()
+		{
+			NPCSystem.SpawnConditions condition = default;
+			if(Main.dayTime)
+			{
+				condition |= NPCSystem.SpawnConditions.Day;
+				if(Main.eclipse)
+				{
+					condition |= NPCSystem.SpawnConditions.Eclipse;
+				}
+			}
+			else
+			{
+				condition |= NPCSystem.SpawnConditions.Night;
+				if(Main.bloodMoon)
+				{
+					condition |= NPCSystem.SpawnConditions.BloodMoon;
+				}
+			}
+			return condition;
+		}
+		#endregion
+		#region GetSpawnChecker
+		public NPCSystem.SpawnChecker GetSpawnChecker()
+		{
+			return new NPCSystem.SpawnChecker() { Biome = GetBiomes(), Condition = GetConditions() };
+		}
+		#endregion
 		#region EatItems
 		/// <summary>
 		/// 吃掉玩家背包里从begin起不包括end的物品
@@ -255,7 +376,6 @@ namespace Starvers
 				Main.npc[MoonIndex].active = true;
 				Main.npc[MoonIndex].SetDefaults(NPCID.MoonLordCore);
 			}
-            Main.npc[MoonIndex].dontTakeDamage = true;
 			Main.npc[MoonIndex].type = NPCID.MoonLordCore;
 			Main.npc[MoonIndex].aiStyle = -1;
 			Main.npc[MoonIndex].Center = Center;
@@ -288,18 +408,15 @@ namespace Starvers
 		public void UPGrade(BigInt ExpGet)
 		{
 			int lvl = level;
+			ExpGet += exp;
 			int need = AuraSystem.StarverAuraManager.UpGradeExp(lvl);
 			if (HasPerm(Perms.VIP.LessCost))
 			{
 				need /= 3;
 			}
-			while (true)
+			while (ExpGet > need)
 			{
 				ExpGet -= need;
-				if(ExpGet < BigInt.Zero)
-				{
-					break;
-				}
 				++lvl;
 				need = AuraSystem.StarverAuraManager.UpGradeExp(lvl);
 				if (HasPerm(Perms.VIP.LessCost))
@@ -308,6 +425,7 @@ namespace Starvers
 				}
 			}
 			Level = lvl;
+			exp = (int)ExpGet;
 		}
 		#endregion
 		#region DataOperations
@@ -454,6 +572,7 @@ namespace Starvers
 			TBCodes = tempplayer.TBCodes;
 			Weapon = tempplayer.Weapon;
 			tempplayer.Dispose();
+			Save()
 		}
 		#endregion
 		#endregion

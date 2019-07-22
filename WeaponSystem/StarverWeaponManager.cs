@@ -1,5 +1,4 @@
-﻿using Starvers.WeaponSystem.Weapons;
-using Starvers.WeaponSystem.Weapons.Ranged;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +8,19 @@ using TShockAPI;
 
 namespace Starvers.WeaponSystem
 {
+	using Starvers.WeaponSystem.Weapons;
+	using Starvers.WeaponSystem.Weapons.Ranged;
+	using Starvers.WeaponSystem.Weapons.Magic;
+	using Starvers.WeaponSystem.Weapons.Melee;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class StarverWeaponManager : IStarverPlugin
 	{
 		#region Fields
 		private static Weapon[] Melee =
 		{
-
+			new NorthPoleEx(),
+			new TerraBladeEx(),
+			new MushroomSpearEx()
 		};
 		private static Weapon[] Ranged =
 		{
@@ -26,7 +31,10 @@ namespace Starvers.WeaponSystem
 		};
 		private static Weapon[] Magic =
 		{
-			
+			new NebulaArcanumEx(),
+			new NebulaBlazeEx(),
+			new LastPrismEx(),
+			new LaserMachinegunEx()
 		};
 		private static Weapon[] Minion =
 		{
@@ -62,7 +70,7 @@ namespace Starvers.WeaponSystem
 				args.Player.SendErrorMessage("正确用法:");
 				args.Player.SendErrorMessage("    <Career> <Name> : Career 武器类型;Name 武器名");
 				args.Player.SendErrorMessage("武器类型为:");
-				args.Player.SendErrorMessage("  Melee\n  Rangd\n  Magic\n  Minion");
+				args.Player.SendErrorMessage("  Melee\n  Ranged\n  Magic\n  Minion");
 				args.Player.SendErrorMessage("    <Career> : 查看该类型武器");
 				return;
 			}
@@ -124,9 +132,9 @@ namespace Starvers.WeaponSystem
 						}
 						catch
 						{
-							foreach(var wp in weapons)
+							foreach (var wp in weapons)
 							{
-								if(wp.Name.ToLower().IndexOf(read)==0)
+								if (wp.Name.ToLower().IndexOf(read) == 0)
 								{
 									weapon = wp;
 									break;
@@ -143,12 +151,12 @@ namespace Starvers.WeaponSystem
 		#region Hooks
 		private void OnProj(object sender, GetDataHandlers.NewProjectileEventArgs args)
 		{
-			if(args.Owner > 40 || Terraria.Main.projectile[args.Index].hostile)
+			if (args.Owner > 40 || !Terraria.Main.projectile[args.Index].friendly)
 			{
 				return;
 			}
 			Weapon[] weapons;
-			if(Terraria.Main.projectile[args.Index].melee)
+			if (Terraria.Main.projectile[args.Index].melee)
 			{
 				weapons = WeaponList[CareerType.Melee];
 			}
@@ -164,13 +172,13 @@ namespace Starvers.WeaponSystem
 			{
 				weapons = WeaponList[CareerType.Minion];
 			}
-			foreach(var weapon in weapons)
+			foreach (var weapon in weapons)
 			{
-				if(weapon.Check(args))
+				if (weapon.Check(args))
 				{
 					if (Starver.Players[args.Owner].HasWeapon(weapon))
 					{
-						weapon.UseWeapon(Starver.Players[args.Owner], (Vector)args.Velocity, Starver.Players[args.Owner].Weapon[weapon.Career, weapon.Index],args);
+						weapon.UseWeapon(Starver.Players[args.Owner], (Vector)args.Velocity, Starver.Players[args.Owner].Weapon[weapon.Career, weapon.Index], args);
 					}
 					break;
 				}

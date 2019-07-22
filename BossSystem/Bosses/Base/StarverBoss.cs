@@ -38,8 +38,10 @@ namespace Starvers.BossSystem.Bosses.Base
 		public bool Silence { get; protected set; } 
 		public string Name { get; protected set; }
 		public Vector2 LastCenter { get; protected set; }
-		public string CommingMessage { get; protected set; } = "这将是一场灾难...";
-		public Color CommingMessageColor { get; protected set; } = Color.DarkGreen;
+		public string DownedMessage { get; protected set; }
+		public string ComingMessage { get; protected set; } = "这将是一场灾难...";
+		public Color ComingMessageColor { get; protected set; } = Color.DarkGreen;
+		public Color DownedMessageColor { get; protected set; } = Color.DarkGreen;
 		/// <summary>
 		/// boss伤害系数
 		/// </summary>
@@ -171,6 +173,10 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region BeDown
 		protected virtual void BeDown()
 		{
+			if(DownedMessage != null)
+			{
+				StarverPlayer.All.SendMessage(DownedMessage, DownedMessageColor);
+			}
 			if(Downed != true)
 			{
 				using(BinaryWriter writer = new BinaryWriter(new FileStream(DataPath,FileMode.Create)))

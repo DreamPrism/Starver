@@ -33,7 +33,6 @@ namespace Starvers
 	public class Starver : TerrariaPlugin
 	{
 		#region Fields
-		internal static bool Cleared;
 		#endregion
 		#region BaseProperties
 		public override string Name { get { return "Starver"; } }
@@ -351,7 +350,7 @@ namespace Starvers
 					byte.Parse(RGB[1]),
 					byte.Parse(RGB[2])
 				};
-					color = new Color(rgbs[0], rgbs[1], rgbs[2]);
+				color = new Color(rgbs[0], rgbs[1], rgbs[2]);
 			}
 			else
 			{
@@ -437,53 +436,8 @@ namespace Starvers
 				}
 			}
 			#endregion
-			#region UpdateMoon
-			if (!TShock.Config.DisableHardmode)
-			{
-				if (BossSystem.Bosses.Base.StarverBoss.EndTrial )
-				{
-					Cleared = false;
-					if (Timer % 30 == 0)
-					{
-						foreach (var player in Players)
-						{
-							if (player is null)
-							{
-								continue;
-							}
-							player.UpdateMoon();
-						}
-					}
-				}
-				else
-				{
-					if (!Cleared)
-					{
-						Cleared = true;
-						foreach (var player in Players)
-						{
-							if (player is null)
-							{
-								continue;
-							}
-							player.UpdateMoonClear();
-						}
-					}
-				}
-			}
-			#endregion
-			#region SetSkillCanUse
-			if(Config.EnableBoss)
-			{
-				BossSystem.Bosses.Base.StarverBoss.AliveBoss = 0;
-				foreach(var boss in StarverBossManager.Bosses)
-				{
-					if(boss.Active)
-					{
-						BossSystem.Bosses.Base.StarverBoss.AliveBoss += 1;
-					}
-				}
-			}
+			#region NPC
+			UpdateNPCAI();
 			#endregion
 		}
 		#endregion
@@ -688,6 +642,19 @@ namespace Starvers
 			//snpc.SendData();
 		}
 		#endregion
+		#endregion
+		#region UpdateNPCAI
+		private static void UpdateNPCAI()
+		{
+			foreach(var npc in NPCs)
+			{
+				if(npc is null || !npc.Active)
+				{
+					continue;
+				}
+				npc.AI();
+			}
+		}
 		#endregion
 		#region LvlPrefixColor
 		public static string LvlPrefixColor(int lvl)
@@ -953,9 +920,9 @@ namespace Starvers
 					}
 					Manager.PlayerList.Items[player.Index] = string.Empty;
 				}
-				catch(Exception e)
+				catch
 				{
-					StarverPlayer.Server.SendInfoMessage(e.ToString());
+					//StarverPlayer.Server.SendInfoMessage(e.ToString());
 				}
 				return;
 			}
