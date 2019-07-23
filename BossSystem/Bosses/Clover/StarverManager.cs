@@ -94,10 +94,10 @@ namespace Starvers.BossSystem.Bosses.Clover
 			SendData();
 			#endregion
 			#region TheFollows
-			CrazyWang.Spawn(where, 40000, this);
-			Deaths.Spawn(where, 40000, this);
-			Wither.Spawn(where, 40000, this);
-			TOFOUT.Spawn(where, 40000, this);
+			CrazyWang.Spawn(where, 4000, this);
+			Deaths.Spawn(where, 4000, this);
+			Wither.Spawn(where, 4000, this);
+			TOFOUT.Spawn(where, 4000, this);
 			#endregion
 		}
 		#endregion
