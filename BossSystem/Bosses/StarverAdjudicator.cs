@@ -36,8 +36,8 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 29;
 			Name = "The Starver Adjudicator";
 			FullName = "Iesnet The Starver Adjudicator";
-			DefaultLife = 900000;
-			DefaultLifes = 100;
+			DefaultLife = 1400000;
+			DefaultLifes = 320;
 			DefaultDefense = -10;
 			RawType = NPCID.DukeFishron;
 			unsafe
@@ -83,7 +83,7 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region Spawn
-		public override void Spawn(Vector2 where, int lvl = Criticallevel)
+		public override void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			base.Spawn(where, lvl);
 			vector.X = 16 * 30;

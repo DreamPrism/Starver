@@ -38,8 +38,9 @@ namespace Starvers.BossSystem.Bosses
 			LifeperPlayerType = ByLifes;
 			RawType = NPCID.DD2DarkMageT3;
 			DefaultLifes = 60;
-			DamagedIndex = 0.04f;
+			DamagedIndex = 0.0004f;
 			DefaultLife = 32500;
+			DefaultDefense = 80;
 			IgnoreDistance = true;
 			Drops = new DropItem[]
 			{

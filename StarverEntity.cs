@@ -43,7 +43,8 @@ namespace Starvers
 		internal BigInt ExpGive = 1;
 		internal int Client = -1;
 		public const float PI = (float)Math.PI;
-		public const int Criticallevel = 2000;
+		public const int CriticalLevel = 3000;
+		public const int BaseLevel = 2000;
 		#endregion
 		#region ctor
 		protected StarverEntity()
@@ -465,12 +466,12 @@ namespace Starvers
 		}
 		protected static int NewNPCStatic(Vector pos, Vector vel, int type, int lifeMax, int defense)
 		{
-			int idx = NPC.NewNPC((int)pos.X, (int)pos.Y, type, start);
+			int idx = NPC.NewNPC((int)pos.X, (int)pos.Y, type);
 			Main.npc[idx].velocity = vel;
 			Main.npc[idx].lifeMax = lifeMax;
 			Main.npc[idx].life = lifeMax;
 			Main.npc[idx].defense = defense;
-			NetMessage.SendData((int)PacketTypes.NpcUpdate,, -1, -1, null, idx);
+			NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, idx);
 			return idx;
 		}
 		#endregion

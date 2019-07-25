@@ -40,7 +40,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 				Ammo = ProjectileID.VortexLaser;
 				ExVersion = true;
 			}
-			protected void Spawn(Vector2 where, int lvl = Criticallevel, double AngleStart = 0, float radium = -1)
+			protected void Spawn(Vector2 where, int lvl = CriticalLevel, double AngleStart = 0, float radium = -1)
 			{
 				base.Spawn(where, lvl);
 				if (radium > 0)

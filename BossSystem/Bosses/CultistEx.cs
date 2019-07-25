@@ -28,9 +28,9 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 42;
 			RawType = NPCID.CultistBoss;
 			Name = Lang.GetNPCNameValue(NPCID.CultistBoss);
-			DefaultLife = 505000;
+			DefaultLife = 4005000;
 			DefaultLifes = 150;
-			DefaultDefense = 28;
+			DefaultDefense = 180;
 			Drops = new DropItem[]
 			{
 				new DropItem(new int[]{ ItemID.WhiteCultistArcherBanner }, 23, 49, 0.35f),

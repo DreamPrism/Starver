@@ -25,7 +25,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			TaskNeed = 35;
 			RawType = NPCID.TheDestroyer;
-			DefaultLife = 560000;
+			DefaultLife = 2560000;
 			DefaultLifes = 100;
 			DefaultDefense = 40;
 			Drops = new DropItem[]

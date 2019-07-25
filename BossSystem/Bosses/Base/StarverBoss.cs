@@ -49,7 +49,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		{
 			get
 			{
-				return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / Criticallevel);
+				return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / CriticalLevel);
 			}
 		}
 		/// <summary>
@@ -141,7 +141,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			NumOfAIs = ainum;
 			StarverAI = (float*)Marshal.AllocHGlobal(sizeof(float) * NumOfAIs).ToPointer();
-			Level = Criticallevel;
+			Level = CriticalLevel;
 			DefaultLife = 40000;
 			DefaultDefense = 60;
 			DefaultLifes = 90;
@@ -287,7 +287,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region Spawn
-		public unsafe virtual void Spawn(Vector2 where, int lvl = Criticallevel)
+		public unsafe virtual void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			if (_active)
 			{
@@ -295,7 +295,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			_active = true;
 			Level = lvl;
-			ExVersion = Level > Criticallevel;
+			ExVersion = Level > CriticalLevel;
 			AliveBoss++;
 			Index = 0;
 			Index = NPC.NewNPC((int)where.X, (int)where.Y, RawType);
@@ -306,7 +306,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			RealNPC.noTileCollide = true;
 			//FakeVelocity = new Vector(ref RealNPC.velocity);
 			LifeMax = DefaultLife;
-			LifesMax = (int)(Level / (float)Criticallevel * DefaultLifes);
+			LifesMax = (int)(Level / (float)CriticalLevel * DefaultLifes);
 			int count = TShock.Utils.ActivePlayers();
 			switch (LifeperPlayerType)
 			{
@@ -342,7 +342,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region Spawn_Clover
-		protected unsafe void Spawn_Clover(Vector2 where, int lvl = Criticallevel)
+		protected unsafe void Spawn_Clover(Vector2 where, int lvl = CriticalLevel)
 		{
 			if (_active)
 			{
@@ -350,7 +350,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			_active = true;
 			Level = lvl;
-			ExVersion = Level > Criticallevel;
+			ExVersion = Level > CriticalLevel;
 			AliveBoss++;
 			Index = 0;
 			for(int i=0;i<Main.npc.Length;i++)
@@ -372,7 +372,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			RealNPC.noTileCollide = true;
 			//FakeVelocity = new Vector(ref RealNPC.velocity);
 			LifeMax = DefaultLife;
-			LifesMax = (int)(Level / (float)Criticallevel * DefaultLifes);
+			LifesMax = (int)(Level / (float)CriticalLevel * DefaultLifes);
 			int count = TShock.Utils.ActivePlayers();
 			switch (LifeperPlayerType)
 			{

@@ -572,7 +572,7 @@ namespace Starvers
 			TBCodes = tempplayer.TBCodes;
 			Weapon = tempplayer.Weapon;
 			tempplayer.Dispose();
-			Save()
+			Save();
 		}
 		#endregion
 		#endregion

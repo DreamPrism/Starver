@@ -35,12 +35,12 @@ namespace Starvers.BossSystem.Bosses
 		{
 			TaskNeed = 30;
 			Name = "The Starver Destroyer";
-			FullName = "Eniltuo The Starver Destroyer";
+			FullName = "Tuofot The Starver Destroyer";
 			RawType = NPCID.DukeFishron;
 			IgnoreDistance = true;
-			DefaultLife = 3200000;
-			DefaultLifes = 200;
-			DefaultDefense = 50;
+			DefaultLife = 5200000;
+			DefaultLifes = 400;
+			DefaultDefense = 170;
 			unsafe
 			{
 				StarverAI[0] = 0;
@@ -48,7 +48,7 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region Spawn
-		public override void Spawn(Vector2 where, int lvl = Criticallevel)
+		public override void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			base.Spawn(where, lvl);
 			flag = true;

@@ -14,10 +14,12 @@ namespace Starvers.NPCSystem
 		public void Load()
 		{
 			ServerApi.Hooks.GameUpdate.Register(Starver.Instance, StarverNPC.DoUpDate);
+			//ServerApi.Hooks.NpcKilled.Register(Starver.Instance, StarverNPC.OnNPCKilled);
 		}
 		public void UnLoad()
 		{
 			ServerApi.Hooks.GameUpdate.Deregister(Starver.Instance, StarverNPC.DoUpDate);
+			//ServerApi.Hooks.NpcKilled.Deregister(Starver.Instance, StarverNPC.OnNPCKilled);
 		}
 		#endregion
 	}

@@ -29,7 +29,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			Name = "The Starver Manager";
 			RawType = NPCID.MoonLordCore;
 			DefaultDefense = 100;
-			DefaultLife = 6000000;
+			DefaultLife = 60000000;
 			DefaultLifes = 1000;
 			Drops = new DropItem[] 
 			{
@@ -94,10 +94,10 @@ namespace Starvers.BossSystem.Bosses.Clover
 			SendData();
 			#endregion
 			#region TheFollows
-			CrazyWang.Spawn(where, 4000, this);
-			Deaths.Spawn(where, 4000, this);
-			Wither.Spawn(where, 4000, this);
-			TOFOUT.Spawn(where, 4000, this);
+			CrazyWang.Spawn(where, Level - 1000, this);
+			Deaths.Spawn(where, Level - 1000, this);
+			Wither.Spawn(where, Level - 1000, this);
+			TOFOUT.Spawn(where, Level - 1000, this);
 			#endregion
 		}
 		#endregion

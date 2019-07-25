@@ -152,6 +152,7 @@
     <Compile Include="NPCSystem\BiomeType.cs" />
     <Compile Include="NPCSystem\NPCs\BrainFollow.cs" />
     <Compile Include="NPCSystem\NPCs\PrimeExArm.cs" />
+    <Compile Include="NPCSystem\NPCs\Zomb.cs" />
     <Compile Include="NPCSystem\SpawnChecker.cs" />
     <Compile Include="NPCSystem\SpawnConditions.cs" />
     <Compile Include="NPCSystem\StarverNPC.cs" />

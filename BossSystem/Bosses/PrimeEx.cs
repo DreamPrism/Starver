@@ -131,7 +131,7 @@ namespace Starvers.BossSystem.Bosses
 			}
 			#endregion
 			#region ArmsAI
-			ArmsAI();
+			//ArmsAI();
 			#endregion
 		}
 		#endregion

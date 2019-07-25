@@ -9,8 +9,9 @@ namespace Starvers
 {
 	public class BaseNPC : StarverEntity
 	{
-		#region Fields
+		#region Var
 		public bool Spawning { get; protected set; }
+		public string Name { get; protected set; }
 		#endregion
 		#region ctor
 		protected BaseNPC()
@@ -31,12 +32,15 @@ namespace Starvers
 		{
 			try
 			{
+				OnDead();
 				RealNPC.checkDead();
 			}
 			catch(Exception e)
 			{
 				TShockAPI.TShock.Log.Info(e.ToString());
 			}
+			Starver.NPCs[Index] = NPCSystem.StarverNPC.NPCs[Index] = null;
+			KillMe();
 			_active = false;
 		}
 		#endregion

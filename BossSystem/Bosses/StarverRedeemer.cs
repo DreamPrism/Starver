@@ -40,8 +40,8 @@ namespace Starvers.BossSystem.Bosses
 			Name = "The Starver Redeemer";
 			FullName = "Shtaed The Starver Redeemer";
 			DefaultLife = 3650000;
-			DefaultLifes = 150;
-			DefaultDefense = 40;
+			DefaultLifes = 200;
+			DefaultDefense = 70;
 			vector.X = 16 * 39;
 			vector.Y = 0;
 			RawType = NPCID.DukeFishron;

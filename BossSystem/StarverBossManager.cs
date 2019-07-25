@@ -307,7 +307,7 @@ namespace Starvers.BossSystem
 						}
 						else if (EndBossDelay == 60 * 1)
 						{
-							Bosses[Bosses.Length - 6].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 3000);
+							Bosses[Bosses.Length - 6].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), StarverBoss.CriticalLevel + 1000);
 							EndBossDelay = -1;
 						}
 						break;
@@ -373,7 +373,7 @@ namespace Starvers.BossSystem
 						}
 						else if (EndBossDelay == 60 * 1)
 						{
-							Bosses[Bosses.Length - 5].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 3000);
+							Bosses[Bosses.Length - 5].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), StarverBoss.CriticalLevel + 1000);
 							EndBossDelay = -1;
 						}
 						break;
@@ -438,7 +438,7 @@ namespace Starvers.BossSystem
 						}
 						else if (EndBossDelay == 60 * 1)
 						{
-							Bosses[Bosses.Length - 4].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 3000);
+							Bosses[Bosses.Length - 4].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), StarverBoss.CriticalLevel + 1000);
 							EndBossDelay = -1;
 						}
 						break;
@@ -503,14 +503,14 @@ namespace Starvers.BossSystem
 						}
 						else if (EndBossDelay == 60 * 1)
 						{
-							Bosses[Bosses.Length - 3].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 3000);
+							Bosses[Bosses.Length - 3].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), StarverBoss.CriticalLevel + 1000);
 							EndBossDelay = -1;
 						}
 						break;
 					#endregion
 					#region 9(Clover Coming)
 					case 9:
-						EndBossDelay = 60 * 30;
+						EndBossDelay = 60 * 60;
 						EndTrialProcess++;
 						break;
 					#endregion
@@ -519,7 +519,7 @@ namespace Starvers.BossSystem
 						if (EndBossDelay-- == 0)
 						{
 							StarverPlayer.All.SendMessage("这是你们的最后一战", Color.Black);
-							Bosses[Bosses.Length - 2].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), 5000);
+							Bosses[Bosses.Length - 2].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), StarverBoss.CriticalLevel + 3000);
 						}
 						break;
 					#endregion
@@ -582,7 +582,7 @@ namespace Starvers.BossSystem
 			if(args.Parameters.Count < 1)
 			{
 				int i = 0;
-				args.Player.SendInfoMessage("临界等级: {0}", StarverBoss.Criticallevel);
+				args.Player.SendInfoMessage("临界等级: {0}", StarverBoss.CriticalLevel);
 				foreach(StarverBoss boss in Bosses)
 				{
 					args.Player.SendInfoMessage("{0}: {1}", ++i, boss.GetType().Name);
@@ -614,7 +614,7 @@ namespace Starvers.BossSystem
 					}
 					catch
 					{
-						lvl = StarverBoss.Criticallevel;
+						lvl = StarverBoss.CriticalLevel;
 					}
 				if (idx == 0)
 				{

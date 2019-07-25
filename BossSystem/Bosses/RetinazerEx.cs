@@ -27,9 +27,9 @@ namespace Starvers.BossSystem.Bosses
 		{
 			TaskNeed = 36;
 			RawType = NPCID.Retinazer;
-			DefaultLife = 425000;
+			DefaultLife = 1925000;
 			DefaultLifes = 100;
-			DefaultDefense = 28;
+			DefaultDefense = 72;
 			Drops = new DropItem[]
 			{
 				new DropItem(new int[]{ Currency.Ranged }, 1, 28, 0.5f),

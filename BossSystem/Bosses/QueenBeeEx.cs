@@ -22,8 +22,8 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 24;
 			RawType = NPCID.QueenBee;
 			Name = "蜂后";
-			DefaultLife = 265500;
-			DefaultDefense = 40;
+			DefaultLife = 965500;
+			DefaultDefense = 65;
 			DefaultLifes = 60;
 			unsafe
 			{
