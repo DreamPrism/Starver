@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Starvers.WeaponSystem.Weapons.Ranged
 {
 	using System.Threading;
-	using TOFOUT.Terraria.Server;
 	using TShockAPI;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class XenopopperEx : Weapon
@@ -17,13 +16,7 @@ namespace Starvers.WeaponSystem.Weapons.Ranged
 		#region ctor
 		public XenopopperEx() : base(3, Terraria.ID.ItemID.Xenopopper, Terraria.ID.ProjectileID.ElectrosphereMissile, CareerType.Ranged, 223)
 		{
-			
-		}
-		#endregion
-		#region Check
-		public override bool Check(GetDataHandlers.NewProjectileEventArgs args)
-		{
-			return Terraria.Main.player[args.Owner].HeldItem.type == ItemID;
+			CatchID = Terraria.ID.ProjectileID.Xenopopper;
 		}
 		#endregion
 		#region UseItem

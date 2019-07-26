@@ -160,7 +160,7 @@ namespace Starvers
 		#region CalculateLife
 		public static int CalculateLife(int Level)
 		{
-			int Result = (int)Math.Min(30000u,Level);
+			int Result = Math.Min(30000, Level / 3);
 			return Result;
 		}
 		#endregion

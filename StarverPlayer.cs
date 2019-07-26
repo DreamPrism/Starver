@@ -572,7 +572,7 @@ namespace Starvers
 			TBCodes = tempplayer.TBCodes;
 			Weapon = tempplayer.Weapon;
 			tempplayer.Dispose();
-			Save()
+			Save();
 		}
 		#endregion
 		#endregion
@@ -780,6 +780,7 @@ namespace Starvers
 		#region Damage
 		public void Damage(int damage)
 		{
+			damage = Math.Min(23000, damage);
 			NetMessage.SendPlayerHurt(Index, PlayerDeathReason.LegacyDefault(), damage, Index, false, false, 0);
 		}
 		#endregion

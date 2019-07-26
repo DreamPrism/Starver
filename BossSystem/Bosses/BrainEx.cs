@@ -77,7 +77,7 @@ namespace Starvers.BossSystem.Bosses
 		*/
 		#endregion
 		#region Spawn
-		public override void Spawn(Vector2 where, int lvl = Criticallevel)
+		public override void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			base.Spawn(where, lvl);
 			Center += Rand.NextVector2(16 * 30);
@@ -147,11 +147,13 @@ namespace Starvers.BossSystem.Bosses
 			{
 				Center = TargetPlayer.Center + Rand.NextVector2(16 * 40);
 			}
+			/*
 			for (i = 0; i < FollowsInter.Length; ++i)
 			{
 				FollowsInter[i].AI();
 				FollowsOuter[i].AI();
 			}
+			*/
 			for (; i < FollowsOuter.Length; ++i)
 			{
 				FollowsOuter[i].AI();
@@ -168,7 +170,7 @@ namespace Starvers.BossSystem.Bosses
 			{
 				if (Timer % 60 * 5 == 0)
 				{
-					if (aliveFollows <= 1|| !CheckFollows())
+					if (aliveFollows <= 1)//|| !CheckFollows())
 					{
 						LifeDown();
 					}

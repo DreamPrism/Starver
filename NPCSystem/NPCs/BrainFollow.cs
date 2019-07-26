@@ -31,7 +31,7 @@ namespace Starvers.NPCSystem.NPCs
 		public BrainFollow():base(1)
 		{
 			RawType = NPCID.Creeper;
-			DefaultDefense = 2000;
+			DefaultDefense = 31000;
 			DefaultLife = short.MaxValue;
 		}
 		#endregion

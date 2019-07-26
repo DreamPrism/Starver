@@ -36,12 +36,13 @@ namespace Starvers.BossSystem.Bosses
 		#region ctor
 		public StarverRedeemer():base(4)
 		{
+			CheckType = false;
 			TaskNeed = 28;
 			Name = "The Starver Redeemer";
 			FullName = "Shtaed The Starver Redeemer";
 			DefaultLife = 3650000;
-			DefaultLifes = 150;
-			DefaultDefense = 40;
+			DefaultLifes = 200;
+			DefaultDefense = 980;
 			vector.X = 16 * 39;
 			vector.Y = 0;
 			RawType = NPCID.DukeFishron;

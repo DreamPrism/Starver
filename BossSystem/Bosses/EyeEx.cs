@@ -17,6 +17,7 @@ namespace Starvers.BossSystem.Bosses
 	{
 		#region Fields
 		private Vector Unit = new Vector(0, -16 * 16);
+		private const int StartCollideDamage = 210;
 		#endregion
 		#region ctor
 		public EyeEx() : base(3)
@@ -26,8 +27,8 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 22;
 			RawType = NPCID.EyeofCthulhu;
 			Name = "克苏鲁之眼";
-			DefaultDefense = 40;
-			DefaultLife = 230000;
+			DefaultDefense = 450;
+			DefaultLife = 630000;
 			DefaultLifes = 50;
 			vector.X = 16 * 20;
 			Drops = new DropItem[] 
@@ -37,10 +38,18 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region Spawn
-		public override void Spawn(Vector2 where, int lvl = Criticallevel)
+		public override void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			base.Spawn(where, lvl);
 			Mode = BossMode.Explosive;
+			RealNPC.damage = StartCollideDamage;
+		}
+		#endregion
+		#region LifeDown
+		public override void LifeDown()
+		{
+			base.LifeDown();
+			RealNPC.damage = (int)(StartCollideDamage * DamageIndex);
 		}
 		#endregion
 		#region RealAI
@@ -148,7 +157,7 @@ namespace Starvers.BossSystem.Bosses
 				for (int i = 0; i < 6; i++)
 				{
 					idx = Proj(vector + NewByPolar(PI / 3 * i, 16 * 20), Vector.Zero, ProjectileID.Explosives, 1000);
-					Main.projectile[idx].active = false;
+					Main.projectile[idx].owner = Target;
 				}
 				/*
 				foreach (var player in Starver.Players)

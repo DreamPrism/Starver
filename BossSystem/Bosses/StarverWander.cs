@@ -41,8 +41,8 @@ namespace Starvers.BossSystem.Bosses
 		{
 			TaskNeed = 27;
 			DefaultLife = 2000000;
-			DefaultLifes = 150;
-			DefaultDefense = 10;
+			DefaultLifes = 200;
+			DefaultDefense = 990;
 			RawType = NPCID.DukeFishron;
 			Name = "The Starver Wander";
 			FullName = "Gnawyzarc The Starver Wander";
@@ -84,7 +84,7 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region Spawn
-		public unsafe override void Spawn(Vector2 where, int lvl = Criticallevel)
+		public unsafe override void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			base.Spawn(where, lvl);
 			Mode = BossMode.CraShoot1;

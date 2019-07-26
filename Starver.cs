@@ -24,6 +24,7 @@ using Starvers.BossSystem;
 using System.Windows.Forms;
 using Starvers.NPCSystem.NPCs;
 using Starvers.WeaponSystem;
+using Starvers.NPCSystem;
 
 namespace Starvers
 {
@@ -61,7 +62,8 @@ namespace Starvers
 			new StarverTaskManager(),
 			new StarverAuraManager(),
 			new StarverBossManager(),
-			new StarverWeaponManager()
+			new StarverWeaponManager(),
+			new StarverNPCManager()
 		};
 		public static ExchangeItem[] Exchanges { get; private set; } = new ExchangeItem[]
 		{
@@ -169,8 +171,11 @@ namespace Starvers
 			ServerApi.Hooks.GameUpdate.Register(this, OnUpdate);
 			ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreet);
 			ServerApi.Hooks.ServerLeave.Register(this, OnLeave);
-			ServerApi.Hooks.ServerChat.Register(this, OnChat);
-			ServerApi.Hooks.NpcKilled.Register(this, OnKill);
+			if (Config.EnableAura)
+			{
+				ServerApi.Hooks.ServerChat.Register(this, OnChat);
+			}
+			//ServerApi.Hooks.NpcKilled.Register(this, OnKill);
 			ServerApi.Hooks.NpcStrike.Register(this, OnStrike);
 			ServerApi.Hooks.NpcSpawn.Register(this, OnNPCSpawn);
 			PlayerHooks.PlayerPostLogin += OnLogin;
@@ -202,7 +207,7 @@ namespace Starvers
 				ServerApi.Hooks.ServerLeave.Deregister(this, OnLeave);
 				ServerApi.Hooks.ServerChat.Deregister(this, OnChat);
 				ServerApi.Hooks.NpcStrike.Deregister(this, OnStrike);
-				ServerApi.Hooks.NpcKilled.Deregister(this, OnKill);
+				//ServerApi.Hooks.NpcKilled.Deregister(this, OnKill);
 				ServerApi.Hooks.NpcSpawn.Deregister(this, OnNPCSpawn);
 				PlayerHooks.PlayerPostLogin -= OnLogin;
 				GetDataHandlers.PlayerDamage += OnDamage;
@@ -259,12 +264,9 @@ namespace Starvers
 				goto Junped;
 			}
 			realdamage = Math.Max(1, realdamage);
-#if DEBUG
-			//TSPlayer.All.SendMessage($"realdamage:{realdamage}", Color.Blue);
-#endif
 			Junped:
 			player.Exp += realdamage;
-			if (!args.Npc.dontTakeDamage)
+			if (Config.EnableAura)
 			{
 				args.Npc.SendCombatMsg(realdamage.ToString(), Color.Yellow);
 			}
@@ -297,7 +299,7 @@ namespace Starvers
 					RealNPC.checkDead();
 				}
 			}
-			else
+			else if(Config.EnableAura)
 			{
 				Vector knockback = (Vector)(args.Npc.Center - player.Center);
 				knockback.Length = args.KnockBack * RealNPC.knockBackResist;
@@ -315,6 +317,7 @@ namespace Starvers
 		}
 		#endregion
 		#region OnKill
+		/*
 		private void OnKill(NpcKilledEventArgs args)
 		{
 			NPC RealNPc = args.npc;
@@ -329,6 +332,7 @@ namespace Starvers
 			}
 			snpc.OnDead();
 		}
+		*/
 		#endregion
 		#region OnChat
 		public static void OnChat(ServerChatEventArgs args)
@@ -646,13 +650,19 @@ namespace Starvers
 		#region UpdateNPCAI
 		private static void UpdateNPCAI()
 		{
-			foreach(var npc in NPCs)
+			foreach (var npc in NPCs)
 			{
-				if(npc is null || !npc.Active)
+				if (npc is null)
 				{
 					continue;
 				}
-				npc.AI();
+				if (npc.Active)
+				{
+#if DEBUG
+					//StarverPlayer.All.SendDeBugMessage($"{npc.Name}({npc.Index}) AIUpdate");
+#endif
+					npc.AI();
+				}
 			}
 		}
 		#endregion

@@ -49,7 +49,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		{
 			get
 			{
-				return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / Criticallevel);
+				return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / CriticalLevel);
 			}
 		}
 		/// <summary>
@@ -89,6 +89,10 @@ namespace Starvers.BossSystem.Bosses.Base
 		protected DropItem[] Drops;
 		protected bool NightBoss = true;
 		protected bool ExVersion;
+		/// <summary>
+		/// 是否检查NPC种类
+		/// </summary>
+		protected bool CheckType = true;
 		protected string DisplayName;
 		protected string FullName;
 		protected int Lifes;
@@ -141,7 +145,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			NumOfAIs = ainum;
 			StarverAI = (float*)Marshal.AllocHGlobal(sizeof(float) * NumOfAIs).ToPointer();
-			Level = Criticallevel;
+			Level = CriticalLevel;
 			DefaultLife = 40000;
 			DefaultDefense = 60;
 			DefaultLifes = 90;
@@ -287,7 +291,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region Spawn
-		public unsafe virtual void Spawn(Vector2 where, int lvl = Criticallevel)
+		public unsafe virtual void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			if (_active)
 			{
@@ -295,18 +299,18 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			_active = true;
 			Level = lvl;
-			ExVersion = Level > Criticallevel;
+			ExVersion = Level > CriticalLevel;
 			AliveBoss++;
 			Index = 0;
 			Index = NPC.NewNPC((int)where.X, (int)where.Y, RawType);
 			SendData();
-			Defense = DefaultDefense * (int)(100 * Math.Log(Level));
+			Defense = DefaultDefense * (int)(100 * Math.Log(Level + Math.E));
 			RealNPC.aiStyle = -1;
 			RealNPC.Center += Rand.NextVector2(54f, 54f);
 			RealNPC.noTileCollide = true;
 			//FakeVelocity = new Vector(ref RealNPC.velocity);
 			LifeMax = DefaultLife;
-			LifesMax = (int)(Level / (float)Criticallevel * DefaultLifes);
+			LifesMax = (int)(Level / (float)CriticalLevel * DefaultLifes);
 			int count = TShock.Utils.ActivePlayers();
 			switch (LifeperPlayerType)
 			{
@@ -342,7 +346,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region Spawn_Clover
-		protected unsafe void Spawn_Clover(Vector2 where, int lvl = Criticallevel)
+		protected unsafe void Spawn_Clover(Vector2 where, int lvl = CriticalLevel)
 		{
 			if (_active)
 			{
@@ -350,7 +354,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			_active = true;
 			Level = lvl;
-			ExVersion = Level > Criticallevel;
+			ExVersion = Level > CriticalLevel;
 			AliveBoss++;
 			Index = 0;
 			for(int i=0;i<Main.npc.Length;i++)
@@ -372,7 +376,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			RealNPC.noTileCollide = true;
 			//FakeVelocity = new Vector(ref RealNPC.velocity);
 			LifeMax = DefaultLife;
-			LifesMax = (int)(Level / (float)Criticallevel * DefaultLifes);
+			LifesMax = (int)(Level / (float)CriticalLevel * DefaultLifes);
 			int count = TShock.Utils.ActivePlayers();
 			switch (LifeperPlayerType)
 			{
@@ -446,8 +450,13 @@ namespace Starvers.BossSystem.Bosses.Base
 			{
 				return _active;
 			}
-			else if (Index == -1)
+			else if (Index == -1 || (!RealNPC.active) || (CheckType && RealNPC.type != RawType)) 
 			{
+#if DEBUG
+				StarverPlayer.All.SendDeBugMessage($"{TypeName} ReSpawned");
+#endif
+				ReSpawn();
+				LifeDown();
 				return false;
 			}
 			else if (Lifes < 0)
@@ -479,19 +488,21 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region RealAI
 		public abstract void RealAI();
 		#endregion
+		#region ReSpawn
+		protected void ReSpawn()
+		{
+			Index = NewNPC((Vector)LastCenter, Vector.Zero, RawType, (int)(Level / (float)CriticalLevel * DefaultLifes), DefaultDefense * (int)(100 * Math.Log(Level + Math.E)));
+			RealNPC.type = RawType;
+			RealNPC.SetDefaults(RawType);
+			RealNPC.aiStyle = None;
+		}
+		#endregion
 		#region AI
 		public unsafe override void AI(object args = null)
 		{
 			if (!CheckActive())
 			{
 				return;
-			}
-			if(!RealNPC.active)
-			{
-				RealNPC.active = true;
-				RealNPC.life = RealNPC.lifeMax;
-				RealNPC.Center = LastCenter;
-				SendData();
 			}
 			if (Target < 0 || Target >= 40 || TargetPlayer == null || !TargetPlayer.Active)
 			{

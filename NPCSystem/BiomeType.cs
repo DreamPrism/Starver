@@ -11,8 +11,8 @@ namespace Starvers.NPCSystem
 	{
 		None = 0,
 		Grass = 1 << 0,
-		Corrupt = 1 << 1,
-		Crimson = 1 << 2,
+		Corrupt = 1 << 1 | Evil,
+		Crimson = 1 << 2 | Evil,
 		Jungle = 1 << 3,
 		Dungeon = 1 << 4,
 		Tower = 1 << 5,
@@ -29,6 +29,7 @@ namespace Starvers.NPCSystem
 		Metor = 1 << 16,
 		Temple = Jungle | 1 << 17,
 		Dessert = 1 << 18,
-		Icy = 1 << 19
+		Icy = 1 << 19,
+		Evil = 1 << 20
 	}
 }

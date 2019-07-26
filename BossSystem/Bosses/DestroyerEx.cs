@@ -14,6 +14,7 @@ namespace Starvers.BossSystem.Bosses
 	public class DestroyerEx : StarverBoss
 	{
 		#region Fields
+		private const int BodyDamageStart = 600;
 		/// <summary>
 		/// 身体节数
 		/// </summary>
@@ -25,9 +26,9 @@ namespace Starvers.BossSystem.Bosses
 		{
 			TaskNeed = 35;
 			RawType = NPCID.TheDestroyer;
-			DefaultLife = 560000;
+			DefaultLife = 2560000;
 			DefaultLifes = 100;
-			DefaultDefense = 40;
+			DefaultDefense = 240;
 			Drops = new DropItem[]
 			{
 				new DropItem(new int[]{ Currency.Melee }, 1, 28, 0.5f),
@@ -50,6 +51,13 @@ namespace Starvers.BossSystem.Bosses
 			{
 				StarverAI[0] = 0;
 			}
+		}
+		#endregion
+		#region LifeDown
+		public override void LifeDown()
+		{
+			base.LifeDown();
+			UpdateBody();
 		}
 		#endregion
 		#region RealAI
@@ -92,6 +100,20 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region AIs
+		#region UpdateBody
+		private unsafe void UpdateBody()
+		{
+			fixed (int* bodies = Bodies)
+			{
+				int* ptr = bodies;
+				int* end = bodies + BodyMax;
+				while (ptr != end)
+				{
+					Terraria.Main.npc[*ptr++].damage = (int)(BodyDamageStart * DamageIndex);
+				}
+			}
+		}
+		#endregion
 		#region CheckBody
 		private unsafe void CheckBody()
 		{
@@ -104,7 +126,8 @@ namespace Starvers.BossSystem.Bosses
 					if(Terraria.Main.npc[*ptr].type != NPCID.TheDestroyerBody || !Terraria.Main.npc[*ptr].active)
 					{
 						*ptr = NewNPC((Vector)Center, Vector.Zero, NPCID.TheDestroyerBody, 0, ptr == begin ? Index : ptr[-1], 0, Index);
-						Terraria.Main.npc[*ptr].defense = 150000;
+						Terraria.Main.npc[*ptr].defense = 400000;
+						Terraria.Main.npc[*ptr].damage = (int)(BodyDamageStart * DamageIndex);
 						Terraria.Main.npc[*ptr].life = 300;
 						if(ptr != begin)
 						{
@@ -113,11 +136,12 @@ namespace Starvers.BossSystem.Bosses
 					}
 					ptr++;
 				}
-				if ( Terraria.Main.npc[*ptr].type != NPCID.TheDestroyerTail || !Terraria.Main.npc[*ptr].active)
+				if (Terraria.Main.npc[*ptr].type != NPCID.TheDestroyerTail || !Terraria.Main.npc[*ptr].active)
 				{
 					*ptr = NewNPC((Vector)Center, Vector.Zero, NPCID.TheDestroyerTail, 0, ptr == begin ? Index : ptr[-1], 0, Index);
 					Terraria.Main.npc[*ptr].defense = 50000;
-						Terraria.Main.npc[*ptr].life = 300;
+					Terraria.Main.npc[*ptr].damage = (int)(BodyDamageStart * DamageIndex);
+					Terraria.Main.npc[*ptr].life = 300;
 					Terraria.Main.npc[ptr[-1]].ai[0] = *ptr;
 				}
 			}
@@ -137,7 +161,7 @@ namespace Starvers.BossSystem.Bosses
 					{
 						for (i = 0; i < 3; i++)
 						{
-							NewNPC((Vector)Terraria.Main.npc[*ptr].Center, NewByPolar(PI * 2 * i / 3, 18), NPCID.Probe, (int)1.25e4, (int)5e4);
+							Terraria.Main.npc[NewNPC((Vector)Terraria.Main.npc[*ptr].Center, NewByPolar(PI * 2 * i / 3, 18), NPCID.Probe, 12500, 400000)].damage = (int)(BodyDamageStart * DamageIndex);
 						}
 					}
 					catch(Exception e)
@@ -194,7 +218,7 @@ namespace Starvers.BossSystem.Bosses
 				}
 				if (StarverAI[0] > PI * 7)
 				{
-					if (Vector2.Distance(Center, vector) < 16 * 3)
+					if (Vector2.Distance(Center, WhereToGo) < 16 * 3)
 					{
 						StarverAI[0] = PI * 10;
 					}
@@ -206,21 +230,21 @@ namespace Starvers.BossSystem.Bosses
 					}
 					else
 					{
-						FakeVelocity = vector - (Vector)Center;
+						FakeVelocity = WhereToGo - (Vector)Center;
 						FakeVelocity.Length /= 10;
 					}
 				}
 				else
 				{
 					StarverAI[0] = PI * 7.5f;
-					vector = (Vector)Center.Symmetry(TargetPlayer.Center);
+					WhereToGo = (Vector)Center.Symmetry(TargetPlayer.Center);
 				}
 			}
 			else
 			{
 				StarverAI[0] += 2 * PI / 90;
-				vector = NewByPolar(StarverAI[0], 16 * 50);
-				FakeVelocity = (Vector)TargetPlayer.Center + vector - (Vector)Center;
+				WhereToGo = NewByPolar(StarverAI[0], 16 * 50);
+				FakeVelocity = (Vector)TargetPlayer.Center + WhereToGo - (Vector)Center;
 				FakeVelocity.Length /= 10;
 			}
 		}
@@ -239,7 +263,8 @@ namespace Starvers.BossSystem.Bosses
 #endif
 				Bodies[i] = ai0 = NewNPC((Vector)Center, Vector.Zero, NPCID.TheDestroyerBody, 0, ai1, 0, ai3);
 				Terraria.Main.npc[ai0].Center = Terraria.Main.npc[ai1].Center + vector;
-				Terraria.Main.npc[ai0].defense = 100000;
+				Terraria.Main.npc[ai0].defense = 600000;
+				Terraria.Main.npc[ai0].damage = (int)(BodyDamageStart * DamageIndex);
 				Terraria.Main.npc[ai1].ai[0] = ai0;
 				ai1 = ai0;
 			}

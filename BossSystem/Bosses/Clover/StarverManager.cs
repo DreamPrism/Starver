@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- using System.Threading;
+using System.Threading;
 using Microsoft.Xna.Framework;
 
 namespace Starvers.BossSystem.Bosses.Clover
@@ -28,8 +28,8 @@ namespace Starvers.BossSystem.Bosses.Clover
 			FullName = "Revolc The Starver Manager";
 			Name = "The Starver Manager";
 			RawType = NPCID.MoonLordCore;
-			DefaultDefense = 100;
-			DefaultLife = 6000000;
+			DefaultDefense = 3000;
+			DefaultLife = 60000000;
 			DefaultLifes = 1000;
 			Drops = new DropItem[] 
 			{
@@ -63,6 +63,10 @@ namespace Starvers.BossSystem.Bosses.Clover
 				{
 					foreach (var ply in Starver.Players)
 					{
+						if(ply == null)
+						{
+							continue;
+						}
 						idx = Terraria.NPC.NewNPC((int)ply.Center.X, (int)ply.Center.Y, NPCID.MoonLordCore);
 						Terraria.NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, idx);
 						Terraria.Main.npc[idx].aiStyle = -1;
@@ -94,10 +98,10 @@ namespace Starvers.BossSystem.Bosses.Clover
 			SendData();
 			#endregion
 			#region TheFollows
-			CrazyWang.Spawn(where, 40000, this);
-			Deaths.Spawn(where, 40000, this);
-			Wither.Spawn(where, 40000, this);
-			TOFOUT.Spawn(where, 40000, this);
+			CrazyWang.Spawn(where, Level - 1000, this);
+			Deaths.Spawn(where, Level - 1000, this);
+			Wither.Spawn(where, Level - 1000, this);
+			TOFOUT.Spawn(where, Level - 1000, this);
 			#endregion
 		}
 		#endregion

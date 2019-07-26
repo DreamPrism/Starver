@@ -17,6 +17,7 @@ namespace Starvers.BossSystem.Bosses
 		#region Fields
 		protected bool flag;
 		protected int idx;
+		private const int StartCollidingDamage = 900;
 		private DropItem[] DropsNormal = new DropItem[]
 		{
 			new DropItem(new int[]{ Currency.Melee }, 15, 30, 0.73f),
@@ -35,12 +36,12 @@ namespace Starvers.BossSystem.Bosses
 		{
 			TaskNeed = 30;
 			Name = "The Starver Destroyer";
-			FullName = "Eniltuo The Starver Destroyer";
+			FullName = "Tuofot The Starver Destroyer";
 			RawType = NPCID.DukeFishron;
 			IgnoreDistance = true;
-			DefaultLife = 3200000;
-			DefaultLifes = 200;
-			DefaultDefense = 50;
+			DefaultLife = 5200000;
+			DefaultLifes = 400;
+			DefaultDefense = 1000;
 			unsafe
 			{
 				StarverAI[0] = 0;
@@ -48,7 +49,7 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region Spawn
-		public override void Spawn(Vector2 where, int lvl = Criticallevel)
+		public override void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			base.Spawn(where, lvl);
 			flag = true;
@@ -56,6 +57,7 @@ namespace Starvers.BossSystem.Bosses
 			RushBegin(flag);
 			Center = where + Rand.NextVector2(16 * 60);
 			Drops = ExVersion ? DropsEx : DropsNormal;
+			RealNPC.damage = StartCollidingDamage;
 		}
 		#endregion
 		#region Fail
@@ -69,6 +71,13 @@ namespace Starvers.BossSystem.Bosses
 				StarverPlayer.All.SendMessage("你们准备好了吗?", Color.HotPink);
 				StarverPlayer.All.SendMessage("你们就是下一个", Color.HotPink);
 			}
+		}
+		#endregion
+		#region LifeDown
+		public override void LifeDown()
+		{
+			base.LifeDown();
+			RealNPC.damage = (int)(StartCollidingDamage * DamageIndex);
 		}
 		#endregion
 		#region Downed

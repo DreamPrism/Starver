@@ -26,8 +26,8 @@ namespace Starvers.BossSystem.Bosses
 			ComingMessageColor = Color.Gray;
 			TaskNeed = 25;
 			RawType = NPCID.SkeletronHead;
-			DefaultDefense = 30;
-			DefaultLife = 310000;
+			DefaultDefense = 80;
+			DefaultLife = 1110000;
 			DefaultLifes = 70;
 			Drops = new DropItem[]
 			{
@@ -37,7 +37,7 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region Spawn
-		public override void Spawn(Vector2 where, int lvl = Criticallevel)
+		public override void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			base.Spawn(where, lvl);
 			unsafe

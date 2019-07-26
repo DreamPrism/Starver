@@ -25,10 +25,10 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 32;
 			Name = "红魔王";
 			RawType = NPCID.RedDevil;
-			DefaultDefense = 18;
+			DefaultDefense = 68;
 			DefaultLife = 30000;
 			DefaultLifes = 70;
-			DamagedIndex = 0.02f;
+			DamagedIndex = 0.0002f;
 			LifeperPlayerType = ByLifes;
 			Drops = new DropItem[]
 			{

@@ -35,8 +35,8 @@ namespace Starvers.NPCSystem
 			{
 				Condition = SpawnConditions.Night,
 				Biome = BiomeType.Grass,
-				SpawnRate = 60 * 5,
-				SpawnChance = 0.3f
+				SpawnRate = 60 * 2 + 30,
+				SpawnChance = 0.6f
 			};
 			slimeLike = new SpawnChecker
 			{

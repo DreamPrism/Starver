@@ -67,9 +67,9 @@ namespace Starvers.BossSystem.Bosses
 		{
 			TaskNeed = 37;
 			RawType = NPCID.Spazmatism;
-			DefaultLife = 425000;
+			DefaultLife = 1925000;
 			DefaultLifes = 100;
-			DefaultDefense = 28;
+			DefaultDefense = 587;
 			Drops = new DropItem[]
 			{
 				new DropItem(new int[]{ Currency.Minion, Currency.Magic }, 1, 28),

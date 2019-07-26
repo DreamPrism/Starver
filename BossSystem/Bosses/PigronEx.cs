@@ -28,10 +28,10 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 33;
 			Name = "猪龙";
 			RawType = NPCID.PigronHallow;
-			DefaultDefense = 23;
+			DefaultDefense = 63;
 			DefaultLife = 30000;
 			DefaultLifes = 80;
-			DamagedIndex = 0.017f;
+			DamagedIndex = 0.00017f;
 			LifeperPlayerType = ByLifes;
 			Drops = new DropItem[]
 			{
@@ -41,7 +41,7 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region Spawn
-		public override void Spawn(Vector2 where, int lvl = Criticallevel)
+		public override void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			base.Spawn(where, lvl);
 			lastMode = BossMode.SummonFollows;
