@@ -457,7 +457,7 @@ namespace Starvers.BossSystem.Bosses.Base
 #endif
 				ReSpawn();
 				LifeDown();
-				return true;
+				return false;
 			}
 			else if (Lifes < 0)
 			{

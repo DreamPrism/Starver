@@ -57,7 +57,7 @@ namespace Starvers.BossSystem.Bosses
 		public override void LifeDown()
 		{
 			base.LifeDown();
-			UpdateBodyDamage();
+			UpdateBody();
 		}
 		#endregion
 		#region RealAI
@@ -100,14 +100,14 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region AIs
-		#region UpdateBodyDamage
-		private unsafe void UpdateBodyDamage()
+		#region UpdateBody
+		private unsafe void UpdateBody()
 		{
-			fixed(int* bodies = Bodies)
+			fixed (int* bodies = Bodies)
 			{
 				int* ptr = bodies;
 				int* end = bodies + BodyMax;
-				while(ptr!=end)
+				while (ptr != end)
 				{
 					Terraria.Main.npc[*ptr++].damage = (int)(BodyDamageStart * DamageIndex);
 				}
@@ -126,7 +126,8 @@ namespace Starvers.BossSystem.Bosses
 					if(Terraria.Main.npc[*ptr].type != NPCID.TheDestroyerBody || !Terraria.Main.npc[*ptr].active)
 					{
 						*ptr = NewNPC((Vector)Center, Vector.Zero, NPCID.TheDestroyerBody, 0, ptr == begin ? Index : ptr[-1], 0, Index);
-						Terraria.Main.npc[*ptr].defense = 150000;
+						Terraria.Main.npc[*ptr].defense = 400000;
+						Terraria.Main.npc[*ptr].damage = (int)(BodyDamageStart * DamageIndex);
 						Terraria.Main.npc[*ptr].life = 300;
 						if(ptr != begin)
 						{
@@ -135,11 +136,12 @@ namespace Starvers.BossSystem.Bosses
 					}
 					ptr++;
 				}
-				if ( Terraria.Main.npc[*ptr].type != NPCID.TheDestroyerTail || !Terraria.Main.npc[*ptr].active)
+				if (Terraria.Main.npc[*ptr].type != NPCID.TheDestroyerTail || !Terraria.Main.npc[*ptr].active)
 				{
 					*ptr = NewNPC((Vector)Center, Vector.Zero, NPCID.TheDestroyerTail, 0, ptr == begin ? Index : ptr[-1], 0, Index);
 					Terraria.Main.npc[*ptr].defense = 50000;
-						Terraria.Main.npc[*ptr].life = 300;
+					Terraria.Main.npc[*ptr].damage = (int)(BodyDamageStart * DamageIndex);
+					Terraria.Main.npc[*ptr].life = 300;
 					Terraria.Main.npc[ptr[-1]].ai[0] = *ptr;
 				}
 			}
@@ -216,7 +218,7 @@ namespace Starvers.BossSystem.Bosses
 				}
 				if (StarverAI[0] > PI * 7)
 				{
-					if (Vector2.Distance(Center, vector) < 16 * 3)
+					if (Vector2.Distance(Center, WhereToGo) < 16 * 3)
 					{
 						StarverAI[0] = PI * 10;
 					}
@@ -228,21 +230,21 @@ namespace Starvers.BossSystem.Bosses
 					}
 					else
 					{
-						FakeVelocity = vector - (Vector)Center;
+						FakeVelocity = WhereToGo - (Vector)Center;
 						FakeVelocity.Length /= 10;
 					}
 				}
 				else
 				{
 					StarverAI[0] = PI * 7.5f;
-					vector = (Vector)Center.Symmetry(TargetPlayer.Center);
+					WhereToGo = (Vector)Center.Symmetry(TargetPlayer.Center);
 				}
 			}
 			else
 			{
 				StarverAI[0] += 2 * PI / 90;
-				vector = NewByPolar(StarverAI[0], 16 * 50);
-				FakeVelocity = (Vector)TargetPlayer.Center + vector - (Vector)Center;
+				WhereToGo = NewByPolar(StarverAI[0], 16 * 50);
+				FakeVelocity = (Vector)TargetPlayer.Center + WhereToGo - (Vector)Center;
 				FakeVelocity.Length /= 10;
 			}
 		}
@@ -261,7 +263,8 @@ namespace Starvers.BossSystem.Bosses
 #endif
 				Bodies[i] = ai0 = NewNPC((Vector)Center, Vector.Zero, NPCID.TheDestroyerBody, 0, ai1, 0, ai3);
 				Terraria.Main.npc[ai0].Center = Terraria.Main.npc[ai1].Center + vector;
-				Terraria.Main.npc[ai0].defense = 100000;
+				Terraria.Main.npc[ai0].defense = 600000;
+				Terraria.Main.npc[ai0].damage = (int)(BodyDamageStart * DamageIndex);
 				Terraria.Main.npc[ai1].ai[0] = ai0;
 				ai1 = ai0;
 			}

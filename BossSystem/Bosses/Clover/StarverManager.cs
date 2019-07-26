@@ -28,7 +28,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			FullName = "Revolc The Starver Manager";
 			Name = "The Starver Manager";
 			RawType = NPCID.MoonLordCore;
-			DefaultDefense = 2000;
+			DefaultDefense = 3000;
 			DefaultLife = 60000000;
 			DefaultLifes = 1000;
 			Drops = new DropItem[] 
