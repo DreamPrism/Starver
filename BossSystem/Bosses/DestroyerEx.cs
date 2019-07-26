@@ -14,6 +14,7 @@ namespace Starvers.BossSystem.Bosses
 	public class DestroyerEx : StarverBoss
 	{
 		#region Fields
+		private const int BodyDamageStart = 600;
 		/// <summary>
 		/// 身体节数
 		/// </summary>
@@ -27,7 +28,7 @@ namespace Starvers.BossSystem.Bosses
 			RawType = NPCID.TheDestroyer;
 			DefaultLife = 2560000;
 			DefaultLifes = 100;
-			DefaultDefense = 40;
+			DefaultDefense = 240;
 			Drops = new DropItem[]
 			{
 				new DropItem(new int[]{ Currency.Melee }, 1, 28, 0.5f),
@@ -50,6 +51,13 @@ namespace Starvers.BossSystem.Bosses
 			{
 				StarverAI[0] = 0;
 			}
+		}
+		#endregion
+		#region LifeDown
+		public override void LifeDown()
+		{
+			base.LifeDown();
+			UpdateBodyDamage();
 		}
 		#endregion
 		#region RealAI
@@ -92,6 +100,20 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region AIs
+		#region UpdateBodyDamage
+		private unsafe void UpdateBodyDamage()
+		{
+			fixed(int* bodies = Bodies)
+			{
+				int* ptr = bodies;
+				int* end = bodies + BodyMax;
+				while(ptr!=end)
+				{
+					Terraria.Main.npc[*ptr++].damage = (int)(BodyDamageStart * DamageIndex);
+				}
+			}
+		}
+		#endregion
 		#region CheckBody
 		private unsafe void CheckBody()
 		{
@@ -137,7 +159,7 @@ namespace Starvers.BossSystem.Bosses
 					{
 						for (i = 0; i < 3; i++)
 						{
-							NewNPC((Vector)Terraria.Main.npc[*ptr].Center, NewByPolar(PI * 2 * i / 3, 18), NPCID.Probe, (int)1.25e4, (int)5e4);
+							Terraria.Main.npc[NewNPC((Vector)Terraria.Main.npc[*ptr].Center, NewByPolar(PI * 2 * i / 3, 18), NPCID.Probe, 12500, 400000)].damage = (int)(BodyDamageStart * DamageIndex);
 						}
 					}
 					catch(Exception e)

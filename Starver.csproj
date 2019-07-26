@@ -107,10 +107,10 @@
     <Compile Include="AuraSystem\Skills\WindRealm.cs" />
     <Compile Include="BlockSystem\StarverBlockManager.cs" />
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.cs" />
-    <Compile Include="BossSystem\Bosses\Base\StarverBoss.IProjSet.cs" />
-    <Compile Include="BossSystem\Bosses\Base\StarverBoss.ProjPair.cs" />
-    <Compile Include="BossSystem\Bosses\Base\StarverBoss.ProjSet.cs" />
-    <Compile Include="BossSystem\Bosses\Base\StarverBoss.ProjStack.cs" />
+    <Compile Include="Entity\StarverEntity.IProjSet.cs" />
+    <Compile Include="Entity\StarverEntity.ProjPair.cs" />
+    <Compile Include="Entity\StarverEntity.ProjSet.cs" />
+    <Compile Include="Entity\StarverEntity.ProjStack.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.FinalAdjudicator.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.FinalDestroyer.cs" />
@@ -151,6 +151,7 @@
     <Compile Include="IStarverPlugin.cs" />
     <Compile Include="NPCSystem\BiomeType.cs" />
     <Compile Include="NPCSystem\NPCs\BrainFollow.cs" />
+    <Compile Include="NPCSystem\NPCs\FloatingSkeleton.cs" />
     <Compile Include="NPCSystem\NPCs\PrimeExArm.cs" />
     <Compile Include="NPCSystem\NPCs\Zomb.cs" />
     <Compile Include="NPCSystem\SpawnChecker.cs" />
@@ -167,7 +168,7 @@
     <Compile Include="SaveModes.cs" />
     <Compile Include="Starver.cs" />
     <Compile Include="StarverConfig.cs" />
-    <Compile Include="StarverEntity.cs" />
+    <Compile Include="Entity\StarverEntity.cs" />
     <Compile Include="BaseNPC.cs" />
     <Compile Include="StarverPlayer.cs" />
     <Compile Include="HelpTexts.cs" />

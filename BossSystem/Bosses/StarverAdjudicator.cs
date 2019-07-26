@@ -38,7 +38,7 @@ namespace Starvers.BossSystem.Bosses
 			FullName = "Iesnet The Starver Adjudicator";
 			DefaultLife = 1400000;
 			DefaultLifes = 320;
-			DefaultDefense = -10;
+			DefaultDefense = 990;
 			RawType = NPCID.DukeFishron;
 			unsafe
 			{

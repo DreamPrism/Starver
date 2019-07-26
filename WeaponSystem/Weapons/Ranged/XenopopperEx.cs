@@ -19,12 +19,6 @@ namespace Starvers.WeaponSystem.Weapons.Ranged
 			CatchID = Terraria.ID.ProjectileID.Xenopopper;
 		}
 		#endregion
-		#region Check
-		public override bool Check(GetDataHandlers.NewProjectileEventArgs args)
-		{
-			return Terraria.Main.player[args.Owner].HeldItem.type == ItemID;
-		}
-		#endregion
 		#region UseItem
 		public override void UseWeapon(StarverPlayer player, Vector Velocity, int lvl, TShockAPI.GetDataHandlers.NewProjectileEventArgs args)
 		{

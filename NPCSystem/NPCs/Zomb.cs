@@ -24,13 +24,21 @@ namespace Starvers.NPCSystem.NPCs
 			NPCID.ZombieSuperman
 		};
 		#endregion
+		#region Properties
+		protected override float CollidingIndex => DamageIndex;
+		#endregion
 		#region ctor
 		public Zomb()
 		{
 			Checker = SpawnChecker.ZombieLike;
 			RawType = NPCID.Zombie;
-			DefaultLife = 2000;
+			DefaultLife = 12000;
+			DefaultDefense = 300000;
 			Checker.Task = 21;
+			AIStyle = 3;
+			Types = ZombieTypes;
+			DamagedIndex = 0.1f;
+			CollideDamage = 200;
 		}
 		#endregion
 		#region CheckSpawn
@@ -42,7 +50,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region RealAI
 		protected override void RealAI()
 		{
-			RealNPC.aiStyle = 3;
+			
 		}
 		#endregion
 		#region OnDead
@@ -55,9 +63,9 @@ namespace Starvers.NPCSystem.NPCs
 				{
 					continue;
 				}
-				if(Microsoft.Xna.Framework.Vector2.Distance(TargetPlayer.Center,Center) < 16 * 30)
+				if(Microsoft.Xna.Framework.Vector2.Distance(TargetPlayer.Center,Center) < 16 * 15)
 				{
-					ply.Damage(3000);
+					ply.Damage((int)(3000 * DamageIndex));
 				}
 			}
 		}
@@ -66,13 +74,6 @@ namespace Starvers.NPCSystem.NPCs
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			RawType = ZombieTypes[Rand.Next(ZombieTypes.Length)];
-			RealNPC.aiStyle = 3;
-			RealNPC.SetDefaults(RawType);
-			RealNPC.life = DefaultLife;
-			RealNPC.lifeMax = DefaultLife;
-			RealNPC.defense = DefaultDefense;
-			SendData();
 		}
 		#endregion
 	}

@@ -17,6 +17,7 @@ namespace Starvers.BossSystem.Bosses
 	{
 		#region Fields
 		private Vector Unit = new Vector(0, -16 * 16);
+		private const int StartCollideDamage = 210;
 		#endregion
 		#region ctor
 		public EyeEx() : base(3)
@@ -26,7 +27,7 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 22;
 			RawType = NPCID.EyeofCthulhu;
 			Name = "克苏鲁之眼";
-			DefaultDefense = 50;
+			DefaultDefense = 450;
 			DefaultLife = 630000;
 			DefaultLifes = 50;
 			vector.X = 16 * 20;
@@ -41,6 +42,14 @@ namespace Starvers.BossSystem.Bosses
 		{
 			base.Spawn(where, lvl);
 			Mode = BossMode.Explosive;
+			RealNPC.damage = StartCollideDamage;
+		}
+		#endregion
+		#region LifeDown
+		public override void LifeDown()
+		{
+			base.LifeDown();
+			RealNPC.damage = (int)(StartCollideDamage * DamageIndex);
 		}
 		#endregion
 		#region RealAI

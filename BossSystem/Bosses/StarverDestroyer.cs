@@ -17,6 +17,7 @@ namespace Starvers.BossSystem.Bosses
 		#region Fields
 		protected bool flag;
 		protected int idx;
+		private const int StartCollidingDamage = 900;
 		private DropItem[] DropsNormal = new DropItem[]
 		{
 			new DropItem(new int[]{ Currency.Melee }, 15, 30, 0.73f),
@@ -40,7 +41,7 @@ namespace Starvers.BossSystem.Bosses
 			IgnoreDistance = true;
 			DefaultLife = 5200000;
 			DefaultLifes = 400;
-			DefaultDefense = 170;
+			DefaultDefense = 1000;
 			unsafe
 			{
 				StarverAI[0] = 0;
@@ -56,6 +57,7 @@ namespace Starvers.BossSystem.Bosses
 			RushBegin(flag);
 			Center = where + Rand.NextVector2(16 * 60);
 			Drops = ExVersion ? DropsEx : DropsNormal;
+			RealNPC.damage = StartCollidingDamage;
 		}
 		#endregion
 		#region Fail
@@ -69,6 +71,13 @@ namespace Starvers.BossSystem.Bosses
 				StarverPlayer.All.SendMessage("你们准备好了吗?", Color.HotPink);
 				StarverPlayer.All.SendMessage("你们就是下一个", Color.HotPink);
 			}
+		}
+		#endregion
+		#region LifeDown
+		public override void LifeDown()
+		{
+			base.LifeDown();
+			RealNPC.damage = (int)(StartCollidingDamage * DamageIndex);
 		}
 		#endregion
 		#region Downed

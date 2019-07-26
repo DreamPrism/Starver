@@ -30,7 +30,7 @@ namespace Starvers.BossSystem.Bosses
 			Name = Lang.GetNPCNameValue(NPCID.CultistBoss);
 			DefaultLife = 4005000;
 			DefaultLifes = 150;
-			DefaultDefense = 180;
+			DefaultDefense = 380;
 			Drops = new DropItem[]
 			{
 				new DropItem(new int[]{ ItemID.WhiteCultistArcherBanner }, 23, 49, 0.35f),

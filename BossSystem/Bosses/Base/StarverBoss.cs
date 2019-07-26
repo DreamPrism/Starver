@@ -89,6 +89,10 @@ namespace Starvers.BossSystem.Bosses.Base
 		protected DropItem[] Drops;
 		protected bool NightBoss = true;
 		protected bool ExVersion;
+		/// <summary>
+		/// 是否检查NPC种类
+		/// </summary>
+		protected bool CheckType = true;
 		protected string DisplayName;
 		protected string FullName;
 		protected int Lifes;
@@ -300,7 +304,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			Index = 0;
 			Index = NPC.NewNPC((int)where.X, (int)where.Y, RawType);
 			SendData();
-			Defense = DefaultDefense * (int)(100 * Math.Log(Level));
+			Defense = DefaultDefense * (int)(100 * Math.Log(Level + Math.E));
 			RealNPC.aiStyle = -1;
 			RealNPC.Center += Rand.NextVector2(54f, 54f);
 			RealNPC.noTileCollide = true;
@@ -446,9 +450,14 @@ namespace Starvers.BossSystem.Bosses.Base
 			{
 				return _active;
 			}
-			else if (Index == -1)
+			else if (Index == -1 || (!RealNPC.active) || (CheckType && RealNPC.type != RawType)) 
 			{
-				return false;
+#if DEBUG
+				StarverPlayer.All.SendDeBugMessage($"{TypeName} ReSpawned");
+#endif
+				ReSpawn();
+				LifeDown();
+				return true;
 			}
 			else if (Lifes < 0)
 			{
@@ -479,19 +488,21 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region RealAI
 		public abstract void RealAI();
 		#endregion
+		#region ReSpawn
+		protected void ReSpawn()
+		{
+			Index = NewNPC((Vector)LastCenter, Vector.Zero, RawType, (int)(Level / (float)CriticalLevel * DefaultLifes), DefaultDefense * (int)(100 * Math.Log(Level + Math.E)));
+			RealNPC.type = RawType;
+			RealNPC.SetDefaults(RawType);
+			RealNPC.aiStyle = None;
+		}
+		#endregion
 		#region AI
 		public unsafe override void AI(object args = null)
 		{
 			if (!CheckActive())
 			{
 				return;
-			}
-			if(!RealNPC.active)
-			{
-				RealNPC.active = true;
-				RealNPC.life = RealNPC.lifeMax;
-				RealNPC.Center = LastCenter;
-				SendData();
 			}
 			if (Target < 0 || Target >= 40 || TargetPlayer == null || !TargetPlayer.Active)
 			{

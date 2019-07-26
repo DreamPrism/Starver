@@ -40,7 +40,7 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLifes = 60;
 			DamagedIndex = 0.0004f;
 			DefaultLife = 32500;
-			DefaultDefense = 80;
+			DefaultDefense = 180;
 			IgnoreDistance = true;
 			Drops = new DropItem[]
 			{
