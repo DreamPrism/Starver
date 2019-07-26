@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- using System.Threading;
+using System.Threading;
 using Microsoft.Xna.Framework;
 
 namespace Starvers.BossSystem.Bosses.Clover
@@ -63,6 +63,10 @@ namespace Starvers.BossSystem.Bosses.Clover
 				{
 					foreach (var ply in Starver.Players)
 					{
+						if(ply == null)
+						{
+							continue;
+						}
 						idx = Terraria.NPC.NewNPC((int)ply.Center.X, (int)ply.Center.Y, NPCID.MoonLordCore);
 						Terraria.NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, idx);
 						Terraria.Main.npc[idx].aiStyle = -1;

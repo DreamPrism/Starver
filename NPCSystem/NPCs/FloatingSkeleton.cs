@@ -7,6 +7,7 @@ using Terraria.ID;
 
 namespace Starvers.NPCSystem.NPCs
 {
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class FloatingSkeleton : StarverNPC
 	{
 		#region Fields
@@ -47,7 +48,16 @@ namespace Starvers.NPCSystem.NPCs
 		#region RealAI
 		protected override void RealAI()
 		{
-
+			FakeVelocity = (Vector)Velocity;
+			if(Timer < 60 * 7 / 2) // 3.5 * 2s一个周期
+			{
+				if (CheckSecond(1.25) || CheckSecond(1.95) || CheckSecond(2.65))
+				{
+					Vel = (Vector)(TargetPlayer.Center - Center);
+					Vel.Length = 19;
+					Proj(Center, Vel, ProjectileID.Bone, 200, 20);
+				}
+			}
 		}
 		#endregion
 	}

@@ -125,6 +125,13 @@ namespace Starvers.NPCSystem
 			return $"{Name}:Index({Index}),_active({_active}),RealNPC({RealNPC})";
 		}
 		#endregion
+		#region CheckSecond
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		protected bool CheckSecond(double seconds)
+		{
+			return Timer % (int)(seconds * 60) == 0;
+		}
+		#endregion
 		#region AI
 		public override void AI(object args = null)
 		{
@@ -204,7 +211,7 @@ namespace Starvers.NPCSystem
 		}
 		#endregion
 		#region Globals
-		protected static int SpawnTimer;
+		private static int SpawnTimer;
 		protected static int counting;
 		protected static int count;
 		protected static int Count
