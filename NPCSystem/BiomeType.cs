@@ -30,6 +30,6 @@ namespace Starvers.NPCSystem
 		Temple = Jungle | 1 << 17,
 		Dessert = 1 << 18,
 		Icy = 1 << 19,
-		Evil = 1 << 20
+		Evil = 1 << 20,
 	}
 }

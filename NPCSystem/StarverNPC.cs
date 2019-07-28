@@ -9,16 +9,18 @@ using TShockAPI;
 namespace Starvers.NPCSystem
 {
 	using Vector = TOFOUT.Terraria.Server.Vector2;
-	public abstract class StarverNPC : BaseNPC , ICloneable
+	public abstract class StarverNPC : BaseNPC, ICloneable
 	{
 		#region Fields
 		protected float[] AIUsing;
 		protected int[] Types;
-		protected int AIStyle = 1;
+		protected int AIStyle = None;
 		protected int RawType;
 		protected int DefaultLife;
 		protected int DefaultDefense;
 		protected int CollideDamage;
+		protected int Height = 3 * 14;
+		protected int Width = 2 * 13;
 		protected bool NoTileCollide;
 		protected DateTime LastSpawn = DateTime.Now;
 		protected StarverNPC Root;
@@ -30,15 +32,11 @@ namespace Starvers.NPCSystem
 		/// 碰撞伤害系数
 		/// </summary>
 		protected virtual float CollidingIndex { get; set; } = 1;
-		public override float DamageIndex
-		{
-			get
-			{
-				return (StarverConfig.Config.TaskNow - 19) / 4f + 1;
-			}
-		}
+		protected virtual float DefenseIndex => (StarverConfig.Config.TaskNow - 20) / 2f;
+		public override float DamageIndex => (StarverConfig.Config.TaskNow - 20) / 5f + 1;
+		public bool OverrideRawDrop { get; protected set; } = false;
 		#endregion
-		#region ctor
+		#region ctor & Release
 		protected StarverNPC(int AIs = 0)
 		{
 			AIUsing = new float[AIs];
@@ -62,6 +60,14 @@ namespace Starvers.NPCSystem
 				Console.ResetColor();
 #endif
 			}
+			unsafe
+			{
+				Finded = (Vector*)System.Runtime.InteropServices.Marshal.AllocHGlobal(sizeof(Vector) * (2 * 120 * 5 + 2 * 50 * 10)).ToPointer();
+			}
+		}
+		public unsafe static void Release()
+		{
+			System.Runtime.InteropServices.Marshal.FreeHGlobal((IntPtr)Finded);
 		}
 		#endregion
 		#region Spawn
@@ -73,13 +79,6 @@ namespace Starvers.NPCSystem
 		}
 		#endregion
 		#region DefenseIndex
-		protected virtual float DefenseIndex
-		{
-			get
-			{
-				return (StarverConfig.Config.TaskNow - 20) / 2f;
-			}
-		}
 		#endregion
 		#region OnSpawn
 		public override void OnSpawn()
@@ -90,21 +89,28 @@ namespace Starvers.NPCSystem
 				RawType = Types[Rand.Next(Types.Length)];
 			}
 			#endregion
+			TransformTo(RawType);
+			SendData();
+#if DEBUG
+			StarverPlayer.All.SendDeBugMessage($"{Name}({this.Index}) has Spawned");
+#endif
+		}
+		#endregion
+		#region TransformTo
+		protected void TransformTo(int type)
+		{
+			RawType = type;
 			RealNPC.SetDefaults(RawType);
 			RealNPC.life = DefaultLife;
 			RealNPC.lifeMax = DefaultLife;
 			RealNPC.aiStyle = AIStyle;
 			RealNPC.noTileCollide = NoTileCollide;
 			RealNPC.defense = (int)(DefaultDefense * DefenseIndex);
-			if(CollideDamage > 0)
+			if (CollideDamage > 0)
 			{
 				RealNPC.damage = CollideDamage;
 			}
 			RealNPC.damage = (int)(RealNPC.damage * CollidingIndex);
-			SendData();
-#if DEBUG
-			StarverPlayer.All.SendDeBugMessage($"{Name}({this.Index}) has Spawned");
-#endif
 		}
 		#endregion
 		#region CheckSpawn
@@ -129,7 +135,20 @@ namespace Starvers.NPCSystem
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		protected bool CheckSecond(double seconds)
 		{
-			return Timer % (int)(seconds * 60) == 0;
+			return Timer % (uint)(seconds * 60) == 0;
+		}
+		#endregion
+		#region Drop
+		public void Drop(int idx)
+		{
+			if(Drops is null)
+			{
+				return;
+			}
+			foreach(var DropItem in Drops)
+			{
+				DropItem.Drop(Terraria.Main.npc[idx]);
+			}
 		}
 		#endregion
 		#region AI
@@ -158,6 +177,107 @@ namespace Starvers.NPCSystem
 			RealAI();
 			SendData();
 			++Timer;
+		}
+		#endregion
+		#region CalcSpawnPos
+		protected unsafe Vector CalcSpawnPos(Vector PlayerCenter)
+		{
+			#region Search
+			Vector LeftUp = new Vector(PlayerCenter.X - 16 * 50 - 16 * 10, PlayerCenter.Y - 16 * 25 - 16 * 5);
+			t = 0;
+			float i, LimY, j, LimX;
+			for (i = PlayerCenter.Y - 25 * 16 - 5 * 16, LimY = PlayerCenter.Y - 25 * 16; i < LimY; i += 16)
+			{
+				for (j = LeftUp.X, LimX = PlayerCenter.X + 50 * 16 + 10 * 16; j < LimX; j += 16)
+				{
+					if (CheckSpace(j, i))
+					{
+						Finded[t].X = j;
+						Finded[t].Y = i;
+						t++;
+					}
+				}
+			}  //搜索玩家上方是否有空位
+			for (i = PlayerCenter.Y + 25 * 16, LimY = PlayerCenter.Y + 25 * 16 + 5 * 16; i < LimY; i += 16)
+			{
+				for (j = LeftUp.X, LimX = PlayerCenter.X + 50 * 16 + 10 * 16; j < LimX; j += 16)
+				{
+					if (CheckSpace(j, i))
+					{
+						Finded[t].X = j;
+						Finded[t].Y = i;
+						t++;
+					}
+				}
+			}  //搜索玩家下方是否有空位
+			for (i = PlayerCenter.Y - 25 * 16, LimY = PlayerCenter.Y + 25 * 16; i < LimY; i += 16)
+			{
+				for (j = PlayerCenter.X - 50 * 16 - 10 * 16, LimX = PlayerCenter.X - 50 * 16; j < LimX; j += 16)
+				{
+					if (CheckSpace(j, i))
+					{
+						Finded[t].X = j;
+						Finded[t].Y = i;
+						t++;
+					}
+				}
+			}  //搜索玩家左边
+			for (i = PlayerCenter.Y - 25 * 16, LimY = PlayerCenter.Y + 25 * 16; i < LimY; i += 16)
+			{
+				for (j = PlayerCenter.X + 50 * 16, LimX = PlayerCenter.X + 50 * 16 + 10 * 16; j < LimX; j += 16)
+				{
+					if (CheckSpace(j, i))
+					{
+						Finded[t].X = j;
+						Finded[t].Y = i;
+						t++;
+					}
+				}
+			}  //搜索玩家右边
+			#endregion
+			#region return
+			if (t > 0)
+			{
+				return Finded[Rand.Next(t)];
+			}
+			if (NoTileCollide)
+			{
+				return (Vector)(PlayerCenter + Rand.NextVector2(16 * 50));
+			}
+			else
+			{
+				throw new Exception("没有合适的出生点");
+			}
+			#endregion
+		}
+		#endregion
+		#region CheckSpace
+		/// <summary>
+		/// 检查以where为左上角的空间是否可以容纳NPC
+		/// </summary>
+		/// <param name="where"></param>
+		/// <returns>空间的左上角</returns>
+		private bool CheckSpace(Vector where)
+		{
+			return CheckSpace(where.X, where.Y);
+		}
+		private bool CheckSpace(float X,float Y)
+		{
+			int i = (int)(Y / 16);
+			int j = (int)(X / 16);
+			int HeightNeed = (int)Math.Ceiling(Height / 16.0);
+			int WidthNeed = (int)Math.Ceiling(Width / 16.0);
+			for (; i < HeightNeed; i++)
+			{
+				for (; j < WidthNeed; j++)
+				{
+					if (Terraria.Main.tile[j, i].active())
+					{
+						return false;
+					}
+				}
+			}
+			return true;
 		}
 		#endregion
 		#region Collide
@@ -211,7 +331,9 @@ namespace Starvers.NPCSystem
 		}
 		#endregion
 		#region Globals
-		private static int SpawnTimer;
+		private static int t;
+		private unsafe static Vector* Finded;
+		protected static int SpawnTimer;
 		protected static int counting;
 		protected static int count;
 		protected static int Count
@@ -313,14 +435,18 @@ namespace Starvers.NPCSystem
 				{
 					if (Count < Alives * TShock.Config.DefaultMaximumSpawns && npc.CheckSpawn(player)) 
 					{
-						NewNPC((Vector)(player.Center + Rand.NextVector2(16 * 20)), Vector.Zero, npc);
+						try
+						{
+							NewNPC(npc.CalcSpawnPos((Vector)player.Center), Vector.Zero, npc);
+						}
+						catch
+						{
+
+						}
 					}
 				}
 			}
-			if (SpawnTimer % 3 == 0)
-			{
-				Collide();
-			}
+			Collide();
 		}
 		public static void OnNPCKilled(TerrariaApi.Server.NpcKilledEventArgs args)
 		{

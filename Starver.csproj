@@ -150,10 +150,14 @@
     </Compile>
     <Compile Include="IStarverPlugin.cs" />
     <Compile Include="NPCSystem\BiomeType.cs" />
+    <Compile Include="NPCSystem\NPCs\RushingBat.cs" />
     <Compile Include="NPCSystem\NPCs\BrainFollow.cs" />
     <Compile Include="NPCSystem\NPCs\FloatingSkeleton.cs" />
+    <Compile Include="NPCSystem\NPCs\PossessedArmorArcher.cs" />
     <Compile Include="NPCSystem\NPCs\PrimeExArm.cs" />
+    <Compile Include="NPCSystem\NPCs\RushingBatIcy.cs" />
     <Compile Include="NPCSystem\NPCs\Zomb.cs" />
+    <Compile Include="NPCSystem\NPCs\ZombSnow.cs" />
     <Compile Include="NPCSystem\SpawnChecker.cs" />
     <Compile Include="NPCSystem\SpawnConditions.cs" />
     <Compile Include="NPCSystem\StarverNPC.cs" />

@@ -17,7 +17,6 @@ namespace Starvers.NPCSystem.NPCs
 			NPCID.ZombieDoctor,
 			NPCID.ZombieElf,
 			NPCID.ZombieElf,
-			NPCID.ZombieEskimo,
 			NPCID.ZombieMushroom,
 			NPCID.ZombiePixie,
 			NPCID.ZombieSweater,

@@ -14,12 +14,25 @@ namespace Starvers.NPCSystem
 		public void Load()
 		{
 			ServerApi.Hooks.GameUpdate.Register(Starver.Instance, StarverNPC.DoUpDate);
+			ServerApi.Hooks.NpcLootDrop.Register(Starver.Instance, OnDrop);
 			//ServerApi.Hooks.NpcKilled.Register(Starver.Instance, StarverNPC.OnNPCKilled);
 		}
 		public void UnLoad()
 		{
 			ServerApi.Hooks.GameUpdate.Deregister(Starver.Instance, StarverNPC.DoUpDate);
+			ServerApi.Hooks.NpcLootDrop.Deregister(Starver.Instance, OnDrop);
+			StarverNPC.Release();
 			//ServerApi.Hooks.NpcKilled.Deregister(Starver.Instance, StarverNPC.OnNPCKilled);
+		}
+		#endregion
+		#region OnDrop
+		private static void OnDrop(NpcLootDropEventArgs args)
+		{
+			if(StarverNPC.NPCs[args.NpcArrayIndex] != null && StarverNPC.NPCs[args.NpcArrayIndex].Active)
+			{
+				args.Handled = StarverNPC.NPCs[args.NpcArrayIndex].OverrideRawDrop;
+				StarverNPC.NPCs[args.NpcArrayIndex].Drop(args.NpcArrayIndex);
+			}
 		}
 		#endregion
 	}

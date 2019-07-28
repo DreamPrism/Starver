@@ -86,7 +86,6 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region Fields
-		protected DropItem[] Drops;
 		protected bool NightBoss = true;
 		protected bool ExVersion;
 		/// <summary>

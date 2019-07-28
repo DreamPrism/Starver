@@ -25,6 +25,11 @@ namespace Starvers
 		public bool EnableNPC { get; set; } = true;
 		public bool EnableBoss { get; set; } = true;
 		public bool EnableTestMode { get; set; }
+		public bool EvilWorld { get; set; }
+		public string MySQLDBName { get; set; } = TShock.Config.MySqlDbName;
+		public string MySQLUserName { get; set; } = TShock.Config.MySqlUsername;
+		public string MySQLPassword { get; set; } = TShock.Config.MySqlPassword;
+		public string MySQLHost { get; set; } = TShock.Config.MySqlHost;
 		public SaveModes SaveMode { get; set; } = TShock.Config.StorageType.ToLower() == "mysql" ? SaveModes.MySQL : SaveModes.Json;
 		#endregion
 		#region ctor & dtor

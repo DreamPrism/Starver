@@ -1055,15 +1055,15 @@ namespace Starvers
 		#region NewConnection
 		private static MySqlConnection NewConnection()
 		{
-			string[] dbHost = TShock.Config.MySqlHost.Split(':');
+			string[] dbHost = StarverConfig.Config.MySQLHost.Split(':');
 			return new MySqlConnection()
 			{
 				ConnectionString = string.Format("Server={0}; Port={1}; Database={2}; UserName={3}; Password={4}; Allow User Variables=True;",
 					dbHost[0],
 					dbHost[1],
-					TShock.Config.MySqlDbName,
-					TShock.Config.MySqlUsername,
-					TShock.Config.MySqlPassword)
+					StarverConfig.Config.MySQLDBName,
+					StarverConfig.Config.MySQLUserName,
+					StarverConfig.Config.MySQLPassword)
 			};
 		}
 		#endregion

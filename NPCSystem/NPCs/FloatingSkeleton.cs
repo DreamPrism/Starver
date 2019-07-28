@@ -11,7 +11,7 @@ namespace Starvers.NPCSystem.NPCs
 	public class FloatingSkeleton : StarverNPC
 	{
 		#region Fields
-		private int[] SkeletonTypes =
+		private static int[] SkeletonTypes =
 		{
 			NPCID.Skeleton,
 			NPCID.SkeletonAlien,
@@ -24,15 +24,29 @@ namespace Starvers.NPCSystem.NPCs
 			NPCID.SmallHeadacheSkeleton,
 			NPCID.SmallHeadacheSkeleton
 		};
+		private static DropItem[] RealDrops =
+		{
+			new DropItem(new int[] { ItemID.Bone }, 1, 10, 0.5f, false)
+		};
+		private static SpawnChecker Checker_UnderGround;
 		#endregion
 		#region Properties
 		protected override float CollidingIndex => DamageIndex;
 		#endregion
 		#region ctor
+		static FloatingSkeleton()
+		{
+			Checker_UnderGround = SpawnChecker.ZombieLike;
+			Checker_UnderGround.SpawnChance /= 2;
+			Checker_UnderGround.Biome = BiomeType.UnderGround;
+			Checker_UnderGround.Condition = SpawnConditions.None;
+		}
 		public FloatingSkeleton()
 		{
+			OverrideRawDrop = true;
 			RawType = NPCID.Skeleton;
 			Types = SkeletonTypes;
+			Drops = RealDrops;
 			AIStyle = 2;
 			DefaultLife = 13000;
 			DefaultDefense = 300000;
@@ -48,16 +62,30 @@ namespace Starvers.NPCSystem.NPCs
 		#region RealAI
 		protected override void RealAI()
 		{
-			FakeVelocity = (Vector)Velocity;
-			if(Timer < 60 * 7 / 2) // 3.5 * 2s一个周期
+			if (Timer % (60 * 7) < 60 * 7 / 2) // 3.5 * 2s一个周期
 			{
 				if (CheckSecond(1.25) || CheckSecond(1.95) || CheckSecond(2.65))
 				{
-					Vel = (Vector)(TargetPlayer.Center - Center);
-					Vel.Length = 19;
-					Proj(Center, Vel, ProjectileID.Bone, 200, 20);
+					try
+					{
+						Vel = (Vector)(TargetPlayer.Center - Center);
+						Vel.Length = 19;
+					}
+					catch (IndexOutOfRangeException e)
+					{
+						//TShockAPI.TShock.Log.Write(e.ToString(), System.Diagnostics.TraceLevel.Error);
+						Vel = (Vector)Rand.NextVector2(19);
+					}
+					Proj(Center, Vel, ProjectileID.SkeletonBone, 200, 20);
 				}
 			}
+		}
+		#endregion
+		#region CheckSpawn
+		protected override bool CheckSpawn(StarverPlayer player)
+		{
+			SpawnChecker value = player.GetSpawnChecker();
+			return StarverConfig.Config.TaskNow >= Checker.Task && (Checker.Match(value) || Checker_UnderGround.Match(value)) && SpawnTimer % Checker.SpawnRate == 0 && Rand.NextDouble() < Checker.SpawnChance && Rand.Next(StarverConfig.Config.TaskNow) > 17;
 		}
 		#endregion
 	}

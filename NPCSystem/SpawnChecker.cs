@@ -27,6 +27,7 @@ namespace Starvers.NPCSystem
 		private static SpawnChecker zombieLike;
 		private static SpawnChecker slimeLike;
 		private static SpawnChecker dungeonLike;
+		private static SpawnChecker underGroundLike;
 		#endregion
 		#region ctor
 		static SpawnChecker()
@@ -50,12 +51,20 @@ namespace Starvers.NPCSystem
 				SpawnRate = 60 * 4,
 				SpawnChance = 0.25f
 			};
+			underGroundLike = new SpawnChecker
+			{
+				Biome = BiomeType.UnderGround,
+				SpawnRate = 60 * 2,
+				SpawnChance = 0.2f,
+				Task = 21
+			};
 		}
 		#endregion
 		#region Properties
 		public static SpawnChecker ZombieLike => zombieLike;
 		public static SpawnChecker SlimeLike => slimeLike;
 		public static SpawnChecker DungeonLike => dungeonLike;
+		public static SpawnChecker UnderGroundLike => underGroundLike;
 		#endregion
 		#endregion
 	}

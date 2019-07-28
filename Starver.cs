@@ -180,6 +180,10 @@ namespace Starvers
 			ServerApi.Hooks.NpcSpawn.Register(this, OnNPCSpawn);
 			PlayerHooks.PlayerPostLogin += OnLogin;
 			GetDataHandlers.PlayerDamage += OnDamage;
+			if(Config.EvilWorld)
+			{
+				GetDataHandlers.KillMe += OnDeath;
+			}
 		}
 		#endregion
 		#region Dispose
@@ -210,7 +214,11 @@ namespace Starvers
 				//ServerApi.Hooks.NpcKilled.Deregister(this, OnKill);
 				ServerApi.Hooks.NpcSpawn.Deregister(this, OnNPCSpawn);
 				PlayerHooks.PlayerPostLogin -= OnLogin;
-				GetDataHandlers.PlayerDamage += OnDamage;
+				GetDataHandlers.PlayerDamage -= OnDamage;
+				if (Config.EvilWorld)
+				{
+					GetDataHandlers.KillMe -= OnDeath;
+				}
 			}
 			catch (Exception e)
 			{
@@ -221,6 +229,12 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region Event
+		#region OnDeath
+		private static void OnDeath(object sender, GetDataHandlers.KillMeEventArgs args)
+		{
+			TShock.Players[args.PlayerId].Disconnect("你被神秘力量逐出了魔界");
+		}
+		#endregion
 		#region OnStrike
 		internal void OnStrike(NpcStrikeEventArgs args)
 		{

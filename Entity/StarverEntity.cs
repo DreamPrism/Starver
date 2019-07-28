@@ -35,6 +35,7 @@ namespace Starvers
 		public float DamagedIndex { get; protected set; } = 1;
 		#endregion
 		#region Fields
+		protected DropItem[] Drops;
 		protected Vector Vel;
 		protected uint Timer;
 		protected const int None = -1;
