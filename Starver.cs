@@ -258,6 +258,10 @@ namespace Starvers
 			float interdamage;
 			interdamage = args.Damage * damageindex;
 			interdamage -= args.Npc.defense / 2;
+			if(args.Critical)
+			{
+				interdamage *= 2;
+			}
 			if (BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
 			{
 				foreach (var boss in StarverBossManager.Bosses)
