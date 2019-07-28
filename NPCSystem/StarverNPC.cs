@@ -301,6 +301,14 @@ namespace Starvers.NPCSystem
 				{
 					continue;
 				}
+				if(Terraria.Main.npc[i].friendly)
+				{
+					continue;
+				}
+				if(Terraria.Main.npc[i].damage < 1)
+				{
+					continue;
+				}
 				foreach (var ply in Starver.Players)
 				{
 					if (ply == null || !ply.Active)

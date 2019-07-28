@@ -38,16 +38,10 @@ namespace Starvers.NPCSystem.NPCs
 			DefaultDefense = 400000;
 		}
 		#endregion
-		#region CheckSpawn
-		protected override bool CheckSpawn(StarverPlayer player)
-		{
-			return base.CheckSpawn(player) && player.GetBiomes() == Checker.Biome;
-		}
-		#endregion
 		#region RealAI
 		protected override void RealAI()
 		{
-			if (Microsoft.Xna.Framework.Vector2.Distance(TargetPlayer.Center, Center) < 16 * 3)
+			if (Vector2.Distance(TargetPlayer.Center, Center) < 16 * 3)
 			{
 				Proj(Center, Vector.Zero, ProjectileID.StardustGuardianExplosion, 0);
 				DeathPos = Center;
@@ -58,10 +52,10 @@ namespace Starvers.NPCSystem.NPCs
 			else //if(Timer % 20 == 0)
 			{
 				AIUsing[0] = 0;
-				Acc = (Vector)(TargetPlayer.Center +NewByPolar(AIUsing[1],16 * 5) - Center);
+				Acc = (Vector)(TargetPlayer.Center + NewByPolar(AIUsing[1], 16 * 5) - Center);
 				Acc.Length = 0.2f;
 				FakeVelocity += Acc;
-				if(FakeVelocity.Length > 9)
+				if (FakeVelocity.Length > 9)
 				{
 					FakeVelocity.Length = 9;
 				}

@@ -51,32 +51,34 @@ namespace Starvers
 			if (Config.SaveMode == SaveModes.MySQL)
 			{
 				SaveAll();
-				using (MySqlConnection connection = new MySqlConnection(DB.ConnectionString))
-				using (MySqlCommand cmd = new MySqlCommand("Select UserID,Level from Starver", connection))
-				using (MySqlDataReader Reader = cmd.ExecuteReader(CommandBehavior.Default))
+				using (MySqlConnection connection = DB.Clone() as MySqlConnection)
 				{
 					connection.Open();
-					do
+					using (MySqlCommand cmd = new MySqlCommand("Select UserID,Level from Starver", connection))
+					using (MySqlDataReader Reader = cmd.ExecuteReader(CommandBehavior.Default))
 					{
-						try
+						do
 						{
-							if (Reader.Read())
+							try
 							{
-								int UserID = Reader.Get<int>("UserID");
-								int Level = Reader.Get<int>("Level");
-								if (Level > 120)
+								if (Reader.Read())
 								{
-									Level += lvlup;
+									int UserID = Reader.Get<int>("UserID");
+									int Level = Reader.Get<int>("Level");
+									if (Level > 120)
+									{
+										Level += lvlup;
+									}
+									DB.Query("update Starver set Level=@0 WHERE UserID=@1", Level, UserID);
 								}
-								DB.Query("update Starver set Level=@0 WHERE UserID=@1", Level, UserID);
+							}
+							catch (Exception e)
+							{
+								TSPlayer.Server.SendInfoMessage(e.ToString());
 							}
 						}
-						catch (Exception e)
-						{
-							TSPlayer.Server.SendInfoMessage(e.ToString());
-						}
+						while (Reader.NextResult());
 					}
-					while (Reader.NextResult());
 				}
 			}
 			else

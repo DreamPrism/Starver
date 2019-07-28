@@ -160,6 +160,7 @@ namespace Starvers
 				ExchangeTips += '\n';
 			}
 			ExchangeTips += "请将可以兑换的物品放置在背包第一格";
+			Commands.ChatCommands.Add(new Command(Perms.VIP.Invisible, Ghost, "invisible"));
 			Commands.ChatCommands.Add(new Command(Perms.Manager, ManagerForm, "stform"));
 			Commands.ChatCommands.Add(new Command(Perms.Test, PtrTest, "vt"));
 			Commands.ChatCommands.Add(new Command(Perms.Exchange, ExchangeCommand, "exchange"));
@@ -747,6 +748,23 @@ namespace Starvers
 		}
 		#endregion
 		#region Commands
+		#region Ghost
+		private static void Ghost(CommandArgs args)
+		{
+			int num = Projectile.NewProjectile(new Vector2(args.Player.X, args.Player.Y), Vector2.Zero, 170, 0, 0f, 255, 0f, 0f);
+			Main.projectile[num].timeLeft = 0;
+			NetMessage.SendData(27, -1, -1, null, num, 0f, 0f, 0f, 0, 0, 0);
+			args.TPlayer.active = !args.TPlayer.active;
+			NetMessage.SendData(14, -1, args.Player.Index, null, args.Player.Index, (float)args.TPlayer.active.GetHashCode(), 0f, 0f, 0, 0, 0);
+			bool active = args.TPlayer.active;
+			if (active)
+			{
+				NetMessage.SendData(4, -1, args.Player.Index, null, args.Player.Index, 0f, 0f, 0f, 0, 0, 0);
+				NetMessage.SendData(13, -1, args.Player.Index, null, args.Player.Index, 0f, 0f, 0f, 0, 0, 0);
+			}
+			args.Player.SendSuccessMessage(string.Format("{0}abled Vanish.", args.TPlayer.active ? "Dis" : "En"));
+		}
+		#endregion
 		#region PtrTest
 		public unsafe void PtrTest(CommandArgs args) { }
 		#endregion

@@ -40,6 +40,7 @@ namespace Starvers
 			public const string All = "starver.vip.*";
 			public const string LessCost = "starver.vip.lesscost";
 			public const string RainBowChat = "starver.vip.rainbowchat";
+			public const string Invisible = "starver.vip.invisible";
 		}
 	}
 }
