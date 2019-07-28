@@ -22,6 +22,7 @@ namespace Starvers.NPCSystem
 		protected int Height = 3 * 14;
 		protected int Width = 2 * 13;
 		protected bool NoTileCollide;
+		protected bool AfraidSun;
 		protected DateTime LastSpawn = DateTime.Now;
 		protected StarverNPC Root;
 		protected SpawnChecker Checker;
@@ -174,6 +175,11 @@ namespace Starvers.NPCSystem
 				}
 				Velocity = FakeVelocity;
 			}
+			if (Terraria.Main.dayTime && AfraidSun && RealNPC.Center.Y / 16 < Terraria.Main.rockLayer) 
+			{
+				KillMe();
+				return;
+			}
 			RealAI();
 			SendData();
 			++Timer;
@@ -265,8 +271,12 @@ namespace Starvers.NPCSystem
 		{
 			int i = (int)(Y / 16);
 			int j = (int)(X / 16);
-			int HeightNeed = (int)Math.Ceiling(Height / 16.0);
-			int WidthNeed = (int)Math.Ceiling(Width / 16.0);
+			if (Terraria.Main.tile[j, i].wall != 0)
+			{
+				return false;
+			}
+			int HeightNeed = i + (int)Math.Ceiling(Height / 16.0);
+			int WidthNeed = j + (int)Math.Ceiling(Width / 16.0);
 			for (; i < HeightNeed; i++)
 			{
 				for (; j < WidthNeed; j++)

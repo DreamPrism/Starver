@@ -513,9 +513,9 @@ namespace Starvers
 					Players[args.Who] = StarverPlayer.Guest;
 					Players[args.Who].Index = args.Who;
 				}
-				if (player.IsLoggedIn != false && Players[args.Who].Level < Config.LevelNeed)
+				if (player.IsLoggedIn && Players[args.Who].Level < Config.LevelNeed)
 				{
-					Players[args.Who].Kick($"你的等级不足,该处需要至少{Config.LevelNeed}级");
+					player.Disconnect($"你的等级不足,该处需要至少{Config.LevelNeed}级");
 				}
 
 			}

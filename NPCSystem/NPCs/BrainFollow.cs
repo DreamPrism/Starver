@@ -30,6 +30,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region ctor
 		public BrainFollow():base(1)
 		{
+			NoTileCollide = true;
 			RawType = NPCID.Creeper;
 			DefaultDefense = 31000;
 			DefaultLife = short.MaxValue;

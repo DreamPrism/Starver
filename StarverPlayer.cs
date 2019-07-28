@@ -238,7 +238,7 @@ namespace Starvers
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Crimson;
 			}
-			if(TPlayer.ZoneRockLayerHeight || TPlayer.ZoneDirtLayerHeight)
+			if(TPlayer.ZoneDirtLayerHeight || TPlayer.ZoneRockLayerHeight)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.UnderGround;

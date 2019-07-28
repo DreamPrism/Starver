@@ -18,6 +18,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region ctor
 		public PrimeExArm() : base(1)
 		{
+			NoTileCollide = true;
 			RawType = NPCID.PrimeLaser;
 			DefaultDefense = 2000;
 			DefaultLife = 30000;

@@ -29,6 +29,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region ctor
 		public Zomb()
 		{
+			AfraidSun = true;
 			Checker = SpawnChecker.ZombieLike;
 			RawType = NPCID.Zombie;
 			DefaultLife = 12000;

@@ -28,6 +28,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region ctor
 		public RushingBat() : base(2)
 		{
+			AfraidSun = true;
 			Width = 13 * 2;
 			Height = Width;
 			Checker = SpawnChecker.UnderGroundLike;

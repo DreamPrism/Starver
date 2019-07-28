@@ -16,6 +16,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region ctor
 		public PossessedArmorArcher()
 		{
+			AfraidSun = true;
 			RawType = NPCID.PossessedArmor;
 			DefaultLife = 14000;
 			DefaultDefense = 620000;
