@@ -291,7 +291,7 @@ namespace Starvers.NPCSystem
 		}
 		#endregion
 		#region Collide
-		private static void Collide()
+		internal static void Collide()
 		{
 			bool Handled;
 			Terraria.NPC RealNPC;
@@ -464,7 +464,6 @@ namespace Starvers.NPCSystem
 					}
 				}
 			}
-			Collide();
 		}
 		public static void OnNPCKilled(TerrariaApi.Server.NpcKilledEventArgs args)
 		{

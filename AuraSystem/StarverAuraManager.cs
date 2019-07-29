@@ -275,6 +275,12 @@ namespace Starvers.AuraSystem
 			return Convert.ToInt32(raw * scale);
 		}
 		#endregion
+		#region NPCDamage
+		public static int NPCDamage(int raw)
+		{
+			return (int)(raw * Config.TaskNow / 3f + 1);
+		}
+		#endregion
 		#region NPCLife
 		internal static int NPCLife(int raw, bool isboss = false)
 		{

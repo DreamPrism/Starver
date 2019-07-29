@@ -26,6 +26,7 @@ namespace Starvers
 		public bool EnableBoss { get; set; } = true;
 		public bool EnableTestMode { get; set; }
 		public bool EvilWorld { get; set; }
+		public bool EnableSelfCollide { get; set; }
 		public string MySQLDBName { get; set; } = TShock.Config.MySqlDbName;
 		public string MySQLUserName { get; set; } = TShock.Config.MySqlUsername;
 		public string MySQLPassword { get; set; } = TShock.Config.MySqlPassword;

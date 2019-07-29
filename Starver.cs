@@ -460,7 +460,14 @@ namespace Starvers
 			}
 			#endregion
 			#region NPC
-			UpdateNPCAI();
+			if (Config.EnableNPC)
+			{
+				UpdateNPCAI();
+			}
+			if(Config.EnableSelfCollide)
+			{
+				StarverNPC.Collide();
+			}
 			#endregion
 		}
 		#endregion
@@ -573,7 +580,7 @@ namespace Starvers
 				if (npc.friendly)
 				{
 					npc.life = npc.lifeMax = short.MaxValue;
-					npc.defense = int.MaxValue;
+					npc.defense = -10;
 				}
 				else
 				{
@@ -646,15 +653,18 @@ namespace Starvers
 							return;
 						case NPCID.TheDestroyerBody:
 							npc.defense *= 60;
+							npc.damage *= 10;
 							goto senddata;
 						default:
 							npc.life = npc.lifeMax = StarverAuraManager.NPCLife(npc.lifeMax);
 							npc.defense = StarverAuraManager.NPCDefense(npc.defense);
+							npc.damage = StarverAuraManager.NPCDamage(npc.damage);
 							goto senddata;
 					}
 					scale *= 10;
 					npc.defense = (int)(npc.defense * scale);
 					npc.life = npc.lifeMax = (int)(scale * npc.lifeMax);
+					npc.damage = (int)(npc.damage * scale);
 				senddata:
 					NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);
 					//snpc.ExpGive =  snpc.RealNPC.lifeMax * Config.TaskNow * Config.TaskNow;
