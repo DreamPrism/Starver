@@ -103,7 +103,7 @@ namespace Starvers
 		public static Starver Instance { get; private set; } = null;
 		public static Form.StarverManagerForm Manager { get; internal set; }
 		public static uint Timer { get; private set; }
-		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20);
+		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20 + (Config.EvilWorld ? 10000 : 0));
 		#endregion
 		#region ctor & Initialize & Dispose
 		#region cctor

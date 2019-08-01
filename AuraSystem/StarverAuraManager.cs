@@ -319,7 +319,7 @@ namespace Starvers.AuraSystem
 			}
 			else if(lvl < (int)1e5)
 			{
-				return Math.Min((int)51e5f, (int)(lvl * 10 * Math.Log(lvl)));
+				return Math.Min((int)5.1e5f, (int)(lvl * 10 * Math.Log(lvl)));
 			}
 			else
 			{
