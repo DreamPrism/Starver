@@ -30,7 +30,8 @@ namespace Starvers.TaskSystem
 		public bool CheckItem { get; protected set; } = true;
 		#endregion
 		#region Statics
-		public readonly static TaskItem[] Default = new TaskItem[] { new TaskItem(ItemID.PlatinumCoin) };
+		public readonly static TaskItem[] DefaultReward = new TaskItem[] { new TaskItem(ItemID.PlatinumCoin) };
+		public readonly static TaskItem[] DefaultNeed = new TaskItem[] { new TaskItem(ItemID.Gel) };
 		public const int MAINLINE = 43;
 		#endregion
 		#region cctor
@@ -1003,14 +1004,15 @@ namespace Starvers.TaskSystem
             }
             if (Normal)
 			{
-				if (Needs == null)
+				if (Needs == null || StarverConfig.Config.TaskNeedNoItem)
 				{
-					Needs = Default;
+					Needs = DefaultNeed;
 				}
 				if (Rewards == null)
 				{
-					Rewards = Default;
+					Rewards = DefaultReward;
 				}
+
 				SetDefaut();
 			}
 		}

@@ -98,11 +98,12 @@ namespace Starvers
 			new ExchangeItem(ItemID.LockBox,ItemID.Nazar),
 			new ExchangeItem(ItemID.LunarTabletFragment,ItemID.PixelBox,40,"放在背包最后一格")
 		};
-		public static StarverConfig Config { get { return StarverConfig.Config; } }
-		public static MySqlConnection DB { get { return StarverPlayer.DB; } }
+		public static StarverConfig Config => StarverConfig.Config;
+		public static MySqlConnection DB => StarverPlayer.DB;
 		public static Starver Instance { get; private set; } = null;
 		public static Form.StarverManagerForm Manager { get; internal set; }
-		public static uint Timer;
+		public static uint Timer { get; private set; }
+		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20);
 		#endregion
 		#region ctor & Initialize & Dispose
 		#region cctor
@@ -322,7 +323,7 @@ namespace Starvers
 			{
 				Vector knockback = (Vector)(args.Npc.Center - player.Center);
 				knockback.Length = args.KnockBack * RealNPC.knockBackResist;
-				knockback *= Math.Min(Math.Max(player.Level - Config.TaskNow * Config.TaskNow * 10, 0), 10) * (1 - RealNPC.knockBackResist);
+				knockback *= Math.Min(Math.Max(player.Level - NPCLevel, 0), 10);
 				RealNPC.velocity += knockback;
 				if (!(snpc is null))
 				{
@@ -664,7 +665,7 @@ namespace Starvers
 					scale *= 10;
 					npc.defense = (int)(npc.defense * scale);
 					npc.life = npc.lifeMax = (int)(scale * npc.lifeMax);
-					npc.damage = (int)(npc.damage * scale);
+					npc.damage = (int)(npc.damage * (1 + scale) * Config.TaskNow < 15 ? 0.1f : 0.6f);
 				senddata:
 					NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);
 					//snpc.ExpGive =  snpc.RealNPC.lifeMax * Config.TaskNow * Config.TaskNow;

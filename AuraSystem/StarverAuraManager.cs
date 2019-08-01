@@ -278,7 +278,14 @@ namespace Starvers.AuraSystem
 		#region NPCDamage
 		public static int NPCDamage(int raw)
 		{
-			return (int)(raw * Config.TaskNow / 3f + 1);
+			if (Config.TaskNow < 18)
+			{
+				return (int)(raw * Config.TaskNow / 5f + 1);
+			}
+			else
+			{
+				return (int)(raw * Config.TaskNow / 3f + 1);
+			}
 		}
 		#endregion
 		#region NPCLife
@@ -312,11 +319,11 @@ namespace Starvers.AuraSystem
 			}
 			else if(lvl < (int)1e5)
 			{
-				return Math.Min((int)9e6f, (int)(lvl * 100 * Math.Log(lvl)));
+				return Math.Min((int)51e5f, (int)(lvl * 10 * Math.Log(lvl)));
 			}
 			else
 			{
-				return (int)1e7f;
+				return (int)1e6f;
 			}
 		}
 		#endregion
