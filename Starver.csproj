@@ -79,6 +79,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuraSystem\Skills\TheWorld.cs" />
     <Compile Include="AuraSystem\StarverAuraManager.cs" />
     <Compile Include="AuraSystem\AuraSkillWeapon.cs" />
     <Compile Include="AuraSystem\SkillID.cs" />

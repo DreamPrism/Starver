@@ -10,7 +10,7 @@ namespace Starvers.AuraSystem.Skills.Base
 {
 	public abstract class Skill
 	{
-		public static Random Rand { get { return Starver.Rand; } }
+		public static Random Rand => Starver.Rand;
 		public string Name { get; private set; }
 		public int Index { get; private set; }
 		public int CD { get; protected set; }
@@ -28,10 +28,13 @@ namespace Starvers.AuraSystem.Skills.Base
 		}
 		protected void SetText()
 		{
-			Text += string.Format("创意来源:{0}\n", Author);
-			Text += string.Format("CD:{0}s\n", CD);
-			Text += string.Format("所需等级:{0}\n", Lvl);
-			Text += string.Format("{0}", Description);
+			StringBuilder sb = new StringBuilder(30);
+			sb.Append($"创意来源: {Author}\n");
+			sb.Append($"CD: {CD}s\n");
+			sb.Append($"所需等级: {Lvl}\n");
+			sb.Append($"MP: {MP}");
+			sb.Append($"{Description}");
+			Text = sb.ToString();
 		}
 	}
 }

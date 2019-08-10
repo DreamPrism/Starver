@@ -180,7 +180,10 @@ namespace Starvers.NPCSystem
 				KillMe();
 				return;
 			}
-			RealAI();
+			if (TheWorld <= 0)
+			{
+				RealAI();
+			}
 			SendData();
 			++Timer;
 		}
@@ -433,7 +436,7 @@ namespace Starvers.NPCSystem
 
 
 
-
+		public static int TheWorld { get; set; }
 		public static StarverNPC[] NPCs = new StarverNPC[Terraria.Main.maxNPCs];
 		public static void DoUpDate(object args)
 		{

@@ -314,6 +314,18 @@ namespace Starvers
 			return new Vector2((float)((rand.NextDouble() - 0.5) * X), (float)((rand.NextDouble() - 0.5) * Y));
 		}
 		#endregion
+		#region SendData
+		public static void SendData(this NPC npc)
+		{
+			NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);
+		}
+		#endregion
+		#region SendData
+		public static void SendData(this Projectile npc)
+		{
+			NetMessage.SendData((int)PacketTypes.ProjectileDestroy, -1, -1, null, npc.whoAmI);
+		}
+		#endregion
 		#region else
 		public static void Exception(string message)
 		{

@@ -29,5 +29,6 @@ namespace Starvers.AuraSystem
 		public const int CDLess = 18;
 		public const int NStrike = 19;
 		public const int Sacrifice = 20;
+		public const int TheWorld = 21;
 	}
 }

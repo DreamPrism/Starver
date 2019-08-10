@@ -35,7 +35,8 @@ namespace Starvers.AuraSystem
 			new PosionFog(),
 			new CDLess(),
 			new NStrike(),
-			new Sacrifice()
+			new Sacrifice(),
+			new TheWorld()
 		};
 		#endregion
 		#region Handle
