@@ -33,7 +33,7 @@ namespace Starvers.AuraSystem.Skills
 		#region Release
 		public override void Release(StarverPlayer player, Vector2 vel)
 		{
-			if (NPCSystem.StarverNPC.TheWorld < 0)
+			if (NPCSystem.StarverNPC.TheWorld < 1)
 			{
 				new Thread(TheWorld_Release).Start();
 			}
