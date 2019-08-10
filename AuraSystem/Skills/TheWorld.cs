@@ -52,113 +52,21 @@ namespace Starvers.AuraSystem.Skills
 			Vector2* ProjVelocity = stackalloc Vector2[Terraria.Main.maxProjectiles];
 			int* NPCAI = stackalloc int[Terraria.Main.maxNPCs];
 			int* ProjAI = stackalloc int[Terraria.Main.maxProjectiles];
-			ReadNPCState(NPCVelocity, NPCAI);
-			ReadProjState(ProjVelocity, ProjAI);
+			Utils.ReadNPCState(NPCVelocity, NPCAI);
+			Utils.ReadProjState(ProjVelocity, ProjAI);
 			int Timer = 0;
 			int sleepTime = 50;
 			while (Timer < (TimeToStop) / sleepTime)
 			{
 				Timer++;
-				UpdateNPCState();
-				UpdateProjState();
+				Utils.UpdateNPCState();
+				Utils.UpdateProjState();
 				Thread.Sleep(sleepTime);
 			}
-			RestoreNPCState(NPCVelocity, NPCAI);
-			RestoreProjState(ProjVelocity, ProjAI);
+			Utils.RestoreNPCState(NPCVelocity, NPCAI);
+			Utils.RestoreProjState(ProjVelocity, ProjAI);
 			NPCSystem.StarverNPC.TheWorld--;
 		}
-		#endregion
-		#region Methods
-		#region ReadNPC
-		protected unsafe static void ReadNPCState(Vector2* NPCVelocity, int* NPCAI)
-		{
-			int t = 0;
-			foreach (var npc in Terraria.Main.npc)
-			{
-				if (!npc.active)
-				{
-					continue;
-				}
-				NPCVelocity[t] = npc.velocity;
-				NPCAI[t++] = npc.aiStyle;
-				npc.SendData();
-			}
-		}
-		#endregion
-		#region ReadProj
-		protected unsafe static void ReadProjState(Vector2* ProjVelocity, int* ProjAI)
-		{
-			int t = 0;
-			foreach (var proj in Terraria.Main.projectile)
-			{
-				if (!proj.active)
-				{
-					continue;
-				}
-				ProjVelocity[t] = proj.velocity;
-				ProjAI[t++] = proj.aiStyle;
-				proj.SendData();
-			}
-		}
-		#endregion
-		#region UpdateNPC
-		protected static void UpdateNPCState()
-		{
-			foreach (var npc in Terraria.Main.npc)
-			{
-				if (!npc.active)
-				{
-					continue;
-				}
-				npc.SendData();
-			}
-		}
-		#endregion
-		#region UpdateProj
-		protected static void UpdateProjState()
-		{
-			foreach (var proj in Terraria.Main.projectile)
-			{
-				if (!proj.active)
-				{
-					continue;
-				}
-				proj.SendData();
-			}
-		}
-		#endregion
-		#region RestoreNPC
-		protected unsafe static void RestoreNPCState(Vector2* NPCVelocity, int* NPCAI)
-		{
-			int t = 0;
-			foreach (var npc in Terraria.Main.npc)
-			{
-				if (!npc.active)
-				{
-					continue;
-				}
-				npc.velocity = NPCVelocity[t];
-				npc.aiStyle = NPCAI[t++];
-				npc.SendData();
-			}
-		}
-		#endregion
-		#region RestoreProj
-		protected unsafe static void RestoreProjState(Vector2* ProjVelocity, int* ProjAI)
-		{
-			int t = 0;
-			foreach (var proj in Terraria.Main.projectile)
-			{
-				if (!proj.active)
-				{
-					continue;
-				}
-				proj.velocity = ProjVelocity[t];
-				proj.aiStyle = ProjAI[t++];
-				proj.SendData();
-			}
-		}
-		#endregion
 		#endregion
 	}
 }

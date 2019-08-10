@@ -22,6 +22,40 @@ namespace Starvers.BossSystem.Bosses.Base
 	using BigInt = System.Numerics.BigInteger;
 	public abstract partial class StarverBoss : StarverEntity
 	{
+		#region Fields
+		protected bool NightBoss = true;
+		protected bool ExVersion;
+		/// <summary>
+		/// 是否检查NPC种类
+		/// </summary>
+		protected bool CheckType = true;
+		protected string DisplayName;
+		protected string FullName;
+		protected int Lifes;
+		protected int LifesMax;
+		protected int DefaultLifes;
+		protected int DefaultLife;
+		protected int DefaultDefense = 10;
+		protected unsafe float* StarverAI;
+		protected uint modetime;
+		protected byte LifeperPlayerType = ByLife;
+		protected Vector vector = new Vector(10, 10);
+		protected Vector WhereToGo;
+		protected BossMode lastMode;
+		private string DataPath;
+		private string TypeName;
+		private int[] Walls;
+		private int TimeSpan;
+		private bool WallStop;
+		private StarverPlayer WallTarget;
+		private Vector[] WallVector;
+		private Vector StopPos;
+		private bool WallActive;
+		private BossMode mode;
+		private readonly int NumOfAIs;
+		private const int MaxWalls = 30;
+		private const int WallDamage = 2250;
+		#endregion
 		#region Properties
 		public int TaskNeed { get; protected set; } = 0;
 		public int Life { get { return RealNPC.life; } set { RealNPC.life = value; } }
@@ -84,40 +118,6 @@ namespace Starvers.BossSystem.Bosses.Base
 				Center = TargetPlayer.Center + value;
 			}
 		}
-		#endregion
-		#region Fields
-		protected bool NightBoss = true;
-		protected bool ExVersion;
-		/// <summary>
-		/// 是否检查NPC种类
-		/// </summary>
-		protected bool CheckType = true;
-		protected string DisplayName;
-		protected string FullName;
-		protected int Lifes;
-		protected int LifesMax;
-		protected int DefaultLifes;
-		protected int DefaultLife;
-		protected int DefaultDefense = 10;
-		protected unsafe float* StarverAI;
-		protected uint modetime;
-		protected byte LifeperPlayerType = ByLife;
-		protected Vector vector = new Vector(10, 10);
-		protected Vector WhereToGo;
-		protected BossMode lastMode;
-		private string DataPath;
-		private string TypeName;
-		private int[] Walls;
-		private int TimeSpan;
-		private bool WallStop;
-		private StarverPlayer WallTarget;
-		private Vector[] WallVector;
-		private Vector StopPos;
-		private bool WallActive;
-		private BossMode mode;
-		private readonly int NumOfAIs;
-		private const int MaxWalls = 30;
-		private const int WallDamage = 2250;
 		#endregion
 		#region ctor
 		private StarverBoss()

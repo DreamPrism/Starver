@@ -323,8 +323,108 @@ namespace Starvers
 		#region SendData
 		public static void SendData(this Projectile npc)
 		{
-			NetMessage.SendData((int)PacketTypes.ProjectileDestroy, -1, -1, null, npc.whoAmI);
+			NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, npc.whoAmI);
 		}
+		#endregion
+		#region TheWorldSkill
+		#region ReadNPC
+		public unsafe static void ReadNPCState(Vector2* NPCVelocity, int* NPCAI)
+		{
+			int t = -1;
+			foreach (var npc in Terraria.Main.npc)
+			{
+				t++;
+				if (!npc.active)
+				{
+					continue;
+				}
+				NPCVelocity[t] = npc.velocity;
+				NPCAI[t] = npc.aiStyle;
+				npc.aiStyle = -1;
+				npc.velocity = Vector2.Zero;
+				npc.SendData();
+			}
+		}
+		#endregion
+		#region ReadProj
+		public unsafe static void ReadProjState(Vector2* ProjVelocity, int* ProjAI)
+		{
+			int t = -1;
+			foreach (var proj in Terraria.Main.projectile)
+			{
+				t++;
+				if (!proj.active)
+				{
+					continue;
+				}
+				ProjVelocity[t] = proj.velocity;
+				ProjAI[t] = proj.aiStyle;
+				proj.aiStyle = -1;
+				proj.velocity = Vector2.Zero;
+				proj.SendData();
+			}
+		}
+		#endregion
+		#region UpdateNPC
+		public static void UpdateNPCState()
+		{
+			foreach (var npc in Terraria.Main.npc)
+			{
+				if (!npc.active)
+				{
+					continue;
+				}
+				npc.SendData();
+			}
+		}
+		#endregion
+		#region UpdateProj
+		public static void UpdateProjState()
+		{
+			foreach (var proj in Terraria.Main.projectile)
+			{
+				if (!proj.active)
+				{
+					continue;
+				}
+				proj.SendData();
+			}
+		}
+		#endregion
+		#region RestoreNPC
+		public unsafe static void RestoreNPCState(Vector2* NPCVelocity, int* NPCAI)
+		{
+			int t = -1;
+			foreach (var npc in Terraria.Main.npc)
+			{
+				t++;
+				if (!npc.active)
+				{
+					continue;
+				}
+				npc.velocity = NPCVelocity[t];
+				npc.aiStyle = NPCAI[t];
+				npc.SendData();
+			}
+		}
+		#endregion
+		#region RestoreProj
+		public unsafe static void RestoreProjState(Vector2* ProjVelocity, int* ProjAI)
+		{
+			int t = -1;
+			foreach (var proj in Terraria.Main.projectile)
+			{
+				t++;
+				if (!proj.active)
+				{
+					continue;
+				}
+				proj.velocity = ProjVelocity[t];
+				proj.aiStyle = ProjAI[t];
+				proj.SendData();
+			}
+		}
+		#endregion
 		#endregion
 		#region else
 		public static void Exception(string message)

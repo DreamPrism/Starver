@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Starvers.AuraSystem.Skills.Base;
@@ -12,21 +13,21 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class TrackingMissile : Skill
 	{
-		protected Vector2 Target;
-		protected const float dis = 640;
+		protected static int Target;
+		protected const float dis = 16 * 100;
 		protected Vector2 Pos;
 		public TrackingMissile() : base(SkillID.TrackingMissile)
 		{
 			Lvl = 30;
 			MP = 20;
-			CD = 30;
+			CD = 20;
 			Description = "制造若干个射向最近敌人位置的导弹";
 			Author = "Deaths";
 			SetText();
 		}
 		public override void Release(StarverPlayer player, Vector2 vel)
 		{
-			Target = player.Center + vel;
+			Target = -1;
 			foreach (NPC npc in Main.npc)
 			{
 				if (npc.friendly)
@@ -35,14 +36,27 @@ namespace Starvers.AuraSystem.Skills
 				}
 				if ((npc.Center - player.TPlayer.Center).Length() < dis)
 				{
-					Target = npc.Center;
+					Target = npc.whoAmI;
 					break;
 				}
 			}
-			for (int i = 0; i < 10; i++)
+			new Thread(RealSkill).Start(player);
+		}
+		protected static void RealSkill(object ply)
+		{
+			StarverPlayer player = ply as StarverPlayer;
+			int t = 0;
+			while (t++ < 6)
 			{
-				Pos = Target +  player.NewByPolar(Rand.NextAngle(), dis);
-				player.NewProj(Pos, 3 * Vector2.Normalize(Target - Pos), ProjectileID.VortexBeaterRocket, player.Level / 10 + 10, 0);
+				Thread.Sleep(1000);
+				if (Target != -1 && Main.npc[Target].active)
+				{
+					player.ProjCircle(Main.npc[Target].Center, 16 * 25, 9, ProjectileID.VortexBeaterRocket, player.Level > 200 ? 8 : 16, 80);
+				}
+				else
+				{
+					player.ProjCircle(player.Center, 16 * 25, 9, ProjectileID.VortexBeaterRocket, player.Level > 200 ? 8 : 16, 80);
+				}
 			}
 		}
 	}
