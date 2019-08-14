@@ -71,6 +71,8 @@ namespace Starvers.AuraSystem
 			catch(Exception e)
 			{
 				TSPlayer.Server.SendErrorMessage(e.ToString());
+				player.SendMessage($"技能使用失败, 原因请查询日志", Color.Red);
+				TShock.Log.Info(e.ToString());
 			}
 		}
 		#endregion

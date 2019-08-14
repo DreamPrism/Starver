@@ -118,6 +118,7 @@ namespace Starvers.BossSystem.Bosses
 		#region RealAI
 		public unsafe override void RealAI()
 		{
+			#region Mode
 			switch (Mode)
 			{
 				#region SelectMode
@@ -247,7 +248,8 @@ namespace Starvers.BossSystem.Bosses
 					break;
 					#endregion
 			}
-			#region Normal
+			#endregion
+			#region Common
 			if (Mode != BossMode.WitherInvincible)
 			{
 				vector.Angle += PI / 120;

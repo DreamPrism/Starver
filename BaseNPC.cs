@@ -10,7 +10,6 @@ namespace Starvers
 	public class BaseNPC : StarverEntity
 	{
 		#region Var
-		public bool Spawning { get; protected set; }
 		public string Name { get; protected set; }
 		#endregion
 		#region ctor
@@ -47,7 +46,7 @@ namespace Starvers
 		#region ToString
 		public override string ToString()
 		{
-			return $" lifeMax:{RealNPC.lifeMax},life:{RealNPC.life},ExpGive:{ExpGive}";
+			return $"lifeMax:{RealNPC.lifeMax},life:{RealNPC.life},ExpGive:{ExpGive}";
 		}
 		#endregion
 	}

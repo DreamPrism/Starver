@@ -101,7 +101,7 @@ namespace Starvers
 		public static StarverConfig Config => StarverConfig.Config;
 		public static MySqlConnection DB => StarverPlayer.DB;
 		public static Starver Instance { get; private set; } = null;
-		public static Form.StarverManagerForm Manager { get; internal set; }
+		public static Forms.StarverManagerForm Manager { get; internal set; }
 		public static uint Timer { get; private set; }
 		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20 + (Config.EvilWorld ? 10000 : 0));
 		#endregion
@@ -956,7 +956,7 @@ namespace Starvers
 		{
 			new Thread(() =>
 			{
-				Manager = new Form.StarverManagerForm();
+				Manager = new Forms.StarverManagerForm();
 				Application.EnableVisualStyles();
 				Application.Run(Manager);
 			}).Start();

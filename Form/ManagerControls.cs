@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Starvers.Form
+namespace Starvers.Forms
 {
 	public class ManagerControls : IDisposable
 	{
@@ -170,6 +170,10 @@ namespace Starvers.Form
 			}
 			set
 			{
+				if(player != null && player.Temp)
+				{
+					player.Dispose();
+				}
 				player = value;
 				if (player == null)
 				{

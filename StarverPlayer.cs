@@ -440,22 +440,18 @@ namespace Starvers
 			StarverPlayer player = new StarverPlayer(UserID);
 			if (SaveMode == SaveModes.MySQL)
 			{
-				MySqlDataReader result = db.QueryReader("SELECT * FROM Starver WHERE UserID=@0;", UserID);
-				if (result.Read())
+				using (MySqlDataReader result = db.QueryReader("SELECT * FROM Starver WHERE UserID=@0;", UserID))
 				{
-					player.Weapon = JsonConvert.DeserializeObject<byte[,]>(result.GetString("Weapons"));
-					buffer = (byte[])result.GetValue(result.GetOrdinal("Skills"));
-					player.BufferToSkill();
-					player.TBCodes = JsonConvert.DeserializeObject<int[]>(result.GetString("TBCodes"));
-					player.level = result.GetInt32("Level");
-					player.Exp = result.GetInt32("Exp");
+					if (result.Read())
+					{
+						player.ReadFromReader(result);
+					}
+					else
+					{
+						TSPlayer.Server.SendInfoMessage("StarverPlugins: 玩家{0}不存在,已新建", TShock.Users.GetUserByID(UserID).Name);
+						AddNewUser(player);
+					}
 				}
-				else
-				{
-					TSPlayer.Server.SendInfoMessage("StarverPlugins: 玩家{0}不存在,已新建", TShock.Users.GetUserByID(UserID).Name);
-					AddNewUser(player);
-				}
-				result.Dispose();
 			}
 			else
 			{
@@ -498,6 +494,28 @@ namespace Starvers
 			}
 			player.MP = (player.MaxMP = player.level / 3 + 100) / 2;
 			return player;
+		}
+		#endregion
+		#region ReadFromReader
+		private static StarverPlayer ReadFromReaderStatic(MySqlDataReader reader)
+		{
+			StarverPlayer player = new StarverPlayer();
+			player.Weapon = JsonConvert.DeserializeObject<byte[,]>(reader.GetString("Weapons"));
+			buffer = (byte[])reader.GetValue(reader.GetOrdinal("Skills"));
+			player.BufferToSkill();
+			player.TBCodes = JsonConvert.DeserializeObject<int[]>(reader.GetString("TBCodes"));
+			player.level = reader.GetInt32("Level");
+			player.Exp = reader.GetInt32("Exp");
+			return player;
+		}
+		private void ReadFromReader(MySqlDataReader reader)
+		{
+			Weapon = JsonConvert.DeserializeObject<byte[,]>(reader.GetString("Weapons"));
+			buffer = (byte[])reader.GetValue(reader.GetOrdinal("Skills"));
+			BufferToSkill();
+			TBCodes = JsonConvert.DeserializeObject<int[]>(reader.GetString("TBCodes"));
+			level = reader.GetInt32("Level");
+			Exp = reader.GetInt32("Exp");
 		}
 		#endregion
 		#region Add
@@ -812,8 +830,56 @@ namespace Starvers
 			TShock.Utils.Kick(this, reason, true, silence);
 		}
 		#endregion
+		#region TryGetPlayer
+		public static bool TryGetTempPlayer(string Name, out StarverPlayer player)
+		{
+			player = null;
+			switch (SaveMode)
+			{
+				case SaveModes.MySQL:
+					{
+						int? ID = TShock.Users.GetUserByName(Name)?.ID;
+						if (ID == null || !ID.HasValue)
+						{
+							return false;
+						}
+						using (MySqlDataReader reader = db.QueryReader("select * from starver where UserID=@0", ID.Value))
+						{
+							if (reader.Read())
+							{
+								player = new StarverPlayer(ID.Value, true);
+								player.ReadFromReader(reader);
+								return true;
+							}
+							return false;
+						}
+					}
+				case SaveModes.Json:
+					{
+						string path = Path.Combine(SavePath, $"{Name}.json");
+						if(File.Exists(path))
+						{
+							try
+							{
+								player = JsonConvert.DeserializeObject<StarverPlayer>(File.ReadAllText(path));
+								player.Temp = true;
+							}
+							catch(Exception e)
+							{
+								TShock.Log.Error(e.ToString());
+								return false;
+							}
+							return true;
+						}
+						return false;
+					}
+			}
+			return false;
+		}
+		#endregion
 		#endregion
 		#region Datas
+		public bool Temp { get; set; }
 		public string Name { get; set; }
 		/// <summary>
 		/// 上一次捕获到释放技能
@@ -848,7 +914,7 @@ namespace Starvers
 			}
 			set
 			{
-				level = value;
+				level = (int)Math.Max((long)level,value);
 				SetLifeMax();
 				MaxMP = 100 + (level / 3);
 			}
@@ -864,12 +930,21 @@ namespace Starvers
 			}
 			set
 			{
-				int tmpExp = exp;
-				exp = value;
-				if (exp < 0)
+				long expNow = exp + value;
+				long lvl = level;
+				int Need = AuraSystem.StarverAuraManager.UpGradeExp((int)lvl);
+				while (expNow > UpGradeExp)
 				{
-					exp = tmpExp;
+					expNow -= Need;
+					lvl++;
+					Need = AuraSystem.StarverAuraManager.UpGradeExp((int)lvl);
+				if(HasPerm(Perms.VIP.LessCost))
+				{
+					Need /=3;
 				}
+				}
+				Level = (int)lvl;
+				exp = (int)Math.Max(0, expNow);
 			}
 		}
 		/// <summary>
@@ -980,7 +1055,7 @@ namespace Starvers
 		private bool disposed;
 		private static StarverPlayer all = new StarverPlayer() { Name = "All", level = int.MaxValue, Index = -1, UserID = -1 };
 		private static StarverPlayer server = new StarverPlayer() { Name = "Server", level = int.MaxValue, Index = -2, UserID = -2 };
-		private static string SavePath { get { return Starver.SavePathPlayers; } }
+		private static string SavePath => Starver.SavePathPlayers;
 		private static SaveModes SaveMode = StarverConfig.Config.SaveMode;
 		private static MySqlConnection db;
 		private static BinaryWriter writer;
@@ -989,11 +1064,12 @@ namespace Starvers
 		private static byte[] buffer = new byte[30];
 		#endregion
 		#region ctor
-		private unsafe StarverPlayer()
+		private unsafe StarverPlayer(bool temp = false)
 		{
-			Skills = (int*)Marshal.AllocHGlobal(sizeof(int) * 5).ToPointer();
+			Temp = temp;
+			Skills = (int*)Marshal.AllocHGlobal(sizeof(int) * 5);
 		}
-		private StarverPlayer(int userID) : this()
+		private StarverPlayer(int userID, bool temp = false) : this(temp)
 		{
 			UserID = userID;
 			Name = TShock.Users.GetUserByID(UserID).Name;
@@ -1025,13 +1101,17 @@ namespace Starvers
 			{
 				return;
 			}
+			disposed = true;
 			if (disposing)
 			{
 				TBCodes = null;
 				Weapon = null;
 				GC.SuppressFinalize(this);
 			}
-			Marshal.FreeHGlobal(new IntPtr(Skills));
+			if (Skills != null)
+			{
+				Marshal.FreeHGlobal(new IntPtr(Skills));
+			}
 		}
 		#endregion
 		#region NewMoon
@@ -1092,14 +1172,11 @@ namespace Starvers
 			int* begin = Skills;
 			int* end = begin + 5;
 			int* iterator = begin;
-			using (stream = new MemoryStream(buffer, true))
+			using (reader = new BinaryReader(new MemoryStream(buffer, true)))
 			{
-				using (reader = new BinaryReader(stream))
+				while (iterator != end)
 				{
-					while (iterator != end)
-					{
-						*iterator++ = reader.ReadInt32();
-					}
+					*iterator++ = reader.ReadInt32();
 				}
 			}
 		}

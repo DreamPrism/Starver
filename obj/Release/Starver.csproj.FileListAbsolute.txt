@@ -217,10 +217,11 @@ G:\Fei\gits\Starver\bin\Release\TOFOUT.Terraria.Server.dll
 G:\Fei\gits\Starver\bin\Release\TOFOUT.Windows.Forms.dll
 G:\Fei\gits\Starver\bin\Release\TShockAPI.dll
 G:\Fei\gits\Starver\obj\Release\Starver.csprojAssemblyReference.cache
-G:\Fei\gits\Starver\obj\Release\Starvers.Form.StarverManagerForm.resources
 G:\Fei\gits\Starver\obj\Release\Starvers.Properties.Resources.resources
 G:\Fei\gits\Starver\obj\Release\Starver.csproj.GenerateResource.cache
 G:\Fei\gits\Starver\obj\Release\Starver.csproj.CoreCompileInputs.cache
 G:\Fei\gits\Starver\obj\Release\Starver.csproj.CopyComplete
 G:\Fei\gits\Starver\obj\Release\Starver.dll
 G:\Fei\gits\Starver\obj\Release\Starver.pdb
+G:\Fei\gits\Starver\obj\Release\Starvers.Forms.StarverManagerForm.resources
+G:\Fei\gits\Starver\bin\Release\TOFOUT.Windows.Forms.pdb

@@ -1,4 +1,4 @@
-﻿namespace Starvers.Form
+﻿namespace Starvers.Forms
 {
 	partial class StarverManagerForm
 	{
@@ -140,6 +140,7 @@
 			this.Searcher.TabIndex = 5;
 			this.Searcher.Text = "管理离线";
 			this.Searcher.UseVisualStyleBackColor = false;
+			this.Searcher.Click += new System.EventHandler(this.OnClickOffline);
 			// 
 			// Mark_Skill_BT
 			// 

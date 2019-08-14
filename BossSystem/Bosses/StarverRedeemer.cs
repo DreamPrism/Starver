@@ -61,7 +61,7 @@ namespace Starvers.BossSystem.Bosses
 			}
 		}
 		#endregion
-		#region Downed
+		#region BeDown
 		protected override void BeDown()
 		{
 			base.BeDown();

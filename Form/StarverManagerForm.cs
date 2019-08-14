@@ -9,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Starvers.Form
+namespace Starvers.Forms
 {
-	public partial class StarverManagerForm : System.Windows.Forms.Form
+	public partial class StarverManagerForm : Form
 	{
 		#region F&P&E
 		public class PSChangeArgs : EventArgs
@@ -64,6 +64,22 @@ namespace Starvers.Form
 		}
 		#endregion
 		#region Events
+		#region OnClickOffline
+		private void OnClickOffline(object sender,EventArgs args)
+		{
+			string Name = TOFOUT.Windows.Forms.InputBox.Show("输入玩家名称", "请输入要寻找的玩家名称");
+			StarverPlayer.TryGetTempPlayer(Name, out StarverPlayer player);
+			if(player is null)
+			{
+				MessageBox.Show("不存在的玩家", "提示");
+			}
+			else
+			{
+				PlayerSelected = player;
+				PSChange(this, new PSChangeArgs() { player = PlayerSelected, Form = this });
+			}
+		}
+		#endregion
 		#region OnPaint
 		private void OnPaint(object sender, PaintEventArgs args)
 		{
@@ -90,7 +106,6 @@ namespace Starvers.Form
 				SLT.Location = new Point(SLTX, SLTY + PlayerList.ItemHeight * PlayerList.SelectedIndex);
 				SLT.Text = string.Empty;
 				PlayerSelected = null;
-				PSChange(this, new PSChangeArgs() { player = PlayerSelected, Form = this });
 			}
 			try
 			{
@@ -154,11 +169,14 @@ namespace Starvers.Form
 		}
 		#endregion
 		#region Kick
-		private void Kicker_Click(object sender, EventArgs e)
+		private unsafe void Kicker_Click(object sender, EventArgs e)
 		{
 			try
 			{
-				PlayerSelected.Kick("");
+				if (PlayerSelected.Skills != null)
+				{
+					PlayerSelected.Kick("");
+				}
 			}
 			catch
 			{
@@ -225,7 +243,6 @@ namespace Starvers.Form
 		private const int SC_MOVE = 0xF010;
 		private const int HTCAPTION = 0x0002;
 		#endregion
-
 		#endregion
 	}
 }

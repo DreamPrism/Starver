@@ -16,10 +16,10 @@ namespace Starvers.AuraSystem.Skills.Base
 		public int CD { get; protected set; }
 		public int MP { get; protected set; }
 		public int Lvl { get; protected set; }
-		public bool BossBan { get; protected set; } = false;
-		public string Author { get; protected set; } = "";
-		public string Description { get; protected set; } = "";
-		public string Text { get; private set; }
+		public bool BossBan { get; protected set; }
+		public string Author { get; protected set; } = string.Empty;
+		public string Description { get; protected set; } = string.Empty;
+		public string Text { get; private set; } = string.Empty;
 		public abstract void Release(StarverPlayer player, Vector2 vel);
 		public Skill(int idx)
 		{
@@ -32,7 +32,7 @@ namespace Starvers.AuraSystem.Skills.Base
 			sb.Append($"创意来源: {Author}\n");
 			sb.Append($"CD: {CD}s\n");
 			sb.Append($"所需等级: {Lvl}\n");
-			sb.Append($"MP: {MP}");
+			sb.Append($"MP: {MP}\n");
 			sb.Append($"{Description}");
 			Text = sb.ToString();
 		}

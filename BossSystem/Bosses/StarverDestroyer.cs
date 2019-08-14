@@ -60,7 +60,7 @@ namespace Starvers.BossSystem.Bosses
 			RealNPC.damage = StartCollidingDamage;
 		}
 		#endregion
-		#region Fail
+		#region OnFail
 		public override void OnFail()
 		{
 			base.OnFail();

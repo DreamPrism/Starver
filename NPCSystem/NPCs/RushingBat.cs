@@ -21,6 +21,10 @@ namespace Starvers.NPCSystem.NPCs
 		/// 死亡地点
 		/// </summary>
 		private Vector2 DeathPos;
+		/// <summary>
+		/// 是否是自杀
+		/// </summary>
+		private bool KillSelf;
 		#endregion
 		#region Properties
 		protected override float CollidingIndex => DamageIndex;
@@ -41,7 +45,8 @@ namespace Starvers.NPCSystem.NPCs
 		#region RealAI
 		protected override void RealAI()
 		{
-			if (Vector2.Distance(TargetPlayer.Center, Center) < 16 * 3)
+			float Distance = Vector2.Distance(TargetPlayer.Center, Center);
+			if (Distance < 16 * 3)
 			{
 				Proj(Center, Vector.Zero, ProjectileID.StardustGuardianExplosion, 0);
 				DeathPos = Center;
@@ -49,10 +54,14 @@ namespace Starvers.NPCSystem.NPCs
 				KillMe();
 				return;
 			}
+			else if(Distance < 16 * 40)
+			{
+
+			}
 			else //if(Timer % 20 == 0)
 			{
 				AIUsing[0] = 0;
-				Acc = (Vector)(TargetPlayer.Center + NewByPolar(AIUsing[1], 16 * 5) - Center);
+				Acc = (Vector)(TargetPlayer.Center + NewByPolar(AIUsing[1], 16 * 8) - Center);
 				Acc.Length = 0.2f;
 				FakeVelocity += Acc;
 				if (FakeVelocity.Length > 9)
@@ -60,12 +69,14 @@ namespace Starvers.NPCSystem.NPCs
 					FakeVelocity.Length = 9;
 				}
 			}
-			if (AIUsing[0]++ > 60 * 3)
+			if (AIUsing[0]++ > 60 * 5)
 			{
 				Proj(Center, Vector.Zero, ProjectileID.StardustGuardianExplosion, 0);
 				DeathPos = Center;
+				KillSelf = true;
 				new Thread(TransformToBolt).Start();
 				KillMe();
+				return;
 			}
 			AIUsing[1] += PI / 120;
 		}
@@ -74,7 +85,10 @@ namespace Starvers.NPCSystem.NPCs
 		private void TransformToBolt()
 		{
 			Thread.Sleep(500);
-			Proj(DeathPos, Vector.Zero, ProjectileID.NebulaSphere, 200);
+			if (!KillSelf)
+			{
+				Proj(DeathPos, Vector.Zero, ProjectileID.NebulaSphere, 200);
+			}
 		}
 		#endregion
 	}
