@@ -52,6 +52,7 @@ namespace Starvers.NPCSystem.NPCs
 			Drops = RealDrops;
 			AIStyle = 2;
 			DefaultLife = 13000;
+			NoGravity = true;
 			DefaultDefense = 300000;
 			NoTileCollide = true;
 			Checker = SpawnChecker.ZombieLike;
@@ -60,6 +61,7 @@ namespace Starvers.NPCSystem.NPCs
 			Checker.SpawnRate /= 2;
 			DamagedIndex = 0.1f;
 			CollideDamage = 350;
+			SpaceOption = SpawnSpaceOptins.None;
 		}
 		#endregion
 		#region RealAI

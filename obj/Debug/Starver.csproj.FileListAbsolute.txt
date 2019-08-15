@@ -112,7 +112,6 @@ G:\gits\Starver\obj\Debug\Starver.csproj.CopyComplete
 G:\gits\Starver\obj\Debug\Starver.dll
 G:\gits\Starver\obj\Debug\Starver.pdb
 G:\Fei\gits\Starver\obj\Debug\Starver.csprojAssemblyReference.cache
-G:\Fei\gits\Starver\obj\Debug\Starvers.Form.StarverManagerForm.resources
 G:\Fei\gits\Starver\obj\Debug\Starvers.Properties.Resources.resources
 G:\Fei\gits\Starver\obj\Debug\Starver.csproj.GenerateResource.cache
 G:\Fei\gits\Starver\obj\Debug\Starver.csproj.CoreCompileInputs.cache
@@ -224,3 +223,5 @@ G:\Fei\gits\Starver\bin\Debug\TOFOUT.Terraria.Server.dll
 G:\Fei\gits\Starver\bin\Debug\TOFOUT.Windows.Forms.dll
 G:\Fei\gits\Starver\bin\Debug\TShockAPI.dll
 G:\Fei\gits\Starver\obj\Debug\Starver.csproj.CopyComplete
+G:\Fei\gits\Starver\bin\Debug\TOFOUT.Windows.Forms.pdb
+G:\Fei\gits\Starver\obj\Debug\Starvers.Forms.StarverManagerForm.resources

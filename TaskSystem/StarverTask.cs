@@ -483,6 +483,7 @@ namespace Starvers.TaskSystem
                         #endregion
                         #region Vortex
                         case 21:
+							TaskID.MoonLord = ID;
                             Name = "漩涡能量";
                             Story = "月亮末日慢慢靠近...";
                             Needs = new TaskItem[]
@@ -558,6 +559,7 @@ namespace Starvers.TaskSystem
                         #endregion
                         #region SkeletonEx
                         case 25:
+							TaskID.SkeletronEx = ID;
                             Boss = Bosses[2];
                             Name = "失落骨架-Hyperosteogeny";
                             Story = "脱胎于某个高等存在的残骸，仍然残存有些许威力。力量不会随着肉体的消亡而蒸发，而是如同跗骨之蛆一般留存";

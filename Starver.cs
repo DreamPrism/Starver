@@ -56,7 +56,7 @@ namespace Starvers
 		public static string SavePathBosses { get; private set; } = Path.Combine(SavePathMain, "Bosses");
 		public static string ExchangeTips { get; private set; } = "";
 		public static StarverPlayer[] Players { get; private set; } = new StarverPlayer[40];
-		public static BaseNPC[] NPCs { get; private set; } = new BaseNPC[200];
+		public static BaseNPC[] NPCs { get; private set; }
 		public static IStarverPlugin[] Plugins { get; private set; } = new IStarverPlugin[]
 		{
 			new StarverTaskManager(),
@@ -177,6 +177,10 @@ namespace Starvers
 			{
 				ServerApi.Hooks.ServerChat.Register(this, OnChat);
 			}
+			if(Config.EnableNPC)
+			{
+				NPCs = new BaseNPC[Main.maxNPCs];
+			}
 			//ServerApi.Hooks.NpcKilled.Register(this, OnKill);
 			ServerApi.Hooks.NpcStrike.Register(this, OnStrike);
 			ServerApi.Hooks.NpcSpawn.Register(this, OnNPCSpawn);
@@ -251,6 +255,7 @@ namespace Starvers
 			NPC RealNPC;
 			RealNPC = Main.npc[args.Npc.realLife >= 0 ? args.Npc.realLife : args.Npc.whoAmI];
 			BaseNPC snpc = NPCs[RealNPC.whoAmI];
+			BossSystem.Bosses.Base.StarverBoss TheBoss = null;
 			StarverPlayer player = Players[args.Player.whoAmI];
 			float damageindex = 1;
 			if (Config.EnableAura)
@@ -271,6 +276,7 @@ namespace Starvers
 					if (boss.Active && args.Npc.whoAmI == boss.Index)
 					{
 						interdamage *= boss.DamagedIndex;
+						TheBoss = boss;
 						break;
 					}
 				}
@@ -290,18 +296,12 @@ namespace Starvers
 			{
 				args.Npc.SendCombatMsg(realdamage.ToString(), Color.Yellow);
 			}
-			if (BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
+			if (TheBoss != null)
 			{
-				foreach (var boss in StarverBossManager.Bosses)
+				if (TheBoss.Life - realdamage < 1)
 				{
-					if (boss.Active && RealNPC.whoAmI == boss.Index)
-					{
-						if (boss.Life - realdamage < 1)
-						{
-							boss.LifeDown();
-							return;
-						}
-					}
+					TheBoss.LifeDown();
+					return;
 				}
 			}
 			RealNPC.life -= realdamage;
@@ -319,20 +319,26 @@ namespace Starvers
 					RealNPC.checkDead();
 				}
 			}
-			else if(Config.EnableAura)
+			else
 			{
-				Vector knockback = (Vector)(args.Npc.Center - player.Center);
-				knockback.Length = args.KnockBack * RealNPC.knockBackResist;
-				knockback *= Math.Min(Math.Max(player.Level - NPCLevel, 0), 10);
-				RealNPC.velocity += knockback;
-				if (!(snpc is null))
+				if (Config.EnableAura)
 				{
-					snpc.SendData();
+					Vector knockback = (Vector)(args.Npc.Center - player.Center);
+					knockback.Length = args.KnockBack * RealNPC.knockBackResist;
+					knockback *= Math.Min(Math.Max(player.Level - NPCLevel, 0), 10);
+					RealNPC.velocity += knockback;
+					if (!(snpc is null))
+					{
+						snpc.SendData();
+					}
+					else
+					{
+						NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, RealNPC.whoAmI);
+					}
+
 				}
-				else
-				{
-					NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, RealNPC.whoAmI);
-				}
+				snpc?.OnStrike(realdamage, args.KnockBack, player);
+				TheBoss?.OnStrike(realdamage, args.KnockBack, player);
 			}
 		}
 		#endregion

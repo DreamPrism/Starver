@@ -17,19 +17,19 @@ namespace Starvers
 	public abstract partial class StarverEntity
 	{
 		#region Properties
-		public static Random Rand { get { return Starver.Rand; } }
+		public static Random Rand => Starver.Rand;
 		public int Index { get; protected set; } = -1;
-		public int Target { get { return RealNPC.target; } protected set { RealNPC.target = value; } }
+		public int Target { get => RealNPC.target; protected set => RealNPC.target = value; }
 		public int Interval { get; protected set; }
-		public float[] ai { get { return RealNPC.ai; } }
+		public float[] ai => RealNPC.ai;
 		public DateTime LastUpdate { get; protected set; } = DateTime.Now;
-		public StarverPlayer TargetPlayer { get { return Starver.Players[Target]; } }
-		public NPC RealNPC { get { return Main.npc[Index]; } }
-		public Vector2 Center { get { return RealNPC.Center; } set { RealNPC.Center = value; } }
-		public ref Vector2 Position { get { return ref RealNPC.position; } }
-		public ref Vector2 Velocity { get { return ref RealNPC.velocity; } }
+		public StarverPlayer TargetPlayer => Starver.Players[Target];
+		public NPC RealNPC => Main.npc[Index];
+		public Vector2 Center { get => RealNPC.Center; set => RealNPC.Center = value; }
+		public ref Vector2 Position => ref RealNPC.position;
+		public ref Vector2 Velocity => ref RealNPC.velocity;
 		public bool OverrideDead { get; protected set; }
-		public bool Active { get { return _active && Index != -1 && RealNPC.active; } }
+		public bool Active => _active && Index != -1 && RealNPC.active;
 		public bool _active { get; internal set; }
 		public virtual float DamageIndex { get; set; } = 1;
 		public float DamagedIndex { get; protected set; } = 1;
@@ -382,6 +382,10 @@ namespace Starvers
 				Velocity.LengthAdd(knockback * (1f - RealNPC.knockBackResist));
 				SendData();
 			}
+		}
+		public virtual void OnStrike(int RealDamage,float KnockBack,StarverPlayer player)
+		{
+
 		}
 		#endregion
 		#region OnDead

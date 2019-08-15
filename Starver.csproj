@@ -151,6 +151,7 @@
     </Compile>
     <Compile Include="IStarverPlugin.cs" />
     <Compile Include="NPCSystem\BiomeType.cs" />
+    <Compile Include="NPCSystem\NPCs\DarkCaster.cs" />
     <Compile Include="NPCSystem\NPCs\RushingBat.cs" />
     <Compile Include="NPCSystem\NPCs\BrainFollow.cs" />
     <Compile Include="NPCSystem\NPCs\FloatingSkeleton.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="HelpTexts.cs" />
     <Compile Include="TaskSystem\StarverTask.cs" />
     <Compile Include="TaskSystem\StarverTaskManager.cs" />
+    <Compile Include="TaskSystem\TaskID.cs" />
     <Compile Include="TaskSystem\TaskItem.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WeaponSystem\Currency.cs" />

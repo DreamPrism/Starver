@@ -11,6 +11,33 @@ namespace Starvers.NPCSystem
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public abstract class StarverNPC : BaseNPC, ICloneable
 	{
+		#region Enums
+		#region SpawnSpaceOptions
+		/// <summary>
+		/// 选择NPC出生时的空间的条件
+		/// </summary>
+		[Flags]
+		protected enum SpawnSpaceOptins
+		{
+			/// <summary>
+			/// 无条件
+			/// </summary>
+			None = 0,
+			/// <summary>
+			/// 必须要有可以踩着的地面(需要与NoGraviry一同设置才能有效)
+			/// </summary>
+			StepableGround = 1 << 0,
+			/// <summary>
+			/// 必须没有液体
+			/// </summary>
+			NotWet = 1 << 1,
+			/// <summary>
+			/// 要生成在玩家屏幕内
+			/// </summary>
+			InScreen = 1 << 2
+		}
+		#endregion
+		#endregion
 		#region Fields
 		protected float[] AIUsing;
 		protected int[] Types;
@@ -22,10 +49,12 @@ namespace Starvers.NPCSystem
 		protected int Height = 3 * 14;
 		protected int Width = 2 * 13;
 		protected bool NoTileCollide;
+		protected bool NoGravity;
 		protected bool AfraidSun;
 		protected DateTime LastSpawn = DateTime.Now;
 		protected StarverNPC Root;
 		protected SpawnChecker Checker;
+		protected SpawnSpaceOptins SpaceOption = SpawnSpaceOptins.StepableGround;
 		protected abstract void RealAI();
 		#endregion
 		#region Properties
@@ -34,6 +63,7 @@ namespace Starvers.NPCSystem
 		/// </summary>
 		protected virtual float CollidingIndex { get; set; } = 1;
 		protected virtual float DefenseIndex => (StarverConfig.Config.TaskNow - 20) / 2f;
+		protected virtual bool Enabled => true;
 		public override float DamageIndex => (StarverConfig.Config.TaskNow - 20) / 5f + 1;
 		public bool OverrideRawDrop { get; protected set; } = false;
 		#endregion
@@ -46,6 +76,7 @@ namespace Starvers.NPCSystem
 		static StarverNPC()
 		{
 			Type[] types = System.Reflection.Assembly.GetExecutingAssembly().GetTypes();
+			StarverNPC npc;
 			foreach (var type in types)
 			{
 				if (type.IsAbstract || IsBossFollow(type) || !type.IsSubclassOf(typeof(StarverNPC)))
@@ -53,7 +84,11 @@ namespace Starvers.NPCSystem
 					continue;
 				}
 				NPCTypes.Add(type);
-				RootNPCs.Add(Activator.CreateInstance(type) as StarverNPC);
+				npc = Activator.CreateInstance(type) as StarverNPC;
+				if (npc.Enabled)
+				{
+					RootNPCs.Add(npc);
+				}
 #if DEBUG
 				//StarverPlayer.All.SendDeBugMessage($"{RootNPCs[RootNPCs.Count - 1].Name} Loaded");
 				Console.ForegroundColor = ConsoleColor.Blue;
@@ -63,7 +98,7 @@ namespace Starvers.NPCSystem
 			}
 			unsafe
 			{
-				Finded = (Vector*)System.Runtime.InteropServices.Marshal.AllocHGlobal(sizeof(Vector) * (2 * 120 * 5 + 2 * 50 * 10)).ToPointer();
+				Finded = (Vector*)System.Runtime.InteropServices.Marshal.AllocHGlobal(sizeof(Vector) * (8000)).ToPointer();
 			}
 		}
 		public unsafe static void Release()
@@ -107,6 +142,7 @@ namespace Starvers.NPCSystem
 			RealNPC.aiStyle = AIStyle;
 			RealNPC.noTileCollide = NoTileCollide;
 			RealNPC.defense = (int)(DefaultDefense * DefenseIndex);
+			RealNPC.noGravity = NoGravity;
 			if (CollideDamage > 0)
 			{
 				RealNPC.damage = CollideDamage;
@@ -142,11 +178,11 @@ namespace Starvers.NPCSystem
 		#region Drop
 		public void Drop(int idx)
 		{
-			if(Drops is null)
+			if (Drops is null)
 			{
 				return;
 			}
-			foreach(var DropItem in Drops)
+			foreach (var DropItem in Drops)
 			{
 				DropItem.Drop(Terraria.Main.npc[idx]);
 			}
@@ -175,7 +211,7 @@ namespace Starvers.NPCSystem
 				}
 				Velocity = FakeVelocity;
 			}
-			if (Terraria.Main.dayTime && AfraidSun && RealNPC.Center.Y / 16 < Terraria.Main.rockLayer) 
+			if (Terraria.Main.dayTime && AfraidSun && RealNPC.Center.Y / 16 < Terraria.Main.rockLayer)
 			{
 				KillMe();
 				return;
@@ -192,6 +228,10 @@ namespace Starvers.NPCSystem
 		protected unsafe Vector CalcSpawnPos(Vector PlayerCenter)
 		{
 			#region Search
+			if(SpaceOption.HasFlag(SpawnSpaceOptins.InScreen))
+			{
+				return CalcSpawnPosInScreen(PlayerCenter);
+			}
 			Vector LeftUp = new Vector(PlayerCenter.X - 16 * 50 - 16 * 10, PlayerCenter.Y - 16 * 25 - 16 * 5);
 			t = 0;
 			float i, LimY, j, LimX;
@@ -259,6 +299,81 @@ namespace Starvers.NPCSystem
 			}
 			#endregion
 		}
+		protected unsafe Vector CalcSpawnPosInScreen(Vector PlayerCenter)
+		{
+			#region Search
+			Vector LeftUp = new Vector(PlayerCenter.X - 16 * 50, PlayerCenter.Y - 16 * 25);
+			t = 0;
+			float i, LimY, j, LimX;
+			for (i = PlayerCenter.Y - 25 * 16, LimY = PlayerCenter.Y + 25 * 16; i < LimY; i += 16)
+			{
+				for (j = LeftUp.X - 50 * 16, LimX = PlayerCenter.X + 50 * 16; j < LimX; j += 16)
+				{
+					if (CheckSpace(j, i))
+					{
+						Finded[t].X = j;
+						Finded[t].Y = i;
+						t++;
+					}
+				}
+			}  //搜索玩家屏幕内是否有空位
+			#endregion
+			#region return
+			if (t > 0)
+			{
+				return Finded[Rand.Next(t)];
+			}
+			if (NoTileCollide)
+			{
+				return (Vector)(PlayerCenter + Rand.NextVector2(16 * 50));
+			}
+			else
+			{
+				throw new Exception("没有合适的出生点");
+			}
+			#endregion
+		}
+		#endregion
+		#region CheckSpaceOptions
+		#region Wet
+		private static bool NotWet(int i, int j, int HeightNeed, int WidthNeed)
+		{
+			int StartedJ = j;
+			for (; i < HeightNeed; i++)
+			{
+				for (j = StartedJ; j < WidthNeed; j++)
+				{
+					if (Terraria.Main.tile[j, i].liquid != 0)
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		#endregion
+		#region Ground
+		/// <summary>
+		/// 检查是否有可以供踩踏的地面
+		/// </summary>
+		/// <param name="i"></param>
+		/// <param name="j"></param>
+		/// <param name="HeightNeed"></param>
+		/// <param name="WidthNeed"></param>
+		/// <returns></returns>
+		private bool HasGround(int i, int j, int WidthNeed)
+		{
+			i += (int)Math.Ceiling(Height / 16.0);
+			for (; j < WidthNeed; j++)
+			{
+				if (Terraria.Main.tile[j, i].active())
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		#endregion
 		#endregion
 		#region CheckSpace
 		/// <summary>
@@ -270,6 +385,11 @@ namespace Starvers.NPCSystem
 		{
 			return CheckSpace(where.X, where.Y);
 		}
+		/// <summary>
+		/// 检查以where为左上角的空间是否可以容纳NPC
+		/// </summary>
+		/// <param name="where"></param>
+		/// <returns>空间的左上角</returns>
 		private bool CheckSpace(float X,float Y)
 		{
 			int i = (int)(Y / 16);
@@ -280,9 +400,24 @@ namespace Starvers.NPCSystem
 			}
 			int HeightNeed = i + (int)Math.Ceiling(Height / 16.0);
 			int WidthNeed = j + (int)Math.Ceiling(Width / 16.0);
+			#region CheckSpaceOptions
+			#region Wet
+			if (SpaceOption.HasFlag(SpawnSpaceOptins.NotWet) && !NotWet(i, j, HeightNeed, WidthNeed))
+			{
+				return false;
+			}
+			#endregion
+			#region Ground
+			if (SpaceOption.HasFlag(SpawnSpaceOptins.StepableGround) && NoGravity == false && !HasGround(i, j, WidthNeed))
+			{
+				return false;
+			}
+			#endregion
+			#endregion
+			int StartedJ = j;
 			for (; i < HeightNeed; i++)
 			{
-				for (; j < WidthNeed; j++)
+				for (j = StartedJ; j < WidthNeed; j++)
 				{
 					if (Terraria.Main.tile[j, i].active())
 					{
@@ -436,6 +571,7 @@ namespace Starvers.NPCSystem
 
 
 
+
 		public static int TheWorld { get; set; }
 		public static StarverNPC[] NPCs = new StarverNPC[Terraria.Main.maxNPCs];
 		public static void DoUpDate(object args)
@@ -460,9 +596,9 @@ namespace Starvers.NPCSystem
 						{
 							NewNPC(npc.CalcSpawnPos((Vector)player.Center), Vector.Zero, npc);
 						}
-						catch
+						catch(Exception e)
 						{
-
+							TShock.Log.Error(e.ToString());
 						}
 					}
 				}
