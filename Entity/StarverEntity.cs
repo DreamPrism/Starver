@@ -249,8 +249,12 @@ namespace Starvers
 		/// <param name="ai1"></param>
 		public static void NewProjSector(Vector2 Center, float Vel, float r,double interrad,double rad,int Damage, int Type, int num, byte direction = 2, float ai0 = 0, float ai1 = 0)
 		{
+			if(num == 1)
+			{
+				NewProj(Center, NewByPolar(interrad, Vel * -direction), Type, Damage);
+			}
 			double start = interrad - rad / 2;
-			double average = rad / num;
+			double average = rad / (num - 1);
 			switch(direction)
 			{
 				case 0:
@@ -286,8 +290,13 @@ namespace Starvers
 		/// <param name="ai1"></param>
 		public void ProjSector(Vector2 Center, float Vel, float r, double interrad, double rad, int Damage, int Type, int num, byte direction = 2, float ai0 = 0, float ai1 = 0)
 		{
+			if(num == 1)
+			{
+				Proj(Center, NewByPolar(interrad, Vel * -direction), Type, Damage);
+				return;
+			}
 			double start = interrad - rad / 2;
-			double average = rad / num;
+			double average = rad / (num - 1);
 			switch (direction)
 			{
 				case 0:

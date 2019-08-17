@@ -152,12 +152,19 @@ namespace Starvers.BossSystem.Bosses
 			vector = (Vector)TargetPlayer.Center;
 			new Thread(() =>
 			{
-				Thread.Sleep(1000);
-				int idx;
-				for (int i = 0; i < 6; i++)
+				try
 				{
-					idx = Proj(vector + NewByPolar(PI / 3 * i, 16 * 20), Vector.Zero, ProjectileID.Explosives, 1000);
-					Main.projectile[idx].owner = Target;
+					Thread.Sleep(1000);
+					int idx;
+					for (int i = 0; i < 6; i++)
+					{
+						idx = Proj(vector + NewByPolar(PI / 3 * i, 16 * 20), Vector.Zero, ProjectileID.Explosives, 1000);
+						Main.projectile[idx].owner = Target;
+					}
+				}
+				catch
+				{
+
 				}
 				/*
 				foreach (var player in Starver.Players)

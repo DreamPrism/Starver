@@ -13,15 +13,16 @@ namespace Starvers.NPCSystem
 		public bool Enabled => StarverConfig.Config.EnableNPC;
 		public void Load()
 		{
+			StarverNPC.Load();
 			ServerApi.Hooks.GameUpdate.Register(Starver.Instance, StarverNPC.DoUpDate);
 			ServerApi.Hooks.NpcLootDrop.Register(Starver.Instance, OnDrop);
 			//ServerApi.Hooks.NpcKilled.Register(Starver.Instance, StarverNPC.OnNPCKilled);
 		}
 		public void UnLoad()
 		{
+			StarverNPC.Release();
 			ServerApi.Hooks.GameUpdate.Deregister(Starver.Instance, StarverNPC.DoUpDate);
 			ServerApi.Hooks.NpcLootDrop.Deregister(Starver.Instance, OnDrop);
-			StarverNPC.Release();
 			//ServerApi.Hooks.NpcKilled.Deregister(Starver.Instance, StarverNPC.OnNPCKilled);
 		}
 		#endregion

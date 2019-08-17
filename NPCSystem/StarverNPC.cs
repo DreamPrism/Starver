@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,29 +74,10 @@ namespace Starvers.NPCSystem
 			AIUsing = new float[AIs];
 			Name = GetType().Name;
 		}
-		static StarverNPC()
+		internal static void Load()
 		{
-			Type[] types = System.Reflection.Assembly.GetExecutingAssembly().GetTypes();
-			StarverNPC npc;
-			foreach (var type in types)
-			{
-				if (type.IsAbstract || IsBossFollow(type) || !type.IsSubclassOf(typeof(StarverNPC)))
-				{
-					continue;
-				}
-				NPCTypes.Add(type);
-				npc = Activator.CreateInstance(type) as StarverNPC;
-				if (npc.Enabled)
-				{
-					RootNPCs.Add(npc);
-				}
-#if DEBUG
-				//StarverPlayer.All.SendDeBugMessage($"{RootNPCs[RootNPCs.Count - 1].Name} Loaded");
-				Console.ForegroundColor = ConsoleColor.Blue;
-				Console.WriteLine($"{RootNPCs[RootNPCs.Count - 1].Name} Loaded");
-				Console.ResetColor();
-#endif
-			}
+			LoadAssemblies();
+			LoadNPCs();
 			unsafe
 			{
 				Finded = (Vector*)System.Runtime.InteropServices.Marshal.AllocHGlobal(sizeof(Vector) * (8000)).ToPointer();
@@ -103,7 +85,11 @@ namespace Starvers.NPCSystem
 		}
 		public unsafe static void Release()
 		{
-			System.Runtime.InteropServices.Marshal.FreeHGlobal((IntPtr)Finded);
+			if (Finded != null)
+			{
+				System.Runtime.InteropServices.Marshal.FreeHGlobal((IntPtr)Finded);
+				Finded = null;
+			}
 		}
 		#endregion
 		#region Spawn
@@ -489,6 +475,7 @@ namespace Starvers.NPCSystem
 		#region Globals
 		private static int t;
 		private unsafe static Vector* Finded;
+		private static DirectoryInfo NPCFolder;
 		protected static int SpawnTimer;
 		protected static int counting;
 		protected static int count;
@@ -507,8 +494,9 @@ namespace Starvers.NPCSystem
 			}
 		}
 		protected static int Alives;
-		protected static List<Type> NPCTypes = new List<Type>();
-		protected static List<StarverNPC> RootNPCs = new List<StarverNPC>();
+		protected static List<System.Reflection.Assembly> NPCPlugins { get; private set; } = new List<System.Reflection.Assembly>();
+		protected static List<Type> NPCTypes { get; private set; } = new List<Type>();
+		protected static List<StarverNPC> RootNPCs { get; private set; } = new List<StarverNPC>();
 		protected static int NewNPC<T>(Vector where, Vector Velocity)
 			where T : StarverNPC, new()
 		{
@@ -566,6 +554,61 @@ namespace Starvers.NPCSystem
 			if (Count != counting)
 			{
 				Count = counting;
+			}
+		}
+		private static void LoadAssemblies()
+		{
+			NPCFolder = new DirectoryInfo(Path.Combine(Starver.MainFolder.FullName, "NPCs"));
+			if(!NPCFolder.Exists)
+			{
+				NPCFolder.Create();
+			}
+			NPCPlugins.Add(System.Reflection.Assembly.GetExecutingAssembly());
+			FileInfo[] Files = NPCFolder.GetFiles("*.dll");
+			foreach(var file in Files)
+			{
+				try
+				{
+					NPCPlugins.Add(System.Reflection.Assembly.LoadFrom(file.FullName));
+				}
+				catch(Exception e)
+				{
+					TShock.Log.ConsoleError(e.ToString());
+				}
+			}
+			foreach(var Assembly in NPCPlugins)
+			{
+				LoadTypes(Assembly);
+			}
+		}
+		private static void LoadTypes(System.Reflection.Assembly Assembly)
+		{
+			Type[] types = Assembly.GetTypes();
+			foreach (var type in types)
+			{
+				if (type.IsAbstract || IsBossFollow(type) || !type.IsSubclassOf(typeof(StarverNPC)))
+				{
+					continue;
+				}
+				NPCTypes.Add(type);
+			}
+		}
+		private static void LoadNPCs()
+		{
+			StarverNPC npc;
+			foreach(var type in NPCTypes)
+			{
+				npc = Activator.CreateInstance(type) as StarverNPC;
+				if (npc.Enabled)
+				{
+					RootNPCs.Add(npc);
+				}
+#if DEBUG
+				//StarverPlayer.All.SendDeBugMessage($"{RootNPCs[RootNPCs.Count - 1].Name} Loaded");
+				Console.ForegroundColor = ConsoleColor.Blue;
+				Console.WriteLine($"{RootNPCs[RootNPCs.Count - 1].Name} Loaded");
+				Console.ResetColor();
+#endif
 			}
 		}
 
