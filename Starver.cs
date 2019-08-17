@@ -244,7 +244,7 @@ namespace Starvers
 		#region OnStrike
 		internal void OnStrike(NpcStrikeEventArgs args)
 		{
-			if (args.Npc.type != NPCID.SolarCrawltipedeTail)
+			if (Config.EnableAura && args.Npc.type != NPCID.SolarCrawltipedeTail)
 			{
 				args.Handled = true;
 			}
@@ -269,7 +269,7 @@ namespace Starvers
 			{
 				interdamage *= 2;
 			}
-			if (BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
+			if (Config.EnableBoss && BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
 			{
 				foreach (var boss in StarverBossManager.Bosses)
 				{
@@ -314,7 +314,7 @@ namespace Starvers
 					player.UPGrade(snpc.ExpGive);
 					snpc.CheckDead();
 				}
-				else
+				else if(Config.EnableAura)
 				{
 					RealNPC.checkDead();
 				}
@@ -433,10 +433,12 @@ namespace Starvers
 			{
 				Utils.SaveAll();
 			}
-			if ((DateTime.Now - Last).TotalSeconds > 5)
+			#endregion
+			#region SendMessage
+			if (Config.EnableAura && (DateTime.Now - Last).TotalSeconds > 5)
 			{
 				Last = DateTime.Now;
-				int liferegen = 0;
+				int liferegen;
 				foreach (StarverPlayer player in Players)
 				{
 					if (player == null)
@@ -456,7 +458,7 @@ namespace Starvers
 								player.SendData(PacketTypes.PlayerHp, "", player.Index);
 							}
 						}
-						player.SendStatusMSG(string.Format("MP:  [{0}/{1}]\nLevel:  [{2}]\nExp:  [{3}/{4}]", player.MP, player.MaxMP, player.Level, player.Exp, StarverAuraManager.UpGradeExp(player.Level)));
+						player.SendStatusMSG(string.Format("MP:  [{0}/{1}]\nLevel:  [{2}]\nExp:  [{3}/{4}]", player.MP, player.MaxMP, player.Level, player.Exp, StarverAuraManager.UpGradeExp(player.Level) / (player.HasPerm(Perms.VIP.LessCost) ? 1 : 3)));
 					}
 					catch(Exception e)
 					{
