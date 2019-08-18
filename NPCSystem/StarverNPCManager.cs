@@ -9,8 +9,22 @@ namespace Starvers.NPCSystem
 	using TerrariaApi.Server;
 	public class StarverNPCManager : IStarverPlugin
 	{
+		#region Properties
+		public StarverConfig Config => StarverConfig.Config;
+		#endregion
 		#region Interfeces
-		public bool Enabled => StarverConfig.Config.EnableNPC;
+		public bool Enabled
+		{
+			get
+			{
+				if(!Config.EnableAura)
+				{
+					StarverPlayer.Server.SendInfoMessage("使用Starver的NPC组件需要先开启Aura以及Task组件");
+					return false;
+				}
+				return Config.EnableNPC;
+			}
+		}
 		public void Load()
 		{
 			StarverNPC.Load();

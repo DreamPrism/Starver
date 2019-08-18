@@ -40,7 +40,18 @@ namespace Starvers.BossSystem
 		#region Interfaces
 		public delegate void AIDelegate(object args);
 		public StarverConfig Config => StarverConfig.Config;
-		public bool Enabled => Config.EnableBoss && Config.EnableAura;
+		public bool Enabled
+		{
+			get
+			{
+				if (!Config.EnableNPC)
+				{
+					StarverPlayer.Server.SendInfoMessage("使用Starver插件的boss组件需要先开启NPC, Task以及Aura组件");
+					return false;
+				}
+				return Config.EnableBoss;
+			}
+		}
 		public void Load()
 		{
 			ServerApi.Hooks.NpcKilled.Register(Starver.Instance, OnKilled);
