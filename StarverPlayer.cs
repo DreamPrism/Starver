@@ -914,7 +914,11 @@ namespace Starvers
 			}
 			set
 			{
-				level = (int)Math.Max((long)level,value);
+				if(level == int.MaxValue)
+				{
+					return;
+				}
+				level = value;
 				SetLifeMax();
 				MaxMP = 100 + (level / 3);
 			}

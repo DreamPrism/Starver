@@ -577,7 +577,7 @@ namespace Starvers.BossSystem
 			{
 				foreach (StarverBoss boss in Bosses)
 				{
-					if (boss.Active || args.NpcArrayIndex == boss.Index)
+					if (boss.Active && args.NpcArrayIndex == boss.Index)
 					{
 						args.Handled = true;
 						return;
