@@ -20,7 +20,7 @@ namespace Starvers.BossSystem.Bosses.Base
 {
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using BigInt = System.Numerics.BigInteger;
-	public abstract partial class StarverBoss : StarverEntity
+	public abstract class StarverBoss : StarverEntity
 	{
 		#region Fields
 		protected bool NightBoss = true;
@@ -194,7 +194,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			{
 				if (RealNPC.playerInteraction[i])
 				{
-					Starver.Players[i].UPGrade(ExpGive);
+					Starver.Players[i]?.UPGrade(ExpGive);
 				}
 			}
 			if (Drops != null)

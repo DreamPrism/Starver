@@ -45,40 +45,50 @@ namespace Starvers.NPCSystem.NPCs
 		#region RealAI
 		protected override void RealAI()
 		{
-			float Distance = Vector2.Distance(TargetPlayer.Center, Center);
-			if (Distance < 16 * 3)
+			try
 			{
-				Proj(Center, Vector.Zero, ProjectileID.StardustGuardianExplosion, 0);
-				DeathPos = Center;
-				new Thread(TransformToBolt).Start();
-				KillMe();
-				return;
-			}
-			else if(Distance < 16 * 40)
-			{
-
-			}
-			else //if(Timer % 20 == 0)
-			{
-				AIUsing[0] = 0;
-				Acc = (Vector)(TargetPlayer.Center + NewByPolar(AIUsing[1], 16 * 8) - Center);
-				Acc.Length = 0.2f;
-				FakeVelocity += Acc;
-				if (FakeVelocity.Length > 9)
+				#region 
+				float Distance = Vector2.Distance(TargetPlayer.Center, Center);
+				if (Distance < 16 * 3)
 				{
-					FakeVelocity.Length = 9;
+					Proj(Center, Vector.Zero, ProjectileID.StardustGuardianExplosion, 0);
+					DeathPos = Center;
+					new Thread(TransformToBolt).Start();
+					KillMe();
+					return;
 				}
+				else if (Distance < 16 * 40)
+				{
+
+				}
+				else //if(Timer % 20 == 0)
+				{
+					AIUsing[0] = 0;
+					Acc = (Vector)(TargetPlayer.Center + NewByPolar(AIUsing[1], 16 * 8) - Center);
+					Acc.Length = 0.2f;
+					FakeVelocity += Acc;
+					if (FakeVelocity.Length > 9)
+					{
+						FakeVelocity.Length = 9;
+					}
+				}
+				if (AIUsing[0]++ > 60 * 5)
+				{
+					Proj(Center, Vector.Zero, ProjectileID.StardustGuardianExplosion, 0);
+					DeathPos = Center;
+					KillSelf = true;
+					new Thread(TransformToBolt).Start();
+					KillMe();
+					return;
+				}
+				AIUsing[1] += PI / 120;
+				#endregion
 			}
-			if (AIUsing[0]++ > 60 * 5)
+			catch
 			{
-				Proj(Center, Vector.Zero, ProjectileID.StardustGuardianExplosion, 0);
-				DeathPos = Center;
-				KillSelf = true;
-				new Thread(TransformToBolt).Start();
 				KillMe();
 				return;
 			}
-			AIUsing[1] += PI / 120;
 		}
 		#endregion
 		#region TransFormToBolt
