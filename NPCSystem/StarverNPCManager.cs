@@ -17,12 +17,16 @@ namespace Starvers.NPCSystem
 		{
 			get
 			{
-				if(!Config.EnableAura)
+				if (Config.EnableNPC)
 				{
-					StarverPlayer.Server.SendInfoMessage("使用Starver的NPC组件需要先开启Aura以及Task组件");
-					return false;
+					if (!Config.EnableAura)
+					{
+						StarverPlayer.Server.SendInfoMessage("使用Starver的NPC组件需要先开启Aura以及Task组件");
+						return false;
+					}
+					return true;
 				}
-				return Config.EnableNPC;
+				return false;
 			}
 		}
 		public void Load()

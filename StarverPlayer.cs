@@ -934,18 +934,27 @@ namespace Starvers
 			}
 			set
 			{
-				long expNow = exp + value;
+				if (value < exp)
+				{
+					exp = value;
+					return;
+				}
+				long expNow = value;
 				long lvl = level;
 				int Need = AuraSystem.StarverAuraManager.UpGradeExp((int)lvl);
+				if (HasPerm(Perms.VIP.LessCost))
+				{
+					Need /= 3;
+				}
 				while (expNow > UpGradeExp)
 				{
 					expNow -= Need;
 					lvl++;
 					Need = AuraSystem.StarverAuraManager.UpGradeExp((int)lvl);
-				if(HasPerm(Perms.VIP.LessCost))
-				{
-					Need /=3;
-				}
+					if (HasPerm(Perms.VIP.LessCost))
+					{
+						Need /= 3;
+					}
 				}
 				Level = (int)lvl;
 				exp = (int)Math.Max(0, expNow);

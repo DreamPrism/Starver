@@ -13,18 +13,18 @@ namespace Starvers.AuraSystem.Skills
 	{
 		public FireBall() : base(SkillID.FireBall)
 		{
-			MP = 10;
-			CD = 2;
+			MP = 18;
+			CD = 6;
 			Author = "三叶草";
 			Lvl = 5;
-			Description = "发射若干个小火球";
+			Description = "发射若干个小火球"; 
 			SetText();
 		}
 		public override void Release(StarverPlayer player, Vector2 vel)
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				player.NewProj(player.Center,  player.NewByPolar(vel.Angle() + Rand.NextDouble(0, Math.PI / 4), 19f), ProjectileID.MolotovFire, (int)(20 * Math.Log(player.Level)), 2f);
+				player.NewProj(player.Center,  player.NewByPolar(vel.Angle() + Rand.NextDouble(0, Math.PI / 4), 19f), ProjectileID.MolotovFire, (int)(10 + Math.Log(player.Level)), 2f);
 			}
 		}
 	}

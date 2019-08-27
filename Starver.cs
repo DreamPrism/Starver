@@ -56,7 +56,7 @@ namespace Starvers
 		public static string SavePathBosses { get; private set; } = Path.Combine(SavePathMain, "Bosses");
 		public static string ExchangeTips { get; private set; } = "";
 		public static StarverPlayer[] Players { get; private set; } = new StarverPlayer[40];
-		public static BaseNPC[] NPCs { get; private set; }
+		public static BaseNPC[] NPCs { get; private set; } = new BaseNPC[Main.maxNPCs];
 		public static IStarverPlugin[] Plugins { get; private set; } = new IStarverPlugin[]
 		{
 			new StarverTaskManager(),
@@ -282,7 +282,10 @@ namespace Starvers
 				}
 			}
 			interdamage += Rand.Next(10);
-			interdamage *= (snpc is null ? 1 : snpc.DamagedIndex);
+			if (snpc != null)
+			{
+				interdamage *= snpc.DamagedIndex;
+			}
 			int realdamage = (int)interdamage;
 			if (args.Npc.dontTakeDamage)
 			{

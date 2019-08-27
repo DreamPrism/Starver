@@ -44,12 +44,16 @@ namespace Starvers.BossSystem
 		{
 			get
 			{
-				if (!Config.EnableNPC)
+				if (Config.EnableBoss)
 				{
-					StarverPlayer.Server.SendInfoMessage("使用Starver插件的boss组件需要先开启NPC, Task以及Aura组件");
-					return false;
+					if (!Config.EnableNPC)
+					{
+						StarverPlayer.Server.SendInfoMessage("使用Starver插件的boss组件需要先开启NPC, Task以及Aura组件");
+						return false;
+					}
+					return true;
 				}
-				return Config.EnableBoss;
+				return false;
 			}
 		}
 		public void Load()
