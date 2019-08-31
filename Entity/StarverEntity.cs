@@ -17,6 +17,7 @@ namespace Starvers
 	public abstract partial class StarverEntity
 	{
 		#region Properties
+		public static Projectile[] Projs => Main.projectile;
 		public static Random Rand => Starver.Rand;
 		public int Index { get; protected set; } = -1;
 		public int Target { get => RealNPC.target; protected set => RealNPC.target = value; }

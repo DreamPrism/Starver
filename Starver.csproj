@@ -110,7 +110,7 @@
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.cs" />
     <Compile Include="Entity\StarverEntity.IProjSet.cs" />
     <Compile Include="Entity\StarverEntity.ProjPair.cs" />
-    <Compile Include="Entity\StarverEntity.ProjSet.cs" />
+    <Compile Include="Entity\StarverEntity.ProjQueue.cs" />
     <Compile Include="Entity\StarverEntity.ProjStack.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.FinalAdjudicator.cs" />

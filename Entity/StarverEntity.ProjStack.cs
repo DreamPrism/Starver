@@ -32,10 +32,22 @@ namespace Starvers
 			}
 			#endregion
 			#region Push
-			public bool Push(int idx,Vector Velocity)
+			public bool Push(int idx, Vector Velocity)
 			{
-				base.Push(new ProjPair() { Index = idx, Velocity = Velocity });
-				return base.Count < Size;
+				Push(new ProjPair() { Index = idx, Velocity = Velocity });
+				return Count < Size;
+			}
+			public unsafe bool Push(int* ptr, int count, Vector vel)
+			{
+				int* end = ptr + count;
+				while (ptr != end)
+				{
+					if (!Push(*ptr++, vel))
+					{
+						return false;
+					}
+				}
+				return Count < Size;
 			}
 			#endregion
 			#region Launch
@@ -44,16 +56,50 @@ namespace Starvers
 				ProjPair pair;
 				for (int i = 0; i < HowMany && base.Count > 0; i++)
 				{
-					pair = base.Pop();
+					pair = Pop();
 					pair.Launch();
 				}
 				return base.Count > 0;
 			}
+			public bool Launch(int HowMany, Vector vel)
+			{
+				ProjPair pair;
+				for (int i = 0; i < HowMany && base.Count > 0; i++)
+				{
+					pair = Pop();
+					pair.Launch(vel);
+				}
+				return Count > 0;
+			}
+			public bool LaunchTo(int HowMany, Vector Where, float vel)
+			{
+				ProjPair pair;
+				for (int i = 0; i < HowMany && base.Count > 0; i++)
+				{
+					pair = Pop();
+					pair.Launch(Where, vel);
+				}
+				return Count > 0;
+			}
 			public void Launch()
 			{
-				while(base.Count > 0)
+				while (Count > 0)
 				{
-					base.Pop().Launch();
+					Pop().Launch();
+				}
+			}
+			public void Launch(Vector vel)
+			{
+				while (Count > 0)
+				{
+					Pop().Launch(vel);
+				}
+			}
+			public void LaunchTo(Vector Where, float vel)
+			{
+				while (Count > 0)
+				{
+					Pop().Launch(Where, vel);
 				}
 			}
 			#endregion

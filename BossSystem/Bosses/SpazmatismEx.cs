@@ -43,8 +43,8 @@ namespace Starvers.BossSystem.Bosses
 		/// 什么时候免疫伤害
 		/// </summary>
 		private bool WhichDontTakeDamage;
-		private IProjSet Fires = new ProjDelay(130);
-		private IProjSet Projs = new ProjDelay(60);
+		private IProjSet Fires = new ProjQueue(130);
+		private IProjSet Projs = new ProjQueue(60);
 		#endregion
 		#region Properties
 		/// <summary>

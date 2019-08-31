@@ -8,7 +8,8 @@ using Starvers.TaskSystem;
 
 namespace Starvers.NPCSystem.NPCs
 {
-	using TOFOUT.Terraria.Server;
+    using Terraria;
+    using TOFOUT.Terraria.Server;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class DarkCaster : StarverNPC
 	{
@@ -21,16 +22,25 @@ namespace Starvers.NPCSystem.NPCs
 		{
 			AI_0,
 			AI_1,
-			AI_2
+			AI_2,
+			AI_3,
+			AI_4
 		};
 		/// <summary>
 		/// <para>0 : 一次3幽灵同时发出</para>
 		/// <para>1 : 直接在玩家身边召唤幽灵</para>
 		/// <para>2 : 5连发</para>
+		/// <para>3 : 先发射水球, 若火球还存活则"分裂"为火球</para>
+		/// <para>5 : 先生成子弹并规划好路线, 随后发射</para>
 		/// </summary>
 		protected int InternalAIStyle;
-		protected const int MaxInternalAIStyle = 3;
+		protected const int MaxInternalAIStyle = 5;
 		protected static SpawnChecker DungeonChecker = SpawnChecker.DungeonLike;
+		/// <summary>
+		/// 保留弹幕位置用
+		/// </summary>
+		protected int ProjIndex;
+		protected IProjSet ProjSet;
 		#endregion
 		#region Properties
 		protected override float CollidingIndex => DamageIndex;
@@ -56,6 +66,10 @@ namespace Starvers.NPCSystem.NPCs
 		{
 			base.OnSpawn();
 			InternalAIStyle = Rand.Next(MaxInternalAIStyle);
+			if(InternalAIStyle == 4)
+			{
+				ProjSet = new ProjStack();
+			}
 		}
 		#endregion
 		#region RealAI
@@ -100,6 +114,54 @@ namespace Starvers.NPCSystem.NPCs
 					break;
 			}
 		}
+		protected static void AI_3(DarkCaster This)
+		{
+			uint Mod = This.Timer % (60 * 5 / 2);
+			switch (Mod)
+			{
+				case 20:
+					This.Vel = (Vector)(This.TargetPlayer.Center - This.Center);
+					This.Vel.Length = 9;
+					This.ProjIndex = This.Proj(This.Center, This.Vel, ProjectileID.FrostBlastHostile, 180);
+					break;
+				case 80:
+					if (Projs[This.ProjIndex].active && Projs[This.ProjIndex].type == ProjectileID.FrostBlastHostile)
+					{
+						This.ProjCircle(Projs[This.ProjIndex].Center, 1, This.Vel.Length / 2, ProjectileID.InfernoHostileBolt, 6, 180 / 2);
+						Projs[This.ProjIndex].active = false;
+						NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, This.ProjIndex);
+					}
+					break;
+			}
+		}
+		protected static void AI_4(DarkCaster This)
+		{
+			uint Mod = This.Timer % (60 * 5);
+			if(Mod < 60 * 5 / 2)
+			{
+				if (Mod % 5 == 0)
+				{
+					This.Vel = (Vector)Rand.NextVector2(16 * 35, 16 * 35);
+					int idx = This.Proj(This.Center + This.Vel, Vector.Zero, ProjectileID.FrostBlastHostile, 123);
+					This.Vel = (Vector)(This.TargetPlayer.Center - Projs[idx].Center);
+					This.Vel.Length = 6;
+					This.ProjSet.Push(idx, This.Vel);
+				}
+			}
+			else if(Mod != 60 * 5 - 1)
+			{
+				if(Mod % 10 == 0)
+				{
+					This.ProjSet.Launch(1);
+				}
+			}
+			else
+			{
+				This.Vel = (Vector)(This.TargetPlayer.Center - This.Center);
+				This.Vel.Length = 10;
+				This.ProjSet.Launch(This.Vel);
+			}
+		}
 		#endregion
 		#region OnStrike
 		public override void OnStrike(int RealDamage, float KnockBack, StarverPlayer player)
@@ -112,7 +174,10 @@ namespace Starvers.NPCSystem.NPCs
 		#region Warp
 		protected void Warp()
 		{
-			Position = CalcSpawnPosInScreen((Vector)TargetPlayer.Center);
+			if (Target != -1)
+			{
+				Position = CalcSpawnPosInScreen((Vector)TargetPlayer.Center);
+			}
 		}
 		#endregion
 		#region Check

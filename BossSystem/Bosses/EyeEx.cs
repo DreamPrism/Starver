@@ -145,7 +145,7 @@ namespace Starvers.BossSystem.Bosses
 			#endregion
 		}
 		#endregion
-		#region Ais
+		#region AIs
 		#region Explosive
 		private void Explosive()
 		{
@@ -154,7 +154,7 @@ namespace Starvers.BossSystem.Bosses
 			{
 				try
 				{
-					Thread.Sleep(1000);
+					Thread.Sleep(700);
 					int idx;
 					for (int i = 0; i < 6; i++)
 					{

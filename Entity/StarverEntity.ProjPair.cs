@@ -24,10 +24,20 @@ namespace Starvers
 		{
 			public int Index;
 			public Vector Velocity;
+			public Projectile Proj => Main.projectile[Index];
 			public void Launch()
 			{
 				Main.projectile[Index].velocity = Velocity;
 				NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, Index);
+			}
+			public void Launch(Vector vel)
+			{
+				Velocity = vel;
+				Launch();
+			}
+			public void Launch(Vector Pos, float vel)
+			{
+				Launch((Vector)(Pos - Proj.Center).ToLenOf(vel));
 			}
 		}
 	}

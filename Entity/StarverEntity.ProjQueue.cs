@@ -20,11 +20,11 @@ namespace Starvers
 	using BigInt = System.Numerics.BigInteger;
 	public abstract partial class StarverEntity
 	{
-		#region ProjSet
+		#region ProjQueue
 		/// <summary>
 		/// 事先将弹幕和速度压入,稍后发射
 		/// </summary>
-		protected unsafe class ProjDelay : IProjSet
+		protected unsafe class ProjQueue : IProjSet
 		{
 			#region Fields
 			private int Size = 30;
@@ -40,15 +40,15 @@ namespace Starvers
 			private int CurrentLaunch;
 			#endregion
 			#region ctor
-			public ProjDelay(int size = 30)
+			public ProjQueue(int size = 30)
 			{
 				Size = size;
-				ProjIndex = (int*)Marshal.AllocHGlobal(sizeof(int) * Size).ToPointer();
-				Velocity = (Vector*)Marshal.AllocHGlobal(sizeof(Vector) * Size).ToPointer();
+				ProjIndex = (int*)Marshal.AllocHGlobal(sizeof(int) * Size);
+				Velocity = (Vector*)Marshal.AllocHGlobal(sizeof(Vector) * Size);
 			}
 			#endregion
 			#region dtor
-			~ProjDelay()
+			~ProjQueue()
 			{
 				Marshal.FreeHGlobal((IntPtr)ProjIndex);
 				Marshal.FreeHGlobal((IntPtr)Velocity);
@@ -60,13 +60,25 @@ namespace Starvers
 			#region Push
 			public bool Push(int idx, Vector velocity)
 			{
-				if (t >= Size || idx >= Size || idx <= 0)
+				if (t >= Size || idx <= 0)
 				{
 					return false;
 				}
 				ProjIndex[t] = idx;
 				Velocity[t++] = velocity;
 				return true;
+			}
+			public unsafe bool Push(int* ptr, int count, Vector vel)
+			{
+				int* end = ptr + count;
+				while (ptr != end)
+				{
+					if (!Push(*ptr++, vel))
+					{
+						return false;
+					}
+				}
+				return t < Size;
 			}
 			#endregion
 			#region Launch
@@ -77,9 +89,6 @@ namespace Starvers
 				Vector* pVelocity = Velocity + CurrentLaunch;
 				while (ptr < end)
 				{
-#if DEBUG
-					StarverPlayer.All.SendDeBugMessage($"*ptr:{*ptr}");
-#endif
 					if (Main.projectile[*ptr].active)
 					{
 						Main.projectile[*ptr].velocity = *pVelocity;
@@ -90,14 +99,39 @@ namespace Starvers
 				}
 				Reset(true);
 			}
+			public void Launch(Vector Velocity)
+			{
+				int* ptr = ProjIndex + CurrentLaunch;
+				int* end = ProjIndex + t;
+				while (ptr < end)
+				{
+					if (Main.projectile[*ptr].active)
+					{
+						Main.projectile[*ptr].velocity = Velocity;
+						NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, *ptr);
+					}
+					ptr++;
+				}
+				Reset(true);
+			}
+			public bool Launch(int HowMany, Vector Vel)
+			{
+				int Limit = CurrentLaunch + HowMany;
+				for (; CurrentLaunch < Limit && CurrentLaunch < t; CurrentLaunch++)
+				{
+					if (Main.projectile[ProjIndex[CurrentLaunch]].active)
+					{
+						Main.projectile[ProjIndex[CurrentLaunch]].velocity = Vel;
+						NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, ProjIndex[CurrentLaunch]);
+					}
+				}
+				return CurrentLaunch < Size;
+			}
 			public bool Launch(int HowManyProjs)
 			{
 				int Limit = CurrentLaunch + HowManyProjs;
 				for (; CurrentLaunch < Limit && CurrentLaunch < t; CurrentLaunch++)
 				{
-#if DEBUG
-					StarverPlayer.All.SendDeBugMessage($"ProjIndex[{CurrentLaunch}]:{ProjIndex[CurrentLaunch]}");
-#endif
 					if (Main.projectile[ProjIndex[CurrentLaunch]].active)
 					{
 						Main.projectile[ProjIndex[CurrentLaunch]].velocity = Velocity[CurrentLaunch];
@@ -105,6 +139,23 @@ namespace Starvers
 					}
 				}
 				return CurrentLaunch < Size;
+			}
+			public bool LaunchTo(int HowMany, Vector Pos, float vel)
+			{
+				int Limit = CurrentLaunch + HowMany;
+				for (; CurrentLaunch < Limit && CurrentLaunch < t; CurrentLaunch++)
+				{
+					if (Main.projectile[ProjIndex[CurrentLaunch]].active)
+					{
+						Main.projectile[ProjIndex[CurrentLaunch]].velocity = (Pos - Main.projectile[ProjIndex[CurrentLaunch]].Center).ToLenOf(vel);
+						NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, ProjIndex[CurrentLaunch]);
+					}
+				}
+				return CurrentLaunch < Size;
+			}
+			public void LaunchTo(Vector Pos, float vel)
+			{
+				LaunchTo(t - CurrentLaunch, Pos, vel);
 			}
 			#endregion
 			#region Reset

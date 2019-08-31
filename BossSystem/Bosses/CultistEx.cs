@@ -19,8 +19,8 @@ namespace Starvers.BossSystem.Bosses
 		/// 计算出生多久(确保邪教有图像)
 		/// </summary>
 		private int SpawnCount;
-		private IProjSet FireBalls = new ProjDelay();
-		private IProjSet ShadowBalls = new ProjDelay(90);
+		private IProjSet FireBalls = new ProjQueue();
+		private IProjSet ShadowBalls = new ProjQueue(90);
 		#endregion
 		#region ctor
 		public CultistEx() : base(3)
