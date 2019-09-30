@@ -31,7 +31,7 @@ namespace Starvers.AuraSystem.Skills
 			Thread.Sleep(100);
 			for (d = 0; d < 2 * Math.PI; d += Math.PI / 4)
 			{
-				player.NewProj(player.Center + player.NewByPolar(d, 160), DefaultVector, ProjectileID.StardustGuardianExplosion, 150, 5);
+				player.NewProj(player.Center + player.FromPolar(d, 160), DefaultVector, ProjectileID.StardustGuardianExplosion, 150, 5);
 			}
 			foreach(var npc in Main.npc)
 			{

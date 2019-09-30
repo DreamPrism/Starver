@@ -203,7 +203,7 @@ namespace Starvers.BossSystem.Bosses
 							}
 							for (int i = 0; i < 8; i++)
 							{
-								Proj(player.Center + NewByPolar(StarverAI[1] + PI * i / 4, 16 * 20), NewByPolar(StarverAI[1] + PI * i / 4 + PI * 3 / 4, 20), ProjectileID.CultistBossIceMist, 266, 5f, -3e3f, 1);
+								Proj(player.Center + FromPolar(StarverAI[1] + PI * i / 4, 16 * 20), FromPolar(StarverAI[1] + PI * i / 4 + PI * 3 / 4, 20), ProjectileID.CultistBossIceMist, 266, 5f, -3e3f, 1);
 							}
 						}
 					}

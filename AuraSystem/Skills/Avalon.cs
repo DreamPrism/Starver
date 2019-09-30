@@ -24,7 +24,11 @@ namespace Starvers.AuraSystem.Skills
 		{
 			player.GodMode = true;
 			player.Heal();
-			new Thread(() =>
+			AsyncRelease(player);
+		}
+		private async void AsyncRelease(StarverPlayer player)
+		{
+			await Task.Run(() =>
 			{
 				Thread.Sleep(5000);
 				player.GodMode = false;
@@ -32,8 +36,7 @@ namespace Starvers.AuraSystem.Skills
 				player.SetBuff(58, 10 * 60);
 				player.SetBuff(176, 10 * 60);
 				player.SetBuff(173, 10 * 60);
-			}
-			).Start();
+			});
 		}
 	}
 }

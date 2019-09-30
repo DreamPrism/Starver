@@ -11,10 +11,30 @@ using TShockAPI;
 
 namespace Starvers.AuraSystem.Skills
 {
-	public class AvalonGradation:Skill
+	public class AvalonGradation : Skill
 	{
 		public const float R = 16 * 80;
-		public AvalonGradation():base(SkillID.AvalonGradation)
+		public static void Update(StarverPlayer player)
+		{
+			if(player.AvalonGradation <= 0)
+			{
+				return;
+			}
+			player.AvalonGradation--;
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj == null || !proj.active)
+				{
+					continue;
+				}
+				if (proj.friendly == false && Vector2.Distance(player.Center, proj.Center) < R)
+				{
+					proj.active = false;
+					TSPlayer.All.SendData(PacketTypes.ProjectileNew, "", proj.whoAmI);
+				}
+			}
+		}
+		public AvalonGradation() : base(SkillID.AvalonGradation)
 		{
 			CD = 60;
 			MP = 180;
@@ -26,29 +46,7 @@ namespace Starvers.AuraSystem.Skills
 		public override void Release(StarverPlayer player, Vector2 vel)
 		{
 			player.SendMessage("你得到了来自幻想乡的庇护", Color.Aqua);
-			new Thread(() =>
-			{
-				DateTime Start = DateTime.Now;
-				Start:
-				foreach (Projectile proj in Main.projectile)
-				{
-					if (proj == null || !proj.active)
-					{
-						continue;
-					}
-					if(proj.friendly == false && Vector2.Distance(player.Center,proj.Center) < R)
-					{
-						proj.active = false;
-						TSPlayer.All.SendData(PacketTypes.ProjectileNew, "", proj.whoAmI);
-					}
-				}
-				if((DateTime.Now-Start).TotalSeconds > 10)
-				{
-					return;
-				}
-				Thread.Sleep(100);
-				goto Start;
-			}).Start();
+			player.AvalonGradation += 60 * 10;
 		}
 	}
 }

@@ -217,7 +217,7 @@ namespace Starvers
 		}
 		#endregion
 		#region Vector2
-		public static Vector2 NewByPolar(double rad, float length)
+		public static Vector2 FromPolar(double rad, float length)
 		{
 			return new Vector2((float)(Math.Cos(rad) * length), (float)(Math.Sin(rad) * length));
 		}
@@ -227,13 +227,13 @@ namespace Starvers
 		}
 		public static double Angle(ref this Vector2  vector, double rad)
 		{
-			vector = NewByPolar(rad,  vector.Length());
+			vector = FromPolar(rad,  vector.Length());
 			return rad;
 		}
 		public static double AngleAdd(ref this Vector2  vector, double rad)
 		{
 			rad += Math.Atan2(vector.Y,  vector.X);
-			vector = NewByPolar(rad,  vector.Length());
+			vector = FromPolar(rad,  vector.Length());
 			return rad;
 		}
 		public static Vector2 Deflect(this Vector2  vector2, double rad)
@@ -244,11 +244,11 @@ namespace Starvers
 		}
 		public static void Length(ref this Vector2  vector, float length)
 		{
-			vector = NewByPolar(vector.Angle(), length);
+			vector = FromPolar(vector.Angle(), length);
 		}
 		public static void LengthAdd(ref this Vector2  vector, float length)
 		{
-			vector = NewByPolar(vector.Angle(), length +  vector.Length());
+			vector = FromPolar(vector.Angle(), length +  vector.Length());
 		}
 		public static Vector2 ToLenOf(this Vector2  vector, float length)
 		{
@@ -300,7 +300,7 @@ namespace Starvers
 		}
 		public static Vector2 NextVector2(this Random rand,float Length)
 		{
-			return NewByPolar(rand.NextAngle(), Length);
+			return FromPolar(rand.NextAngle(), Length);
 		}
 		/// <summary>
 		/// 

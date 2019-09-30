@@ -140,7 +140,7 @@ namespace Starvers.BossSystem.Bosses
 		private void Laser()
 		{
 			vector = new Vector(0, 16 * 28);
-			Vel = NewByPolar(PI / 2, 23);
+			Vel = FromPolar(PI / 2, 23);
 			Vel.Angle += (Rand.NextAngle() - PI) / 6;
 			Proj(TargetPlayer.Center + vector, Vel.Deflect(PI), ProjectileID.EyeLaser, 149);
 			Proj(TargetPlayer.Center - vector, Vel, ProjectileID.EyeLaser, 149);

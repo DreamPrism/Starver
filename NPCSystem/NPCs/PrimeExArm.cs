@@ -35,7 +35,7 @@ namespace Starvers.NPCSystem.NPCs
 			Starver.NPCs[Index] = NPCs[Index] = this;
 			AIUsing[0] = PI * 2 * ID / PrimeEx.MaxArms;
 			Prime = prime;
-			Vel = NewByPolar(PI * 2 * (ID / PrimeEx.MaxArms),Distance);
+			Vel = FromPolar(PI * 2 * (ID / PrimeEx.MaxArms),Distance);
 			Center = Prime.Center + Vel;
 			RealNPC.aiStyle = None;
 			RealNPC.ai[1] = Prime.Index;
@@ -52,7 +52,7 @@ namespace Starvers.NPCSystem.NPCs
 			}
 			Target = Prime.Target;
 			AIUsing[0] += PI * 2 / PrimeEx.MaxArms / 20;
-			Vel = NewByPolar(AIUsing[0], Distance);
+			Vel = FromPolar(AIUsing[0], Distance);
 			Center = Prime.Center + Vel;
 			switch(Mode)
 			{

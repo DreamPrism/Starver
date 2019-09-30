@@ -25,10 +25,10 @@ namespace Starvers.AuraSystem.Skills
 		{
 			player.ProjCircle(player.Center, 32, 16, ProjectileID.DD2SquireSonicBoom, 10, 475);
 			player.ProjSector(player.Center, 16, 16, vel.Angle(), Math.PI / 4, 550, ProjectileID.NebulaBlaze2, 3);
-			player.ProjLine(player.Center, player.Center +  player.NewByPolar(vel.Angle(), 48 * 20), vel.ToLenOf(24), 20, 750, ProjectileID.SolarWhipSwordExplosion);
+			player.ProjLine(player.Center, player.Center +  player.FromPolar(vel.Angle(), 48 * 20), vel.ToLenOf(24), 20, 750, ProjectileID.SolarWhipSwordExplosion);
 			Vector2 ver = vel.Vertical().ToLenOf(54);
-			player.ProjLine(player.Center + ver, player.Center +  player.NewByPolar(vel.Angle(), 48 * 20) + ver, vel.ToLenOf(24), 20, 500, ProjectileID.SolarWhipSwordExplosion);
-			player.ProjLine(player.Center - ver, player.Center +  player.NewByPolar(vel.Angle(), 48 * 20) - ver, vel.ToLenOf(24), 20, 500, ProjectileID.SolarWhipSwordExplosion);
+			player.ProjLine(player.Center + ver, player.Center +  player.FromPolar(vel.Angle(), 48 * 20) + ver, vel.ToLenOf(24), 20, 500, ProjectileID.SolarWhipSwordExplosion);
+			player.ProjLine(player.Center - ver, player.Center +  player.FromPolar(vel.Angle(), 48 * 20) - ver, vel.ToLenOf(24), 20, 500, ProjectileID.SolarWhipSwordExplosion);
 			ver.Length(84f);
 			player.ProjLine(player.Center + ver, player.Center - ver, vel.ToLenOf(18f), 10, 530, ProjectileID.TerraBeam);
 

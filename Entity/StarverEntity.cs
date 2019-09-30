@@ -60,10 +60,10 @@ namespace Starvers
 		}
 		#endregion
 		#region Utils
-		#region NewByPolar
-		public static Vector NewByPolar(double rad,float length)
+		#region FromPolar
+		public static Vector FromPolar(double rad,float length)
 		{
-			return Vector.NewByPolar(rad, length);
+			return Vector.FromPolar(rad, length);
 		}
 		#endregion
 		#region NewProj
@@ -115,7 +115,7 @@ namespace Starvers
 			double averagerad = Math.PI * 2 / number;
 			for(int i = 0; i < number; i++)
 			{
-				NewProj(Center + NewByPolar(averagerad * i, r), NewByPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		/// <summary>
@@ -145,7 +145,7 @@ namespace Starvers
 			double averagerad = Math.PI * 2 / number;
 			for (int i = 0; i < number; i++)
 			{
-				NewProj(Center + NewByPolar(averagerad * i, r), NewByPolar(averagerad * i, -Vel), Type, Damage,owner, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage,owner, 4f, ai0, ai1);
 			}
 		}
 		#endregion
@@ -177,7 +177,7 @@ namespace Starvers
 			double averagerad = Math.PI * 2 / number;
 			for (int i = 0; i < number; i++)
 			{
-				Proj(Center + NewByPolar(averagerad * i, r), NewByPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
+				Proj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		/// <summary>
@@ -208,7 +208,7 @@ namespace Starvers
 			double averagerad = Math.PI * 2 / number;
 			for (int i = 0; i < number; i++)
 			{
-				Indexes[i] = Proj(Center + NewByPolar(averagerad * i, r), NewByPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
+				Indexes[i] = Proj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
 			}
 			return Indexes;
 		}
@@ -228,7 +228,7 @@ namespace Starvers
 			double averagerad = Math.PI * 2 / number;
 			for (int i = 0; i < number; i++)
 			{
-				Indexes[i] = Proj(Center + NewByPolar(averagerad * i, r), Vel, Type, Damage, 4f, ai0, ai1);
+				Indexes[i] = Proj(Center + FromPolar(averagerad * i, r), Vel, Type, Damage, 4f, ai0, ai1);
 			}
 			return Indexes;
 		}
@@ -252,7 +252,7 @@ namespace Starvers
 		{
 			if(num == 1)
 			{
-				NewProj(Center, NewByPolar(interrad, Vel * -direction), Type, Damage);
+				NewProj(Center, FromPolar(interrad, Vel * -direction), Type, Damage);
 			}
 			double start = interrad - rad / 2;
 			double average = rad / (num - 1);
@@ -270,7 +270,7 @@ namespace Starvers
 			}
 			for (int i = 0; i < num; i++)
 			{
-				NewProj(Center + NewByPolar(start + i * average, r), NewByPolar(start + i * average, Vel), Type, Damage, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(start + i * average, r), FromPolar(start + i * average, Vel), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		#endregion
@@ -293,7 +293,7 @@ namespace Starvers
 		{
 			if(num == 1)
 			{
-				Proj(Center, NewByPolar(interrad, Vel * -direction), Type, Damage);
+				Proj(Center, FromPolar(interrad, Vel * -direction), Type, Damage);
 				return;
 			}
 			double start = interrad - rad / 2;
@@ -312,7 +312,7 @@ namespace Starvers
 			}
 			for (int i = 0; i < num; i++)
 			{
-				Proj(Center + NewByPolar(start + i * average, r), NewByPolar(start + i * average, Vel), Type, Damage, 4f, ai0, ai1);
+				Proj(Center + FromPolar(start + i * average, r), FromPolar(start + i * average, Vel), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		#endregion

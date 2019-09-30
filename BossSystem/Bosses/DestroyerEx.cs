@@ -161,7 +161,7 @@ namespace Starvers.BossSystem.Bosses
 					{
 						for (i = 0; i < 3; i++)
 						{
-							Terraria.Main.npc[NewNPC((Vector)Terraria.Main.npc[*ptr].Center, NewByPolar(PI * 2 * i / 3, 18), NPCID.Probe, 12500, 400000)].damage = (int)(BodyDamageStart * DamageIndex);
+							Terraria.Main.npc[NewNPC((Vector)Terraria.Main.npc[*ptr].Center, FromPolar(PI * 2 * i / 3, 18), NPCID.Probe, 12500, 400000)].damage = (int)(BodyDamageStart * DamageIndex);
 						}
 					}
 					catch(Exception e)
@@ -243,7 +243,7 @@ namespace Starvers.BossSystem.Bosses
 			else
 			{
 				StarverAI[0] += 2 * PI / 90;
-				WhereToGo = NewByPolar(StarverAI[0], 16 * 50);
+				WhereToGo = FromPolar(StarverAI[0], 16 * 50);
 				FakeVelocity = (Vector)TargetPlayer.Center + WhereToGo - (Vector)Center;
 				FakeVelocity.Length /= 10;
 			}
@@ -255,7 +255,7 @@ namespace Starvers.BossSystem.Bosses
 			int ai1 = Index; //每一节的前一节
 			int ai0 = Index; //可能是每一节的后一节
 			int ai3 = Index; //ai3为头
-			vector = NewByPolar(Rand.NextAngle(), 16 * 4.5f);
+			vector = FromPolar(Rand.NextAngle(), 16 * 4.5f);
 			for (int i = 0; i < BodyMax - 1; i++)
 			{
 #if DEBUG

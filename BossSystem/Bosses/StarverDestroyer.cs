@@ -116,7 +116,7 @@ namespace Starvers.BossSystem.Bosses
 					{
 						Mode = BossMode.WaitForMode;
 						double rad = (Center - TargetPlayer.Center).Angle();
-						vector = Vector.NewByPolar(rad, 16 * 30f);
+						vector = Vector.FromPolar(rad, 16 * 30f);
 						Center = TargetPlayer.Center +  vector ;
 						FakeVelocity = default;
 						break;

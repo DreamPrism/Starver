@@ -22,6 +22,7 @@ namespace Starvers
 	using Terraria.Localization;
 	using BigInt = System.Numerics.BigInteger;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
+	using Skill = AuraSystem.Skills.Base.Skill;
 	public class StarverPlayer : IDisposable
 	{
 		#region FromTS
@@ -606,16 +607,16 @@ namespace Starvers
 		}
 		#endregion
 		#region Projs
-		#region NewByPolar
+		#region FromPolar
 		/// <summary>
 		/// 极坐标获取角度
 		/// </summary>
 		/// <param name="rad">所需角度(弧度)</param>
 		/// <param name="length"></param>
 		/// <returns></returns>
-		public Vector NewByPolar(double rad,float length)
+		public Vector FromPolar(double rad,float length)
 		{
-			return Vector.NewByPolar(rad, length);
+			return Vector.FromPolar(rad, length);
 		}
 		#endregion
 		#region NewProj
@@ -669,7 +670,7 @@ namespace Starvers
 			double averagerad = Math.PI * 2 / number;
 			for (int i = 0; i < number; i++)
 			{
-				NewProj(Center + NewByPolar(averagerad * i, r) , NewByPolar(averagerad * i, -Vel) , Type, Damage, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(averagerad * i, r) , FromPolar(averagerad * i, -Vel) , Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		#endregion
@@ -706,7 +707,7 @@ namespace Starvers
 			}
 			for (int i = 0; i < num; i++)
 			{
-				NewProj(Center + NewByPolar(start + i * average, r) , NewByPolar(start + i * average, Vel) , Type, Damage, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(start + i * average, r) , FromPolar(start + i * average, Vel) , Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		#endregion
@@ -830,6 +831,25 @@ namespace Starvers
 			TShock.Utils.Kick(this, reason, true, silence);
 		}
 		#endregion
+		#region GetSkill
+		public unsafe Skill GetSkill(int slot)
+		{
+#if DEBUG
+			if(slot < 0 && slot >= Skill.MaxSlots)
+			{
+				throw new IndexOutOfRangeException($"slot: {slot}");
+			}
+#endif
+			return AuraSystem.SkillManager.Skills[Skills[slot]];
+		}
+		#endregion
+		#region SkillCombineCD
+		public string SkillCombineCD(int slot)
+		{
+			Skill skill = GetSkill(slot);
+			return $"{skill.Name}({(CDs[slot] + 59) / 60})";
+		}
+		#endregion
 		#region TryGetPlayer
 		public static bool TryGetTempPlayer(string Name, out StarverPlayer player)
 		{
@@ -880,11 +900,16 @@ namespace Starvers
 		#endregion
 		#region Datas
 		public bool Temp { get; set; }
+		public int AvalonGradation { get; set; }
 		public string Name { get; set; }
 		/// <summary>
 		/// 上一次捕获到释放技能
 		/// </summary>
 		public DateTime LastHandle = DateTime.Now;
+		/// <summary>
+		/// 玩家升级经验是否更少
+		/// </summary>
+		public bool LessCost => HasPerm(Perms.VIP.LessCost);
 		/// <summary>
 		/// 玩家存活且在线
 		/// </summary>
@@ -919,6 +944,10 @@ namespace Starvers
 					return;
 				}
 				level = value;
+				if(Temp)
+				{
+					return;
+				}
 				SetLifeMax();
 				MaxMP = 100 + (level / 3);
 			}
@@ -935,6 +964,11 @@ namespace Starvers
 			set
 			{
 				if (value < exp)
+				{
+					exp = value;
+					return;
+				}
+				if(Temp)
 				{
 					exp = value;
 					return;
@@ -1021,11 +1055,22 @@ namespace Starvers
 		/// <summary>
 		/// 上一次释放技能时间
 		/// </summary>
-		internal DateTime[] LastHandles = new DateTime[5] { DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now };
+		internal int[] CDs = new int[Skill.MaxSlots] 
+		{
+			0,
+			0,
+			0,
+			0,
+			0
+		};
 		/// <summary>
 		/// 数据库连接
 		/// </summary>
-		internal static MySqlConnection DB { get { return db; } set { db = value; } }
+		internal static MySqlConnection DB
+		{
+			get => db;
+			set => db = value;
+		}
 		/// <summary>
 		/// 代表服务器
 		/// </summary>
@@ -1037,7 +1082,7 @@ namespace Starvers
 		/// <summary>
 		/// 用于未注册用户(退出后消失)
 		/// </summary>
-		internal static StarverPlayer Guest { get { return new StarverPlayer() { Name = "Guest" ,level = 0, UserID = -3,Index = -3 }; } }
+		internal static StarverPlayer Guest => new StarverPlayer() { Name = "Guest", level = 0, UserID = -3, Index = -3 };
 		/// <summary>
 		/// 上一次使用的技能
 		/// </summary>
@@ -1047,11 +1092,11 @@ namespace Starvers
 		/// <summary>
 		/// 获取对应Terraria.Player
 		/// </summary>
-		internal Player TPlayer { get { return Name == "Server" ? TSPlayer.Server.TPlayer : Main.player[Index]; } }
+		internal Player TPlayer => IsServer ? TSPlayer.Server.TPlayer : Main.player[Index];
 		/// <summary>
 		/// 获取对应TSPlayer
 		/// </summary>
-		internal TSPlayer TSPlayer { get { return Name == "Server" ? TSPlayer.Server : TShock.Players[Index]; } }
+		internal TSPlayer TSPlayer => IsServer ? TSPlayer.Server : TShock.Players[Index];
 		/// <summary>
 		/// 技能ID列表
 		/// </summary>
@@ -1064,10 +1109,11 @@ namespace Starvers
 		#endregion
 		#region Privates
 		#region Fields
+		private bool IsServer;
 		private int MoonIndex = -1;
 		private bool disposed;
 		private static StarverPlayer all = new StarverPlayer() { Name = "All", level = int.MaxValue, Index = -1, UserID = -1 };
-		private static StarverPlayer server = new StarverPlayer() { Name = "Server", level = int.MaxValue, Index = -2, UserID = -2 };
+		private static StarverPlayer server = new StarverPlayer() { Name = "Server", level = int.MaxValue, Index = -2, UserID = -2, IsServer = true };
 		private static string SavePath => Starver.SavePathPlayers;
 		private static SaveModes SaveMode = StarverConfig.Config.SaveMode;
 		private static MySqlConnection db;
@@ -1080,7 +1126,10 @@ namespace Starvers
 		private unsafe StarverPlayer(bool temp = false)
 		{
 			Temp = temp;
-			Skills = (int*)Marshal.AllocHGlobal(sizeof(int) * 5);
+			if (!temp)
+			{
+				Skills = (int*)Marshal.AllocHGlobal(sizeof(int) * Skill.MaxSlots);
+			}
 		}
 		private StarverPlayer(int userID, bool temp = false) : this(temp)
 		{
@@ -1121,9 +1170,9 @@ namespace Starvers
 				Weapon = null;
 				GC.SuppressFinalize(this);
 			}
-			if (Skills != null)
+			if (!Temp)
 			{
-				Marshal.FreeHGlobal(new IntPtr(Skills));
+				Marshal.FreeHGlobal((IntPtr)Skills);
 			}
 		}
 		#endregion

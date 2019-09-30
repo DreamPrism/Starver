@@ -146,12 +146,12 @@ namespace Starvers.BossSystem.Bosses
 		{
 			if(Left)
 			{
-				vector = NewByPolar(0, 23);
+				vector = FromPolar(0, 23);
 				vector.Y += Rand.Next(-4, 4);
 			}
 			else
 			{
-				vector = NewByPolar(PI, 23);
+				vector = FromPolar(PI, 23);
 				vector.Y += Rand.Next(-4, 4);
 			}
 			Proj(Center, vector, ProjectileID.FrostBlastHostile, 162);
@@ -172,7 +172,7 @@ namespace Starvers.BossSystem.Bosses
 			vector.Y -= 16 * 20;
 			Vel = vector + UnitX * 2;
 			vector -= UnitX * 2;
-			Vector tempVel = (ShotDir = !ShotDir) ? NewByPolar(PI / 4, 13) : NewByPolar(PI / 4 + PI / 2, 13);
+			Vector tempVel = (ShotDir = !ShotDir) ? FromPolar(PI / 4, 13) : FromPolar(PI / 4 + PI / 2, 13);
 			ProjLine(vector, Vel, tempVel, 23, 163, ProjectileID.HarpyFeather);
 		}
 		#endregion

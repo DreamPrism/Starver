@@ -69,7 +69,7 @@ namespace Starvers.BossSystem.Bosses
 					{
 						Mode = BossMode.WaitForMode;
 						double rad = (Center - TargetPlayer.Center).Angle();
-						vector = Vector.NewByPolar(rad, 16 * 30f);
+						vector = Vector.FromPolar(rad, 16 * 30f);
 						Center = TargetPlayer.Center + vector;
 						FakeVelocity = default;
 						break;
@@ -158,7 +158,7 @@ namespace Starvers.BossSystem.Bosses
 					int idx;
 					for (int i = 0; i < 6; i++)
 					{
-						idx = Proj(vector + NewByPolar(PI / 3 * i, 16 * 20), Vector.Zero, ProjectileID.Explosives, 1000);
+						idx = Proj(vector + FromPolar(PI / 3 * i, 16 * 20), Vector.Zero, ProjectileID.Explosives, 1000);
 						Main.projectile[idx].owner = Target;
 					}
 				}
@@ -186,9 +186,9 @@ namespace Starvers.BossSystem.Bosses
 		private unsafe new void SummonFollows()
 		{
 			++StarverAI[1];
-			NewNPC((Vector)Center, NewByPolar(PI / 2, 9), NPCID.WanderingEye, 6235, 98);
-			NewNPC((Vector)Center, NewByPolar(PI / 2 + PI / 6, 9), NPCID.WanderingEye, 6235, 98);
-			NewNPC((Vector)Center, NewByPolar(PI / 2 - PI / 6, 9), NPCID.WanderingEye, 6235, 98);
+			NewNPC((Vector)Center, FromPolar(PI / 2, 9), NPCID.WanderingEye, 6235, 98);
+			NewNPC((Vector)Center, FromPolar(PI / 2 + PI / 6, 9), NPCID.WanderingEye, 6235, 98);
+			NewNPC((Vector)Center, FromPolar(PI / 2 - PI / 6, 9), NPCID.WanderingEye, 6235, 98);
 		}
 		#endregion
 		#region Trident

@@ -55,14 +55,17 @@ namespace Starvers.AuraSystem
 				{
 					player.SendCombatMSsg("MP不足", Color.Pink);
 				}
-				else if ((player.IgnoreCD == false || skill.Index == SkillID.CDLess) && (DateTime.Now - player.LastHandles[slot]).TotalSeconds < skill.CD)
+				else if ((player.IgnoreCD == false || skill.Index == SkillID.CDLess) && player.CDs[slot] > 0)
 				{
 					player.SendCombatMSsg("技能冷却中", Color.Pink);
 				}
 				else
 				{
 					skill.Release(player, vel);
-					player.LastHandles[slot] = DateTime.Now;
+					if (skill.ForceCD || !player.IgnoreCD)
+					{
+						player.CDs[slot] = skill.CD;
+					}
 					player.MP -= skill.MP;
 					player.LastSkill = skill.Index;
 				}

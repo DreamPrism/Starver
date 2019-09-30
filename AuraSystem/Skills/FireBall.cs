@@ -24,7 +24,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				player.NewProj(player.Center,  player.NewByPolar(vel.Angle() + Rand.NextDouble(0, Math.PI / 4), 19f), ProjectileID.MolotovFire, (int)(10 + Math.Log(player.Level)), 2f);
+				player.NewProj(player.Center,  player.FromPolar(vel.Angle() + Rand.NextDouble(0, Math.PI / 4), 19f), ProjectileID.MolotovFire, (int)(10 + Math.Log(player.Level)), 2f);
 			}
 		}
 	}

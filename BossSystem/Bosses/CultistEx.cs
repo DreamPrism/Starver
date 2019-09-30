@@ -191,7 +191,7 @@ namespace Starvers.BossSystem.Bosses
 			TrackingTarget = true;
 			for (int i = 0; i < 4; i++)
 			{
-				NewNPC((Vector)Center, NewByPolar(PI * i / 2, 33), NPCID.AncientCultistSquidhead, 30000, 60000);
+				NewNPC((Vector)Center, FromPolar(PI * i / 2, 33), NPCID.AncientCultistSquidhead, 30000, 60000);
 			}
 		}
 		#endregion
@@ -206,7 +206,7 @@ namespace Starvers.BossSystem.Bosses
 		private unsafe void Lightning()
 		{
 			StarverAI[0] += PI / 5;
-			vector = NewByPolar(StarverAI[0], 16 * 20);
+			vector = FromPolar(StarverAI[0], 16 * 20);
 			Main.projectile[Proj(TargetPlayer.Center + vector, Vector2.Zero, ProjectileID.CultistBossLightningOrb, 263)].ai[0] = Index;
 		}
 		#endregion
@@ -229,7 +229,7 @@ namespace Starvers.BossSystem.Bosses
 			int[] Indexes = ProjCircleWithReturn(Center, 16 * 10, Rand.NextVector2(4), ProjectileID.CultistBossFireBallClone, 30, 143);
 			for (int i = 0; i < Indexes.Length; i++)
 			{
-				ShadowBalls.Push(Indexes[i], NewByPolar(PI * 2 * i / Indexes.Length, 23));
+				ShadowBalls.Push(Indexes[i], FromPolar(PI * 2 * i / Indexes.Length, 23));
 			}
 		}
 		#endregion

@@ -26,7 +26,7 @@ namespace Starvers.AuraSystem.Skills
 			double dirold = Math.Atan2(vel.Y, vel.X);
 			for (double d = dirold - Math.PI / 12; d < dirold + Math.PI / 12; d += Math.PI / 24)
 			{
-				player.ProjLine(player.Center, player.Center +  player.NewByPolar(d, 16 * 50), Vector2.Zero, 45,80, ProjectileID.Flames);
+				player.ProjLine(player.Center, player.Center +  player.FromPolar(d, 16 * 50), Vector2.Zero, 45,80, ProjectileID.Flames);
 				Thread.Sleep(20);
 			}
 		}

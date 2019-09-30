@@ -57,7 +57,7 @@ namespace Starvers.BossSystem.Bosses
 			unsafe
 			{
 				StarverAI[0] = PI / 2;
-				WhereToGo = NewByPolar(StarverAI[0], 16 * 25);
+				WhereToGo = FromPolar(StarverAI[0], 16 * 25);
 				FakeVelocity += (Vector)(TargetPlayer.Center + WhereToGo - Center).ToLenOf(1);
 			}
 			//NewArms();
@@ -214,7 +214,7 @@ namespace Starvers.BossSystem.Bosses
 				while (Vector2.Distance(TargetPlayer.Center + WhereToGo, Center) < 16 * 4)
 				{
 					StarverAI[0] += 2 * PI / 3;
-					WhereToGo = NewByPolar(StarverAI[0], 16 * 25);
+					WhereToGo = FromPolar(StarverAI[0], 16 * 25);
 
 					FakeVelocity /= 2;
 				}

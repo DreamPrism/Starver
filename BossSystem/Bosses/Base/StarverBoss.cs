@@ -258,7 +258,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region GoToTarget
 		public void GotoTarget()
 		{
-			Center = TargetPlayer.Center + NewByPolar(Rand.NextAngle(), 16 * 16);
+			Center = TargetPlayer.Center + FromPolar(Rand.NextAngle(), 16 * 16);
 			SendData();
 		}
 		#endregion
@@ -572,7 +572,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			WallTarget = Starver.Players[target];
 			for (int i = 0; i < MaxWalls; i++)
 			{
-				WallVector[i] = NewByPolar(PI * 4 * i / (3f * MaxWalls), 16 * 20);
+				WallVector[i] = FromPolar(PI * 4 * i / (3f * MaxWalls), 16 * 20);
 				Walls[i] = Proj(WallTarget.Center + WallVector[i], Vector2.Zero, ProjectileID.NebulaSphere, WallDamage, 0);
 			}
 			WallStop = false;

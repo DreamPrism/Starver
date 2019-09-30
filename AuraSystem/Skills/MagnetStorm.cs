@@ -25,7 +25,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			for (double d = 0; d < 2 * Math.PI; d += Math.PI / 9)
 			{
-				player.NewProj(player.Center,  player.NewByPolar(d, 9f), ProjectileID.MagnetSphereBolt, 182, 0);
+				player.NewProj(player.Center,  player.FromPolar(d, 9f), ProjectileID.MagnetSphereBolt, 182, 0);
 				Thread.Sleep(10);
 			}
 		}

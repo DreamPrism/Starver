@@ -137,7 +137,7 @@ namespace Starvers.BossSystem.Bosses
 		#region DarkMageSigil
 		private unsafe void DarkMageSigil()
 		{
-			Vel = NewByPolar(StarverAI[0], 170);
+			Vel = FromPolar(StarverAI[0], 170);
 			vector = Vel;
 			Vel.Length = 4;
 			Proj(TargetPlayer.Center + vector, -Vel, ProjectileID.DD2DarkMageRaise, 129);

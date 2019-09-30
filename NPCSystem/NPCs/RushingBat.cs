@@ -66,7 +66,7 @@ namespace Starvers.NPCSystem.NPCs
 				else //if(Timer % 20 == 0)
 				{
 					AIUsing[0] = 0;
-					Acc = (Vector)(TargetPlayer.Center + NewByPolar(AIUsing[1], 16 * 8) - Center);
+					Acc = (Vector)(TargetPlayer.Center + FromPolar(AIUsing[1], 16 * 8) - Center);
 					Acc.Length = 0.2f;
 					FakeVelocity += Acc;
 					if (FakeVelocity.Length > 9)

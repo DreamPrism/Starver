@@ -27,7 +27,7 @@ namespace Starvers.AuraSystem.Skills
 			player.MP = 0;
 			for (int i = 0; i < n; i++)
 			{
-				player.NewProj(player.Center,  player.NewByPolar(vel.Angle() + Rand.NextDouble(-Math.PI / 6, Math.PI / 6), 29), ProjectileID.CursedFlameFriendly, damage, 20f);
+				player.NewProj(player.Center,  player.FromPolar(vel.Angle() + Rand.NextDouble(-Math.PI / 6, Math.PI / 6), 29), ProjectileID.CursedFlameFriendly, damage, 20f);
 			}
 		}
 	}

@@ -18,16 +18,25 @@ namespace Starvers.AuraSystem.Skills
 			CD = 360;
 			MP = 20;
 			Lvl = 500;
+			ForceCD = true;
 			SetText();
 		}
 		public override void Release(StarverPlayer player, Vector2 vel)
 		{
+			AsyncRelease(player);
+		}
+		private async void AsyncRelease(StarverPlayer player)
+		{
 			player.IgnoreCD = true;
-			new Thread(() =>
+			for (int i = 0; i < player.CDs.Length; i++)
+			{
+				player.CDs[i] = 0;
+			}
+			await Task.Run(() =>
 			{
 				Thread.Sleep(5000);
-				player.IgnoreCD = false;
-			}).Start();
+			});
+			player.IgnoreCD = false;
 		}
 	}
 }

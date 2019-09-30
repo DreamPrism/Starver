@@ -44,7 +44,7 @@ namespace Starvers.BossSystem.Bosses
 		/// </summary>
 		private bool WhichDontTakeDamage;
 		private IProjSet Fires = new ProjQueue(130);
-		private IProjSet Projs = new ProjQueue(60);
+		private new IProjSet Projs = new ProjQueue(60);
 		#endregion
 		#region Properties
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Starvers.BossSystem.Bosses
 		public override void Spawn(Vector2 where, int lvl = 2000)
 		{
 			base.Spawn(where, lvl);
-			Direct = NewByPolar(0, 16 * 20);
+			Direct = FromPolar(0, 16 * 20);
 			AutoSetWhereToGo = true;
 			AutoSetFakeVelocity = true;
 			lastMode = BossMode.SpazmatismBetsyFireBall;
@@ -279,7 +279,7 @@ namespace Starvers.BossSystem.Bosses
 		#region Rush
 		private unsafe new void Rush()
 		{
-			WhereToGo = NewByPolar((TargetPlayer.Center - Center).Angle(), 16 * 10) + (Vector)TargetPlayer.Center;
+			WhereToGo = FromPolar((TargetPlayer.Center - Center).Angle(), 16 * 10) + (Vector)TargetPlayer.Center;
 			if (StarverAI[0] < 16)
 			{
 				if (Timer % 10 == 0)
@@ -344,13 +344,13 @@ namespace Starvers.BossSystem.Bosses
 		private void Flaming()
 		{
 			FlamingLength = Math.Min((TargetPlayer.Center - Center).Length() + 16 * 8, 16 * 30);
-			Vel = (Vector)Center + NewByPolar((-RelativePos).Angle, FlamingLength);
+			Vel = (Vector)Center + FromPolar((-RelativePos).Angle, FlamingLength);
 			ProjLine(Center, Vel, Vector2.Zero, (int)FlamingLength / 40, 219, ProjectileID.Flames);
 			#region Wasted
 			/*
-			Vel = (Vector)Center + NewByPolar((-RelativePos).Angle + PI / 18, FlamingLength);
+			Vel = (Vector)Center + FromPolar((-RelativePos).Angle + PI / 18, FlamingLength);
 			ProjLine(Center, Vel, Vector2.Zero, 20, 219, ProjectileID.Flames);
-			Vel = (Vector)Center + NewByPolar((-RelativePos).Angle - PI / 18, FlamingLength);
+			Vel = (Vector)Center + FromPolar((-RelativePos).Angle - PI / 18, FlamingLength);
 			ProjLine(Center, Vel, Vector2.Zero, 20, 219, ProjectileID.Flames);
 			*/
 			/*

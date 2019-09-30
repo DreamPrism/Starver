@@ -47,7 +47,7 @@ namespace Starvers.NPCSystem.NPCs
 					}
 					catch
 					{
-						Vel = NewByPolar(Rand.NextAngle(), 16);
+						Vel = FromPolar(Rand.NextAngle(), 16);
 					}
 					Proj(Center, Vel, ProjectileID.WoodenArrowHostile, 179, 20);
 				}

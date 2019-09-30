@@ -290,12 +290,12 @@ namespace Starvers.BossSystem.Bosses
 					{
 						continue;
 					}
-					Proj(player.Center + Vel, Vector.NewByPolar(Vel.Angle+ PI / 2, 22), ProjectileID.LostSoulHostile, 413, 10f);
+					Proj(player.Center + Vel, Vector.FromPolar(Vel.Angle+ PI / 2, 22), ProjectileID.LostSoulHostile, 413, 10f);
 				}
 			}
 			else
 			{
-				Proj(TargetPlayer.Center + Vel, Vector.NewByPolar(Vel.Angle- PI / 2, 18), ProjectileID.LostSoulHostile, 333, 3f);
+				Proj(TargetPlayer.Center + Vel, Vector.FromPolar(Vel.Angle- PI / 2, 18), ProjectileID.LostSoulHostile, 333, 3f);
 			}
 			Vel.Angle+= PI / 20;
 		}
@@ -309,7 +309,7 @@ namespace Starvers.BossSystem.Bosses
 		#region Laser
 		protected void WitherLaser()
 		{
-			Vel = Vector.NewByPolar(Rand.NextAngle() / 12 + PI * 5 / 12, 19);
+			Vel = Vector.FromPolar(Rand.NextAngle() / 12 + PI * 5 / 12, 19);
 			foreach (var player in Starver.Players)
 			{
 				if (player == null || !player.Active)

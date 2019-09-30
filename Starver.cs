@@ -30,6 +30,7 @@ namespace Starvers
 {
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using BigInt = System.Numerics.BigInteger;
+	using Skill = AuraSystem.Skills.Base.Skill;
 	[ApiVersion(2, 1)]
 	public class Starver : TerrariaPlugin
 	{
@@ -50,7 +51,6 @@ namespace Starvers
 		public static DirectoryInfo MainFolder { get; private set; }
 		public static DirectoryInfo PlayerFolder { get; private set; }
 		public static DirectoryInfo BossFolder { get; private set; }
-		public static DateTime Last { get; private set; } = DateTime.Now;
 		public static string SavePathMain { get; private set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Starver");
 		public static string SavePathPlayers { get; private set; } = Path.Combine(SavePathMain, "Players");
 		public static string SavePathBosses { get; private set; } = Path.Combine(SavePathMain, "Bosses");
@@ -437,11 +437,41 @@ namespace Starvers
 				Utils.SaveAll();
 			}
 			#endregion
-			#region SendMessage
-			if (Config.EnableAura && (DateTime.Now - Last).TotalSeconds > 5)
+			#region Most
+			if (Config.EnableAura && Timer % 60 == 0)
 			{
-				Last = DateTime.Now;
 				int liferegen;
+				StringBuilder MsgBuilder = new StringBuilder(50);
+				#region update mp and life
+				if (Timer % (60 * 5) == 0)
+				{
+					foreach (StarverPlayer player in Players)
+					{
+						if (player == null)
+						{
+							continue;
+						}
+						try
+						{
+							player.MP = Math.Min(player.MP + player.Level / 33 + 1, player.MaxMP);
+							if (!player.Dead)
+							{
+								liferegen = (int)(50 * Math.Log((player.TPlayer.lifeRegen + player.TPlayer.statDefense) * (player.Level / 100)));
+								liferegen = Math.Min(liferegen, player.TPlayer.statLife / 10);
+								if (liferegen > 0)
+								{
+									player.TPlayer.statLife = Math.Min(player.TPlayer.statLifeMax2, player.TPlayer.statLife + liferegen);
+									player.SendData(PacketTypes.PlayerHp, "", player.Index);
+								}
+							}
+						}
+						catch
+						{
+
+						}
+					}
+				}
+				#endregion
 				foreach (StarverPlayer player in Players)
 				{
 					if (player == null)
@@ -450,18 +480,23 @@ namespace Starvers
 					}
 					try
 					{
-						player.MP = Math.Min(player.MP + player.Level / 33 + 1, player.MaxMP);
-						if (!player.Dead)
+						AuraSystem.Skills.AvalonGradation.Update(player);
+						if (Timer % (60 * 4) < 60 * 2)
 						{
-							liferegen = (int)(50 * Math.Log((player.TPlayer.lifeRegen + player.TPlayer.statDefense) * (player.Level / 100)));
-							liferegen = Math.Min(liferegen, player.TPlayer.statLife / 10);
-							if (liferegen > 0)
+							MsgBuilder.Append($"Lv.{player.Level},");
+							MsgBuilder.AppendLine($"Exp: {player.exp}/{player.UpGradeExp / (player.LessCost ? 3 : 1)}");
+							MsgBuilder.AppendLine($"MP: [{player.MP}/{player.MaxMP}]");
+						}
+						else
+						{
+							MsgBuilder.AppendLine($"CDs:");
+							for (int i = 0; i < Skill.MaxSlots; i++)
 							{
-								player.TPlayer.statLife = Math.Min(player.TPlayer.statLifeMax2, player.TPlayer.statLife + liferegen);
-								player.SendData(PacketTypes.PlayerHp, "", player.Index);
+								MsgBuilder.AppendLine($"{player.SkillCombineCD(i)}");
 							}
 						}
-						player.SendStatusMSG(string.Format("MP:  [{0}/{1}]\nLevel:  [{2}]\nExp:  [{3}/{4}]", player.MP, player.MaxMP, player.Level, player.Exp, StarverAuraManager.UpGradeExp(player.Level) / (player.HasPerm(Perms.VIP.LessCost) ? 1 : 3)));
+						player.SendStatusMSG(MsgBuilder.ToString());
+						MsgBuilder.Clear();
 					}
 					catch(Exception e)
 					{
@@ -977,6 +1012,40 @@ namespace Starvers
 		#region UpdateForm
 		private static void UpdateForm(StarverPlayer player, bool delete = false)
 		{
+			#region Temp
+			//mod群的某人从灾厄搬出来的
+			//说看不懂，就临时把代码放到这里帮他分析
+			/*
+			if (Main.projectile[TeaNPCGlobalProjectile.MiniSO].active)
+			{
+				Vector2 vector = Center;
+				Vector Delta = Main.projectile[TeaNPCGlobalProjectile.MiniSO].Center - Center;
+				double angle;
+				float length;
+				bool flag = true;
+				while (flag)
+				{
+					length = 20;
+					angle = Delta.Angle;
+					float Distance = Delta.Length;
+					if (Distance < 52)
+					{
+						length = (int)Distance - 16 * 2;
+						flag = false;
+					}
+					//DeltaX *= LenDelta;
+					//DeltaY *= LenDelta;
+					//vector.X += DeltaX;
+					//vector.Y += DeltaY;
+					vector += Vector.FromPolar(angle, length);
+					Delta = Main.projectile[TeaNPCGlobalProjectile.MiniSO].Center - vector;
+					Color color2 = Lighting.GetColor((int)vector.X / 16, (int)(vector.Y / 16f));
+					var Texture = mod.GetTexture("Extra/MiniSOChain");
+					Main.spriteBatch.Draw(Texture, vector - Main.screenPosition, new Rectangle(0, 0, Texture.Width, length), Color.White, angle - PI / 2, new Vector2(Texture.Width * 0.5f, Texture.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+				}
+			}
+			*/
+			#endregion
 			if (delete)
 			{
 				try

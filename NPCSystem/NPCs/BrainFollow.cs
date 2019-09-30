@@ -72,7 +72,7 @@ namespace Starvers.NPCSystem.NPCs
 				Unit = PI / 50;
 				Rounding = Round_Negative;
 			}
-			Vel = NewByPolar(start, Radium);
+			Vel = FromPolar(start, Radium);
 			//DamagedIndex = Criticallevel / (float)Brain.Level;
 			AIUsing[0] = Radium;
 			return flag;
