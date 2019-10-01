@@ -30,15 +30,15 @@ namespace Starvers.AuraSystem.Skills
 				if (proj.friendly == false && Vector2.Distance(player.Center, proj.Center) < R)
 				{
 					proj.active = false;
-					TSPlayer.All.SendData(PacketTypes.ProjectileNew, "", proj.whoAmI);
+					TSPlayer.All.SendData(PacketTypes.ProjectileDestroy, "", proj.whoAmI);
 				}
 			}
 		}
-		public AvalonGradation() : base(SkillID.AvalonGradation)
+		public AvalonGradation() : base(SkillIDs.AvalonGradation)
 		{
 			CD = 60;
 			MP = 180;
-			Lvl = 1000;
+			Level = 1000;
 			Author = "1413";
 			Description = "消除你身边的所有敌对弹幕,持续10s";
 			SetText();

@@ -11,12 +11,12 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class Musket:Skill
 	{
-		public Musket() : base(SkillID.Musket)
+		public Musket() : base(SkillIDs.Musket)
 		{
 			CD = 0;
 			MP = 70;
 			Description = "这东西很没用?\n怎么可能\n这可是唯一一个无CD技能";
-			Lvl = 50;
+			Level = 50;
 			Author = "三叶草";
 			BossBan = true;
 			SetText();

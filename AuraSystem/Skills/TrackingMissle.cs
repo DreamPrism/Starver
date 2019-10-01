@@ -16,9 +16,9 @@ namespace Starvers.AuraSystem.Skills
 		protected static int Target;
 		protected const float dis = 16 * 100;
 		protected Vector2 Pos;
-		public TrackingMissile() : base(SkillID.TrackingMissile)
+		public TrackingMissile() : base(SkillIDs.TrackingMissile)
 		{
-			Lvl = 30;
+			Level = 30;
 			MP = 20;
 			CD = 20;
 			Description = "制造若干个射向最近敌人位置的导弹";

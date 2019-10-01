@@ -11,6 +11,7 @@ namespace Starvers.TaskSystem
 	/// </summary>
 	public static class TaskID
 	{
+		public static int Eye { get; internal set; } = 2;
 		public static int SkeletronEx { get; internal set; } = 25;
 		public static int MoonLord { get; internal set; } = 21;
 	}

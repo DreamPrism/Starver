@@ -79,10 +79,16 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuraSystem\Skills\Chaos.cs" />
+    <Compile Include="AuraSystem\Skills\ChordMana.cs" />
+    <Compile Include="AuraSystem\Skills\Cosmos.cs" />
+    <Compile Include="AuraSystem\Skills\FromHell.cs" />
+    <Compile Include="AuraSystem\Skills\MirrorMana.cs" />
+    <Compile Include="AuraSystem\Skills\StarEruption.cs" />
     <Compile Include="AuraSystem\Skills\TheWorld.cs" />
     <Compile Include="AuraSystem\StarverAuraManager.cs" />
     <Compile Include="AuraSystem\AuraSkillWeapon.cs" />
-    <Compile Include="AuraSystem\SkillID.cs" />
+    <Compile Include="AuraSystem\SkillIDs.cs" />
     <Compile Include="AuraSystem\SkillManager.cs" />
     <Compile Include="AuraSystem\Skills\Avalon.cs" />
     <Compile Include="AuraSystem\Skills\AvalonGradation.cs" />
@@ -108,10 +114,10 @@
     <Compile Include="AuraSystem\Skills\WindRealm.cs" />
     <Compile Include="BlockSystem\StarverBlockManager.cs" />
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.cs" />
-    <Compile Include="Entity\StarverEntity.IProjSet.cs" />
-    <Compile Include="Entity\StarverEntity.ProjPair.cs" />
-    <Compile Include="Entity\StarverEntity.ProjQueue.cs" />
-    <Compile Include="Entity\StarverEntity.ProjStack.cs" />
+    <Compile Include="ProjContainers\IProjSet.cs" />
+    <Compile Include="ProjContainers\ProjPair.cs" />
+    <Compile Include="ProjContainers\ProjQueue.cs" />
+    <Compile Include="ProjContainers\ProjStack.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.FinalAdjudicator.cs" />
     <Compile Include="BossSystem\Bosses\Clover\StarverManager.FinalDestroyer.cs" />
@@ -174,7 +180,7 @@
     <Compile Include="SaveModes.cs" />
     <Compile Include="Starver.cs" />
     <Compile Include="StarverConfig.cs" />
-    <Compile Include="Entity\StarverEntity.cs" />
+    <Compile Include="StarverEntity.cs" />
     <Compile Include="BaseNPC.cs" />
     <Compile Include="StarverPlayer.cs" />
     <Compile Include="HelpTexts.cs" />

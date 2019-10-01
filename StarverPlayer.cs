@@ -134,6 +134,23 @@ namespace Starvers
 				TSPlayer.SendInfoMessage(msg);
 			}
 		}
+		public void SendErrorMessage(string msg)
+		{
+			if (Index == -2)
+			{
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.WriteLine(msg);
+				Console.ResetColor();
+			}
+			else if (Index >= -1)
+			{
+				SendMessage(msg, Color.Red);
+			}
+			else
+			{
+				TSPlayer.SendInfoMessage(msg);
+			}
+		}
 		public void SendInfoMessage(string msg, params object[] args)
 		{
 			if (Index == -2)
@@ -769,9 +786,9 @@ namespace Starvers
 				{
 					if (skill.Name.ToLower().IndexOf(name) == 0)
 					{
-						if (level < skill.Lvl && !ServerDoThis)
+						if (skill.CanSet(this) == false && !ServerDoThis)
 						{
-							TSPlayer.SendErrorMessage("你的等级不足");
+							SendErrorMessage("设置失败");
 						}
 						else
 						{
@@ -897,6 +914,12 @@ namespace Starvers
 			return false;
 		}
 		#endregion
+		#region KillMe
+		public void KillMe()
+		{
+			TSPlayer.KillPlayer();
+		}
+		#endregion
 		#endregion
 		#region Datas
 		public bool Temp { get; set; }
@@ -994,6 +1017,17 @@ namespace Starvers
 				exp = (int)Math.Max(0, expNow);
 			}
 		}
+		public int MP
+		{
+			get
+			{
+				return mp;
+			}
+			set
+			{
+				mp = Math.Min(value, MaxMP);
+			}
+		}
 		/// <summary>
 		/// 当前升级所需经验
 		/// </summary>
@@ -1006,6 +1040,18 @@ namespace Starvers
 		}
 		public int MaxMP { get; set; }
 		public byte[,] Weapon { get; set; } = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+		public int Life
+		{
+			get
+			{
+				return TPlayer.statLife;
+			}
+			set
+			{
+				TPlayer.statLife = Math.Min(value, TPlayer.statLifeMax2);
+				SendData(PacketTypes.PlayerHp, string.Empty, Index);
+			}
+		}
 		//以下4个属性均为支线任务(未启用)使用
 		public int FishCode
 		{
@@ -1087,7 +1133,7 @@ namespace Starvers
 		/// 上一次使用的技能
 		/// </summary>
 		internal int LastSkill;
-		internal int MP;
+		internal int mp;
 		internal int exp;
 		/// <summary>
 		/// 获取对应Terraria.Player

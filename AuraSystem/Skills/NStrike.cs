@@ -13,11 +13,11 @@ namespace Starvers.AuraSystem.Skills
 	public class NStrike:Skill
 	{
 		private const float rec = 16 * 30;
-		public NStrike() : base(SkillID.NStrike)
+		public NStrike() : base(SkillIDs.NStrike)
 		{
 			MP = 350;
-			CD = 120;
-			Lvl = 50000;
+			CD = 500;
+			Level = 50000;
 			Author = "wither";
 			Description = "能够和咖喱棒平起平坐的技能!\n对一定范围内的敌对生物发动攻击";
 			BossBan = true;
@@ -31,7 +31,7 @@ namespace Starvers.AuraSystem.Skills
 				{
 					npc.velocity = new Vector2(0);
 					NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);
-					player.NewProj(npc.Center, Vector2.Zero, ProjectileID.StardustGuardianExplosion, player.Level * 10, 0);
+					player.NewProj(npc.Center, Vector2.Zero, ProjectileID.StardustGuardianExplosion, player.Level * 10 + 1400, 0);
 				}
 			}
 			if (player.TPlayer.hostile)
@@ -44,7 +44,7 @@ namespace Starvers.AuraSystem.Skills
 					}
 					ply.velocity = Vector2.Zero;
 					NetMessage.SendData((int)PacketTypes.PlayerUpdate, -1, -1, null, ply.whoAmI);
-					player.NewProj(ply.Center, Vector2.Zero, ProjectileID.StardustGuardianExplosion, player.Level * 10, 0);
+					player.NewProj(ply.Center, Vector2.Zero, ProjectileID.StardustGuardianExplosion, player.Level * 10 + 1400, 0);
 				}
 			}
 			player.SetBuff(BuffID.ShadowDodge);

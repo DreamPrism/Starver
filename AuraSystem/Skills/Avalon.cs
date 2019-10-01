@@ -11,13 +11,13 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class Avalon : Skill
 	{
-		public Avalon() : base(SkillID.Avalon)
+		public Avalon() : base(SkillIDs.Avalon)
 		{
 			MP = 30;
 			CD = 30;
 			Description = "幻想乡，这个技能可以给予你5s的伪无敌,\n随后附加多种回血buff,苟命专用";
 			Author = "三叶草";
-			Lvl = 10;
+			Level = 10;
 			SetText();
 		}
 		public override void Release(StarverPlayer player, Vector2 vel)

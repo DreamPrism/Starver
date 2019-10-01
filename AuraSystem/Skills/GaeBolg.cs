@@ -10,12 +10,12 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class GaeBolg : Skill
 	{
-		public GaeBolg() : base(SkillID.GaeBolg)
+		public GaeBolg() : base(SkillIDs.GaeBolg)
 		{
 			BossBan = true;
 			MP = 45;
 			CD = 32;
-			Lvl = 350;
+			Level = 350;
 			Author = "三叶草";
 			Description = "发着一支速度极快的黎明";
 			SetText();

@@ -20,13 +20,13 @@ namespace Starvers.AuraSystem.Skills
 		protected static int TimeToStop;
 		#endregion
 		#region ctor
-		public TheWorld() : base(SkillID.TheWorld)
+		public TheWorld() : base(SkillIDs.TheWorld)
 		{
 			MP = 110;
 			CD = 120;
 			Author = "逍遥";
 			Description = $"让所有怪物以及弹幕暂停一段时间({StopTime / 1000}s)";
-			Lvl = 3000;
+			Level = 3000;
 			SetText();
 		}
 		#endregion

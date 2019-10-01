@@ -18,13 +18,13 @@ namespace Starvers.AuraSystem
 		public static StarverConfig Config => StarverConfig.Config;
 		public static DateTime Last { get; protected set; } = DateTime.Now;
 		public static SkillManager Skill { get; private set; } = new SkillManager();
-		public static AuraSkillWeapon[] SkillSlot { get; private set; } = new AuraSkillWeapon[5]
+		public static AuraSkillWeapon[] SkillSlot { get; private set; } = new AuraSkillWeapon[Skills.Base.Skill.MaxSlots]
 		{
 			new AuraSkillWeapon(ItemID.Spear,ProjectileID.Spear,100),
 			new AuraSkillWeapon(ItemID.Trident,ProjectileID.Trident,800),
-			new AuraSkillWeapon(ItemID.Swordfish,ProjectileID.Swordfish,6000),
-			new AuraSkillWeapon(ItemID.DarkLance,ProjectileID.DarkLance,80000),
-			new AuraSkillWeapon(ItemID.ObsidianSwordfish,ProjectileID.ObsidianSwordfish,300000)
+			new AuraSkillWeapon(ItemID.Swordfish,ProjectileID.Swordfish,4000),
+			new AuraSkillWeapon(ItemID.DarkLance,ProjectileID.DarkLance,8000),
+			new AuraSkillWeapon(ItemID.ObsidianSwordfish,ProjectileID.ObsidianSwordfish,30000)
 		};
 		public static string SkillList = "技能列表:";
 		#endregion
@@ -68,7 +68,7 @@ namespace Starvers.AuraSystem
 				NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, args.Index);
 				return;
 			}
-			int slot = Skill.GetSlot(args.Type);
+			int slot = SkillManager.GetSlot(args.Type);
 			if (slot > 0 && slot < 6 && (DateTime.Now - Starver.Players[args.Owner].LastHandle).TotalSeconds > 1) 
 			{
 				Starver.Players[args.Owner].LastHandle = DateTime.Now;

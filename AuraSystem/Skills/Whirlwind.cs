@@ -10,11 +10,11 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class Whirlwind : Skill
 	{
-		public Whirlwind() : base(SkillID.WindRealm)
+		public Whirlwind() : base(SkillIDs.WindRealm)
 		{
 			CD = 10;
 			MP = 12;
-			Lvl = 165;
+			Level = 165;
 			Author = "三叶草";
 			Description = "制造一个攻击一群敌人的风暴";
 			SetText();

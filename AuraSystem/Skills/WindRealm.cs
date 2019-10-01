@@ -12,14 +12,14 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class WindRealm:Skill
 	{
-		public WindRealm() : base(SkillID.WindRealm)
+		public WindRealm() : base(SkillIDs.WindRealm)
 		{
 			BossBan = true;
 			MP = 12;
 			CD = 10;
 			Author = "三叶草";
 			Description = "吹飞所有怪物";
-			Lvl = 175;
+			Level = 175;
 			SetText();
 		}
 		public override void Release(StarverPlayer player, Vector2 vel)
@@ -39,7 +39,7 @@ namespace Starvers.AuraSystem.Skills
 					TSPlayer.All.SendData(PacketTypes.NpcUpdate, "", i);
 				}
 			}
-			if (player.LastSkill == SkillID.WindRealm)
+			if (player.LastSkill == (int)SkillIDs.WindRealm)
 			{
 				player.NewProj(player.Center, vel * 10, 116, player.Level / 10 + 1, 1);
 			}

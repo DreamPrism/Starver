@@ -36,7 +36,13 @@ namespace Starvers.AuraSystem
 			new CDLess(),
 			new NStrike(),
 			new Sacrifice(),
-			new TheWorld()
+			new TheWorld(),
+			new MirrorMana(),
+			new Chaos(),
+			new Cosmos(),
+			new ChordMana(),
+			new FromHell(),
+			new StarEruption()
 		};
 		#endregion
 		#region Handle
@@ -55,7 +61,7 @@ namespace Starvers.AuraSystem
 				{
 					player.SendCombatMSsg("MP不足", Color.Pink);
 				}
-				else if ((player.IgnoreCD == false || skill.Index == SkillID.CDLess) && player.CDs[slot] > 0)
+				else if ((player.IgnoreCD == false || skill.ForceCD) && player.CDs[slot] > 0)
 				{
 					player.SendCombatMSsg("技能冷却中", Color.Pink);
 				}
@@ -64,7 +70,7 @@ namespace Starvers.AuraSystem
 					skill.Release(player, vel);
 					if (skill.ForceCD || !player.IgnoreCD)
 					{
-						player.CDs[slot] = skill.CD;
+						player.CDs[slot] += skill.CD;
 					}
 					player.MP -= skill.MP;
 					player.LastSkill = skill.Index;
@@ -80,7 +86,18 @@ namespace Starvers.AuraSystem
 		}
 		#endregion
 		#region GetSlot
-		public  int GetSlot(int type)
+		public static int GetSlotByItemID(int type)
+		{
+			for (int i = 0; i < StarverAuraManager.SkillSlot.Length; i++)
+			{
+				if (type == StarverAuraManager.SkillSlot[i].Item)
+				{
+					return i + 1;
+				}
+			}
+			return 0;
+		}
+		public static int GetSlot(int type)
 		{
 			for (int i = 0; i < StarverAuraManager.SkillSlot.Length; i++)
 			{

@@ -206,7 +206,6 @@ namespace Starvers
 		{
 			Life = Math.Min(Life, 30000);
 			player.statLifeMax = Life;
-			player.statLifeMax2 = Life;
 			NetMessage.SendData((int)PacketTypes.PlayerHp, -1, -1, null, player.whoAmI);
 		}
 		#endregion
@@ -296,7 +295,7 @@ namespace Starvers
 			{
 				throw new ArgumentException("最大值必须大等于最小值");
 			}
-			return (max - min) * (rand.NextDouble() - 0.5) + min;
+			return (max - min) * rand.NextDouble() + min;
 		}
 		public static Vector2 NextVector2(this Random rand,float Length)
 		{

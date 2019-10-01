@@ -21,24 +21,40 @@ namespace Starvers.AuraSystem.Skills.Base
 			protected set => cd = value * 60;
 		}
 		public int MP { get; protected set; }
-		public int Lvl { get; protected set; }
+		public int Level { get; protected set; }
 		public bool ForceCD { get; protected set; }
 		public bool BossBan { get; protected set; }
 		public string Author { get; protected set; } = string.Empty;
 		public string Description { get; protected set; } = string.Empty;
 		public string Text { get; private set; } = string.Empty;
 		public abstract void Release(StarverPlayer player, Vector2 vel);
-		public Skill(int idx)
+		public int TaskNeed = 0;
+		public virtual bool CanSet(StarverPlayer player)
 		{
-			Index = idx;
+			bool condition = TaskNeed <= StarverConfig.Config.TaskNow;
+			if(!condition)
+			{
+				player.SendInfoMessage($"当前任务不足, 该技能将在任务{TaskNeed}完成后解锁");
+				return condition;
+			}
+			condition = Level <= player.Level;
+			if(!condition)
+			{
+				player.SendInfoMessage($"当前等级不足, 该技能将在{Level}级解锁");
+			}
+			return condition;
+		}
+		public Skill(SkillIDs idx)
+		{
+			Index = (int)idx;
 			Name = GetType().Name;
 		}
 		protected void SetText()
 		{
 			StringBuilder sb = new StringBuilder(30);
 			sb.AppendLine($"创意来源: {Author}");
-			sb.AppendLine($"CD: {CD}s");
-			sb.AppendLine($"所需等级: {Lvl}");
+			sb.AppendLine($"CD: {CD / 60}s");
+			sb.AppendLine($"所需等级: {Level}");
 			sb.AppendLine($"MP: {MP}");
 			sb.Append($"{Description}");
 			Text = sb.ToString();

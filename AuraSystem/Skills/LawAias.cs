@@ -11,12 +11,12 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class LawAias : Skill
 	{
-		public LawAias() : base(SkillID.LawAias)
+		public LawAias() : base(SkillIDs.LawAias)
 		{
 			MP = 300;
 			CD = 120;
 			BossBan = true;
-			Lvl = 5000;
+			Level = 5000;
 			Author = "三叶草";
 			Description = "这是三叶草没做好的技能,\n但是1413完成这个技能的同时偏离了三叶草的原版设计意图\n以释放者为圆心制造一个由弹幕组成的逐渐缩小的圆";
 			SetText();

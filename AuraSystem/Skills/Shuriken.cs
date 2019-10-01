@@ -11,7 +11,7 @@ namespace Starvers.AuraSystem.Skills
 	public class Shuriken:Skill
 	{
 		protected Vector2 Pos;
-		public Shuriken():base(SkillID.Shuriken)
+		public Shuriken():base(SkillIDs.Shuriken)
 		{
 			MP = 8;
 			CD = 1;

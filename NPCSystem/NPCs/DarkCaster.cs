@@ -137,20 +137,24 @@ namespace Starvers.NPCSystem.NPCs
 		protected static void AI_4(DarkCaster This)
 		{
 			uint Mod = This.Timer % (60 * 5);
-			if(Mod < 60 * 5 / 2)
+			if (Mod < 60 * 5 / 2)
 			{
 				if (Mod % 5 == 0)
 				{
 					This.Vel = (Vector)Rand.NextVector2(16 * 35, 16 * 35);
-					int idx = This.Proj(This.Center + This.Vel, Vector.Zero, ProjectileID.FrostBlastHostile, 123);
-					This.Vel = (Vector)(This.TargetPlayer.Center - Projs[idx].Center);
+					This.ProjIndex = This.Proj(This.Center + This.Vel, Vector.Zero, ProjectileID.FrostBlastHostile, 123);
+					if (This.ProjIndex >= 200 || This.ProjIndex < 0)
+					{
+						return;
+					}
+					This.Vel = (Vector)(This.TargetPlayer.Center - Projs[This.ProjIndex].Center);
 					This.Vel.Length = 6;
-					This.ProjSet.Push(idx, This.Vel);
+					This.ProjSet.Push(This.ProjIndex, This.Vel);
 				}
 			}
-			else if(Mod != 60 * 5 - 1)
+			else if (Mod != 60 * 5 - 1)
 			{
-				if(Mod % 10 == 0)
+				if (Mod % 10 == 0)
 				{
 					This.ProjSet.Launch(1);
 				}

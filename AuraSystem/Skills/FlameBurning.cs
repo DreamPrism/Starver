@@ -12,13 +12,13 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class FlameBurning:Skill
 	{
-		public FlameBurning():base(SkillID.FlameBurning)
+		public FlameBurning():base(SkillIDs.FlameBurning)
 		{
 			CD = 15;
 			MP = 20;
 			Author = "麦克虚妄";
 			Description = "制造一片扇形的火焰";
-			Lvl = 20;
+			Level = 20;
 			SetText();
 		}
 		public override void Release(StarverPlayer player, Vector2 vel)

@@ -437,6 +437,20 @@ namespace Starvers
 				Utils.SaveAll();
 			}
 			#endregion
+			#region Fast
+			foreach (var player in Players)
+			{
+				if (player is null)
+				{
+					continue;
+				}
+				AuraSystem.Skills.AvalonGradation.Update(player);
+				for (int i = 0; i < player.CDs.Length; i++)
+				{
+					player.CDs[i] = Math.Max(0, player.CDs[i] - 1);
+				}
+			}
+			#endregion
 			#region Most
 			if (Config.EnableAura && Timer % 60 == 0)
 			{
@@ -453,7 +467,7 @@ namespace Starvers
 						}
 						try
 						{
-							player.MP = Math.Min(player.MP + player.Level / 33 + 1, player.MaxMP);
+							player.MP += player.Level / 33 + 1;
 							if (!player.Dead)
 							{
 								liferegen = (int)(50 * Math.Log((player.TPlayer.lifeRegen + player.TPlayer.statDefense) * (player.Level / 100)));
@@ -480,19 +494,19 @@ namespace Starvers
 					}
 					try
 					{
-						AuraSystem.Skills.AvalonGradation.Update(player);
-						if (Timer % (60 * 4) < 60 * 2)
+						if (Timer % (60 * 8) < 60 * 4)
 						{
-							MsgBuilder.Append($"Lv.{player.Level},");
+							MsgBuilder.Append($"Lv.{player.Level}, ");
 							MsgBuilder.AppendLine($"Exp: {player.exp}/{player.UpGradeExp / (player.LessCost ? 3 : 1)}");
 							MsgBuilder.AppendLine($"MP: [{player.MP}/{player.MaxMP}]");
 						}
 						else
 						{
-							MsgBuilder.AppendLine($"CDs:");
-							for (int i = 0; i < Skill.MaxSlots; i++)
+							MsgBuilder.Append($"CDs: ");
+							MsgBuilder.AppendLine($"{player.SkillCombineCD(0)}");
+							for (int i = 1; i < Skill.MaxSlots; i++)
 							{
-								MsgBuilder.AppendLine($"{player.SkillCombineCD(i)}");
+								MsgBuilder.AppendLine($"       {player.SkillCombineCD(i)}");
 							}
 						}
 						player.SendStatusMSG(MsgBuilder.ToString());

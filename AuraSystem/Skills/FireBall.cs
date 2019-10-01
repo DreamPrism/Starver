@@ -11,12 +11,12 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class FireBall : Skill
 	{
-		public FireBall() : base(SkillID.FireBall)
+		public FireBall() : base(SkillIDs.FireBall)
 		{
 			MP = 18;
 			CD = 6;
 			Author = "三叶草";
-			Lvl = 5;
+			Level = 5;
 			Description = "发射若干个小火球"; 
 			SetText();
 		}

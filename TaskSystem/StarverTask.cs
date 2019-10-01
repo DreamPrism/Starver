@@ -73,10 +73,10 @@ namespace Starvers.TaskSystem
             {
                 #region 2
                 case 2:
-                switch(id)
-            {
-//简单难度写这里
-            }
+					switch (id)
+					{
+						//简单难度写这里
+					}
                     break;  
                 #endregion
                 #region 3
@@ -99,6 +99,7 @@ namespace Starvers.TaskSystem
                         #endregion
                         #region Eye
                         case 2:
+							TaskID.Eye = ID;
                             Name = "凝视";
                             Story = "希望站在我们和克苏鲁之眼间的不是弱小的你";
                             Needs = new TaskItem[]

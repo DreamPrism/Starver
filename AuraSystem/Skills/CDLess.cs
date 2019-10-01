@@ -11,13 +11,13 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class CDLess : Skill
 	{
-		public CDLess() : base(SkillID.CDLess)
+		public CDLess() : base(SkillIDs.CDLess)
 		{
 			Author = "1413";
 			Description = "技能CD太长了？来试试他吧!\n5s内其他技能无CD";
 			CD = 360;
 			MP = 20;
-			Lvl = 500;
+			Level = 500;
 			ForceCD = true;
 			SetText();
 		}

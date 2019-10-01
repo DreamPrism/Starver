@@ -11,10 +11,10 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class PosionFog:Skill
 	{
-		public PosionFog():base(SkillID.PosionFog)
+		public PosionFog():base(SkillIDs.PosionFog)
 		{
 			MP = 190;
-			Lvl = 400;
+			Level = 400;
 			CD = 20;
 			Author = "Deaths";
 			Description = "制造一片毒雾";

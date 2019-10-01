@@ -11,11 +11,11 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class EnderWand:Skill
 	{
-		public EnderWand():base(SkillID.EnderWand)
+		public EnderWand():base(SkillIDs.EnderWand)
 		{
 			MP = 20;
 			CD = 1;
-			Lvl = 100;
+			Level = 100;
 			Author = "三叶草";
 			Description = "跑路专用,往常长矛的方向高速移动\n还可以拿来闯7778机关";
 			SetText();

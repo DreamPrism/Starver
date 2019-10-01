@@ -16,11 +16,11 @@ namespace Starvers.AuraSystem.Skills
 		protected static int rec = 1200;
 		protected static Vector2 DefaultVector = Vector2.Zero;
 		protected double d = 0;
-		public SpiritStrike():base(SkillID.SpiritStrike)
+		public SpiritStrike():base(SkillIDs.SpiritStrike)
 		{
 			MP = 35;
 			CD = 20;
-			Lvl = 80;
+			Level = 80;
 			Author = "wither";
 			Description = "对一定范围内的敌对生物发动攻击";
 			SetText();

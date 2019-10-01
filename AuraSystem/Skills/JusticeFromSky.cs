@@ -11,11 +11,11 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class JusticeFromSky : Skill
 	{
-		public JusticeFromSky():base(SkillID.JusticeFromSky)
+		public JusticeFromSky():base(SkillIDs.JusticeFromSky)
 		{
 			CD = 20;
 			MP = 100;
-			Lvl = 350;
+			Level = 350;
 			Author = "1413";
 			Description = "\"其实这只是饥饿的轰炸炸错了位置\"";
 			SetText();
