@@ -42,7 +42,15 @@ namespace Starvers.AuraSystem
 			new Cosmos(),
 			new ChordMana(),
 			new FromHell(),
-			new StarEruption()
+			new StarEruption(),
+			new NatureRage(),
+			new NatureGuard(),
+			new FishingRod(),
+			new AlcoholFeast(),
+			new GreenWind(),
+			new FrozenCraze(),
+			new LimitBreak(),
+			new MiracleMana()
 		};
 		#endregion
 		#region Handle

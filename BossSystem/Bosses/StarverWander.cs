@@ -98,6 +98,7 @@ namespace Starvers.BossSystem.Bosses
 		#region RealAI
 		public unsafe override void RealAI()
 		{
+			#region Modes
 			switch (Mode)
 			{
 				#region SelectMode
@@ -224,6 +225,7 @@ namespace Starvers.BossSystem.Bosses
 					break;
 					#endregion
 			}
+			#endregion
 			#region normal
 			if (StarverAI[0] > 0)
 			{

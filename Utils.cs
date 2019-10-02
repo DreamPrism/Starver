@@ -37,7 +37,7 @@ namespace Starvers
 		{
 			for (int i = 0; i < 40; i++)
 			{
-				if (Players[i] == null || Players[i].UserID < 0) 
+				if (Players[i] == null || Players[i].UserID < 0)
 				{
 					continue;
 				}
@@ -102,7 +102,7 @@ namespace Starvers
 					player.Save();
 				}
 			}
-			foreach(var ply in Starver.Players)
+			foreach (var ply in Starver.Players)
 			{
 				if (ply is null)
 				{
@@ -119,7 +119,7 @@ namespace Starvers
 			{
 				int num = 0;
 				double level = 0;
-				if(Config.SaveMode== SaveModes.MySQL)
+				if (Config.SaveMode == SaveModes.MySQL)
 				{
 					SaveAll();
 					MySqlCommand cmd = new MySqlCommand("Select UserID,Level from Starver", DB);
@@ -130,7 +130,7 @@ namespace Starvers
 						{
 							int UserID = Reader.Get<int>("UserID");
 							int Level = Reader.Get<int>("Level");
-							if(Level < Config.LevelNeed)
+							if (Level < Config.LevelNeed)
 							{
 								continue;
 							}
@@ -167,7 +167,7 @@ namespace Starvers
 		}
 		#endregion
 		#region StrikeMe
-		public static void StrikeMe(this NPC RealNPC,int Damage, float knockback, StarverPlayer player)
+		public static void StrikeMe(this NPC RealNPC, int Damage, float knockback, StarverPlayer player)
 		{
 			RealNPC.playerInteraction[player.Index] = true;
 			int realdamage = (int)(Damage * (Rand.NextDouble() - 0.5) / 4 - RealNPC.defense * 0.5);
@@ -220,48 +220,48 @@ namespace Starvers
 		{
 			return new Vector2((float)(Math.Cos(rad) * length), (float)(Math.Sin(rad) * length));
 		}
-		public static double Angle(this Vector2  vector)
+		public static double Angle(this Vector2 vector)
 		{
-			return Math.Atan2(vector.Y,  vector.X);
+			return Math.Atan2(vector.Y, vector.X);
 		}
-		public static double Angle(ref this Vector2  vector, double rad)
+		public static double Angle(ref this Vector2 vector, double rad)
 		{
-			vector = FromPolar(rad,  vector.Length());
+			vector = FromPolar(rad, vector.Length());
 			return rad;
 		}
-		public static double AngleAdd(ref this Vector2  vector, double rad)
+		public static double AngleAdd(ref this Vector2 vector, double rad)
 		{
-			rad += Math.Atan2(vector.Y,  vector.X);
-			vector = FromPolar(rad,  vector.Length());
+			rad += Math.Atan2(vector.Y, vector.X);
+			vector = FromPolar(rad, vector.Length());
 			return rad;
 		}
-		public static Vector2 Deflect(this Vector2  vector2, double rad)
+		public static Vector2 Deflect(this Vector2 vector2, double rad)
 		{
-			Vector2  vector =  vector2;
+			Vector2 vector = vector2;
 			vector2.AngleAdd(rad);
-			return  vector;
+			return vector;
 		}
-		public static void Length(ref this Vector2  vector, float length)
+		public static void Length(ref this Vector2 vector, float length)
 		{
 			vector = FromPolar(vector.Angle(), length);
 		}
-		public static void LengthAdd(ref this Vector2  vector, float length)
+		public static void LengthAdd(ref this Vector2 vector, float length)
 		{
-			vector = FromPolar(vector.Angle(), length +  vector.Length());
+			vector = FromPolar(vector.Angle(), length + vector.Length());
 		}
-		public static Vector2 ToLenOf(this Vector2  vector, float length)
+		public static Vector2 ToLenOf(this Vector2 vector, float length)
 		{
 			vector.Normalize();
 			vector *= length;
-			return  vector;
+			return vector;
 		}
-		public static Vector2 Symmetry(this Vector2  vector, Vector2 Center)
+		public static Vector2 Symmetry(this Vector2 vector, Vector2 Center)
 		{
-			return Center * 2f -  vector;
+			return Center * 2f - vector;
 		}
-		public static Vector2 Vertical(this Vector2  vector)
+		public static Vector2 Vertical(this Vector2 vector)
 		{
-			return new Vector2(-vector.Y,  vector.X);
+			return new Vector2(-vector.Y, vector.X);
 		}
 		public static Vector ToVector(this Vector2 value)
 		{
@@ -285,19 +285,19 @@ namespace Starvers
 		/// <param name="rand"></param>
 		/// <param name="Range"></param>
 		/// <returns></returns>
-		public static double NextAngle(this Random rand,double Range)
+		public static double NextAngle(this Random rand, double Range)
 		{
 			return (rand.NextAngle() - Math.PI) / (Math.PI / Range);
 		}
-		public static double NextDouble(this Random rand,double min,double max)
+		public static double NextDouble(this Random rand, double min, double max)
 		{
-			if(max < min)
+			if (max < min)
 			{
 				throw new ArgumentException("最大值必须大等于最小值");
 			}
 			return (max - min) * rand.NextDouble() + min;
 		}
-		public static Vector2 NextVector2(this Random rand,float Length)
+		public static Vector2 NextVector2(this Random rand, float Length)
 		{
 			return FromPolar(rand.NextAngle(), Length);
 		}
@@ -308,9 +308,19 @@ namespace Starvers
 		/// <param name="X">实际变为-X / 2 ~ X / 2</param>
 		/// <param name="Y">实际变为-Y / 2 ~ Y / 2</param>
 		/// <returns></returns>
-		public static Vector2 NextVector2(this Random rand,float X,float Y)
+		public static Vector2 NextVector2(this Random rand, float X, float Y)
 		{
 			return new Vector2((float)((rand.NextDouble() - 0.5) * X), (float)((rand.NextDouble() - 0.5) * Y));
+		}
+		/// <summary>
+		/// 随机获取一个元素
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="array"></param>
+		/// <returns></returns>
+		public static T Next<T>(this T[] array)
+		{
+			return array[Rand.Next(array.Length)];
 		}
 		#endregion
 		#region SendData

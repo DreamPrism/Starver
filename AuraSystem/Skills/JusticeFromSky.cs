@@ -25,7 +25,7 @@ namespace Starvers.AuraSystem.Skills
 			Vector2 Start = player.Center + new Vector2(-Math.Min(player.Level, 348 * 10) - 48 * 10, -16 * 40);
 			Vector2 End = player.Center + new Vector2(Math.Min(player.Level, 48 * 10) + 48 * 10, -16 * 40);
 			Vector2 Gra = new Vector2(0, 16);
-			player.ProjLine(Start, End, Gra, Math.Max(Math.Min(player.Level / 48,10), 10) * 2 + 20, 130, ProjectileID.RocketSnowmanIII);
+			player.ProjLine(Start, End, Gra, Math.Max(Math.Min(player.Level / 48,10), 10) * 2 + 20, 400, ProjectileID.RocketSnowmanIII);
 		}
 	}
 }

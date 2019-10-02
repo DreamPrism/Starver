@@ -22,11 +22,12 @@ namespace Starvers.AuraSystem.Skills
 		}
 		public override void Release(StarverPlayer player, Vector2 vel)
 		{
+			int damage = 122 + player.Level > 10000 ? (int)(122 * Math.Log(player.Level)) : 0;
 			player.NewProj(player.Center, vel * 10, 636, 130, 1);
-			player.NewProj(player.Center + vel.ToLenOf(8f), vel * 10, 636, 122, 1);
-			player.NewProj(player.Center + vel.ToLenOf(16f), vel * 10, 636, 122 / 10, 1);
-			player.NewProj(player.Center, Vector2.Zero, 696, 70, 1);
-			player.NewProj(player.Center, Vector2.Zero, 612, 70, 1);
+			player.NewProj(player.Center + vel.ToLenOf(8f), vel * 10, 636, damage, 1);
+			player.NewProj(player.Center + vel.ToLenOf(16f), vel * 10, 636, damage / 10, 1);
+			player.NewProj(player.Center, Vector2.Zero, 696, damage / 2, 1);
+			player.NewProj(player.Center, Vector2.Zero, 612, damage / 2, 1);
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace Starvers.AuraSystem.Skills
 {
 	public class Whirlwind : Skill
 	{
-		public Whirlwind() : base(SkillIDs.WindRealm)
+		public Whirlwind() : base(SkillIDs.Whirlwind)
 		{
 			CD = 10;
 			MP = 12;
@@ -21,6 +21,7 @@ namespace Starvers.AuraSystem.Skills
 		}
 		public override void Release(StarverPlayer player, Vector2 vel)
 		{
+			int damage = 100 + (int)(100 * Math.Log(player.Level * player.Level / 2));
 			player.NewProj(player.Center, vel * 10, 704, player.Level, 1);
 			player.NewProj(player.Center, Vector2.Zero, 612, player.Level, 1);
 		}

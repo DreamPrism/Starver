@@ -55,6 +55,18 @@ namespace Starvers
 			TSPlayer.SetBuff(type, time, bypass);
 		}
 		#endregion
+		#region RemoveBuff
+		public void RemoveBuff(int type)
+		{
+			int idx = TPlayer.FindBuffIndex(type);
+			if(idx != -1)
+			{
+				TPlayer.buffTime[idx] = 0;
+				TPlayer.buffType[idx] = 0;
+				SendData(PacketTypes.PlayerBuff, "", Index);
+			}
+		}
+		#endregion
 		#region Sends
 		/// <summary>
 		/// 发送悬浮文字
@@ -225,6 +237,7 @@ namespace Starvers
 			set
 			{
 				TPlayer.velocity = value;
+				SendData(PacketTypes.PlayerUpdate, "", Index);
 			}
 		}
 		#endregion
@@ -670,7 +683,7 @@ namespace Starvers
 		/// <param name="Type"></param>
 		/// <param name="number">弹幕总数</param>
 		/// <param name="direction">0:不动 1:向内 2:向外</param>
-		public void ProjCircle(Vector2 Center, int r, float Vel, int Type, int number, int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
+		public void ProjCircle(Vector2 Center, float r, float Vel, int Type, int number, int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
 		{
 			switch (direction)
 			{
@@ -748,6 +761,28 @@ namespace Starvers
 			{
 				NewProj(Begin + average * i, Vel, type, Damage, 3f, ai0, ai1);
 			}
+		}
+		/// <summary>
+		 /// 制造速度平行的弹幕直线
+		 /// </summary>
+		 /// <param name="Begin">起点</param>
+		 /// <param name="End">终点</param>
+		 /// <param name="Vel">速度</param>
+		 /// <param name="num">数量</param>
+		 /// <param name="Damage"></param>
+		 /// <param name="type"></param>
+		 /// <param name="ai0"></param>
+		 /// <param name="ai1"></param>
+		public int[] ProjLineReturns(Vector2 Begin, Vector2 End, Vector2 Vel, int num, int Damage, int type, float ai0 = 0, float ai1 = 0)
+		{
+			int[] arr = new int[num];
+			Vector2 average = End - Begin;
+			average /= num;
+			for (int i = 0; i < num; i++)
+			{
+				arr[i] = NewProj(Begin + average * i, Vel, type, Damage, 3f, ai0, ai1);
+			}
+			return arr;
 		}
 		#endregion
 		#endregion

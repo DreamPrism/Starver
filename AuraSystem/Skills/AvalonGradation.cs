@@ -30,7 +30,8 @@ namespace Starvers.AuraSystem.Skills
 				if (proj.friendly == false && Vector2.Distance(player.Center, proj.Center) < R)
 				{
 					proj.active = false;
-					TSPlayer.All.SendData(PacketTypes.ProjectileDestroy, "", proj.whoAmI);
+					proj.type = 0;
+					NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, proj.whoAmI);
 				}
 			}
 		}

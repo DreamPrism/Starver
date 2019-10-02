@@ -32,7 +32,7 @@ namespace Starvers.AuraSystem.Skills
 			{
 				proj = ProjectileID.Typhoon;
 			}
-			player.ProjCircle(player.Center, 16 * 40, 15, proj, 25,200);
+			player.ProjCircle(player.Center, 16 * 40, 15, proj, 25, 200 + (int)(200 * Math.Log(player.Level)));
 		}
 	}
 }

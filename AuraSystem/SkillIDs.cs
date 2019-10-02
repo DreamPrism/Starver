@@ -35,6 +35,15 @@ namespace Starvers.AuraSystem
 		Cosmos,
 		ChordMana,
 		FromHell,
-		StarEruption
+		StarEruption,
+		NatureRage,
+		NatureGuard,
+		FishingRod,
+		AlcoholFeast,
+		GreenWind,
+		FrozenCraze,
+		LimitBreak,
+		MiracleMana,
+		UltimateSlash
 	}
 }

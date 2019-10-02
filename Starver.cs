@@ -502,11 +502,11 @@ namespace Starvers
 						}
 						else
 						{
-							MsgBuilder.Append($"CDs: ");
+							MsgBuilder.Append($"CDs:  ");
 							MsgBuilder.AppendLine($"{player.SkillCombineCD(0)}");
 							for (int i = 1; i < Skill.MaxSlots; i++)
 							{
-								MsgBuilder.AppendLine($"       {player.SkillCombineCD(i)}");
+								MsgBuilder.AppendLine($"      {player.SkillCombineCD(i)}");
 							}
 						}
 						player.SendStatusMSG(MsgBuilder.ToString());

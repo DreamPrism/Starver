@@ -33,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
@@ -79,13 +80,22 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuraSystem\Skills\AlcoholFeast.cs" />
     <Compile Include="AuraSystem\Skills\Chaos.cs" />
     <Compile Include="AuraSystem\Skills\ChordMana.cs" />
     <Compile Include="AuraSystem\Skills\Cosmos.cs" />
+    <Compile Include="AuraSystem\Skills\FishingRod.cs" />
     <Compile Include="AuraSystem\Skills\FromHell.cs" />
+    <Compile Include="AuraSystem\Skills\FrozenCraze.cs" />
+    <Compile Include="AuraSystem\Skills\GreenWind.cs" />
+    <Compile Include="AuraSystem\Skills\LimitBreak.cs" />
+    <Compile Include="AuraSystem\Skills\MiracleMana.cs" />
     <Compile Include="AuraSystem\Skills\MirrorMana.cs" />
+    <Compile Include="AuraSystem\Skills\NatureGuard.cs" />
+    <Compile Include="AuraSystem\Skills\NatureRage.cs" />
     <Compile Include="AuraSystem\Skills\StarEruption.cs" />
     <Compile Include="AuraSystem\Skills\TheWorld.cs" />
+    <Compile Include="AuraSystem\Skills\UltimateSlash.cs" />
     <Compile Include="AuraSystem\StarverAuraManager.cs" />
     <Compile Include="AuraSystem\AuraSkillWeapon.cs" />
     <Compile Include="AuraSystem\SkillIDs.cs" />
