@@ -303,9 +303,6 @@ namespace Starvers.BossSystem.Bosses
 		#region Shoot2
 		protected unsafe void Shoot2()
 		{
-#if DEBUG
-			TSPlayer.All.SendInfoMessage("Shoot2 shooting");
-#endif
 			UnitY = (TargetPlayer.Center - Center).Vertical();
 			UnitY.Length(16 * 14);
 			ProjSector(Center + UnitY, ExVersion ? 23 : 16, 3, StarverAI[1], PI / 4, 220, Ammo, 12);

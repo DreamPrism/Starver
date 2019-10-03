@@ -52,7 +52,8 @@ namespace Starvers.AuraSystem
 			new LimitBreak(),
 			new MiracleMana(),
 			new UltimateSlash(),
-			new UniverseBlast()
+			new UniverseBlast(),
+			new NatureStorm()
 		};
 		#endregion
 		#region Handle

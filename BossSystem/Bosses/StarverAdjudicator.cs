@@ -214,7 +214,7 @@ namespace Starvers.BossSystem.Bosses
 						Vel.X = 16 * (ExVersion ? 10 : 16);
 						break;
 					}
-					if (Timer % 2 == 0)
+					if (Timer % 3 == 0)
 					{
 						WitherLaser();
 					}
@@ -270,12 +270,12 @@ namespace Starvers.BossSystem.Bosses
 					{
 						continue;
 					}
-					ProjSector(player.Center + vector, 24, 2, vector.Angle+ PI, PI * 3 / 4, 492, ProjectileID.NebulaBolt, 18);
+					ProjSector(player.Center + vector, 15, 2, vector.Angle+ PI, PI * 3 / 4, 492, ProjectileID.NebulaBolt, 18);
 				}
 			}
 			else
 			{
-				ProjSector(Center, 16, 2, vector.Angle+ PI, PI /2, 321, ProjectileID.NebulaBolt, 12);
+				ProjSector(Center, 13, 2, vector.Angle+ PI, PI /2, 321, ProjectileID.NebulaBolt, 12);
 			}
 		}
 		#endregion
@@ -316,8 +316,8 @@ namespace Starvers.BossSystem.Bosses
 				{
 					continue;
 				}
-				Proj(player.Center - GravityVel * 20, Vel, ProjectileID.SaucerLaser, 219, 2f);
-				Proj(player.Center + GravityVel * 20, Vel.Deflect(PI), ProjectileID.SaucerLaser, 219, 2f);
+				Proj(player.Center - GravityVel * 20, Vel, ProjectileID.SaucerLaser, 160, 2f);
+				Proj(player.Center + GravityVel * 20, Vel.Deflect(PI), ProjectileID.SaucerLaser, 171, 2f);
 			}
 		}
 		#endregion

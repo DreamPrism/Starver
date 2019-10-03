@@ -975,6 +975,7 @@ namespace Starvers
 		public bool Dead => TPlayer.dead;
 		public bool IgnoreCD { get; set; }
 		public bool ForceIgnoreCD { get; set; }
+		public bool IsGuest => UserID == -3;
 		/// <summary>
 		/// 在MySql中的UserID
 		/// <para> -1代表All</para>

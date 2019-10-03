@@ -45,6 +45,7 @@ namespace Starvers.AuraSystem
 		LimitBreak,
 		MiracleMana,
 		UltimateSlash,
-		UniverseBlast
+		UniverseBlast,
+		NatureStorm
 	}
 }

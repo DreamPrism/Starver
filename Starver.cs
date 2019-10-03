@@ -440,7 +440,7 @@ namespace Starvers
 			#region Fast
 			foreach (var player in Players)
 			{
-				if (player is null)
+				if (player is null || player.IsGuest)
 				{
 					continue;
 				}
@@ -461,7 +461,7 @@ namespace Starvers
 				{
 					foreach (StarverPlayer player in Players)
 					{
-						if (player == null)
+						if (player == null || player.IsGuest)
 						{
 							continue;
 						}
@@ -488,7 +488,7 @@ namespace Starvers
 				#endregion
 				foreach (StarverPlayer player in Players)
 				{
-					if (player == null)
+					if (player == null || player.IsGuest)
 					{
 						continue;
 					}
