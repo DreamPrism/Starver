@@ -219,7 +219,8 @@ namespace Starvers.AuraSystem
 					{
 						goto default;
 					}
-					player.IgnoreCD = !player.IgnoreCD;
+					player.ForceIgnoreCD ^= true;
+					player.SendInfoMessage($"ForceIgnoreCD: {player.ForceIgnoreCD}");
 					break;
 				#endregion
 				#region help

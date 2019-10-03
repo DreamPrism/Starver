@@ -537,27 +537,29 @@ namespace Starvers
 		{
 			//new Thread(() =>
 			//{
-				try
+			try
+			{
+				//Thread.Sleep(2000);
+				Players[args.Player.Index]?.Dispose();
+				Players[args.Player.Index] = null;
+				if (Config.SaveMode == SaveModes.MySQL)
 				{
-					//Thread.Sleep(2000);
-					if (Config.SaveMode == SaveModes.MySQL)
-					{
-						Players[args.Player.Index] = StarverPlayer.Read(args.Player.User.ID);
-						UpdateForm(Players[args.Player.Index]);
-					}
-					if (Players[args.Player.Index].Level < Config.LevelNeed)
-					{
-						Players[args.Player.Index].Kick($"你的等级不足,该端口要求玩家最低等级为{Config.LevelNeed}", true);
-					}
-					else if (Config.EnableTestMode && !Players[args.Player.Index].HasPerm(Perms.Test))
-					{
-						Players[args.Player.Index].Kick("当前端口处于测试模式");
-					}
+					Players[args.Player.Index] = StarverPlayer.Read(args.Player.User.ID);
+					UpdateForm(Players[args.Player.Index]);
 				}
-				catch (Exception E)
+				if (Players[args.Player.Index].Level < Config.LevelNeed)
 				{
-					TShock.Log.Info(E.ToString());
+					Players[args.Player.Index].Kick($"你的等级不足,该端口要求玩家最低等级为{Config.LevelNeed}", true);
 				}
+				else if (Config.EnableTestMode && !Players[args.Player.Index].HasPerm(Perms.Test))
+				{
+					Players[args.Player.Index].Kick("当前端口处于测试模式");
+				}
+			}
+			catch (Exception E)
+			{
+				TShock.Log.Info(E.ToString());
+			}
 			//}).Start();
 		}
 		#endregion
@@ -590,7 +592,7 @@ namespace Starvers
 			}
 			else
 			{
-				Players[args.Who] = StarverPlayer.Read(TShock.Players[args.Who].Name);
+				Players[args.Who] = StarverPlayer.Read(TShock.Players[args.Who].User.Name);
 			}
 #if DEBUG
 			Players[args.Who].ShowInfos();

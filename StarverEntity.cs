@@ -20,22 +20,40 @@ namespace Starvers
 		public static Projectile[] Projs => Main.projectile;
 		public static Random Rand => Starver.Rand;
 		public int Index { get; protected set; } = -1;
-		public int Target { get => RealNPC.target; protected set => RealNPC.target = value; }
+		public int Target
+		{
+			get => RealNPC.target;
+			protected set => RealNPC.target = value;
+		}
 		public int Interval { get; protected set; }
 		public float[] ai => RealNPC.ai;
 		public DateTime LastUpdate { get; protected set; } = DateTime.Now;
 		public StarverPlayer TargetPlayer => Starver.Players[Target];
 		public NPC RealNPC => Main.npc[Index];
-		public Vector2 Center { get => RealNPC.Center; set => RealNPC.Center = value; }
+		public Vector2 Center
+		{
+			get => RealNPC.Center;
+			set => RealNPC.Center = value;
+		}
 		public ref Vector2 Position => ref RealNPC.position;
 		public ref Vector2 Velocity => ref RealNPC.velocity;
 		public bool OverrideDead { get; protected set; }
 		public bool Active => _active && Index != -1 && RealNPC.active;
-		public bool _active { get; internal set; }
 		public virtual float DamageIndex { get; set; } = 1;
 		public float DamagedIndex { get; protected set; } = 1;
+		public int RealLife
+		{
+			get => RealNPC.realLife;
+			set => RealNPC.realLife = value;
+		}
+		public bool DontTakeDamage
+		{
+			get => RealNPC.dontTakeDamage;
+			set => RealNPC.dontTakeDamage = value;
+		}
 		#endregion
 		#region Fields
+		internal bool _active;
 		protected DropItem[] Drops;
 		protected Vector Vel;
 		protected uint Timer;

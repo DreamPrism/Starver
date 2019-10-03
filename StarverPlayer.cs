@@ -661,7 +661,7 @@ namespace Starvers
 		/// <param name="ai0"></param>
 		/// <param name="ai1"></param>
 		/// <returns></returns>
-		public int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack, float ai0 = 0, float ai1 = 0)
+		public int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack = 20f, float ai0 = 0, float ai1 = 0)
 		{
 			Damage = Math.Max(1, Math.Min(30000, Damage));
 			int idx = Projectile.NewProjectile(position, velocity, Type, Damage, KnockBack, Index, ai0, ai1);
@@ -974,6 +974,7 @@ namespace Starvers
 		public bool Active => TPlayer.active && !TPlayer.dead;
 		public bool Dead => TPlayer.dead;
 		public bool IgnoreCD { get; set; }
+		public bool ForceIgnoreCD { get; set; }
 		/// <summary>
 		/// 在MySql中的UserID
 		/// <para> -1代表All</para>

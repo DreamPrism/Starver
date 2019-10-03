@@ -96,6 +96,7 @@
     <Compile Include="AuraSystem\Skills\StarEruption.cs" />
     <Compile Include="AuraSystem\Skills\TheWorld.cs" />
     <Compile Include="AuraSystem\Skills\UltimateSlash.cs" />
+    <Compile Include="AuraSystem\Skills\UniverseBlast.cs" />
     <Compile Include="AuraSystem\StarverAuraManager.cs" />
     <Compile Include="AuraSystem\AuraSkillWeapon.cs" />
     <Compile Include="AuraSystem\SkillIDs.cs" />

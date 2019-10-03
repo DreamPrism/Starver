@@ -54,7 +54,6 @@ namespace Starvers.BossSystem.Bosses.Clover
 			public unsafe override void RealAI()
 			{
 				#region Common
-				RealNPC.dontTakeDamage = true;
 				if (!Manager._active)
 				{
 					KillMe();

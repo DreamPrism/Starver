@@ -127,11 +127,19 @@ namespace Starvers.BossSystem.Bosses.Clover
 				TOFOUT.Respawn();
 			}
 			#endregion
-			#region AIUpdate
+			#region Update
 			CrazyWang.AI();
 			Deaths.AI();
 			Wither.AI();
 			TOFOUT.AI();
+			CrazyWang.DontTakeDamage = true;
+			Deaths.DontTakeDamage = true;
+			Wither.DontTakeDamage = true;
+			TOFOUT.DontTakeDamage = true;
+			//CrazyWang.RealLife = Index;
+			//Deaths.RealLife = Index;
+			//Wither.RealLife = Index;
+			//TOFOUT.RealLife = Index;
 			#endregion
 			#endregion
 			#region Self
@@ -140,6 +148,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			FakeVelocity = (Vector)(TargetPlayer.Center - Center) / 13;
 			#endregion
 			#region DetectDamage
+			DontTakeDamage = false;
 			MyRect = new Rectangle((int)Center.X - 16 * 20, (int)Center.Y - 16 * 20, 16 * 40, 16 * 40);
 			foreach(var proj in Terraria.Main.projectile)
 			{
@@ -157,6 +166,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 					//proj.Damage();
 				}
 			}
+			
 			#endregion
 			#endregion
 			#region Mode

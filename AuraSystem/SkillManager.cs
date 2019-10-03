@@ -50,7 +50,9 @@ namespace Starvers.AuraSystem
 			new GreenWind(),
 			new FrozenCraze(),
 			new LimitBreak(),
-			new MiracleMana()
+			new MiracleMana(),
+			new UltimateSlash(),
+			new UniverseBlast()
 		};
 		#endregion
 		#region Handle
@@ -69,7 +71,7 @@ namespace Starvers.AuraSystem
 				{
 					player.SendCombatMSsg("MP不足", Color.Pink);
 				}
-				else if ((player.IgnoreCD == false || skill.ForceCD) && player.CDs[slot] > 0)
+				else if (player.ForceIgnoreCD == false && (player.IgnoreCD == false || skill.ForceCD) && player.CDs[slot] > 0) 
 				{
 					player.SendCombatMSsg("技能冷却中", Color.Pink);
 				}

@@ -47,7 +47,6 @@ namespace Starvers.BossSystem.Bosses.Clover
 				}
 				vector.Length = Radium;
 				base.RealAI();
-				RealNPC.dontTakeDamage = true;
 			}
 			#endregion
 		}

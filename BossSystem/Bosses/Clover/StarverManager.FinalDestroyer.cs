@@ -52,7 +52,6 @@ namespace Starvers.BossSystem.Bosses.Clover
 					KillMe();
 					return;
 				}
-				RealNPC.dontTakeDamage = true;
 				Center = TargetPlayer.Center + ForRounding;
 				ForRounding.Angle += PI / 120;
 				ForRounding.Length = Radium;
