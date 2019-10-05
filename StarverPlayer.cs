@@ -821,7 +821,7 @@ namespace Starvers
 				{
 					if (skill.Name.ToLower().IndexOf(name) == 0)
 					{
-						if (skill.CanSet(this) == false && !ServerDoThis)
+						if (ServerDoThis == false && !skill.CanSet(this))
 						{
 							SendErrorMessage("设置失败");
 						}

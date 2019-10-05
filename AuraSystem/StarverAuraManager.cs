@@ -26,27 +26,41 @@ namespace Starvers.AuraSystem
 			new AuraSkillWeapon(ItemID.DarkLance,ProjectileID.DarkLance,8000),
 			new AuraSkillWeapon(ItemID.ObsidianSwordfish,ProjectileID.ObsidianSwordfish,30000)
 		};
-		public static string SkillList = "技能列表:";
+		public static string[] SkillLists;
 		#endregion
 		#region I & D
 		public void Load()
 		{
 			GetDataHandlers.NewProjectile += OnProj;
 			Commands.ChatCommands.Add(new Command(Perms.Aura.Normal, Command, "au", "aura"));
-			bool flag;
-			SkillList += '\n';
-			for (int i = 1; i <= SkillManager.Skills.Length; i++)
+			int line = 5;
+			int column = 4;
+			int page = (int)Math.Ceiling((float)SkillManager.Skills.Length / column / line);
+			SkillLists = new string[page];
+			StringBuilder SB = new StringBuilder(10 * 4 * 5);
+			int idx;
+			for (int i = 0; i < page; i++)
 			{
-				flag = i % 3 == 0;
-				SkillList += SkillManager.Skills[i - 1].Name;
-				if (flag)
+				SB.AppendLine($"技能列表({i + 1}/{page}):");
+				for (int j = 0; j < line; j++)
 				{
-					SkillList += '\n';
+					for (int k = 0; k < column; k++)
+					{
+						idx = k + j * column + i * column * line;
+						if (idx < SkillManager.Skills.Length)
+						{
+							SB.Append($"{SkillManager.Skills[idx].Name}    ");
+						}
+						else
+						{
+							break;
+						}
+					}
+					SB.AppendLine();
 				}
-				else
-				{
-					SkillList += "    ";
-				}
+				SB.Length -= 1;
+				SkillLists[i] = SB.ToString();
+				SB.Clear();
 			}
 		}
 		public void UnLoad()
@@ -174,7 +188,26 @@ namespace Starvers.AuraSystem
 				#endregion
 				#region list
 				case "list":
-					player.SendInfoMessage(SkillList);
+					{
+						int page = 1;
+						if (args.Parameters.Count > 1)
+						{
+							if(!int.TryParse(args.Parameters[1], out page))
+							{
+								page = 1;
+							}
+						}
+						page -= 1;
+						if (page < 0)
+						{
+							page = 0;
+						}
+						else if (page >= SkillLists.Length)
+						{
+							page = SkillLists.Length - 1;
+						}
+						player.SendInfoMessage(SkillLists[page]);
+					}
 					break;
 				#endregion
 				#region buy
@@ -201,17 +234,19 @@ namespace Starvers.AuraSystem
 				#endregion
 				#region Set
 				case "set":
-					int slot;
-					if(args.Parameters.Count < 3 || !int.TryParse(args.Parameters[1],out slot))
 					{
-						player.SendInfoMessage("格式错误");
-						player.SendInfoMessage("正确用法:    set <slot> <skilltype>");
+						int slot;
+						if (args.Parameters.Count < 3 || !int.TryParse(args.Parameters[1], out slot))
+						{
+							player.SendInfoMessage("格式错误");
+							player.SendInfoMessage("正确用法:    set <slot> <skilltype>");
+						}
+						else
+						{
+							player.SetSkill(args.Parameters[2], slot);
+						}
+						break;
 					}
-					else
-					{
-						player.SetSkill(args.Parameters[2], slot);
-					}
-					break;
 				#endregion
 				#region CDLess
 				case "cd":
@@ -247,6 +282,7 @@ namespace Starvers.AuraSystem
 							}
 							args.Player.SendErrorMessage("技能名称错误");
 							args.Player.SendErrorMessage("    list:  查看技能列表");
+							break;
 						}
 						goto default;
 					}

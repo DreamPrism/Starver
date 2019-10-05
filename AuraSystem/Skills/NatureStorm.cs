@@ -20,7 +20,7 @@ namespace Starvers.AuraSystem.Skills
 		#region Fields
 		private const float XDistance = 16 * 65;
 		private const float YDistance = 16 * 30;
-		private const int UpingGreenID = ProjectileID.TerraBeam;
+		private const int UpingGreenID = ProjectileID.CrystalLeafShot;
 		private const int ExStrikeID = ProjectileID.FlamingJack;
 		private const int LeafType = ProjectileID.CrystalLeafShot;
 		private readonly static Vector2 UpingVel = new Vector2(0, -27);
@@ -50,15 +50,15 @@ namespace Starvers.AuraSystem.Skills
 				damage *= 20;
 				damage += 1500;
 
-				AsyncUpingGreen(player, player);
+				UpingGreen(player, player);
 
 				Vector2 Distance;
 
 				NPC target = null;
 
-				foreach(var npc in Main.npc)
+				foreach (var npc in Main.npc)
 				{
-					if(npc == null||!npc.active)
+					if (npc == null || !npc.active)
 					{
 						continue;
 					}
@@ -70,40 +70,47 @@ namespace Starvers.AuraSystem.Skills
 					{
 						target = npc;
 					}
-					else if (target.life < npc.life) 
+					else if (target.friendly == false && target.life < npc.life)
 					{
 						target = npc;
 					}
 					#endregion
-					if(Distance.X < XDistance && Distance.Y < YDistance)
+					if (Distance.X < XDistance && Distance.Y < YDistance)
 					{
 						AsyncUpingGreen(player, npc);
 					}
 					Thread.Sleep(5);
 				}
-				target = target is null ? Main.npc[0] : target;
+				#region SelectTarget
+				if (target is null || target.friendly)
+				{
+					foreach (var npc in Main.npc)
+					{
+						if (!npc.active)
+						{
+							target = npc;
+							break;
+						}
+					}
+				}
+				#endregion
 
-				Vector Direct = (Vector)(player.Center - target.Center);
-				Direct.Length = 16 * 8f;
-
-				Circle circle = new Circle((Vector)player.Center, 16 * 2.5f, 64);
-				circle.Anchor += Direct;
-				circle.Position -= Direct;
-				vel.Length = 15;
-				int[] projs = circle.CreateProjs(ExStrikeID, damage, vel, player);
+				vel.Length = 18;
+				int[] projs = new int[128];
+				for (int i = 0; i < projs.Length; i++)
+				{
+					projs[i] = player.NewProj(player.Center, vel, ExStrikeID, damage);
+				}
 				SetTarget(projs, target.whoAmI);
 				damage /= 4;
 				Vector2 HitPos = Main.projectile[projs[0]].Center;
 				while (CheckProjs(projs))
 				{
 					#region playerEffect
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i < 8; i++)
 					{
-						Vector StartPos = (Vector)player.Center;
-						StartPos.Y += player.TPlayer.width / 2;
-						StartPos.X += Rand.Next(-2 * player.TPlayer.width, 2 * player.TPlayer.width);
-						player.NewProj(StartPos, UpingVel, UpingGreenID, damage);
-						Thread.Sleep(1);
+						player.NewProj(player.Center, Rand.NextVector2(13), LeafType, damage);
+						Thread.Sleep(2);
 					}
 					#endregion
 					AddLeaf(projs, player);
@@ -118,6 +125,10 @@ namespace Starvers.AuraSystem.Skills
 		}
 		#endregion
 		#region UpingGreen
+		internal static void UpingGreen(StarverPlayer player,Entity target)
+		{
+			UpingGreen(player, target.position, target.height, target.width);
+		}
 		internal static void AsyncUpingGreen(StarverPlayer player, Entity target)
 		{
 			#region Wasted
@@ -149,6 +160,29 @@ namespace Starvers.AuraSystem.Skills
 			#endregion
 			AsyncUpingGreen(player, target.Center, target.height, target.width);
 		}
+		internal static void UpingGreen(StarverPlayer player, Vector2 Center, int Height, int Width)
+		{
+			int Timer = 0;
+			int speed = 18;
+			Vector velocity = new Vector(0, -speed);
+			Vector StartPos = (Vector)Center;
+			StartPos.Y += Height / 3 + Height / 2;
+			Vector Line = new Vector(2 * Width, 0);
+			Line.X = Math.Min(16 * 6, Line.X);
+
+			int Num = (int)(Line.Length / 8);
+
+			int damage = (int)Math.Sqrt(player.Level);
+			damage *= 5;
+			damage += 900;
+
+
+			while (Timer++ < 50)
+			{
+				player.ProjLine(StartPos + Line, StartPos - Line, velocity, Num, damage, UpingGreenID);
+				Thread.Sleep(20);
+			}
+		}
 		internal static async void AsyncUpingGreen(StarverPlayer player, Vector2 Center, int Height,int Width)
 		{
 			await Task.Run(() =>
@@ -161,17 +195,17 @@ namespace Starvers.AuraSystem.Skills
 				Vector Line = new Vector(2 * Width, 0);
 				Line.X = Math.Min(16 * 6, Line.X);
 
-				int Num = (int)(Line.Length / 4);
+				int Num = (int)(Line.Length / 8);
 
 				int damage = (int)Math.Sqrt(player.Level);
 				damage *= 5;
 				damage += 900;
 
 
-				while (Timer++ < 10) 
+				while (Timer++ < 5) 
 				{
 					player.ProjLine(StartPos + Line, StartPos - Line, velocity, Num, damage, UpingGreenID);
-					Thread.Sleep(5 * speed);
+					Thread.Sleep(20);
 				}
 			});
 		}
@@ -192,18 +226,16 @@ namespace Starvers.AuraSystem.Skills
 		}
 		#endregion
 		#region AddLeaf
-		private static void AddLeaf(int[] projs,StarverPlayer player)
+		private static void AddLeaf(int[] projs, StarverPlayer player)
 		{
 			int damage = (int)Math.Sqrt(player.Level);
 			damage *= 4;
 			damage += 500;
-			//for (int i = 0; i < 4; i++)
+			int idx;
+			idx = projs[0];
+			for (int i = 0; i < 4; i++)
 			{
-				foreach (var idx in projs)
-				{
-					player.NewProj(Main.projectile[idx].Center, Rand.NextVector2(6), LeafType, damage);
-					Thread.Sleep(1);
-				}
+				player.NewProj(Main.projectile[idx].Center, Rand.NextVector2(6), LeafType, damage);
 			}
 		}
 		#endregion
@@ -234,8 +266,8 @@ namespace Starvers.AuraSystem.Skills
 				radium += 16 * 3f;
 				Thread.Sleep(175);
 			}
-			player.ProjCircle(pos, 16 * 60, 25, ExStrikeID, 50, damage);
-			AsyncUpingGreen(player, pos, 16 * 3, 16 * 30);
+			player.ProjCircle(pos, 16 * 60, 25, LeafType, 50, damage);
+			UpingGreen(player, pos, 16 * 3, 16 * 30);
 		}
 		#endregion
 	}
