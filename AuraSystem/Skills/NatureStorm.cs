@@ -70,14 +70,14 @@ namespace Starvers.AuraSystem.Skills
 					{
 						target = npc;
 					}
-					else if (target.friendly == false && target.life < npc.life)
+					else if (player.TPlayer.CanHit(target) && target.life < npc.life)
 					{
 						target = npc;
 					}
 					#endregion
 					if (Distance.X < XDistance && Distance.Y < YDistance)
 					{
-						AsyncUpingGreen(player, npc);
+						UpingGreen(player, npc, 15);
 					}
 					Thread.Sleep(5);
 				}
@@ -107,7 +107,19 @@ namespace Starvers.AuraSystem.Skills
 				while (CheckProjs(projs))
 				{
 					#region playerEffect
-					for (int i = 0; i < 8; i++)
+					if (target.active)
+					{
+						Vector velocity = (Vector)(target.Center - player.Center);
+						velocity.Length = 17;
+						Vector offset = velocity.Vertical();
+						for (int i = 0; i < 6; i++)
+						{
+							offset.Length = Rand.Next(-16 * 3, 16 * 3);
+							player.NewProj(player.Center + offset, velocity, LeafType, damage);
+							Thread.Sleep(2);
+						}
+					}
+					else for (int i = 0; i < 6; i++)
 					{
 						player.NewProj(player.Center, Rand.NextVector2(13), LeafType, damage);
 						Thread.Sleep(2);
@@ -125,9 +137,9 @@ namespace Starvers.AuraSystem.Skills
 		}
 		#endregion
 		#region UpingGreen
-		internal static void UpingGreen(StarverPlayer player,Entity target)
+		internal static void UpingGreen(StarverPlayer player,Entity target, int timer = 50)
 		{
-			UpingGreen(player, target.position, target.height, target.width);
+			UpingGreen(player, target.position, target.height, target.width, timer);
 		}
 		internal static void AsyncUpingGreen(StarverPlayer player, Entity target)
 		{
@@ -160,7 +172,7 @@ namespace Starvers.AuraSystem.Skills
 			#endregion
 			AsyncUpingGreen(player, target.Center, target.height, target.width);
 		}
-		internal static void UpingGreen(StarverPlayer player, Vector2 Center, int Height, int Width)
+		internal static void UpingGreen(StarverPlayer player, Vector2 Center, int Height, int Width,int timer = 50)
 		{
 			int Timer = 0;
 			int speed = 18;
@@ -177,7 +189,7 @@ namespace Starvers.AuraSystem.Skills
 			damage += 900;
 
 
-			while (Timer++ < 50)
+			while (Timer++ < timer)
 			{
 				player.ProjLine(StartPos + Line, StartPos - Line, velocity, Num, damage, UpingGreenID);
 				Thread.Sleep(20);

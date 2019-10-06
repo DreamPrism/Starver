@@ -87,6 +87,7 @@
     <Compile Include="AuraSystem\Skills\FishingRod.cs" />
     <Compile Include="AuraSystem\Skills\FromHell.cs" />
     <Compile Include="AuraSystem\Skills\FrozenCraze.cs" />
+    <Compile Include="AuraSystem\Skills\GreenCrit.cs" />
     <Compile Include="AuraSystem\Skills\GreenWind.cs" />
     <Compile Include="AuraSystem\Skills\LimitBreak.cs" />
     <Compile Include="AuraSystem\Skills\MiracleMana.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="AuraSystem\Skills\TheWorld.cs" />
     <Compile Include="AuraSystem\Skills\UltimateSlash.cs" />
     <Compile Include="AuraSystem\Skills\UniverseBlast.cs" />
+    <Compile Include="AuraSystem\Skills\UnstableTele.cs" />
     <Compile Include="AuraSystem\StarverAuraManager.cs" />
     <Compile Include="AuraSystem\AuraSkillWeapon.cs" />
     <Compile Include="AuraSystem\SkillIDs.cs" />

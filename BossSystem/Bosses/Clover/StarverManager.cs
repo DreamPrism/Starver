@@ -15,6 +15,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 	public partial class StarverManager : StarverBoss
 	{
 		#region Fields
+		internal const float Radium = 16 * 55;
 		private Rectangle MyRect;
 		private FinalWander CrazyWang = new FinalWander();
 		private FinalRedeemer Deaths = new FinalRedeemer();

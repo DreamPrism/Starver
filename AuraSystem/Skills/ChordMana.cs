@@ -41,7 +41,7 @@ namespace Starvers.AuraSystem.Skills
 					int MaxLevels = 7;
 					double offset = 0;
 					float length = 16 * 6f;
-					using (ProjQueue Projs = new ProjQueue((MaxLevels + 1) * Count))
+					ProjQueue Projs = new ProjQueue((MaxLevels + 1) * Count);
 					{
 						while (level < MaxLevels)
 						{

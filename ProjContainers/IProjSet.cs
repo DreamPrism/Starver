@@ -27,6 +27,7 @@ namespace Starvers
 		/// <param name="velocity">速度</param>
 		/// <returns>代表是否可以继续添加(是否已满)</returns>
 		bool Push(int idx, Vector velocity);
+		bool Push(IEnumerable<int> idxes, Vector velocity);
 		unsafe bool Push(int* ptr, int count, Vector vel);
 		/// <summary>
 		/// 发射若干个弹幕

@@ -34,6 +34,17 @@ namespace Starvers
 			Push(new ProjPair() { Index = idx, Velocity = Velocity });
 			return Count < Size;
 		}
+		public bool Push(IEnumerable<int> idxes, Vector Velocity)
+		{
+			foreach(int idx in idxes)
+			{
+				if (!Push(idx, Velocity))
+				{
+					return false;
+				}
+			}
+			return Count < Size;
+		}
 		public unsafe bool Push(int* ptr, int count, Vector vel)
 		{
 			int* end = ptr + count;

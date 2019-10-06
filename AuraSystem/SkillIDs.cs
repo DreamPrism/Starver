@@ -46,6 +46,8 @@ namespace Starvers.AuraSystem
 		MiracleMana,
 		UltimateSlash,
 		UniverseBlast,
-		NatureStorm
+		NatureStorm,
+		UnstableTele,
+		GreenCrit
 	}
 }

@@ -20,12 +20,14 @@ namespace Starvers
 	/// <summary>
 	/// 事先将弹幕和速度存入,稍后发射
 	/// </summary>
-	public unsafe class ProjQueue : IProjSet, IDisposable
+	public class ProjQueue : IProjSet
 	{
 		#region Fields
 		private int Size = 30;
-		private int* ProjIndex;
-		private Vector* Velocity;
+		private int[] ProjIndex;
+		private Vector[] Velocity;
+		//private int* ProjIndex;
+		//private Vector* Velocity;
 		/// <summary>
 		/// 存了多少个
 		/// </summary>
@@ -39,15 +41,19 @@ namespace Starvers
 		public ProjQueue(int size = 30)
 		{
 			Size = size;
-			ProjIndex = (int*)Marshal.AllocHGlobal(sizeof(int) * Size);
-			Velocity = (Vector*)Marshal.AllocHGlobal(sizeof(Vector) * Size);
+			ProjIndex = new int[size];
+			Velocity = new Vector[size];
+			//ProjIndex = (int*)Marshal.AllocHGlobal(sizeof(int) * Size);
+			//Velocity = (Vector*)Marshal.AllocHGlobal(sizeof(Vector) * Size);
 		}
 		#endregion
 		#region dtor
+		/*
 		~ProjQueue()
 		{
 			Dispose(false);
 		}
+		*/
 		#endregion
 		#region Indexer
 		public Projectile this[int idx] => Main.projectile[ProjIndex[idx]];
@@ -62,6 +68,17 @@ namespace Starvers
 			ProjIndex[t] = idx;
 			Velocity[t++] = velocity;
 			return true;
+		}
+		public bool Push(IEnumerable<int> idxes, Vector vel)
+		{
+			foreach(var idx in idxes)
+			{
+				if (!Push(idx, vel))
+				{
+					return false;
+				}
+			}
+			return t < Size;
 		}
 		public unsafe bool Push(int* ptr, int count, Vector vel)
 		{
@@ -79,33 +96,25 @@ namespace Starvers
 		#region Launch
 		public void Launch()
 		{
-			int* ptr = ProjIndex + CurrentLaunch;
-			int* end = ProjIndex + t;
-			Vector* pVelocity = Velocity + CurrentLaunch;
-			while (ptr < end)
+			for (int i = CurrentLaunch; i < t; i++) 
 			{
-				if (Main.projectile[*ptr].active)
+				if (this[t].active)
 				{
-					Main.projectile[*ptr].velocity = *pVelocity;
-					NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, *ptr);
+					this[t].velocity = Velocity[t];
+					NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, ProjIndex[t]);
 				}
-				ptr++;
-				pVelocity++;
 			}
 			Reset(true);
 		}
 		public void Launch(Vector Velocity)
 		{
-			int* ptr = ProjIndex + CurrentLaunch;
-			int* end = ProjIndex + t;
-			while (ptr < end)
+			for (int i = CurrentLaunch; i < t; i++)
 			{
-				if (Main.projectile[*ptr].active)
+				if (this[t].active)
 				{
-					Main.projectile[*ptr].velocity = Velocity;
-					NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, *ptr);
+					this[t].velocity = Velocity;
+					NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, ProjIndex[t]);
 				}
-				ptr++;
 			}
 			Reset(true);
 		}
@@ -114,9 +123,9 @@ namespace Starvers
 			int Limit = CurrentLaunch + HowMany;
 			for (; CurrentLaunch < Limit && CurrentLaunch < t; CurrentLaunch++)
 			{
-				if (Main.projectile[ProjIndex[CurrentLaunch]].active)
+				if (this[CurrentLaunch].active)
 				{
-					Main.projectile[ProjIndex[CurrentLaunch]].velocity = Vel;
+					this[CurrentLaunch].velocity = Vel;
 					NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, ProjIndex[CurrentLaunch]);
 				}
 			}
@@ -127,9 +136,9 @@ namespace Starvers
 			int Limit = CurrentLaunch + HowManyProjs;
 			for (; CurrentLaunch < Limit && CurrentLaunch < t; CurrentLaunch++)
 			{
-				if (Main.projectile[ProjIndex[CurrentLaunch]].active)
+				if (this[CurrentLaunch].active)
 				{
-					Main.projectile[ProjIndex[CurrentLaunch]].velocity = Velocity[CurrentLaunch];
+					this[CurrentLaunch].velocity = Velocity[CurrentLaunch];
 					NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, ProjIndex[CurrentLaunch]);
 				}
 			}
@@ -140,9 +149,9 @@ namespace Starvers
 			int Limit = CurrentLaunch + HowMany;
 			for (; CurrentLaunch < Limit && CurrentLaunch < t; CurrentLaunch++)
 			{
-				if (Main.projectile[ProjIndex[CurrentLaunch]].active)
+				if (this[CurrentLaunch].active)
 				{
-					Main.projectile[ProjIndex[CurrentLaunch]].velocity = (Pos - Main.projectile[ProjIndex[CurrentLaunch]].Center).ToLenOf(vel);
+					this[CurrentLaunch].velocity = (Pos - this[CurrentLaunch].Center).ToLenOf(vel);
 					NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, ProjIndex[CurrentLaunch]);
 				}
 			}
@@ -160,16 +169,23 @@ namespace Starvers
 			CurrentLaunch = 0;
 			if (ClearItems)
 			{
+				for (int i = 0; i < ProjIndex.Length; i++)
+				{
+					ProjIndex[i] = 0;
+				}
+				/*
 				int* ptr = ProjIndex;
 				int* end = ptr + Size;
 				while (ptr != end)
 				{
 					*ptr++ = 0;
 				}
+				*/
 			}
 		}
 		#endregion
 		#region Dispose
+		/*
 		public void Dispose()
 		{
 			Dispose(true);
@@ -189,6 +205,7 @@ namespace Starvers
 			ProjIndex = null;
 			Velocity = null;
 		}
+		*/
 		#endregion
 	}
 }

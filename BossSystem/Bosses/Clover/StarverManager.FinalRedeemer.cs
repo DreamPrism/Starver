@@ -14,7 +14,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 		private class FinalRedeemer : StarverRedeemer
 		{
 			#region Fields
-			private float Radium = 16 * 37;
+			private float Radium = StarverManager.Radium;
 			private StarverManager Manager;
 			#endregion
 			#region ctor

@@ -41,7 +41,7 @@ namespace Starvers.AuraSystem.Skills
 			{
 				ProjectileID.EnchantedBeam,
 				ProjectileID.SwordBeam,
-				ProjectileID.FrostBeam
+				ProjectileID.FrostBlastFriendly
 			};
 		}
 		//打算让UltimateBlast直接继承这个,省点事,到时候直接重写AsyncRelease

@@ -47,7 +47,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 					return;
 				}
 				vector.Angle += PI / 120;
-				vector.Length = Radium;
+				vector.Length = StarverManager.Radium;
 				Center = vector + TargetPlayer.Center;
 				#endregion
 				#region Mode

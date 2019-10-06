@@ -27,7 +27,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			TaskNeed = 42;
 			RawType = NPCID.CultistBoss;
-			Name = Lang.GetNPCNameValue(NPCID.CultistBoss);
+			Name = "Cultist Boss";
 			DefaultLife = 4005000;
 			DefaultLifes = 150;
 			DefaultDefense = 380;

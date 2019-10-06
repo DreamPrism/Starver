@@ -348,39 +348,39 @@ namespace Starvers.BossSystem
 					case 4:
 						if (EndBossDelay-- == 60 * 30)
 						{
-							StarverPlayer.All.SendMessage("他似乎永远是最平静的那个", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 28)
 						{
-							StarverPlayer.All.SendMessage("平时什么都不做", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 26)
 						{
-							StarverPlayer.All.SendMessage("就是拿着根鱼竿", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 23)
 						{
-							StarverPlayer.All.SendMessage("坐在岸边", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 20)
 						{
-							StarverPlayer.All.SendMessage("安心钓鱼", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 18)
 						{
-							StarverPlayer.All.SendMessage("但是这样是躲不掉的", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 13)
 						{
-							StarverPlayer.All.SendMessage("该打的时候还是得去打", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 10)
 						{
-							StarverPlayer.All.SendMessage("越来越近了", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 7)
 						{
-							StarverPlayer.All.SendMessage("到了该动手的时候了", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("Text", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 3)
 						{
@@ -498,7 +498,7 @@ namespace Starvers.BossSystem
 						}
 						else if (EndBossDelay == 60 * 18)
 						{
-							StarverPlayer.All.SendMessage("一开始他的实验品经常变成空气", Color.BlueViolet);
+							StarverPlayer.All.SendMessage("一开始他的实验品经常变成空气, 他一直为此苦恼", Color.BlueViolet);
 						}
 						else if (EndBossDelay == 60 * 13)
 						{
@@ -534,7 +534,7 @@ namespace Starvers.BossSystem
 						if (EndBossDelay-- == 0)
 						{
 							StarverPlayer.All.SendMessage("这是你们的最后一战", Color.Black);
-							Bosses[Bosses.Length - 2].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), StarverBoss.CriticalLevel + 3000);
+							Bosses[Bosses.Length - 2].Spawn(SelectLuckyPlayer() + Rand.NextVector2(16 * 80), StarverBoss.CriticalLevel + 2001);
 						}
 						break;
 					#endregion

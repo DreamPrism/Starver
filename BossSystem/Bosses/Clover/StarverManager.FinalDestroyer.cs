@@ -14,7 +14,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 		private class FinalDestroyer : StarverDestroyer
 		{
 			#region Fields
-			private float Radium = 16 * 37;
+			private float Radium = StarverManager.Radium;
 			private Vector ForRounding;
 			private StarverManager Manager;
 			#endregion
@@ -39,7 +39,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 				lastMode = BossMode.Present;
 				Manager = manager;
 				ForRounding.X = 0;
-				ForRounding.Y = Radium;
+				ForRounding.Y = StarverManager.Radium;
 				ForRounding.Angle = PI * 2 * 4 / 4;
 			}
 			#endregion
@@ -54,7 +54,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 				}
 				Center = TargetPlayer.Center + ForRounding;
 				ForRounding.Angle += PI / 120;
-				ForRounding.Length = Radium;
+				ForRounding.Length = StarverManager.Radium;
 				TargetPlayer.TPlayer.ZoneTowerSolar = true;
 				TargetPlayer.SendData(PacketTypes.Zones, "", Target);
 				#endregion

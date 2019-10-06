@@ -63,7 +63,7 @@ namespace Starvers
 		internal BigInt ExpGive = 1;
 		internal int Client = -1;
 		public const float PI = (float)Math.PI;
-		public const int CriticalLevel = 3000;
+		public const int CriticalLevel = 2000;
 		public const int BaseLevel = 2000;
 		#endregion
 		#region ctor

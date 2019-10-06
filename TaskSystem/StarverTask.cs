@@ -40,7 +40,7 @@ namespace Starvers.TaskSystem
 			if (WorldGen.oreTier1 == -1)
 			{
 				WorldGen.oreTier1 = 107;
-				if (WorldGen.genRand.Next(2) == 0)
+				if (Starver.Rand.Next(2) == 0)
 				{
 					WorldGen.oreTier1 = 221;
 				}
@@ -48,7 +48,7 @@ namespace Starvers.TaskSystem
 			if (WorldGen.oreTier2 == -1)
 			{
 				WorldGen.oreTier2 = 108;
-				if (WorldGen.genRand.Next(2) == 0)
+				if (Starver.Rand.Next(2) == 0)
 				{
 					WorldGen.oreTier2 = 222;
 				}
@@ -56,7 +56,7 @@ namespace Starvers.TaskSystem
 			if (WorldGen.oreTier3 == -1)
 			{
 				WorldGen.oreTier3 = 111;
-				if (WorldGen.genRand.Next(2) == 0)
+				if (Starver.Rand.Next(2) == 0)
 				{
 					WorldGen.oreTier3 = 223;
 				}

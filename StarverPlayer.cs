@@ -184,12 +184,11 @@ namespace Starvers
 		{
 			NetMessage.SendData((int)msgType, Index, -1, NetworkText.FromLiteral(text), number, number2, number3, number4, number5);
 		}
+		private static string EndLine19 = new string('\n', 19);
+		private static string EndLine20 = new string('\n', 20);
 		public void SendStatusMSG(string msg)
 		{
-			for (int index = 1; index <= 19; ++index)
-				msg = "\n" + msg;
-			for (int index = 1; index <= 20; ++index)
-				msg += "\n";
+			msg = EndLine19 + msg + EndLine20;
 			SendData(PacketTypes.Status, msg, 0, 0.0f, 0.0f, 0.0f, 0);
 		}
 		#endregion
@@ -211,6 +210,7 @@ namespace Starvers
 			set
 			{
 				TPlayer.Center = value;
+				SendData(PacketTypes.PlayerUpdate, "", Index);
 			}
 		}
 		#endregion
@@ -224,6 +224,7 @@ namespace Starvers
 			set
 			{
 				TPlayer.position = value;
+				SendData(PacketTypes.PlayerUpdate, "", Index);
 			}
 		}
 		#endregion
@@ -702,6 +703,39 @@ namespace Starvers
 			{
 				NewProj(Center + FromPolar(averagerad * i, r) , FromPolar(averagerad * i, -Vel) , Type, Damage, 4f, ai0, ai1);
 			}
+		}
+		#endregion
+		#region ProjCircle
+		/// <summary>
+		/// 弹幕圆
+		/// </summary>
+		/// <param name="Center"></param>
+		/// <param name="r"></param>
+		/// <param name="Vel">速率</param>
+		/// <param name="Type"></param>
+		/// <param name="number">弹幕总数</param>
+		/// <param name="direction">0:不动 1:向内 2:向外</param>
+		public int[] ProjCircleRet(Vector2 Center, float r, float Vel, int Type, int number, int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
+		{
+			switch (direction)
+			{
+				case 0:
+					Vel = 0;
+					break;
+				case 1:
+					Vel *= 1;
+					break;
+				case 2:
+					Vel *= -1;
+					break;
+			}
+			double averagerad = Math.PI * 2 / number;
+			int[] arr = new int[number];
+			for (int i = 0; i < number; i++)
+			{
+				arr[i] = NewProj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
+			}
+			return arr;
 		}
 		#endregion
 		#region ProjSector
@@ -1209,10 +1243,7 @@ namespace Starvers
 		private unsafe StarverPlayer(bool temp = false)
 		{
 			Temp = temp;
-			if (!temp)
-			{
-				Skills = (int*)Marshal.AllocHGlobal(sizeof(int) * Skill.MaxSlots);
-			}
+			Skills = (int*)Marshal.AllocHGlobal(sizeof(int) * Skill.MaxSlots);
 		}
 		private StarverPlayer(int userID, bool temp = false) : this(temp)
 		{

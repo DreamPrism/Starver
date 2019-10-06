@@ -35,7 +35,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			public void Spawn(Vector2 where, int lvl = 2000,StarverManager manager = null)
 			{
 				Manager = manager;
-				Radium = 16 * 37;
+				Radium = StarverManager.Radium;
 				Spawn(where, lvl, PI * 2 * 1 / 4,Radium);
 				Ammo = ProjectileID.VortexLaser;
 				ExVersion = true;
@@ -60,7 +60,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 					return;
 				}
 				ForRounding.Angle += PI / 120;
-				ForRounding.Length = Radium;
+				ForRounding.Length = StarverManager.Radium;
 				Center = TargetPlayer.Center + ForRounding;
 				#endregion
 				#region Mode
