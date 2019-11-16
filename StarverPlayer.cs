@@ -1356,6 +1356,8 @@ namespace Starvers
 		{
 			UserID = userID;
 			Name = GetUserNameByID(UserID);
+			if (temp)
+				return;
 			for (int i = 0; i < Starver.Players.Length; i++)
 			{
 				if (TShock.Players[i] == null || TShock.Players[i].Active == false || TShock.Players[i].Name != Name)
