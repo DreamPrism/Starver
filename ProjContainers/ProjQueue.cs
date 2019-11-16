@@ -61,7 +61,7 @@ namespace Starvers
 		#region Push
 		public bool Push(int idx, Vector velocity)
 		{
-			if (t >= Size || idx <= 0)
+			if (t >= Size || idx < 0)
 			{
 				return false;
 			}

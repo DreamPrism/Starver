@@ -143,7 +143,7 @@ namespace Starvers.BossSystem.Bosses.Base
 				}
 			}
 			NumOfAIs = ainum;
-			StarverAI = (float*)Marshal.AllocHGlobal(sizeof(float) * NumOfAIs).ToPointer();
+			StarverAI = (float*)Marshal.AllocHGlobal(sizeof(float) * NumOfAIs);
 			Level = CriticalLevel;
 			DefaultLife = 40000;
 			DefaultDefense = 60;
@@ -155,7 +155,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		{
 			if (NumOfAIs > 0)
 			{
-				Marshal.FreeHGlobal(new IntPtr(StarverAI));
+				Marshal.FreeHGlobal((IntPtr)StarverAI);
 			}
 		}
 		#endregion
@@ -190,7 +190,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			_active = false;
 			ExpGive = LifeMax;
 			ExpGive *= LifesMax;
-			for (int i = 0; i < 40; ++i)
+			for (int i = 0; i < Starver.Players.Length; ++i)
 			{
 				if (RealNPC.playerInteraction[i])
 				{
@@ -201,6 +201,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			{
 				DropItems();
 			}
+			RealNPC.NPCLoot();
 			KillMe();
 		}
 		#endregion
@@ -216,12 +217,12 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region CheckTarget
 		public void CheckTarget()
 		{
-			if (Target < 0 || Target > 40 || TargetPlayer == null || !TargetPlayer.Active)
+			if (Target < 0 || Target > Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 			{
 				TargetClosest();
 				if (Target == -1)
 				{
-					if (AlivePlayers() < 0 && TShock.Utils.ActivePlayers() > 0)
+					if (AlivePlayers() < 0 && Utils.ActivePlayers() > 0)
 					{
 						OnFail();
 					}
@@ -310,7 +311,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			//FakeVelocity = new Vector(ref RealNPC.velocity);
 			LifeMax = DefaultLife;
 			LifesMax = (int)(Level / (float)CriticalLevel * DefaultLifes);
-			int count = TShock.Utils.ActivePlayers();
+			int count = Utils.ActivePlayers();
 			switch (LifeperPlayerType)
 			{
 				case ByLife:
@@ -376,7 +377,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			//FakeVelocity = new Vector(ref RealNPC.velocity);
 			LifeMax = DefaultLife;
 			LifesMax = (int)(Level / (float)CriticalLevel * DefaultLifes);
-			int count = TShock.Utils.ActivePlayers();
+			int count = Utils.ActivePlayers();
 			switch (LifeperPlayerType)
 			{
 				case ByLife:
@@ -503,10 +504,10 @@ namespace Starvers.BossSystem.Bosses.Base
 			{
 				return;
 			}
-			if (Target < 0 || Target >= 40 || TargetPlayer == null || !TargetPlayer.Active)
+			if (Target < 0 || Target >= Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 			{
 				TargetClosest();
-				if (Target < 0 || Target >= 40 || TargetPlayer == null || !TargetPlayer.Active)
+				if (Target < 0 || Target >= Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 				{
 					//if (TShock.Utils.ActivePlayers() > 0)
 					{

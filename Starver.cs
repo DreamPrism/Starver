@@ -55,7 +55,7 @@ namespace Starvers
 		public static string SavePathPlayers { get; private set; } = Path.Combine(SavePathMain, "Players");
 		public static string SavePathBosses { get; private set; } = Path.Combine(SavePathMain, "Bosses");
 		public static string ExchangeTips { get; private set; } = "";
-		public static StarverPlayer[] Players { get; private set; } = new StarverPlayer[40];
+		public static StarverPlayer[] Players { get; private set; } = new StarverPlayer[Main.player.Length];
 		public static BaseNPC[] NPCs { get; private set; } = new BaseNPC[Main.maxNPCs];
 		public static IStarverPlugin[] Plugins { get; private set; } = new IStarverPlugin[]
 		{
@@ -99,6 +99,7 @@ namespace Starvers
 			new ExchangeItem(ItemID.LunarTabletFragment,ItemID.PixelBox,40,"放在背包最后一格")
 		};
 		public static StarverConfig Config => StarverConfig.Config;
+		public static bool IsPE => Main.myPlayer != 255;
 		public static MySqlConnection DB => StarverPlayer.DB;
 		public static Starver Instance { get; private set; }
 		public static Forms.StarverManagerForm Manager { get; internal set; }
@@ -445,10 +446,7 @@ namespace Starvers
 					continue;
 				}
 				AuraSystem.Skills.AvalonGradation.Update(player);
-				for (int i = 0; i < player.CDs.Length; i++)
-				{
-					player.CDs[i] = Math.Max(0, player.CDs[i] - 1);
-				}
+				player.Update();
 			}
 			#endregion
 			#region Most
@@ -544,7 +542,18 @@ namespace Starvers
 				Players[args.Player.Index] = null;
 				if (Config.SaveMode == SaveModes.MySQL)
 				{
-					Players[args.Player.Index] = StarverPlayer.Read(args.Player.User.ID);
+					int ID;
+					//由于TrPE的TS里是TSPlayer.Account,所以只能这么做
+					dynamic ply = args.Player;
+					try
+					{
+						ID = ply.User.ID;
+					}
+					catch
+					{
+						ID = ply.Account.ID;
+					}
+					Players[args.Player.Index] = StarverPlayer.Read(ID);
 					UpdateForm(Players[args.Player.Index]);
 				}
 				if (Players[args.Player.Index].Level < Config.LevelNeed)
@@ -571,7 +580,17 @@ namespace Starvers
 			{
 				if (player.IsLoggedIn)
 				{
-					Players[args.Who] = StarverPlayer.Read(player.User.ID);
+					int ID;
+					dynamic ply = player;
+					try
+					{
+						ID = ply.User.ID;
+					}
+					catch
+					{
+						ID = ply.Account.ID;
+					}
+					Players[args.Who] = StarverPlayer.Read(ID);
 					Console.WriteLine($"Added:{Players[args.Who].Name}");
 					UpdateForm(Players[args.Who]);
 					if (Config.EnableTestMode && !Players[args.Who].HasPerm(Perms.Test))
@@ -592,7 +611,17 @@ namespace Starvers
 			}
 			else
 			{
-				Players[args.Who] = StarverPlayer.Read(TShock.Players[args.Who].User.Name);
+				string Name;
+				dynamic ply = TShock.Players[args.Who];
+				try
+				{
+					Name = ply.User.Name;
+				}
+				catch
+				{
+					Name = ply.Account.Name;
+				}
+				Players[args.Who] = StarverPlayer.Read(Name);
 			}
 #if DEBUG
 			Players[args.Who].ShowInfos();
@@ -971,9 +1000,11 @@ namespace Starvers
 			{
 				try
 				{
-					i = TShock.Users.GetUserByName(args.Parameters[0]).ID;
-					StarverPlayer player = StarverPlayer.Read(i);
-					player.ShowInfos(args.Player);
+					var ID = StarverPlayer.GetUserIDByName(args.Parameters[0]);
+					using (StarverPlayer player = StarverPlayer.Read((int)ID))
+					{
+						player.ShowInfos(args.Player);
+					}
 				}
 				catch
 				{

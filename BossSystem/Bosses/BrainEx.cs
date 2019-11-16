@@ -122,7 +122,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			base.KillMe();
 			/*
-			for (i = 0; i < 40; ++i)
+			for (i = 0; i < Starver.Players.Length; ++i)
 			{
 				if (TShockAPI.TShock.Players[i] == null || !TShockAPI.TShock.Players[i].Active)
 				{

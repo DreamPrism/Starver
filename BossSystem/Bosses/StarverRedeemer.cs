@@ -225,10 +225,10 @@ namespace Starvers.BossSystem.Bosses
 			{
 				fixed (float* ai = this.ai)
 				{
-					int num1 = Utils.SelectRandom(Main.rand, SummonList.ToArray());
-					ai[1] = 30 * Main.rand.Next(5, 16);
-					int num2 = Main.rand.Next(3, 6);
-					int num3 = Main.rand.Next(0, 4);
+					int num1 = SummonList.Next();
+					ai[1] = 30 * Starver.Rand.Next(5, 16);
+					int num2 = Starver.Rand.Next(3, 6);
+					int num3 = Starver.Rand.Next(0, 4);
 					int index1 = 0;
 					tupleList.Add(item: Tuple.Create(RealNPC.Top - (Vector2.UnitY * 120f), num2, 0));
 					int num4 = 0;
@@ -237,9 +237,9 @@ namespace Starvers.BossSystem.Bosses
 						Vector2  vector2_1 = tupleList[0].Item1;
 						int num6 = 1;
 						int num7 = 1;
-						if (num4 > 0 && num3 > 0 && (Main.rand.Next(3) != 0 || num4 == 1))
+						if (num4 > 0 && num3 > 0 && (Starver.Rand.Next(3) != 0 || num4 == 1))
 						{
-							num7 = Main.rand.Next(Math.Max(1, tupleList[0].Item2));
+							num7 = Starver.Rand.Next(Math.Max(1, tupleList[0].Item2));
 							++num6;
 							--num3;
 						}
@@ -247,26 +247,26 @@ namespace Starvers.BossSystem.Bosses
 						{
 							int num8 = tupleList[0].Item3;
 							if (num4 == 0)
-								num8 =Utils.SelectRandom(Main.rand, param1);
+								num8 = param1.Next();
 							else if (index2 == 1)
 								num8 *= -1;
-							float num9 = (float)((num4 % 2 == 0 ? 0.0 : 3.14159274101257) + (0.5 - Main.rand.NextFloat()) * 0.785398185253143 + num8 * 0.785398185253143 * (num4 % 2 == 0).ToDirectionInt());
-							float num10 = (float)(100.0 + 50.0 * Main.rand.NextFloat());
+							float num9 = (float)((num4 % 2 == 0 ? 0.0 : 3.14159274101257) + (0.5 - Starver.Rand.NextFloat()) * 0.785398185253143 + num8 * 0.785398185253143 * (num4 % 2 == 0).ToDirectionInt());
+							float num10 = (float)(100.0 + 50.0 * Starver.Rand.NextFloat());
 							int num11 = tupleList[0].Item2;
 							if (index2 != 0)
 								num11 = num7;
 							if (num4 == 0)
 							{
-								num9 = (float)((0.5 - Main.rand.NextFloat()) * 0.785398185253143);
-								num10 = (float)(100.0 + 100.0 * Main.rand.NextFloat());
+								num9 = (float)((0.5 - Starver.Rand.NextFloat()) * 0.785398185253143);
+								num10 = (float)(100.0 + 100.0 * Starver.Rand.NextFloat());
 							}
 							Vector2  vector2_2 = (-Vector2.UnitY).RotatedBy(num9, new Vector2()) * num10;
 							if (num11 - 1 < 0)
 								vector2_2 = Vector2.Zero;
-							index1 = Proj(vector2_1,  vector2_2, ProjectileID.StardustTowerMark, 180, 0.0f, -num4 * 10f, (float)(0.5 + Main.rand.NextFloat() * 0.5));
+							index1 = Proj(vector2_1,  vector2_2, ProjectileID.StardustTowerMark, 180, 0.0f, -num4 * 10f, (float)(0.5 + Starver.Rand.NextFloat() * 0.5));
 							if (ExVersion)
 							{
-								for (int i = 0; i < 35; i++)
+								for (int i = 0; i < Starver.Players.Length; i++)
 								{
 									if (Starver.Players[i] is null)
 									{
@@ -276,12 +276,12 @@ namespace Starvers.BossSystem.Bosses
 									{
 										continue;
 									}
-									index1 = Proj(Starver.Players[i].Center,  vector2_2, ProjectileID.StardustTowerMark, 180, 0.0f, -num4 * 10f, (float)(0.5 + Main.rand.NextFloat() * 0.5));
+									index1 = Proj(Starver.Players[i].Center,  vector2_2, ProjectileID.StardustTowerMark, 180, 0.0f, -num4 * 10f, (float)(0.5 + Starver.Rand.NextFloat() * 0.5));
 								}
 							}
 							else
 							{
-								index1 = Proj(vector2_1,  vector2_2, ProjectileID.StardustTowerMark, 180, 0.0f, -num4 * 10f, (float)(0.5 + Main.rand.NextFloat() * 0.5));
+								index1 = Proj(vector2_1,  vector2_2, ProjectileID.StardustTowerMark, 180, 0.0f, -num4 * 10f, (float)(0.5 + Starver.Rand.NextFloat() * 0.5));
 							}
 							vector2List.Add(vector2_1 +  vector2_2);
 							if (num4 < num2 && tupleList[0].Item2 > 0)

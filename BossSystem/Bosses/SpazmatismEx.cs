@@ -107,10 +107,10 @@ namespace Starvers.BossSystem.Bosses
 				RealNPC.Center = LastCenter;
 				SendData();
 			}
-			if (Target < 0 || Target >= 40 || TargetPlayer == null || !TargetPlayer.Active)
+			if (Target < 0 || Target >= Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 			{
 				TargetClosest();
-				if (Target < 0 || Target >= 40 || TargetPlayer == null || !TargetPlayer.Active)
+				if (Target < 0 || Target >= Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 				{
 					KillMe();
 					return;

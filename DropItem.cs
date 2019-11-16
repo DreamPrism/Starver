@@ -42,7 +42,7 @@ namespace Starvers
 		public void Drop(NPC npc)
 		{
 			Vector2 pos = npc.Center;
-			if (Main.rand.NextDouble() > chance)
+			if (Starver.Rand.NextDouble() > chance)
 			{
 				return;
 			}

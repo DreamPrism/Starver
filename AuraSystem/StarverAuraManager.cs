@@ -217,7 +217,7 @@ namespace Starvers.AuraSystem
 						need = int.Parse(args.Parameters[1]) - 1;
 						if(player.Exp >= SkillSlot[need].Cost)
 						{
-							player.TSPlayer.GiveItem(SkillSlot[need].Item, "", 0, 0, 1, 0);
+							player.GiveItem(SkillSlot[need].Item);
 							player.Exp -= SkillSlot[need].Cost;
 							player.SendMessage("购买成功", new Color(0, 0x80, 0));
 						}

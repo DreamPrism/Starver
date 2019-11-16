@@ -563,7 +563,6 @@ I:\VS Solution\gits\Starver-master\obj\Release\Starver.csprojAssemblyReference.c
 I:\VS Solution\gits\Starver-master\obj\Release\Starvers.Forms.StarverManagerForm.resources
 I:\VS Solution\gits\Starver-master\obj\Release\Starvers.Properties.Resources.resources
 I:\VS Solution\gits\Starver-master\obj\Release\Starver.csproj.GenerateResource.cache
-I:\VS Solution\gits\Starver-master\obj\Release\Starver.csproj.CoreCompileInputs.cache
 I:\VS Solution\gits\Starver-master\obj\Release\Starver.csproj.CopyComplete
 I:\VS Solution\gits\Starver-master\obj\Release\Starver.dll
 I:\VS Solution\gits\Starver-master\obj\Release\Starver.pdb

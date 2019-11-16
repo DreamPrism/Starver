@@ -136,11 +136,7 @@ namespace Starvers.BossSystem
 					{
 						foreach (var player in Starver.Players)
 						{
-							if (player is null)
-							{
-								continue;
-							}
-							player.UpdateMoon();
+							player?.UpdateMoon();
 						}
 					}
 				}
@@ -243,6 +239,10 @@ namespace Starvers.BossSystem
 					{
 						boss.AI();
 					}
+				}
+				catch(KeyNotFoundException)
+				{
+					continue;
 				}
 				catch (Exception e)
 				{

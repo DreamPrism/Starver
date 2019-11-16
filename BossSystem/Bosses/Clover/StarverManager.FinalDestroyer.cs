@@ -38,6 +38,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 				Mode = BossMode.WaitForMode;
 				lastMode = BossMode.Present;
 				Manager = manager;
+				Radium = StarverManager.Radium;
 				ForRounding.X = 0;
 				ForRounding.Y = StarverManager.Radium;
 				ForRounding.Angle = PI * 2 * 4 / 4;
@@ -54,7 +55,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 				}
 				Center = TargetPlayer.Center + ForRounding;
 				ForRounding.Angle += PI / 120;
-				ForRounding.Length = StarverManager.Radium;
+				ForRounding.Length = Radium;
 				TargetPlayer.TPlayer.ZoneTowerSolar = true;
 				TargetPlayer.SendData(PacketTypes.Zones, "", Target);
 				#endregion

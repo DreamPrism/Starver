@@ -46,93 +46,102 @@ namespace Starvers.AuraSystem.Skills
 		{
 			await Task.Run(() =>
 			{
-				int damage = (int)Math.Sqrt(player.Level);
-				damage *= 20;
-				damage += 1500;
-
-				UpingGreen(player, player);
-
-				Vector2 Distance;
-
-				NPC target = null;
-
-				foreach (var npc in Main.npc)
+				try
 				{
-					if (npc == null || !npc.active)
-					{
-						continue;
-					}
-					Distance = npc.Center - player.Center;
-					Distance.X = Math.Abs(Distance.X);
-					Distance.Y = Math.Abs(Distance.Y);
-					#region SelectMainStrikeTarget
-					if (target == null)
-					{
-						target = npc;
-					}
-					else if (player.TPlayer.CanHit(target) && target.life < npc.life)
-					{
-						target = npc;
-					}
-					#endregion
-					if (Distance.X < XDistance && Distance.Y < YDistance)
-					{
-						UpingGreen(player, npc, 15);
-					}
-					Thread.Sleep(5);
-				}
-				#region SelectTarget
-				if (target is null || target.friendly)
-				{
+					int damage = (int)Math.Sqrt(player.Level);
+					damage *= 20;
+					damage += 1500;
+
+					UpingGreen(player, player);
+
+					Vector2 Distance;
+
+					NPC target = null;
+
 					foreach (var npc in Main.npc)
 					{
-						if (!npc.active)
+						if (npc == null || !npc.active)
+						{
+							continue;
+						}
+						Distance = npc.Center - player.Center;
+						Distance.X = Math.Abs(Distance.X);
+						Distance.Y = Math.Abs(Distance.Y);
+						#region SelectMainStrikeTarget
+						if (target == null)
 						{
 							target = npc;
-							break;
 						}
-					}
-				}
-				#endregion
-
-				vel.Length = 18;
-				int[] projs = new int[128];
-				for (int i = 0; i < projs.Length; i++)
-				{
-					projs[i] = player.NewProj(player.Center, vel, ExStrikeID, damage);
-				}
-				SetTarget(projs, target.whoAmI);
-				damage /= 4;
-				Vector2 HitPos = Main.projectile[projs[0]].Center;
-				while (CheckProjs(projs))
-				{
-					#region playerEffect
-					if (target.active)
-					{
-						Vector velocity = (Vector)(target.Center - player.Center);
-						velocity.Length = 17;
-						Vector offset = velocity.Vertical();
-						for (int i = 0; i < 6; i++)
+						else if (target.ReceiveDamage() && target.life < npc.life)
 						{
-							offset.Length = Rand.Next(-16 * 3, 16 * 3);
-							player.NewProj(player.Center + offset, velocity, LeafType, damage);
-							Thread.Sleep(2);
+							target = npc;
 						}
+						#endregion
+						if (Distance.X < XDistance && Distance.Y < YDistance)
+						{
+							UpingGreen(player, npc, 15);
+						}
+						Thread.Sleep(5);
 					}
-					else for (int i = 0; i < 6; i++)
+					#region SelectTarget
+					if (target is null || target.friendly)
 					{
-						player.NewProj(player.Center, Rand.NextVector2(13), LeafType, damage);
-						Thread.Sleep(2);
+						foreach (var npc in Main.npc)
+						{
+							if (!npc.active)
+							{
+								target = npc;
+								break;
+							}
+						}
 					}
 					#endregion
-					AddLeaf(projs, player);
-					HitPos = Main.projectile[projs[0]].Center;
+
+					vel.Length = 18;
+					int[] projs = new int[128];
+					for (int i = 0; i < projs.Length; i++)
+					{
+						projs[i] = player.NewProj(player.Center, vel, ExStrikeID, damage);
+					}
+					SetTarget(projs, target.whoAmI);
+					damage /= 4;
+					Vector2 HitPos = Main.projectile[projs[0]].Center;
+					while (CheckProjs(projs))
+					{
+						#region playerEffect
+						if (target.active)
+						{
+							Vector velocity = (Vector)(target.Center - player.Center);
+							velocity.Length = 17;
+							Vector offset = velocity.Vertical();
+							for (int i = 0; i < 6; i++)
+							{
+								offset.Length = Rand.Next(-16 * 3, 16 * 3);
+								player.NewProj(player.Center + offset, velocity, LeafType, damage);
+								Thread.Sleep(2);
+							}
+						}
+						else for (int i = 0; i < 6; i++)
+							{
+								player.NewProj(player.Center, Rand.NextVector2(13), LeafType, damage);
+								Thread.Sleep(2);
+							}
+						#endregion
+						AddLeaf(projs, player);
+						HitPos = Main.projectile[projs[0]].Center;
+					}
+					if (target.active)
+					{
+						HitPos = target.Center;
+					}
+					Boom(HitPos, player);
 				}
-				if(target.active)
+				catch(Exception e)
 				{
-					HitPos = target.Center;
+					string msg = e.ToString();
+					StarverPlayer.All.SendErrorMessage(msg);
+					StarverPlayer.Server.SendErrorMessage(msg);
 				}
-				Boom(HitPos, player);
 			});
 		}
 		#endregion

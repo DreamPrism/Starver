@@ -183,7 +183,7 @@ namespace Starvers.NPCSystem
 			}
 			if (RealNPC.aiStyle == None)
 			{
-				if (Target < 0 || Target > 40 || TargetPlayer == null || !TargetPlayer.Active)
+				if (Target < 0 || Target > Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 				{
 					TargetClosest();
 					if (Target == None || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500)

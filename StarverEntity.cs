@@ -87,15 +87,11 @@ namespace Starvers
 		#region NewProj
 		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack = 3f,float ai0 = 0, float ai1 = 0)
 		{
-			Damage = Math.Max(1, Math.Min(32767, Damage));
-			int idx = Projectile.NewProjectile(position, velocity, Type, Damage, KnockBack, 255, ai0, ai1);
-			return idx;
+			return Utils.NewProj(position, velocity, Type, Damage, KnockBack, Main.myPlayer, ai0, ai1);
 		}
 		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage,int owner, float KnockBack, float ai0 = 0, float ai1 = 0)
 		{
-			Damage = Math.Max(1, Math.Min(32767, Damage));
-			int idx = Projectile.NewProjectile(position, velocity, Type, Damage, KnockBack, owner, ai0, ai1);
-			return idx;
+			return Utils.NewProj(position, velocity, Type, Damage, KnockBack, owner, ai0, ai1);
 		}
 		#endregion
 		#region Proj
@@ -374,7 +370,7 @@ namespace Starvers
 			}
 			if (RealNPC.aiStyle == None)
 			{
-				if (Target < 0 || Target > 40 || TargetPlayer == null || !TargetPlayer.Active)
+				if (Target < 0 || Target > Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 				{
 					TargetClosest();
 					if (Target == None || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 400)
@@ -432,7 +428,7 @@ namespace Starvers
 		public void TargetClosest()
 		{
 			Target = -1;
-			for(int i = 0; i < 40; i++)
+			for(int i = 0; i < Starver.Players.Length; i++)
 			{
 				if (Starver.Players[i] == null || !Starver.Players[i].Active)
 				{
@@ -453,7 +449,7 @@ namespace Starvers
 		public static int AlivePlayers()
 		{
 			int total = 0;
-			for(int i = 0; i < 40; i++)
+			for(int i = 0; i < Starver.Players.Length; i++)
 			{
 				if (Starver.Players[i] == null || !Starver.Players[i].Active)
 				{

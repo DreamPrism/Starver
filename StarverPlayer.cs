@@ -84,14 +84,20 @@ namespace Starvers
 				TPlayer.SendCombatMsg(msg, color);
 			}
 		}
-		public void SendMessage(string msg,byte R,byte G,byte B)
+		public void SendMessage(string msg, byte R, byte G, byte B)
 		{
 			if (Index == -2)
 			{
 				Console.WriteLine(msg);
 			}
-			else if (Index >= -1)
+			else if(Index == -1)
 			{
+				TSPlayer.All.SendMessage(msg, R, G, B);
+			}
+			else if (Index >= 0)
+			{
+				TSPlayer.SendMessage(msg, R, G, B);
+				/*
 				if (msg.Contains("\n"))
 				{
 					foreach (string msg2 in msg.Split(new char[]
@@ -104,6 +110,7 @@ namespace Starvers
 					return;
 				}
 				this.SendData(PacketTypes.SmartTextMessage, msg, 255, R, G, B, -1);
+				*/
 			}
 			else
 			{
@@ -243,7 +250,96 @@ namespace Starvers
 		}
 		#endregion
 		#endregion
+		#region Properties
+		#region Zones
+		public bool ZoneDirtLayerHeight
+		{
+			get
+			{
+				return TilePoint.Y <= Main.rockLayer && TilePoint.Y > Main.worldSurface;
+			}
+		}
+		public bool ZoneBeach
+		{
+			get
+			{
+				return ZoneOverworldHeight && (TilePoint.X < 380 || TilePoint.X > Main.maxTilesX - 380);
+			}
+		}
+		public bool ZoneOverworldHeight
+		{
+			get
+			{
+				return TilePoint.Y <= Main.worldSurface && TilePoint.Y > Main.worldSurface * 0.349999994039536;
+			}
+		}
+		public bool ZoneRockLayerHeight
+		{
+			get
+			{
+				return TilePoint.Y <= Main.maxTilesY - 200 && (double)TilePoint.Y > Main.rockLayer;
+			}
+		}
+		public bool ZoneRain
+		{
+			get
+			{
+				return Main.raining && (double)TilePoint.Y <= Main.worldSurface;
+			}
+		}
+		public bool ZoneUnderworldHeight
+		{
+			get
+			{
+				return TilePoint.Y > Main.maxTilesY - 200;
+			}
+		}
+		public bool ZoneSkyHeight
+		{
+			get
+			{
+				return TilePoint.Y <= Main.worldSurface * 0.349999994039536;
+			}
+		}
+		#endregion
+		#region HeldItem
+		public Item HeldItem
+		{
+			get
+			{
+				return TPlayer.inventory[TPlayer.selectedItem];
+			}
+		}
+		#endregion
+		#endregion
 		#region Methods
+		#region GiveItem
+		public void GiveItem(int type, int stack = 1, int prefix = 0)
+		{
+			int number = Item.NewItem((int)Center.X, (int)Center.Y, TPlayer.width, TPlayer.height, type, stack, true, prefix, true, false);
+			SendData(PacketTypes.ItemDrop, "", number);
+		}
+		#endregion
+		#region GetUser
+		public static int? GetUserIDByName(string name)
+		{
+			var reader = TShockAPI.DB.DbExt.QueryReader(TShock.DB, "select * from users where Username=@0", name);
+			if (reader.Read())
+			{
+				return reader.Get<int?>("ID");
+			}
+			return null;
+		}
+		public static string GetUserNameByID(int id)
+		{
+			var reader = TShockAPI.DB.DbExt.QueryReader(TShock.DB, "select * from users where ID=@0", id);
+			if (reader.Read())
+			{
+				return reader.Get<string>("Username");
+			}
+			return null;
+		}
+		#endregion
 		#region GetBiomes
 		public NPCSystem.BiomeType GetBiomes()
 		{
@@ -270,7 +366,7 @@ namespace Starvers
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Crimson;
 			}
-			if(TPlayer.ZoneDirtLayerHeight || TPlayer.ZoneRockLayerHeight)
+			if(ZoneDirtLayerHeight || ZoneRockLayerHeight)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.UnderGround;
@@ -290,12 +386,12 @@ namespace Starvers
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Metor;
 			}
-			if(TPlayer.ZoneRain)
+			if(ZoneRain)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Rain;
 			}
-			if(TPlayer.ZoneUnderworldHeight)
+			if(ZoneUnderworldHeight)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Hell;
@@ -320,11 +416,11 @@ namespace Starvers
 				Grass = false;
 				biome |= NPCSystem.BiomeType.TowerVortex;
 			}
-			if(TPlayer.ZoneSkyHeight)
+			if(ZoneSkyHeight)
 			{
 				biome |= NPCSystem.BiomeType.Sky;
 			}
-			if(TPlayer.ZoneBeach)
+			if(ZoneBeach)
 			{
 				biome |= NPCSystem.BiomeType.Beach;
 			}
@@ -386,7 +482,23 @@ namespace Starvers
 			return Weapon[weapon.Career, weapon.Index] > 0;
 		}
 		#endregion
-		#region UpdateMoon
+		#region Update
+		public void Update()
+		{
+			UpdateCD();
+			UpdateTilePoint();
+		}
+		protected void UpdateTilePoint()
+		{
+			TilePoint = Center.ToTileCoordinates();
+		}
+		protected void UpdateCD()
+		{
+			for (int i = 0; i < CDs.Length; i++)
+			{
+				CDs[i] = Math.Max(0, CDs[i] - 1);
+			}
+		}
 		public void UpdateMoon()
 		{
 			if(Dead)
@@ -480,7 +592,7 @@ namespace Starvers
 					}
 					else
 					{
-						TSPlayer.Server.SendInfoMessage("StarverPlugins: 玩家{0}不存在,已新建", TShock.Users.GetUserByID(UserID).Name);
+						TSPlayer.Server.SendInfoMessage("StarverPlugins: 玩家{0}不存在,已新建", player.Name);
 						AddNewUser(player);
 					}
 				}
@@ -664,14 +776,7 @@ namespace Starvers
 		/// <returns></returns>
 		public int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack = 20f, float ai0 = 0, float ai1 = 0)
 		{
-			Damage = Math.Max(1, Math.Min(30000, Damage));
-			int idx = Projectile.NewProjectile(position, velocity, Type, Damage, KnockBack, Index, ai0, ai1);
-			if(Type == ProjectileID.ToxicCloud)
-			{
-				Main.projectile[idx].timeLeft = 60 * 10;
-			}
-			NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, idx);
-			return idx;
+			return Utils.NewProj(position, velocity, Type, Damage, KnockBack, Index, ai0, ai1);
 		}
 		#endregion
 		#region ProjCircle
@@ -886,7 +991,8 @@ namespace Starvers
 		public void Damage(int damage)
 		{
 			damage = Math.Min(23000, damage);
-			NetMessage.SendPlayerHurt(Index, PlayerDeathReason.LegacyDefault(), damage, Index, false, false, 0);
+			TSPlayer.DamagePlayer(damage);
+			//NetMessage.SendPlayerHurt(Index, PlayerDeathReason.LegacyDefault(), damage, Index, false, false, 0);
 		}
 		#endregion
 		#region ShowInfos
@@ -944,8 +1050,8 @@ namespace Starvers
 			{
 				case SaveModes.MySQL:
 					{
-						int? ID = TShock.Users.GetUserByName(Name)?.ID;
-						if (ID == null || !ID.HasValue)
+						int? ID = GetUserIDByName(Name);
+						if (!ID.HasValue)
 						{
 							return false;
 						}
@@ -1226,6 +1332,7 @@ namespace Starvers
 		#endregion
 		#region Privates
 		#region Fields
+		private Point TilePoint;
 		private bool IsServer;
 		private int MoonIndex = -1;
 		private bool disposed;
@@ -1248,8 +1355,8 @@ namespace Starvers
 		private StarverPlayer(int userID, bool temp = false) : this(temp)
 		{
 			UserID = userID;
-			Name = TShock.Users.GetUserByID(UserID).Name;
-			for (int i = 0; i < 40; i++)
+			Name = GetUserNameByID(UserID);
+			for (int i = 0; i < Starver.Players.Length; i++)
 			{
 				if (TShock.Players[i] == null || TShock.Players[i].Active == false || TShock.Players[i].Name != Name)
 				{

@@ -35,7 +35,7 @@ namespace Starvers
 		#region SaveAll
 		public static void SaveAll()
 		{
-			for (int i = 0; i < 40; i++)
+			for (int i = 0; i < Starver.Players.Length; i++)
 			{
 				if (Players[i] == null || Players[i].UserID < 0)
 				{
@@ -187,7 +187,7 @@ namespace Starvers
 		#region cmd
 		public static StarverPlayer SPlayer(this CommandArgs args)
 		{
-			if (args.Player.Name != "Server")
+			if (0 <= args.Player.Index && args.Player.Index < Main.player.Length) 
 			{
 				return Starver.Players[args.Player.Index];
 			}
@@ -195,6 +195,31 @@ namespace Starvers
 			{
 				return StarverPlayer.Server;
 			}
+		}
+		#endregion
+		#region Activeplayers
+		public static int ActivePlayers()
+		{
+			int count = 0;
+			foreach(var player in Main.player)
+			{
+				if (player != null)
+					count++;
+			}
+			return count;
+		}
+		#endregion
+		#region NewProj
+		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack, int Owner, float ai0 = 0, float ai1 = 0)
+		{
+			if(Type >= Main.projectileTexture.Length)
+			{
+				Type = 0;
+			}
+			Damage = Math.Max(1, Math.Min(30000, Damage));
+			int idx = Projectile.NewProjectile(position.X, position.Y, velocity.X, velocity.Y, Type, Damage, KnockBack, Owner, ai0, ai1);
+			NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, idx);
+			return idx;
 		}
 		#endregion
 		#region SetLife
@@ -212,7 +237,7 @@ namespace Starvers
 		#region SendCombatText
 		public static void SendCombatMsg(this Entity entity, string msg, Color color)
 		{
-			NetMessage.SendData((int)PacketTypes.CreateCombatTextExtended, -1, -1, NetworkText.FromLiteral(msg), (int)color.PackedValue, entity.position.X + Rand.Next(entity.width), entity.position.Y + Rand.Next(entity.height), 0.0f, 0, 0, 0);
+			NetMessage.SendData((int)PacketTypes.CreateCombatText, -1, -1, NetworkText.FromLiteral(msg), (int)color.PackedValue, entity.position.X + Rand.Next(entity.width), entity.position.Y + Rand.Next(entity.height), 0.0f, 0, 0, 0);
 		}
 		#endregion
 		#region Vector2
@@ -272,7 +297,25 @@ namespace Starvers
 			return new Vector2(value.X, value.Y);
 		}
 		#endregion
-		#region rands
+		#region ReceiveDamage
+		public static bool ReceiveDamage(this NPC npc)
+		{
+			if(npc.friendly)
+			{
+				return false;
+			}
+			if(npc.dontTakeDamage)
+			{
+				return false;
+			}
+			return true;
+		}
+		#endregion
+		#region Rands
+		public static float NextFloat(this Random rand)
+		{
+			return (float)rand.NextDouble();
+		}
 		public static double NextAngle(this Random rand)
 		{
 			return rand.NextDouble() * Math.PI * 2;
@@ -321,6 +364,10 @@ namespace Starvers
 		public static T Next<T>(this T[] array)
 		{
 			return array[Rand.Next(array.Length)];
+		}
+		public static T Next<T>(this IList<T> list)
+		{
+			return list[Rand.Next(list.Count)];
 		}
 		#endregion
 		#region SendData

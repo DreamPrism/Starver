@@ -93,7 +93,7 @@ namespace Starvers.WeaponSystem.Weapons
 		#region Check
 		public virtual bool Check(TShockAPI.GetDataHandlers.NewProjectileEventArgs args)
 		{
-			return args.Type == CatchID && Terraria.Main.player[args.Owner].HeldItem.type == ItemID;
+			return args.Type == CatchID && Starver.Players[args.Owner].HeldItem.type == ItemID;
 		}
 		#endregion
 		#region UseWeapon
