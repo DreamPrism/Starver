@@ -30,7 +30,7 @@ namespace Starvers.NPCSystem.NPCs
 		/// <para>0 : 一次3幽灵同时发出</para>
 		/// <para>1 : 直接在玩家身边召唤幽灵</para>
 		/// <para>2 : 5连发</para>
-		/// <para>3 : 先发射水球, 若火球还存活则"分裂"为火球</para>
+		/// <para>3 : 先发射水球, 若水球还存活则"分裂"为火球</para>
 		/// <para>5 : 先生成子弹并规划好路线, 随后发射</para>
 		/// </summary>
 		protected int InternalAIStyle;
@@ -187,6 +187,8 @@ namespace Starvers.NPCSystem.NPCs
 		#region Check
 		protected override bool CheckSpawn(StarverPlayer player)
 		{
+			if (BossSystem.Bosses.Base.StarverBoss.EndTrial)
+				return false;
 			var PlayerChecker = player.GetSpawnChecker();
 			return StarverConfig.Config.TaskNow >= Checker.Task && (Checker.Match(PlayerChecker) || DungeonChecker.Match(PlayerChecker)) && SpawnTimer % Checker.SpawnRate == 0 && Rand.NextDouble() < Checker.SpawnChance;
 		}

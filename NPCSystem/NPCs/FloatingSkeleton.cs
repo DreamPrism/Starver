@@ -76,7 +76,17 @@ namespace Starvers.NPCSystem.NPCs
 						Vel = (Vector)(TargetPlayer.Center - Center);
 						Vel.Length = 19;
 					}
-					catch (IndexOutOfRangeException e)
+					catch(NullReferenceException)
+					{
+						if(AlivePlayers() == 0)
+						{
+							KillMe();
+							return;
+						}
+						TargetClosest();
+						Vel = (Vector)Rand.NextVector2(19);
+					}
+					catch (IndexOutOfRangeException)
 					{
 						//TShockAPI.TShock.Log.Write(e.ToString(), System.Diagnostics.TraceLevel.Error);
 						Vel = (Vector)Rand.NextVector2(19);
@@ -89,6 +99,10 @@ namespace Starvers.NPCSystem.NPCs
 		#region CheckSpawn
 		protected override bool CheckSpawn(StarverPlayer player)
 		{
+			if(BossSystem.Bosses.Base.StarverBoss.EndTrial)
+			{
+				return false;
+			}
 			SpawnChecker value = player.GetSpawnChecker();
 			return StarverConfig.Config.TaskNow >= Checker.Task && (Checker.Match(value) || Checker_UnderGround.Match(value)) && SpawnTimer % Checker.SpawnRate == 0 && Rand.NextDouble() < Checker.SpawnChance && Rand.Next(StarverConfig.Config.TaskNow) > 17;
 		}

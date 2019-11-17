@@ -54,7 +54,7 @@ namespace Starvers
 		public static string SavePathMain { get; private set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Starver");
 		public static string SavePathPlayers { get; private set; } = Path.Combine(SavePathMain, "Players");
 		public static string SavePathBosses { get; private set; } = Path.Combine(SavePathMain, "Bosses");
-		public static string ExchangeTips { get; private set; } = "";
+		public static string ExchangeTips { get; private set; }
 		public static StarverPlayer[] Players { get; private set; } = new StarverPlayer[Main.player.Length];
 		public static BaseNPC[] NPCs { get; private set; } = new BaseNPC[Main.maxNPCs];
 		public static IStarverPlugin[] Plugins { get; private set; } = new IStarverPlugin[]
@@ -98,6 +98,7 @@ namespace Starvers
 			new ExchangeItem(ItemID.LockBox,ItemID.Nazar),
 			new ExchangeItem(ItemID.LunarTabletFragment,ItemID.PixelBox,40,"放在背包最后一格")
 		};
+		public static int CombatTextPacket { get; private set; }
 		public static StarverConfig Config => StarverConfig.Config;
 		public static bool IsPE => Main.myPlayer != 255;
 		public static MySqlConnection DB => StarverPlayer.DB;
@@ -152,16 +153,18 @@ namespace Starvers
 				}
 			}
 			int i = 0;
+			StringBuilder SB = new StringBuilder(Exchanges.Length * 10);
 			foreach (ExchangeItem item in Exchanges)
 			{
-				ExchangeTips += item;
-				ExchangeTips += i++ % 2 == 0 ? "    " : "\n";
+				SB.Append(item);
+				SB.Append(i++ % 2 == 0 ? "    " : "\n");
 			}
-			if (ExchangeTips[ExchangeTips.Length - 1] != '\n')
+			if (SB[SB.Length - 1] != '\n')
 			{
-				ExchangeTips += '\n';
+				SB.Append('\r');
 			}
-			ExchangeTips += "请将可以兑换的物品放置在背包第一格";
+			SB.Append("请将可以兑换的物品放置在背包第一格");
+			ExchangeTips = SB.ToString();
 			Commands.ChatCommands.Add(new Command(Perms.VIP.Invisible, Ghost, "invisible"));
 			Commands.ChatCommands.Add(new Command(Perms.Manager, ManagerForm, "stform"));
 			Commands.ChatCommands.Add(new Command(Perms.Test, PtrTest, "vt"));
@@ -183,6 +186,7 @@ namespace Starvers
 				NPCs = new BaseNPC[Main.maxNPCs];
 			}
 			//ServerApi.Hooks.NpcKilled.Register(this, OnKill);
+			CombatTextPacket = (int)(IsPE ? PacketTypes.CreateCombatText : PacketTypes.CreateCombatTextExtended);
 			ServerApi.Hooks.NpcStrike.Register(this, OnStrike);
 			ServerApi.Hooks.NpcSpawn.Register(this, OnNPCSpawn);
 			PlayerHooks.PlayerPostLogin += OnLogin;
@@ -545,11 +549,11 @@ namespace Starvers
 					int ID;
 					//由于TrPE的TS里是TSPlayer.Account,所以只能这么做
 					dynamic ply = args.Player;
-					try
+					if(!IsPE)
 					{
 						ID = ply.User.ID;
 					}
-					catch
+					else
 					{
 						ID = ply.Account.ID;
 					}
@@ -582,11 +586,11 @@ namespace Starvers
 				{
 					int ID;
 					dynamic ply = player;
-					try
+					if(!IsPE)
 					{
 						ID = ply.User.ID;
 					}
-					catch
+					else
 					{
 						ID = ply.Account.ID;
 					}
@@ -1029,7 +1033,7 @@ namespace Starvers
 						args.TPlayer.inventory[0].netDefaults(0);
 						NetMessage.SendData((int)PacketTypes.PlayerSlot, -1, -1, Terraria.Localization.NetworkText.Empty, args.Player.Index, 0);
 						//int num = Item.NewItem(new Vector2(0,0),new Vector2(0,0),p,stack);
-						args.Player.GiveItem(p, "", 0, 0, stack);
+						args.SPlayer().GiveItem(p, stack);
 						args.Player.SendInfoMessage("兑换完毕");
 						return;
 					}

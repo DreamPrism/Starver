@@ -187,14 +187,15 @@ namespace Starvers
 		#region cmd
 		public static StarverPlayer SPlayer(this CommandArgs args)
 		{
-			if (0 <= args.Player.Index && args.Player.Index < Main.player.Length) 
+			if(args.Player == TSPlayer.All)
 			{
-				return Starver.Players[args.Player.Index];
+				return StarverPlayer.All;
 			}
-			else
+			else if(args.Player == TSPlayer.Server)
 			{
 				return StarverPlayer.Server;
 			}
+			return Starver.Players[args.Player.Index];
 		}
 		#endregion
 		#region Activeplayers
@@ -237,7 +238,7 @@ namespace Starvers
 		#region SendCombatText
 		public static void SendCombatMsg(this Entity entity, string msg, Color color)
 		{
-			NetMessage.SendData((int)PacketTypes.CreateCombatText, -1, -1, NetworkText.FromLiteral(msg), (int)color.PackedValue, entity.position.X + Rand.Next(entity.width), entity.position.Y + Rand.Next(entity.height), 0.0f, 0, 0, 0);
+			NetMessage.SendData(Starver.CombatTextPacket, -1, -1, NetworkText.FromLiteral(msg), (int)color.PackedValue, entity.position.X + Rand.Next(entity.width), entity.position.Y + Rand.Next(entity.height), 0.0f, 0, 0, 0);
 		}
 		#endregion
 		#region Vector2

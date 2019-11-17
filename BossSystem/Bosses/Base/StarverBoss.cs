@@ -83,7 +83,9 @@ namespace Starvers.BossSystem.Bosses.Base
 		{
 			get
 			{
-				return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / CriticalLevel);
+#warning "boss难度削弱"
+				return (float)(Math.Sqrt(Math.Sqrt(Math.Sqrt(LifesMax / (Lifes + 1)))) + (float)Level / CriticalLevel);
+				//return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / CriticalLevel);
 			}
 		}
 		/// <summary>

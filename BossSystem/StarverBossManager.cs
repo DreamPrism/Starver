@@ -147,11 +147,7 @@ namespace Starvers.BossSystem
 						Cleared = true;
 						foreach (var player in Starver.Players)
 						{
-							if (player is null)
-							{
-								continue;
-							}
-							player.UpdateMoonClear();
+							player?.UpdateMoonClear();
 						}
 					}
 				}
@@ -191,7 +187,11 @@ namespace Starvers.BossSystem
 							{
 								continue;
 							}
-							CanSpawn |= ply.Active;
+							if(ply.Active)
+							{
+								CanSpawn = true;
+								break;
+							}
 						}
 						if (EndTrial == false && CanSpawn && Rand.Next(100) >= 10)
 						{
@@ -217,7 +217,7 @@ namespace Starvers.BossSystem
 						{
 							foreach (var ply in Starver.Players)
 							{
-								if (!ply.Active)
+								if (ply is null || !ply.Active) 
 								{
 									continue;
 								}
@@ -762,7 +762,7 @@ namespace Starvers.BossSystem
 			Vector2 pos = default;
 			foreach(var ply in Starver.Players)
 			{
-				if(!ply.Active)
+				if(ply is null || ply.Active)
 				{
 					continue;
 				}

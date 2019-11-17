@@ -86,11 +86,11 @@ namespace Starvers
 		}
 		public void SendMessage(string msg, byte R, byte G, byte B)
 		{
-			if (Index == -2)
+			if (UserID == -2)
 			{
 				Console.WriteLine(msg);
 			}
-			else if(Index == -1)
+			else if(UserID == -1)
 			{
 				TSPlayer.All.SendMessage(msg, R, G, B);
 			}
@@ -467,9 +467,9 @@ namespace Starvers
 		/// </summary>
 		/// <param name="begin"></param>
 		/// <param name="end"></param>
-		public void EatItems(int begin,int end)
+		public void EatItems(int begin, int end)
 		{
-			for(;begin < end;begin++)
+			for (; begin < end; begin++)
 			{
 				TPlayer.inventory[begin].netDefaults(0);
 				NetMessage.SendData((int)PacketTypes.PlayerSlot, -1, -1, null, Index, begin);
@@ -1002,13 +1002,14 @@ namespace Starvers
 		/// <param name="ToWho">展示信息给谁</param>
 		public void ShowInfos(TSPlayer ToWho = null)
 		{
-			ToWho = ToWho == null ? TSPlayer.Server : ToWho;
+			ToWho = ToWho ?? TSPlayer.Server;
 			PropertyInfo[] infos = GetType().GetProperties();
 			foreach (var info in infos)
 			{
 				try
 				{
-					ToWho.SendInfoMessage("\"{0}\" :{1}", info.Name, JsonConvert.SerializeObject(info.GetValue(this)));
+					if (info.CanWrite)
+						ToWho.SendInfoMessage("\"{0}\" :{1}", info.Name, JsonConvert.SerializeObject(info.GetValue(this)));
 				}
 				catch
 				{
@@ -1315,11 +1316,16 @@ namespace Starvers
 		/// <summary>
 		/// 获取对应Terraria.Player
 		/// </summary>
-		internal Player TPlayer => IsServer ? TSPlayer.Server.TPlayer : Main.player[Index];
+		internal Player TPlayer => TSPlayer.TPlayer;
 		/// <summary>
 		/// 获取对应TSPlayer
 		/// </summary>
-		internal TSPlayer TSPlayer => IsServer ? TSPlayer.Server : TShock.Players[Index];
+		internal TSPlayer TSPlayer => UserID switch
+		{
+			-2 => TSPlayer.Server,
+			-1 => TSPlayer.All,
+			_ => TShock.Players[Index]
+		};
 		/// <summary>
 		/// 技能ID列表
 		/// </summary>
@@ -1358,14 +1364,33 @@ namespace Starvers
 			Name = GetUserNameByID(UserID);
 			if (temp)
 				return;
-			for (int i = 0; i < Starver.Players.Length; i++)
+			if (!Starver.IsPE)
 			{
-				if (TShock.Players[i] == null || TShock.Players[i].Active == false || TShock.Players[i].Name != Name)
+				dynamic ply;
+				for (int i = 0; i < Starver.Players.Length; i++)
 				{
-					continue;
+					ply = TShock.Players[i];
+					if (TShock.Players[i] == null || TShock.Players[i].Active == false || ply.User.ID != userID)
+					{
+						continue;
+					}
+					Index = i;
+					break;
 				}
-				Index = i;
-				break;
+			}
+			else
+			{
+				dynamic ply;
+				for (int i = 0; i < Starver.Players.Length; i++)
+				{
+					ply = TShock.Players[i];
+					if (TShock.Players[i] == null || TShock.Players[i].Active == false || ply.Account.ID != userID)
+					{
+						continue;
+					}
+					Index = i;
+					break;
+				}
 			}
 		}
 		#endregion

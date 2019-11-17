@@ -30,12 +30,19 @@ namespace Starvers.AuraSystem.Skills
 		{
 			await Task.Run(() =>
 			{
-				Thread.Sleep(5000);
-				player.GodMode = false;
-				player.SetBuff(62, 10 * 60);
-				player.SetBuff(58, 10 * 60);
-				player.SetBuff(176, 10 * 60);
-				player.SetBuff(173, 10 * 60);
+				try
+				{
+					Thread.Sleep(5000);
+					player.GodMode = false;
+					player.SetBuff(62, 10 * 60);
+					player.SetBuff(58, 10 * 60);
+					player.SetBuff(176, 10 * 60);
+					player.SetBuff(173, 10 * 60);
+				}
+				catch
+				{
+
+				}
 			});
 		}
 	}

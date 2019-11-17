@@ -52,6 +52,7 @@ namespace Starvers.NPCSystem
 		protected bool NoTileCollide;
 		protected bool NoGravity;
 		protected bool AfraidSun;
+		protected bool EndTrialEnemy;
 		protected DateTime LastSpawn = DateTime.Now;
 		protected StarverNPC Root;
 		protected SpawnChecker Checker;
@@ -144,7 +145,15 @@ namespace Starvers.NPCSystem
 		/// <returns></returns>
 		protected virtual bool CheckSpawn(StarverPlayer player)
 		{
-			bool Flag = StarverConfig.Config.TaskNow >= Checker.Task && Checker.Match(player.GetSpawnChecker()) && SpawnTimer % Checker.SpawnRate == 0 && Rand.NextDouble() < Checker.SpawnChance;
+			bool Flag = 
+				StarverConfig.Config.TaskNow >= Checker.Task &&
+				Checker.Match(player.GetSpawnChecker()) && 
+				SpawnTimer % Checker.SpawnRate == 0 && 
+				Rand.NextDouble() < Checker.SpawnChance;
+			if(BossSystem.Bosses.Base.StarverBoss.EndTrial)
+			{
+				Flag = EndTrialEnemy;
+			}
 			return Flag;
 		}
 		#endregion
