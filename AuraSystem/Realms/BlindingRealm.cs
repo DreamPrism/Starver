@@ -15,7 +15,10 @@ namespace Starvers.AuraSystem.Realms
 		private const int Blind = BuffID.Obstructed;
 		private const int MaxTimeLeft = 60 * 20;
 		private int[] Blasters;
-		public BlindingRealm() : base(true) { }
+		public BlindingRealm() : base(true)
+		{
+			DefaultTimeLeft = MaxTimeLeft;
+		}
 
 		public override void Kill()
 		{
@@ -49,7 +52,6 @@ namespace Starvers.AuraSystem.Realms
 
 		protected override void SetDefault()
 		{
-			TimeLeft = MaxTimeLeft;
 			Radium = 16 * 30;
 		}
 		protected override void InternalUpdate()

@@ -20,12 +20,11 @@ namespace Starvers.AuraSystem.Realms
 
 		public ApoptoticRealm() : base(true)
 		{
-
+			DefaultTimeLeft = 60 * 20;
 		}
 
 		protected override void SetDefault()
 		{
-			TimeLeft = 60 * 20;
 			Radium = 16 * 30;
 		}
 

@@ -14,6 +14,7 @@ namespace Starvers.AuraSystem.Realms
 
 		protected uint TimeLeft;
 
+		public uint DefaultTimeLeft { get; set; }
 		public Vector2 Center { get; set; }
 		public bool Active { get; set; }
 
@@ -28,6 +29,7 @@ namespace Starvers.AuraSystem.Realms
 		public virtual void Start()
 		{
 			Active = true;
+			TimeLeft = DefaultTimeLeft;
 			SetDefault();
 		}
 

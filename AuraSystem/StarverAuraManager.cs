@@ -59,7 +59,8 @@ namespace Starvers.AuraSystem
 			RealmTypes = new List<Type>
 			{
 				typeof(ApoptoticRealm),
-				typeof(BlindingRealm)
+				typeof(BlindingRealm),
+				typeof(ReflectingRealm)
 			};
 		}
 		private void LoadHandlers()
@@ -205,9 +206,30 @@ namespace Starvers.AuraSystem
 				IRealm realm;
 				switch (value)
 				{
-					default:
-						realm = Activator.CreateInstance(RealmTypes[value - 1]) as IRealm;
+					case 3:
+						{
+							int owner;
+							try
+							{
+								owner = int.Parse(args.Parameters[1]);
+							}
+							catch
+							{
+								owner = 255;
+							}
+							ReflectingRealm Realm = new ReflectingRealm(owner);
+							if(args.Parameters.Count >= 3 && uint.TryParse(args.Parameters[2], out uint timeLeft))
+							{
+								Realm.DefaultTimeLeft = timeLeft;
+							}
+							realm = Realm;
 						break;
+						}
+					default:
+						{
+							realm = Activator.CreateInstance(RealmTypes[value - 1]) as IRealm;
+							break;
+						}
 				}
 				realm.Center = args.TPlayer.Center;
 				AddRealm(realm);

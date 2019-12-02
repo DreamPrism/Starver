@@ -207,6 +207,20 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region FromTPlayer
+		#region Others
+		public int Team
+		{
+			get
+			{
+				return TPlayer.team;
+			}
+			set
+			{
+				TPlayer.team = value;
+				SendData(PacketTypes.PlayerTeam, "", Index);
+			}
+		}
+		#endregion
 		#region Center
 		public Vector2 Center
 		{

@@ -382,7 +382,14 @@ namespace Starvers
 		#region SendData
 		public static void SendData(this NPC npc)
 		{
-			NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);
+			try
+			{
+				NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);
+			}
+			catch(KeyNotFoundException)
+			{
+
+			}
 		}
 		public static void SendData(this Projectile proj)
 		{
