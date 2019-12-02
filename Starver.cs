@@ -37,11 +37,11 @@ namespace Starvers
 		#region Fields
 		#endregion
 		#region BaseProperties
-		public override string Name { get { return "Starver"; } }
-		public override Version Version { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
-		public override string Author { get { return "TOFOUT&Clover"; } }
+		public override string Name => "Starver";
+		public override Version Version => Assembly.GetExecutingAssembly().GetName().Version;
+		public override string Author => "TOFOUT & Clover";
 		public override string Description => base.Description;
-		public override bool Enabled { get { return true; } }
+		public override bool Enabled => true;
 		#endregion
 		#region Properties
 		public delegate int Calculator(int parament);
@@ -57,6 +57,7 @@ namespace Starvers
 		public static string ExchangeTips { get; private set; }
 		public static StarverPlayer[] Players { get; private set; } = new StarverPlayer[Main.player.Length];
 		public static BaseNPC[] NPCs { get; private set; } = new BaseNPC[Main.maxNPCs];
+		public StarverAuraManager Aura { get; private set; }
 		public static IStarverPlugin[] Plugins { get; private set; } = new IStarverPlugin[]
 		{
 			new StarverTaskManager(),
@@ -100,7 +101,7 @@ namespace Starvers
 		};
 		public static int CombatTextPacket { get; private set; }
 		public static StarverConfig Config => StarverConfig.Config;
-		public static bool IsPE => Main.myPlayer != 255;
+		public static bool IsPE { get; private set; }
 		public static MySqlConnection DB => StarverPlayer.DB;
 		public static Starver Instance { get; private set; }
 		public static Forms.StarverManagerForm Manager { get; internal set; }
@@ -152,49 +153,65 @@ namespace Starvers
 					TSPlayer.Server.SendErrorMessage(e.ToString());
 				}
 			}
-			int i = 0;
-			StringBuilder SB = new StringBuilder(Exchanges.Length * 10);
-			foreach (ExchangeItem item in Exchanges)
 			{
-				SB.Append(item);
-				SB.Append(i++ % 2 == 0 ? "    " : "\n");
+				int i = 0;
+				StringBuilder SB = new StringBuilder(Exchanges.Length * 10);
+				foreach (ExchangeItem item in Exchanges)
+				{
+					SB.Append(item);
+					SB.Append(i++ % 2 == 0 ? "    " : "\n");
+				}
+				if (SB[SB.Length - 1] != '\n')
+				{
+					SB.Append('\r');
+				}
+				SB.Append("请将可以兑换的物品放置在背包第一格");
+				ExchangeTips = SB.ToString();
 			}
-			if (SB[SB.Length - 1] != '\n')
 			{
-				SB.Append('\r');
-			}
-			SB.Append("请将可以兑换的物品放置在背包第一格");
-			ExchangeTips = SB.ToString();
-			Commands.ChatCommands.Add(new Command(Perms.VIP.Invisible, Ghost, "invisible"));
-			Commands.ChatCommands.Add(new Command(Perms.Manager, ManagerForm, "stform"));
-			Commands.ChatCommands.Add(new Command(Perms.Test, PtrTest, "vt"));
-			Commands.ChatCommands.Add(new Command(Perms.Exchange, ExchangeCommand, "exchange"));
-			Commands.ChatCommands.Add(new Command(Perms.ShowInfo, ShowInfoCommand, "showinfo"));
-			Commands.ChatCommands.Add(new Command(Perms.Normal, Command_Aura, "starver") { HelpText = HelpTexts.LevelSystem });
+				Commands.ChatCommands.Add(new Command(Perms.VIP.Invisible, Ghost, "invisible"));
+				Commands.ChatCommands.Add(new Command(Perms.Manager, ManagerForm, "stform"));
+				Commands.ChatCommands.Add(new Command(Perms.Test, PtrTest, "vt"));
+				Commands.ChatCommands.Add(new Command(Perms.Exchange, ExchangeCommand, "exchange"));
+				Commands.ChatCommands.Add(new Command(Perms.ShowInfo, ShowInfoCommand, "showinfo"));
+				Commands.ChatCommands.Add(new Command(Perms.Normal, Command_Aura, "starver") { HelpText = HelpTexts.LevelSystem });
 #if DEBUG
-			Commands.ChatCommands.Add(new Command(Perms.Test, (CommandArgs args) => { new Thread(() => { throw new Exception(); }).Start(); }, "exception"));
+				Commands.ChatCommands.Add(new Command(Perms.Test, (CommandArgs args) => { new Thread(() => { throw new Exception(); }).Start(); }, "exception"));
 #endif
-			ServerApi.Hooks.GameUpdate.Register(this, OnUpdate);
-			ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreet);
-			ServerApi.Hooks.ServerLeave.Register(this, OnLeave);
-			if (Config.EnableAura)
-			{
-				ServerApi.Hooks.ServerChat.Register(this, OnChat);
 			}
+			{
+				ServerApi.Hooks.GameUpdate.Register(this, OnUpdate);
+				ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreet);
+				ServerApi.Hooks.ServerLeave.Register(this, OnLeave);
+				if (Config.EnableAura)
+				{
+					ServerApi.Hooks.ServerChat.Register(this, OnChat);
+				}
+				//ServerApi.Hooks.NpcKilled.Register(this, OnKill);
+				ServerApi.Hooks.NpcStrike.Register(this, OnStrike);
+				ServerApi.Hooks.NpcSpawn.Register(this, OnNPCSpawn);
+				PlayerHooks.PlayerPostLogin += OnLogin;
+				GetDataHandlers.PlayerDamage += OnDamage;
+				if (Config.EvilWorld)
+				{
+					GetDataHandlers.KillMe += OnDeath;
+				}
+			}
+			Aura = Plugins[1] as StarverAuraManager;
 			if(Config.EnableNPC)
 			{
 				NPCs = new BaseNPC[Main.maxNPCs];
 			}
-			//ServerApi.Hooks.NpcKilled.Register(this, OnKill);
-			CombatTextPacket = (int)(IsPE ? PacketTypes.CreateCombatText : PacketTypes.CreateCombatTextExtended);
-			ServerApi.Hooks.NpcStrike.Register(this, OnStrike);
-			ServerApi.Hooks.NpcSpawn.Register(this, OnNPCSpawn);
-			PlayerHooks.PlayerPostLogin += OnLogin;
-			GetDataHandlers.PlayerDamage += OnDamage;
-			if(Config.EvilWorld)
-			{
-				GetDataHandlers.KillMe += OnDeath;
-			}
+			IsPE = Main.player.Length != 256;
+			CombatTextPacket = IsPE ? (int)PacketTypes.CreateCombatText : (int)PacketTypes.CreateCombatTextExtended;
+#if DEBUG
+			Console.BackgroundColor = ConsoleColor.Yellow;
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.WriteLine($"Main.player.Length: {Main.player.Length}");
+			Console.WriteLine($"IsPe: {IsPE}");
+			Console.WriteLine($"CombatTextPacket: {(PacketTypes)CombatTextPacket}");
+			Console.ResetColor();
+#endif
 		}
 		#endregion
 		#region Dispose
@@ -234,6 +251,30 @@ namespace Starvers
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
+			}
+			// 不确定是否会出现问题
+			if (false)
+			{
+				Instance = null;
+				Players = null;
+				Exchanges = null;
+				Rand = null;
+				ExchangeTips = null;
+				Manager.Dispose();
+				Manager = null;
+				Plugins = null;
+				NPCs = null;
+
+				UpGradeExp = null;
+				BagExp = null;
+
+				MainFolder = null;
+				PlayerFolder = null;
+				BossFolder = null;
+
+				SavePathMain = null;
+				SavePathPlayers = null;
+				SavePathBosses = null;
 			}
 			base.Dispose(disposing);
 		}
@@ -306,11 +347,17 @@ namespace Starvers
 			}
 			if (TheBoss != null)
 			{
+				TheBoss.ReceiveDamage(realdamage);
+				RealNPC.playerInteraction[player.Index] = true;
+				player.TPlayer.OnHit((int)RealNPC.Center.X, (int)RealNPC.Center.Y, RealNPC);
+				return;
+				/*
 				if (TheBoss.Life - realdamage < 1)
 				{
 					TheBoss.LifeDown();
 					return;
 				}
+				*/
 			}
 			RealNPC.life -= realdamage;
 			RealNPC.playerInteraction[player.Index] = true;

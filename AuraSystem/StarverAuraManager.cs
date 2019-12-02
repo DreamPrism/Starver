@@ -8,16 +8,24 @@ using Terraria;
 using TerrariaApi.Server;
 using Terraria.ID;
 using TShockAPI;
+using Starvers.AuraSystem.Realms;
 
 namespace Starvers.AuraSystem
 {
 	public class StarverAuraManager : IStarverPlugin
 	{
+		#region Fields
+		private Command AuraCommand;
+		private Command TestCommand;
+		private SkillManager Skill;
+		private string[] SkillLists;
+		private LinkedList<IRealm> TheRealms;
+		private List<IRealm> RemoveList;
+		private List<Type> RealmTypes;
+		#endregion
 		#region Properties
+		private static StarverConfig Config => StarverConfig.Config;
 		public bool Enabled => Config.EnableAura;
-		public static StarverConfig Config => StarverConfig.Config;
-		public static DateTime Last { get; protected set; } = DateTime.Now;
-		public static SkillManager Skill { get; private set; } = new SkillManager();
 		public static AuraSkillWeapon[] SkillSlot { get; private set; } = new AuraSkillWeapon[Skills.Base.Skill.MaxSlots]
 		{
 			new AuraSkillWeapon(ItemID.Spear,ProjectileID.Spear,100),
@@ -26,18 +34,47 @@ namespace Starvers.AuraSystem
 			new AuraSkillWeapon(ItemID.DarkLance,ProjectileID.DarkLance,8000),
 			new AuraSkillWeapon(ItemID.ObsidianSwordfish,ProjectileID.ObsidianSwordfish,30000)
 		};
-		public static string[] SkillLists;
 		#endregion
 		#region I & D
 		public void Load()
 		{
+			LoadVars();
+			LoadHandlers();
+			LoadSkillList();
+			LoadCommands();
+		}
+		public void UnLoad()
+		{
+			UnLoadHandlers();
+			UnLoadSkillList();
+			UnLoadCommands();
+		}
+		#endregion
+		#region Loads
+		private void LoadVars()
+		{
+			Skill = new SkillManager();
+			TheRealms = new LinkedList<IRealm>();
+			RemoveList = new List<IRealm>(10);
+			RealmTypes = new List<Type>
+			{
+				typeof(ApoptoticRealm),
+				typeof(BlindingRealm)
+			};
+		}
+		private void LoadHandlers()
+		{
+			ServerApi.Hooks.GameUpdate.Register(Starver.Instance, OnUpdate);
+
 			GetDataHandlers.NewProjectile += OnProj;
-			Commands.ChatCommands.Add(new Command(Perms.Aura.Normal, Command, "au", "aura"));
+		}
+		private void LoadSkillList()
+		{
 			int line = 5;
 			int column = 4;
 			int page = (int)Math.Ceiling((float)SkillManager.Skills.Length / column / line);
-			SkillLists = new string[page];
 			StringBuilder SB = new StringBuilder(10 * 4 * 5);
+			SkillLists = new string[page];
 			int idx;
 			for (int i = 0; i < page; i++)
 			{
@@ -63,9 +100,61 @@ namespace Starvers.AuraSystem
 				SB.Clear();
 			}
 		}
-		public void UnLoad()
+		private void LoadCommands()
 		{
+			AuraCommand = new Command(Perms.Aura.Normal, Command, "au", "aura");
+			TestCommand = new Command(Perms.Test, CommandForTest, "realm");
+
+			Commands.ChatCommands.Add(AuraCommand);
+			Commands.ChatCommands.Add(TestCommand);
+		}
+		#endregion
+		#region UnLoads
+		private void UnLoadHandlers()
+		{
+			ServerApi.Hooks.GameUpdate.Deregister(Starver.Instance, OnUpdate);
+
 			GetDataHandlers.NewProjectile -= OnProj;
+		}
+		private void UnLoadSkillList()
+		{
+			SkillLists = null;
+		}
+		private void UnLoadCommands()
+		{
+			Commands.ChatCommands.Remove(AuraCommand);
+			Commands.ChatCommands.Remove(TestCommand);
+		}
+		#endregion
+		#region Realms
+		public void AddRealm(IRealm realm)
+		{
+			realm.Start();
+			TheRealms.AddLast(realm);
+		}
+		private void UpdateRealms()
+		{
+			foreach (var realm in TheRealms)
+			{
+				realm.Update();
+				if (!realm.Active)
+				{
+					RemoveList.Add(realm);
+				}
+			}
+			for (int i = 0; i < RemoveList.Count; i++)
+			{
+				TheRealms.Remove(RemoveList[i]);
+				RemoveList[i] = null;
+			}
+			RemoveList.Clear();
+		}
+		#endregion
+		#region Hooks
+		#region OnUpdate
+		private void OnUpdate(object args)
+		{
+			UpdateRealms();
 		}
 		#endregion
 		#region OnProj
@@ -90,7 +179,40 @@ namespace Starvers.AuraSystem
 			}
 		}
 		#endregion
+		#endregion
 		#region Command
+		private void CommandForTest(CommandArgs args)
+		{
+			int value;
+			try
+			{
+				value = int.Parse(args.Parameters[0]);
+			}
+			catch
+			{
+				value = 0;
+			}
+			if (value == 0)
+			{
+				for (int i = 0; i < RealmTypes.Count; i++)
+				{
+					args.Player.SendInfoMessage($"{i + 1}: {RealmTypes[i].Name}");
+				}
+				return;
+			}
+			else
+			{
+				IRealm realm;
+				switch (value)
+				{
+					default:
+						realm = Activator.CreateInstance(RealmTypes[value - 1]) as IRealm;
+						break;
+				}
+				realm.Center = args.TPlayer.Center;
+				AddRealm(realm);
+			}
+		}
 		private void Command(CommandArgs args)
 		{
 			string p = args.Parameters.Count < 1 ? "None" : args.Parameters[0];

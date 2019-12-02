@@ -317,6 +317,14 @@ namespace Starvers
 		{
 			return (float)rand.NextDouble();
 		}
+		public static float NextFloat(this Random rand, float min, float max)
+		{
+			if (max < min)
+			{
+				throw new ArgumentException("最大值必须大等于最小值");
+			}
+			return (max - min) * rand.NextFloat() + min;
+		}
 		public static double NextAngle(this Random rand)
 		{
 			return rand.NextDouble() * Math.PI * 2;
@@ -376,11 +384,13 @@ namespace Starvers
 		{
 			NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, npc.whoAmI);
 		}
-		#endregion
-		#region SendData
-		public static void SendData(this Projectile npc)
+		public static void SendData(this Projectile proj)
 		{
-			NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, npc.whoAmI);
+			NetMessage.SendData((int)PacketTypes.ProjectileNew, -1, -1, null, proj.whoAmI);
+		}
+		public static void SendData(this Player player)
+		{
+			NetMessage.SendData((int)PacketTypes.PlayerUpdate, -1, -1, null, player.whoAmI);
 		}
 		#endregion
 		#region TheWorldSkill

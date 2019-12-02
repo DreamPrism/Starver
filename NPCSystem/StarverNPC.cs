@@ -152,7 +152,7 @@ namespace Starvers.NPCSystem
 				Rand.NextDouble() < Checker.SpawnChance;
 			if(BossSystem.Bosses.Base.StarverBoss.EndTrial)
 			{
-				Flag = EndTrialEnemy;
+				Flag &= EndTrialEnemy;
 			}
 			return Flag;
 		}
@@ -650,7 +650,7 @@ namespace Starvers.NPCSystem
 						}
 						catch(Exception e)
 						{
-							TShock.Log.Error(e.ToString());
+							
 						}
 					}
 				}

@@ -13,10 +13,9 @@ namespace Starvers.WeaponSystem.Weapons.Magic
 	public class LaserMachinegunEx : Weapon
 	{
 		#region Fields
-		private Vector Vertical;
 		#endregion
-		#region ctor
-		public LaserMachinegunEx() : base(3,IID.LaserMachinegun,PID.LaserMachinegunLaser,CareerType.Magic,242)
+		#region Ctor
+		public LaserMachinegunEx() : base(3, IID.LaserMachinegun, PID.LaserMachinegunLaser, CareerType.Magic, 242)
 		{
 			CatchID = PID.LaserMachinegun;
 		}
@@ -24,9 +23,21 @@ namespace Starvers.WeaponSystem.Weapons.Magic
 		#region UseWeapon
 		public override void UseWeapon(StarverPlayer player, Vector Velocity, int lvl, GetDataHandlers.NewProjectileEventArgs args)
 		{
-			Vertical = Velocity.Vertical();
-			Vertical.Length = Starver.Rand.Next(-4,5) * 16;
-			player.NewProj(args.Position + Vertical, Velocity, ProjID, CalcDamage(lvl), args.Knockback);
+			InternalUse(player, Velocity, lvl, args);
+		}
+		private void InternalUse(StarverPlayer player, Vector Velocity, int lvl, GetDataHandlers.NewProjectileEventArgs args)
+		{
+			//await Task.Run(() =>
+			{
+				Vector Vertical = Velocity.Vertical();
+				Vertical.Length = 16 * 3;
+				int damage = CalcDamage(lvl);
+				int Count = 17 + Math.Min(lvl / 3, 20);
+				for (int i = 0; i < Count; i++)
+				{
+					player.NewProj(args.Position + Vertical * Starver.Rand.NextFloat(-2, 2), Velocity, ProjID, damage);
+				}
+			};
 		}
 		#endregion
 	}

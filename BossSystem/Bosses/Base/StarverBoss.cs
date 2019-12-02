@@ -36,7 +36,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		protected int DefaultLifes;
 		protected int DefaultLife;
 		protected int DefaultDefense = 10;
-		protected unsafe float* StarverAI;
+		protected float[] StarverAI;
 		protected uint modetime;
 		protected byte LifeperPlayerType = ByLife;
 		protected Vector vector = new Vector(10, 10);
@@ -58,9 +58,21 @@ namespace Starvers.BossSystem.Bosses.Base
 		#endregion
 		#region Properties
 		public int TaskNeed { get; protected set; } = 0;
-		public int Life { get { return RealNPC.life; } set { RealNPC.life = value; } }
-		public int LifeMax { get { return RealNPC.lifeMax; } set { RealNPC.lifeMax = value; } }
-		public int Defense { get { return RealNPC.defense; } set { RealNPC.defense = value; } }
+		public int Life
+		{
+			get => RealNPC.life;
+			set => RealNPC.life = value;
+		}
+		public int LifeMax
+		{
+			get => RealNPC.lifeMax;
+			set => RealNPC.lifeMax = value;
+		}
+		public int Defense
+		{
+			get => RealNPC.defense;
+			set => RealNPC.defense = value;
+		}
 		public int RawType { get; protected set; } = NPCID.BlueSlime;
 		public float MaxDistance { get; protected set; } = 500f;
 		public bool IgnoreDistance { get; protected set; } = true;
@@ -85,7 +97,8 @@ namespace Starvers.BossSystem.Bosses.Base
 			{
 #warning "boss难度削弱"
 				return (float)(Math.Sqrt(Math.Sqrt(Math.Sqrt(LifesMax / (Lifes + 1)))) + (float)Level / CriticalLevel);
-				//return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / CriticalLevel);
+				// 下面是原来的
+				// return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / CriticalLevel);
 			}
 		}
 		/// <summary>
@@ -132,33 +145,20 @@ namespace Starvers.BossSystem.Bosses.Base
 			DataPath = path;
 			if (!File.Exists(path))
 			{
-				using (BinaryWriter writer = new BinaryWriter(new FileStream(path, FileMode.Create)))
-				{
-					writer.Write(Downed);
-				}
+				using BinaryWriter writer = new BinaryWriter(new FileStream(path, FileMode.Create));
+				writer.Write(Downed);
 			}
 			else
 			{
-				using (BinaryReader reader = new BinaryReader(new FileStream(path, FileMode.Open)))
-				{
-					Downed = reader.ReadBoolean();
-				}
+				using BinaryReader reader = new BinaryReader(new FileStream(path, FileMode.Open));
+				Downed = reader.ReadBoolean();
 			}
 			NumOfAIs = ainum;
-			StarverAI = (float*)Marshal.AllocHGlobal(sizeof(float) * NumOfAIs);
+			StarverAI = new float[NumOfAIs];
 			Level = CriticalLevel;
 			DefaultLife = 40000;
 			DefaultDefense = 60;
 			DefaultLifes = 90;
-		}
-		#endregion
-		#region dtor
-		unsafe ~StarverBoss()
-		{
-			if (NumOfAIs > 0)
-			{
-				Marshal.FreeHGlobal((IntPtr)StarverAI);
-			}
 		}
 		#endregion
 		#region KillMe
@@ -340,9 +340,9 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			modetime = 0;
 			LastCenter = Center;
-			for (float* begin = StarverAI, end = StarverAI + NumOfAIs; begin != end;)
+			for (int i = 0; i < StarverAI.Length; i++)
 			{
-				*begin++ = 0;
+				StarverAI[i] = 0;
 			}
 			mode = BossMode.WaitForMode;
 		}
@@ -406,11 +406,35 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			modetime = 0;
 			LastCenter = Center;
-			for (float* begin = StarverAI, end = StarverAI + NumOfAIs; begin != end;)
+			for (int i = 0; i < StarverAI.Length; i++)
 			{
-				*begin++ = 0;
+				StarverAI[i] = 0;
 			}
 			mode = BossMode.WaitForMode;
+		}
+		#endregion
+		#region ReceiveDamage
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="damage">已经计算过防御的伤害</param>
+		public void ReceiveDamage(int damage)
+		{
+			while (damage >= Life)
+			{
+				damage -= Life;
+				Life = 0;
+				LifeDown();
+				if(Lifes < 1)
+				{
+					return;
+				}
+				if(DontTakeDamage)
+				{
+					return;
+				}
+			}
+			Life -= damage;
 		}
 		#endregion
 		#region ToString

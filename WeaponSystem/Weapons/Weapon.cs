@@ -12,7 +12,7 @@ namespace Starvers.WeaponSystem.Weapons
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public abstract class Weapon
 	{
-		#region Var
+		#region Fields
 		/// <summary>
 		/// 对应物品
 		/// </summary>
@@ -26,14 +26,17 @@ namespace Starvers.WeaponSystem.Weapons
 		/// </summary>
 		protected int ProjID;
 		protected int Damage;
+		#endregion
+		#region Properties
 		/// <summary>
 		/// 职业
 		/// </summary>
 		public int Career { get; protected set; }
 		public int Index { get; private set; }
 		public string Name { get; private set; }
+		public static Random Rand => Starver.Rand;
 		#endregion
-		#region ctor
+		#region Ctor
 		public Weapon(int index,int ItemType,int ProjType,int WhichCareer,int damage)
 		{
 			Index = index;
@@ -87,7 +90,7 @@ namespace Starvers.WeaponSystem.Weapons
 		#region DamageIndex
 		protected virtual int CalcDamage(int lvl)
 		{
-			return (int)(Damage * (1 + 0.1 * lvl));
+			return (int)(2 * Damage * (1 + 0.1 * lvl));
 		}
 		#endregion
 		#region Check

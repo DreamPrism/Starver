@@ -98,7 +98,7 @@ namespace Starvers.NPCSystem.NPCs
 		{
 			Vel = (Vector)(TargetPlayer.Center - Prime.Center);
 			FakeVelocity = (Vector)(Center - Prime.Center);
-			if(Vel * FakeVelocity > 0)
+			if(Vector.Dot(Vel, FakeVelocity) > 0)
 			{
 				Vel = (Vector)(TargetPlayer.Center - Center);
 				Vel.Length = 19;

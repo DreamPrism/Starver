@@ -81,6 +81,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuraSystem\Realms\ApoptoticRealm.cs" />
+    <Compile Include="AuraSystem\Realms\BlindingRealm.cs" />
+    <Compile Include="AuraSystem\Realms\CircleRealm.cs" />
+    <Compile Include="AuraSystem\Realms\IRealm.cs" />
+    <Compile Include="AuraSystem\Realms\StarverRealm.cs" />
+    <Compile Include="AuraSystem\Realms\ReflectingRealm.cs" />
     <Compile Include="AuraSystem\Skills\AlcoholFeast.cs" />
     <Compile Include="AuraSystem\Skills\Chaos.cs" />
     <Compile Include="AuraSystem\Skills\ChordMana.cs" />
