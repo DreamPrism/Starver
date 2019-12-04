@@ -15,6 +15,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 		protected const int BorderMax = 60;
 		protected int[] Border;
 		protected int projID;
+		protected double angleVel;
 
 		/// <summary>
 		/// a / b 的值
@@ -87,7 +88,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 		}
 		public virtual void Update(int Timer)
 		{
-			Rotation += Math.PI / 120;
+			Rotation += angleVel;
 			Vector2 Pos;
 			for (int i = 0; i < Border.Length; i++)
 			{
@@ -120,6 +121,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 			projID = ProjectileID.Bat;
 			ShaftA = 16 * 20;
 			ShaftB = 16 * 30;
+			angleVel = Math.PI / 120; 
 		}
 
 		private Vector CalcReflectedVelocity(Entity entity)
@@ -130,11 +132,16 @@ namespace Starvers.AuraSystem.Realms.Generics
 			vel.Angle -= Rotation;
 			relativePos.Angle -= Rotation;
 
+			Vector r = (relativePos.Y, -relativePos.X);
+
+			vel -= r * (float)angleVel;
+
 			double alpha = Math.Atan2(relativePos.X / ShaftA, relativePos.Y / ShaftB);
 			Vector u = (ShaftA * Math.Cos(alpha), ShaftB * Math.Sin(alpha));
 
 			vel -= 2 * Vector.Dot(vel, u) * u / u.LengthSquared;
 
+			vel += r * (float)angleVel;
 			vel.Angle += Rotation;
 			return vel;
 		}
@@ -143,7 +150,11 @@ namespace Starvers.AuraSystem.Realms.Generics
 			Pos -= (Vector)Center;
 			Pos.Angle -= Rotation;
 			Pos.X /= K;
-			return Math.Abs(Pos.Length - ShaftB) <= 16 * 4;
+			Vector r = Pos;
+			r.Length = ShaftB;
+			r.X *= K;
+			Pos.X *= K;
+			return Vector.Distance(Pos, r) <= 16 * 4;
 		}
 
 		private bool InternalInRange(Vector Pos)
