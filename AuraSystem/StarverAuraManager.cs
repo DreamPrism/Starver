@@ -62,7 +62,8 @@ namespace Starvers.AuraSystem
 				typeof(ApoptoticRealm),
 				typeof(BlindingRealm),
 				typeof(ReflectingRealm),
-				typeof(ReflectingRealm<EllipseReflector>)
+				typeof(ReflectingRealm<EllipseReflector>),
+				typeof(BlindingRealm<EllipseReflector>)
 			};
 		}
 		private void LoadHandlers()

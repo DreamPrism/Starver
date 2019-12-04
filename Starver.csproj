@@ -84,6 +84,7 @@
     <Compile Include="AuraSystem\Realms\ApoptoticRealm.cs" />
     <Compile Include="AuraSystem\Realms\BlindingRealm.cs" />
     <Compile Include="AuraSystem\Realms\CircleRealm.cs" />
+    <Compile Include="AuraSystem\Realms\Generics\BlindingRealm.cs" />
     <Compile Include="AuraSystem\Realms\Generics\EllipseReflector.cs" />
     <Compile Include="AuraSystem\Realms\Generics\IRealmConditioner.cs" />
     <Compile Include="AuraSystem\Realms\Generics\IRealmReflector.cs" />
