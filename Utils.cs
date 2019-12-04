@@ -515,6 +515,12 @@ namespace Starvers
 				throw e;
 			}).Start();
 		}
+		public static void KillMeEx(this Projectile proj)
+		{
+			proj.type = 0;
+			proj.active = false;
+			proj.SendData();
+		}
 		#endregion
 	}
 }

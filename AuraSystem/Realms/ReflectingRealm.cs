@@ -13,6 +13,7 @@ namespace Starvers.AuraSystem.Realms
 	public class ReflectingRealm : CircleRealm
 	{
 		private int Owner;
+		private double angle;
 		private int borderProj;
 		private int[] BorderProjs;
 		private StarverPlayer OwnerPlayer => Starver.Players[Owner];
@@ -51,7 +52,7 @@ namespace Starvers.AuraSystem.Realms
 			{
 				foreach (var proj in Main.projectile)
 				{
-					if (proj.active && proj.hostile == false && AtBorder(proj))
+					if (proj.active && proj.hostile == false && AtBorder(proj) && proj.aiStyle >= 0)
 						Reflect(proj);
 				}
 				foreach (var player in Starver.Players)
@@ -64,7 +65,7 @@ namespace Starvers.AuraSystem.Realms
 			{
 				foreach (var proj in Main.projectile)
 				{
-					if (proj.active && AtBorder(proj))
+					if (proj.active && AtBorder(proj) && proj.aiStyle >= 0)
 						Reflect(proj);
 				}
 				foreach (var npc in Main.npc)
@@ -86,7 +87,7 @@ namespace Starvers.AuraSystem.Realms
 			{
 				foreach (var proj in Main.projectile)
 				{
-					if (proj.active && proj.hostile && AtBorder(proj) && CanHitOwner(proj))
+					if (proj.active && proj.hostile && AtBorder(proj) && CanHitOwner(proj) && proj.aiStyle >= 0)
 						Reflect(proj);
 				}
 				foreach (var npc in Main.npc)
@@ -118,32 +119,37 @@ namespace Starvers.AuraSystem.Realms
 			{
 				BorderProjs[i] = Utils.NewProj
 					(
-					position: Center + Vector.FromPolar(Math.PI * 2 / 60 * i, Radium),
+					position: Center + Vector.FromPolar(Math.PI * 2 / 60 * i + angle, Radium),
 					velocity: Vector2.Zero,
 					Type: borderProj,
 					Damage: 0,
 					KnockBack: 0,
 					Owner: Main.myPlayer
 					);
-				Main.projectile[BorderProjs[i]].aiStyle = -1;
+				Main.projectile[BorderProjs[i]].aiStyle = -2;
 			}
 		}
 		protected void UpdateBorder()
 		{
+			angle += Math.PI * 2 / 90;
 			for (int i = 0; i < BorderProjs.Length; i++)
 			{
 				if (!Main.projectile[BorderProjs[i]].active || Main.projectile[BorderProjs[i]].type != borderProj)
 				{
 					BorderProjs[i] = Utils.NewProj
 					(
-					position: Center + Vector.FromPolar(Math.PI * 2 / 60 * i, Radium),
+					position: Center + Vector.FromPolar(Math.PI * 2 / 60 * i + angle, Radium),
 					velocity: Vector2.Zero,
 					Type: borderProj,
 					Damage: 0,
 					KnockBack: 0,
 					Owner: Main.myPlayer
 					);
-					Main.projectile[BorderProjs[i]].aiStyle = -1;
+					Main.projectile[BorderProjs[i]].aiStyle = -2;
+				}
+				else
+				{
+					Main.projectile[BorderProjs[i]].Center = Center + Vector.FromPolar(Math.PI * 2 / 60 * i + angle, Radium);
 				}
 				Main.projectile[BorderProjs[i]].SendData();
 			}

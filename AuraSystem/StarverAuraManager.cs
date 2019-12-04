@@ -9,6 +9,7 @@ using TerrariaApi.Server;
 using Terraria.ID;
 using TShockAPI;
 using Starvers.AuraSystem.Realms;
+using Starvers.AuraSystem.Realms.Generics;
 
 namespace Starvers.AuraSystem
 {
@@ -60,7 +61,8 @@ namespace Starvers.AuraSystem
 			{
 				typeof(ApoptoticRealm),
 				typeof(BlindingRealm),
-				typeof(ReflectingRealm)
+				typeof(ReflectingRealm),
+				typeof(ReflectingRealm<EllipseReflector>)
 			};
 		}
 		private void LoadHandlers()
@@ -217,13 +219,32 @@ namespace Starvers.AuraSystem
 							{
 								owner = 255;
 							}
-							ReflectingRealm Realm = new ReflectingRealm(owner);
-							if(args.Parameters.Count >= 3 && uint.TryParse(args.Parameters[2], out uint timeLeft))
+							var Realm = new ReflectingRealm(owner);
+							if(args.Parameters.Count >= 3 && int.TryParse(args.Parameters[2], out int timeLeft))
 							{
 								Realm.DefaultTimeLeft = timeLeft;
 							}
 							realm = Realm;
 						break;
+						}
+					case 4:
+						{
+							int owner;
+							try
+							{
+								owner = int.Parse(args.Parameters[1]);
+							}
+							catch
+							{
+								owner = 255;
+							}
+							var Realm = new ReflectingRealm<EllipseReflector>(owner);
+							if (args.Parameters.Count >= 3 && int.TryParse(args.Parameters[2], out int timeLeft))
+							{
+								Realm.DefaultTimeLeft = timeLeft;
+							}
+							realm = Realm;
+							break;
 						}
 					default:
 						{

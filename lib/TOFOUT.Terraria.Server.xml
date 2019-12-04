@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TOFOUT.Terraria.Server</name>
+    </assembly>
+    <members>
+        <member name="T:TOFOUT.Terraria.Server.IShape">
+            <summary>
+            表示不可变点集, 主要用于创建向量
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.IShape.NewProjs(System.Int32,System.Int32,TOFOUT.Terraria.Server.Vector2,System.Int32)">
+            <summary>
+            生成一组弹幕
+            </summary>
+            <param name="Type">弹幕类型</param>
+            <param name="Damage">伤害</param>
+            <param name="Velocity">速度</param>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.IShape.NewProjs(System.Int32,System.Int32,System.Single,System.Int32)">
+            <summary>
+            生成一组弹幕
+            </summary>
+            <param name="Type">弹幕类型</param>
+            <param name="Damage">伤害</param>
+            <param name="Speed">速率(速度从Center指向弹幕位置)</param>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.IShape.NewProjs(System.Int32,System.Int32,System.Action{System.Int32},System.Int32)">
+            <summary>
+            生成一组弹幕
+            </summary>
+            <param name="Type">弹幕类型</param>
+            <param name="Damage">伤害</param>
+            <param name="Handler">需要操作弹幕的方法</param>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.IShape.CreateProjs(System.Int32,System.Int32,TOFOUT.Terraria.Server.Vector2,System.Int32)">
+            <summary>
+            生成一组弹幕
+            </summary>
+            <param name="Type">弹幕类型</param>
+            <param name="Damage">伤害</param>
+            <param name="Velocity">速度</param>
+            <returns>弹幕的索引</returns>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.IShape.CreateProjs(System.Int32,System.Int32,System.Single,System.Int32)">
+            <summary>
+            生成一组弹幕
+            </summary>
+            <param name="Type">弹幕类型</param>
+            <param name="Damage">伤害</param>
+            <param name="Speed">速率(速度从Center指向弹幕位置)</param>
+            <returns>弹幕的索引</returns>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.IShape.Position">
+            <summary>
+            图形的位置
+            </summary>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.IShape.Anchor">
+            <summary>
+            锚点(相对于Center)
+            </summary>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.IShape.Count">
+            <summary>
+            点数
+            </summary>
+        </member>
+        <member name="T:TOFOUT.Terraria.Server.Shapes.CountFixedShape">
+            <summary>
+            表示不可添加更多点的Shape
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Shapes.CountFixedShape.Add(TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            请不要调用
+            </summary>
+            <exception cref="T:System.InvalidOperationException">尝试调用时触发</exception>
+        </member>
+        <member name="T:TOFOUT.Terraria.Server.Shapes.Line">
+            <summary>
+            IShape的一种实现, 直线
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Shapes.Line.#ctor">
+            <summary>
+            留作他用
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Shapes.Line.#ctor(TOFOUT.Terraria.Server.Vector2,System.Double,System.Int32,System.Single)">
+            <summary>
+            初始化一个Line实例
+            </summary>
+            <param name="PointStart">起点</param>
+            <param name="Angle">倾斜角(弧度制)</param>
+            <param name="Num">点的数量</param>
+            <param name="Interval">相邻2点距离</param>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Shapes.Line.#ctor(TOFOUT.Terraria.Server.Vector2,TOFOUT.Terraria.Server.Vector2,System.Int32)">
+            <summary>
+            初始化一个Line实例
+            </summary>
+            <param name="PointStart">起点</param>
+            <param name="PointEnd">终点</param>
+            <param name="Num">点的数量</param>
+        </member>
+        <member name="T:TOFOUT.Terraria.Server.Shapes.RectangleFrame">
+            <summary>
+            IShape的实现, 矩形边框
+            </summary>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.Shapes.RectangleFrame.Width">
+            <summary>
+            宽度(长)
+            </summary>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.Shapes.RectangleFrame.Height">
+            <summary>
+            高度(宽）
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Shapes.RectangleFrame.#ctor(TOFOUT.Terraria.Server.Vector2,System.Single,System.Single,System.Int32,System.Int32)">
+            <summary>
+            初始化RectgleFrame的实例
+            </summary>
+            <param name="Position"></param>
+            <param name="Width">宽度(长)</param>
+            <param name="Height">高度(宽)</param>
+            <param name="WidthCount">长上的点数</param>
+            <param name="HeightCount">宽上的点数</param>
+        </member>
+        <member name="T:TOFOUT.Terraria.Server.Shapes.RoundRing">
+            <summary>
+            IShape的实现, 圆环
+            </summary>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.Shapes.RoundRing.Radium">
+            <summary>
+            半径
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Shapes.RoundRing.#ctor(TOFOUT.Terraria.Server.Vector2,System.Single,System.Int32)">
+            <summary>
+            初始化圆环
+            </summary>
+            <param name="Position">中心</param>
+            <param name="Radium">半径</param>
+            <param name="Num">点数</param>
+        </member>
+        <member name="T:TOFOUT.Terraria.Server.Shapes.Shape">
+            <summary>
+            <para> IShape的一种实现, 表示任意点集, 可以随意添加点 </para>
+            <para> 注意, 添加Point时Point相对于Center </para>
+            </summary>
+        </member>
+        <member name="T:TOFOUT.Terraria.Server.Shapes.SquareFrame">
+            <summary>
+            IShape实现, 正方形
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Shapes.SquareFrame.#ctor(TOFOUT.Terraria.Server.Vector2,System.Single,System.Int32)">
+            <summary>
+            实例化
+            </summary>
+            <param name="Width">边长</param>
+        </member>
+        <member name="T:TOFOUT.Terraria.Server.Vector2">
+            <summary>
+            <para> 用于简化向量部分操作</para>
+            <para> 可以隐式转化为XNA的Vector2</para>
+            <para> 可隐式由(X, Y)或显式由XNA得Vector2转化而来</para>
+            </summary>
+        </member>
+        <member name="F:TOFOUT.Terraria.Server.Vector2.X">
+            <summary>
+            X坐标不解释
+            </summary>
+        </member>
+        <member name="F:TOFOUT.Terraria.Server.Vector2.Y">
+            <summary>
+            Y坐标不解释
+            </summary>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.Vector2.Length">
+            <summary>
+            获取或设置该向量的极径
+            </summary>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.Vector2.LengthSquared">
+            <summary>
+            返回模长平方
+            </summary>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.Vector2.Angle">
+            <summary>
+            获取或设置该向量的角度
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.#ctor(System.Single)">
+            <summary>
+            初始化为 (xy, xy)
+            </summary>
+            <param name="xy">X分量兼Y分量</param>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.FromPolar(System.Double,System.Single)">
+            <summary>
+            通过极坐标获取向量
+            </summary>
+            <param name="angle">极角</param>
+            <param name="length">极径</param>
+            <returns></returns>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.NewByPolar(System.Double,System.Single)">
+            <summary>
+            通过极坐标获取向量(和另一个没区别)
+            </summary>
+            <param name="angle">极角</param>
+            <param name="length">极径</param>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.op_UnaryNegation(TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            获取反方向向量
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.op_Subtraction(TOFOUT.Terraria.Server.Vector2,TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            向量减法, 不需要多说
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.op_Addition(TOFOUT.Terraria.Server.Vector2,TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            加法不解释
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.op_Multiply(TOFOUT.Terraria.Server.Vector2,TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            返回(left.X * right.X, left.Y * right.Y)
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.op_Inequality(TOFOUT.Terraria.Server.Vector2,TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            判断不等(实际上是判断距离是否不小于0.001)
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.op_Equality(TOFOUT.Terraria.Server.Vector2,TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            判断是否相等(实际上是判断距离是否小于0.001)
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.op_Implicit(TOFOUT.Terraria.Server.Vector2)~Microsoft.Xna.Framework.Vector2">
+            <summary>
+            可以正常使用
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.op_Explicit(Microsoft.Xna.Framework.Vector2)~TOFOUT.Terraria.Server.Vector2">
+            <summary>
+            可以正常使用
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.Cross(TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            求外积的模长
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.Symmetry(TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            获取对称向量
+            </summary>
+            <param name="Center">对称中心</param>
+            <returns></returns>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.Vertical">
+            <summary>
+            获取法向量(-Y, X), 实际上只是角度加上了 PI / 2
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.Deflect(System.Double)">
+            <summary>
+            获取偏转一定角度的向量
+            </summary>
+            <param name="rad">偏转角</param>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.ToTileCoordinate">
+            <summary>
+            转化为Main.tile中的坐标
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.Normalize">
+            <summary>
+            变为单位向量(其实几乎没用到过)
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.ToString">
+            <summary>
+            转化为(X, Y)的字符串表示形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:TOFOUT.Terraria.Server.Vector2.Zero">
+            <summary>
+            零向量
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.Distance(TOFOUT.Terraria.Server.Vector2,TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            求距离
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.DistanceSquare(TOFOUT.Terraria.Server.Vector2,TOFOUT.Terraria.Server.Vector2)">
+            <summary>
+            求距离平方
+            </summary>
+        </member>
+        <member name="M:TOFOUT.Terraria.Server.Vector2.GetHashCode">
+            <summary>
+            容不容易冲突还不知道
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

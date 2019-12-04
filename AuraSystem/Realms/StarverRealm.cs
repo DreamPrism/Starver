@@ -10,12 +10,12 @@ namespace Starvers.AuraSystem.Realms
 {
 	public abstract class StarverRealm : IRealm
 	{
-		private bool UseTimeLeft;
+		private bool KillByTimeLeft;
 
-		protected uint TimeLeft;
+		protected int TimeLeft;
 
-		public uint DefaultTimeLeft { get; set; }
-		public Vector2 Center { get; set; }
+		public int DefaultTimeLeft { get; set; }
+		public virtual Vector2 Center { get; set; }
 		public bool Active { get; set; }
 
 		public abstract bool InRange(Entity entity);
@@ -39,20 +39,17 @@ namespace Starvers.AuraSystem.Realms
 			UpdateTimeLeft();
 		}
 
-		protected StarverRealm(bool useTimeLeft)
+		protected StarverRealm(bool killByTimeLeft)
 		{
-			UseTimeLeft = useTimeLeft;
+			KillByTimeLeft = killByTimeLeft;
 		}
 
 		protected void UpdateTimeLeft()
 		{
-			if(!UseTimeLeft)
+			if (--TimeLeft == 0)
 			{
-				return;
-			}
-			if(--TimeLeft == 0)
-			{
-				Kill();
+				if (KillByTimeLeft)
+					Kill();
 			}
 		}
 
