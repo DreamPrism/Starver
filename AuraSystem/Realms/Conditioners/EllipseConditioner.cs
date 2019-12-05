@@ -37,6 +37,10 @@ namespace Starvers.AuraSystem.Realms.Conditioners
 		/// 边界弹幕类型
 		/// </summary>
 		public int ProjID { get; set; }
+		/// <summary>
+		/// 弹幕的TimeLeft
+		/// </summary>
+		public int DefProjTimeLeft { get; set; }
 		public Vector2 Center { get; set; }
 
 		public bool InRange(Entity entity)
@@ -77,6 +81,8 @@ namespace Starvers.AuraSystem.Realms.Conditioners
 					Owner: Main.myPlayer
 					);
 				Main.projectile[Border[i]].aiStyle = -2;
+				if (DefProjTimeLeft != 0)
+					Main.projectile[Border[i]].timeLeft = DefProjTimeLeft;
 			}
 		}
 		public virtual void Kill()
@@ -105,6 +111,8 @@ namespace Starvers.AuraSystem.Realms.Conditioners
 						  Owner: Main.myPlayer
 						  );
 					Main.projectile[Border[i]].aiStyle = -2;
+					if (DefProjTimeLeft != 0)
+						Main.projectile[Border[i]].timeLeft = DefProjTimeLeft;
 				}
 				else
 					Main.projectile[Border[i]].Center = Pos;

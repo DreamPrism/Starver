@@ -12,7 +12,19 @@ namespace Starvers.AuraSystem.Realms.Interfaces
 	/// </summary>
 	public interface IBorderConditioner : IRealmConditioner
 	{
+		/// <summary>
+		/// 判断entity是否在边界上
+		/// </summary>
+		/// <param name="entity"></param>
+		/// <returns></returns>
 		public bool AtBorder(Entity entity);
+		/// <summary>
+		/// 弹幕的默认TimeLeft
+		/// </summary>
+		public int DefProjTimeLeft { get; set; }
+		/// <summary>
+		/// 边界弹幕ID
+		/// </summary>
 		public int ProjID { get; set; }
 	}
 }

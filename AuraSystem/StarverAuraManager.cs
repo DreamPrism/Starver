@@ -25,6 +25,7 @@ namespace Starvers.AuraSystem
 		private LinkedList<IRealm> TheRealms;
 		private List<IRealm> RemoveList;
 		private List<Type> RealmTypes;
+		private string[] RealmNames;
 		#endregion
 		#region Properties
 		private static StarverConfig Config => StarverConfig.Config;
@@ -65,8 +66,25 @@ namespace Starvers.AuraSystem
 				typeof(BlindingRealm),
 				typeof(ReflectingRealm),
 				typeof(ReflectingRealm<EllipseReflector>),
-				typeof(BlindingRealm<EllipseConditioner>)
+				typeof(BlindingRealm<EllipseConditioner>),
+				typeof(ReflectingRealm<CircleReflector>)
 			};
+			{
+				RealmNames = new string[RealmTypes.Count];
+				for (int i = 0; i < RealmNames.Length; i++)
+				{
+					string joined = string.Empty;
+					if (RealmTypes[i].IsGenericType)
+					{
+						var arr = RealmTypes[i].GetGenericArguments().Select(type =>
+						{
+							return type.Name;
+						});
+						joined = $"<{string.Join(", ", arr)}>";
+					}
+					RealmNames[i] = $"{RealmTypes[i].Name}{joined}";
+				}
+			}
 		}
 		private void LoadHandlers()
 		{
@@ -202,7 +220,7 @@ namespace Starvers.AuraSystem
 			{
 				for (int i = 0; i < RealmTypes.Count; i++)
 				{
-					args.Player.SendInfoMessage($"{i + 1}: {RealmTypes[i].Name}");
+					args.Player.SendInfoMessage($"{i + 1}: {RealmNames[i]}");
 				}
 				return;
 			}

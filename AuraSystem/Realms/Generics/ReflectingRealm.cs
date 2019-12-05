@@ -9,13 +9,15 @@ using Terraria;
 namespace Starvers.AuraSystem.Realms.Generics
 {
 	using Interfaces;
-	using Vector = TOFOUT.Terraria.Server.Vector2;
+    using Terraria.ID;
+    using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class ReflectingRealm<ReflectorType> : StarverRealm
 		where ReflectorType : IRealmReflector, new()
 	{
 		private int Owner;
 		private ReflectorType Reflector;
 		private StarverPlayer OwnerPlayer => Starver.Players[Owner];
+		public int BorderProjID { get; set; }
 		public override Vector2 Center
 		{
 			get => base.Center;
@@ -28,9 +30,11 @@ namespace Starvers.AuraSystem.Realms.Generics
 		}
 		public ReflectingRealm(ReflectorType reflector) : base(true)
 		{
+			BorderProjID = ProjectileID.CannonballHostile;
 			Owner = Main.myPlayer;
 			DefaultTimeLeft = 60 * 30;
 			Reflector = reflector;
+			reflector.ProjID = BorderProjID;
 		}
 
 		public ReflectingRealm(int owner) : this()
