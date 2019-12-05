@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Terraria;
+    using Terraria.ID;
 
 namespace Starvers.AuraSystem.Realms.Generics
 {
 	using Interfaces;
-    using Terraria.ID;
     using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class ReflectingRealm<ReflectorType> : StarverRealm
 		where ReflectorType : IRealmReflector, new()
@@ -18,11 +18,6 @@ namespace Starvers.AuraSystem.Realms.Generics
 		private ReflectorType Reflector;
 		private StarverPlayer OwnerPlayer => Starver.Players[Owner];
 		public int BorderProjID { get; set; }
-		public override Vector2 Center
-		{
-			get => base.Center;
-			set => Reflector.Center = base.Center = value;
-		}
 
 		public ReflectingRealm(): this(new ReflectorType())
 		{
@@ -52,6 +47,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 		public override void Start()
 		{
 			base.Start();
+			Reflector.Center = Center;
 			Reflector.Start();
 		}
 

@@ -223,7 +223,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			if (Timer % 45 == 0 && SummonList.Count > 0)
 			{
-				fixed (float* ai = this.ai)
+				fixed (float* ai = this.Rawai)
 				{
 					int num1 = SummonList.Next();
 					ai[1] = 30 * Starver.Rand.Next(5, 16);

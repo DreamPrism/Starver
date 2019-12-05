@@ -23,10 +23,10 @@ namespace Starvers
 		public int Target
 		{
 			get => RealNPC.target;
-			protected set => RealNPC.target = value;
+			set => RealNPC.target = value;
 		}
 		public int Interval { get; protected set; }
-		public float[] ai => RealNPC.ai;
+		public float[] Rawai => RealNPC.ai;
 		public DateTime LastUpdate { get; protected set; } = DateTime.Now;
 		public StarverPlayer TargetPlayer => Starver.Players[Target];
 		public NPC RealNPC => Main.npc[Index];

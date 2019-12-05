@@ -14,12 +14,12 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using System.Reflection;
 using Terraria.ID;
+	using Terraria.Localization;
 using System.Runtime.InteropServices;
 
 namespace Starvers
 {
-	using Starvers.DB;
-	using Terraria.Localization;
+	using DB;
 	using BigInt = System.Numerics.BigInteger;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using Skill = AuraSystem.Skills.Base.Skill;
@@ -39,18 +39,12 @@ namespace Starvers
 		#region GodMode
 		public bool GodMode
 		{
-			get
-			{
-				return TSPlayer.GodMode;
-			}
-			set
-			{
-				TSPlayer.GodMode = value;
-			}
+			get => TSPlayer.GodMode;
+			set => TSPlayer.GodMode = value;
 		}
 		#endregion
 		#region SetBuff
-		public void SetBuff(int type,int time = 3600,bool bypass = false)
+		public void SetBuff(int type, int time = 3600, bool bypass = false)
 		{
 			TSPlayer.SetBuff(type, time, bypass);
 		}
@@ -59,7 +53,7 @@ namespace Starvers
 		public void RemoveBuff(int type)
 		{
 			int idx = TPlayer.FindBuffIndex(type);
-			if(idx != -1)
+			if (idx != -1)
 			{
 				TPlayer.buffTime[idx] = 0;
 				TPlayer.buffType[idx] = 0;
@@ -90,7 +84,7 @@ namespace Starvers
 			{
 				Console.WriteLine(msg);
 			}
-			else if(UserID == -1)
+			else if (UserID == -1)
 			{
 				TSPlayer.All.SendMessage(msg, R, G, B);
 			}
@@ -121,7 +115,7 @@ namespace Starvers
 		{
 			SendMessage(msg, Color.Blue);
 		}
-		public void SendMessage(string msg,Color color)
+		public void SendMessage(string msg, Color color)
 		{
 			if (Index == -2)
 			{
@@ -133,7 +127,7 @@ namespace Starvers
 			}
 			else
 			{
-				TSPlayer.SendMessage(msg,color);
+				TSPlayer.SendMessage(msg, color);
 			}
 		}
 		public void SendInfoMessage(string msg)
@@ -196,7 +190,7 @@ namespace Starvers
 		public void SendStatusMSG(string msg)
 		{
 			msg = EndLine19 + msg + EndLine20;
-			SendData(PacketTypes.Status, msg, 0, 0.0f, 0.0f, 0.0f, 0);
+			SendData(PacketTypes.Status, msg);
 		}
 		#endregion
 		#region HasPerm
@@ -266,64 +260,16 @@ namespace Starvers
 		#endregion
 		#region Properties
 		#region Zones
-		public bool ZoneDirtLayerHeight
-		{
-			get
-			{
-				return TilePoint.Y <= Main.rockLayer && TilePoint.Y > Main.worldSurface;
-			}
-		}
-		public bool ZoneBeach
-		{
-			get
-			{
-				return ZoneOverworldHeight && (TilePoint.X < 380 || TilePoint.X > Main.maxTilesX - 380);
-			}
-		}
-		public bool ZoneOverworldHeight
-		{
-			get
-			{
-				return TilePoint.Y <= Main.worldSurface && TilePoint.Y > Main.worldSurface * 0.349999994039536;
-			}
-		}
-		public bool ZoneRockLayerHeight
-		{
-			get
-			{
-				return TilePoint.Y <= Main.maxTilesY - 200 && (double)TilePoint.Y > Main.rockLayer;
-			}
-		}
-		public bool ZoneRain
-		{
-			get
-			{
-				return Main.raining && (double)TilePoint.Y <= Main.worldSurface;
-			}
-		}
-		public bool ZoneUnderworldHeight
-		{
-			get
-			{
-				return TilePoint.Y > Main.maxTilesY - 200;
-			}
-		}
-		public bool ZoneSkyHeight
-		{
-			get
-			{
-				return TilePoint.Y <= Main.worldSurface * 0.349999994039536;
-			}
-		}
+		public bool ZoneDirtLayerHeight => TilePoint.Y <= Main.rockLayer && TilePoint.Y > Main.worldSurface;
+		public bool ZoneBeach => ZoneOverworldHeight && (TilePoint.X < 380 || TilePoint.X > Main.maxTilesX - 380);
+		public bool ZoneOverworldHeight => TilePoint.Y <= Main.worldSurface && TilePoint.Y > Main.worldSurface * 0.349999994039536;
+		public bool ZoneRockLayerHeight => TilePoint.Y <= Main.maxTilesY - 200 && (double)TilePoint.Y > Main.rockLayer;
+		public bool ZoneRain => Main.raining && TilePoint.Y <= Main.worldSurface;
+		public bool ZoneUnderworldHeight => TilePoint.Y > Main.maxTilesY - 200;
+		public bool ZoneSkyHeight => TilePoint.Y <= Main.worldSurface * 0.349999994039536;
 		#endregion
 		#region HeldItem
-		public Item HeldItem
-		{
-			get
-			{
-				return TPlayer.inventory[TPlayer.selectedItem];
-			}
-		}
+		public Item HeldItem => TPlayer.inventory[TPlayer.selectedItem];
 		#endregion
 		#endregion
 		#region Methods
@@ -365,80 +311,80 @@ namespace Starvers
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Dessert;
 			}
-			if(TPlayer.ZoneHoly)
+			if (TPlayer.ZoneHoly)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Holy;
 			}
-			if(TPlayer.ZoneCorrupt)
+			if (TPlayer.ZoneCorrupt)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Corrupt;
 			}
-			if(TPlayer.ZoneCrimson)
+			if (TPlayer.ZoneCrimson)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Crimson;
 			}
-			if(ZoneDirtLayerHeight || ZoneRockLayerHeight)
+			if (ZoneDirtLayerHeight || ZoneRockLayerHeight)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.UnderGround;
 			}
-			if(TPlayer.ZoneJungle)
+			if (TPlayer.ZoneJungle)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Jungle;
 			}
-			if(TPlayer.ZoneSnow)
+			if (TPlayer.ZoneSnow)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Icy;
 			}
-			if(TPlayer.ZoneMeteor)
+			if (TPlayer.ZoneMeteor)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Metor;
 			}
-			if(ZoneRain)
+			if (ZoneRain)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Rain;
 			}
-			if(ZoneUnderworldHeight)
+			if (ZoneUnderworldHeight)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.Hell;
 			}
-			if(TPlayer.ZoneTowerSolar)
+			if (TPlayer.ZoneTowerSolar)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.TowerSolar;
 			}
-			if(TPlayer.ZoneTowerNebula)
+			if (TPlayer.ZoneTowerNebula)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.TowerNebula;
 			}
-			if(TPlayer.ZoneTowerStardust)
+			if (TPlayer.ZoneTowerStardust)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.TowerStardust;
 			}
-			if(TPlayer.ZoneTowerVortex)
+			if (TPlayer.ZoneTowerVortex)
 			{
 				Grass = false;
 				biome |= NPCSystem.BiomeType.TowerVortex;
 			}
-			if(ZoneSkyHeight)
+			if (ZoneSkyHeight)
 			{
 				biome |= NPCSystem.BiomeType.Sky;
 			}
-			if(ZoneBeach)
+			if (ZoneBeach)
 			{
 				biome |= NPCSystem.BiomeType.Beach;
 			}
-			if(Grass)
+			if (Grass)
 			{
 				biome |= NPCSystem.BiomeType.Grass;
 			}
@@ -450,10 +396,10 @@ namespace Starvers
 		public NPCSystem.SpawnConditions GetConditions()
 		{
 			NPCSystem.SpawnConditions condition = default;
-			if(Main.dayTime)
+			if (Main.dayTime)
 			{
 				condition |= NPCSystem.SpawnConditions.Day;
-				if(Main.eclipse)
+				if (Main.eclipse)
 				{
 					condition |= NPCSystem.SpawnConditions.Eclipse;
 				}
@@ -461,7 +407,7 @@ namespace Starvers
 			else
 			{
 				condition |= NPCSystem.SpawnConditions.Night;
-				if(Main.bloodMoon)
+				if (Main.bloodMoon)
 				{
 					condition |= NPCSystem.SpawnConditions.BloodMoon;
 				}
@@ -515,7 +461,7 @@ namespace Starvers
 		}
 		public void UpdateMoon()
 		{
-			if(Dead)
+			if (Dead)
 			{
 				if (MoonIndex > 0)
 				{
@@ -523,11 +469,11 @@ namespace Starvers
 				}
 				return;
 			}
-			if(MoonIndex < 0 ) 
+			if (MoonIndex < 0)
 			{
 				MoonIndex = NewMoon();
 			}
-			else if(
+			else if (
 				Main.npc[MoonIndex].type == NPCID.MoonLordCore &&
 				Main.npc[MoonIndex].active == false)
 			{
@@ -689,7 +635,7 @@ namespace Starvers
 			string Weapon = JsonConvert.SerializeObject(player.Weapon);
 			int* begin = player.Skills;
 			int* end = begin + 5;
-			while(begin != end)
+			while (begin != end)
 			{
 				*begin++ = 0;
 			}
@@ -771,7 +717,7 @@ namespace Starvers
 		/// <param name="rad">所需角度(弧度)</param>
 		/// <param name="length"></param>
 		/// <returns></returns>
-		public Vector FromPolar(double rad,float length)
+		public Vector FromPolar(double rad, float length)
 		{
 			return Vector.FromPolar(rad, length);
 		}
@@ -820,7 +766,7 @@ namespace Starvers
 			double averagerad = Math.PI * 2 / number;
 			for (int i = 0; i < number; i++)
 			{
-				NewProj(Center + FromPolar(averagerad * i, r) , FromPolar(averagerad * i, -Vel) , Type, Damage, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		/// <summary>
@@ -920,7 +866,7 @@ namespace Starvers
 			}
 			for (int i = 0; i < num; i++)
 			{
-				NewProj(Center + FromPolar(start + i * average, r) , FromPolar(start + i * average, Vel) , Type, Damage, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(start + i * average, r), FromPolar(start + i * average, Vel), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		#endregion
@@ -946,16 +892,16 @@ namespace Starvers
 			}
 		}
 		/// <summary>
-		 /// 制造速度平行的弹幕直线
-		 /// </summary>
-		 /// <param name="Begin">起点</param>
-		 /// <param name="End">终点</param>
-		 /// <param name="Vel">速度</param>
-		 /// <param name="num">数量</param>
-		 /// <param name="Damage"></param>
-		 /// <param name="type"></param>
-		 /// <param name="ai0"></param>
-		 /// <param name="ai1"></param>
+		/// 制造速度平行的弹幕直线
+		/// </summary>
+		/// <param name="Begin">起点</param>
+		/// <param name="End">终点</param>
+		/// <param name="Vel">速度</param>
+		/// <param name="num">数量</param>
+		/// <param name="Damage"></param>
+		/// <param name="type"></param>
+		/// <param name="ai0"></param>
+		/// <param name="ai1"></param>
 		public int[] ProjLineReturns(Vector2 Begin, Vector2 End, Vector2 Vel, int num, int Damage, int type, float ai0 = 0, float ai1 = 0)
 		{
 			int[] arr = new int[num];
@@ -990,7 +936,7 @@ namespace Starvers
 		/// <param name="name">技能名称(可以只取前几位字母)</param>
 		/// <param name="slot">槽位</param>
 		/// <param name="ServerDoThis">是否无视等级设置</param>
-		public unsafe void SetSkill(string name, int slot,bool ServerDoThis = false)
+		public unsafe void SetSkill(string name, int slot, bool ServerDoThis = false)
 		{
 			slot -= 1;
 			if (slot < 0 || slot > AuraSystem.SkillManager.Skills.Length)
@@ -1011,12 +957,12 @@ namespace Starvers
 						else
 						{
 							Skills[slot] = skill.Index;
-							if(!ServerDoThis)
+							if (!ServerDoThis)
 							{
 								TSPlayer.SendSuccessMessage("设置成功");
 							}
 						}
-						if(!ServerDoThis)
+						if (!ServerDoThis)
 						{
 							TSPlayer.SendInfoMessage(skill.Text);
 						}
@@ -1079,7 +1025,7 @@ namespace Starvers
 		public unsafe Skill GetSkill(int slot)
 		{
 #if DEBUG
-			if(slot < 0 && slot >= Skill.MaxSlots)
+			if (slot < 0 && slot >= Skill.MaxSlots)
 			{
 				throw new IndexOutOfRangeException($"slot: {slot}");
 			}
@@ -1121,14 +1067,14 @@ namespace Starvers
 				case SaveModes.Json:
 					{
 						string path = Path.Combine(SavePath, $"{Name}.json");
-						if(File.Exists(path))
+						if (File.Exists(path))
 						{
 							try
 							{
 								player = JsonConvert.DeserializeObject<StarverPlayer>(File.ReadAllText(path));
 								player.Temp = true;
 							}
-							catch(Exception e)
+							catch (Exception e)
 							{
 								TShock.Log.Error(e.ToString());
 								return false;
@@ -1155,7 +1101,7 @@ namespace Starvers
 		/// <summary>
 		/// 上一次捕获到释放技能
 		/// </summary>
-		public DateTime LastHandle = DateTime.Now;
+		public DateTime LastHandle { get; set; } = DateTime.Now;
 		/// <summary>
 		/// 玩家升级经验是否更少
 		/// </summary>
@@ -1191,12 +1137,12 @@ namespace Starvers
 			}
 			set
 			{
-				if(level == int.MaxValue)
+				if (level == int.MaxValue)
 				{
 					return;
 				}
 				level = value;
-				if(Temp)
+				if (Temp)
 				{
 					return;
 				}
@@ -1220,7 +1166,7 @@ namespace Starvers
 					exp = value;
 					return;
 				}
-				if(Temp)
+				if (Temp)
 				{
 					exp = value;
 					return;
@@ -1260,15 +1206,15 @@ namespace Starvers
 		/// <summary>
 		/// 当前升级所需经验
 		/// </summary>
-		public int UpGradeExp
-		{
-			get
-			{
-				return AuraSystem.StarverAuraManager.UpGradeExp(level);
-			}
-		}
+		public int UpGradeExp => AuraSystem.StarverAuraManager.UpGradeExp(level);
 		public int MaxMP { get; set; }
-		public byte[,] Weapon { get; set; } = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+		public byte[,] Weapon { get; set; } =
+		{
+			{ 0, 0, 0, 0 },
+			{ 0, 0, 0, 0 },
+			{ 0, 0, 0, 0 },
+			{ 0, 0, 0, 0 }
+		};
 		public int Life
 		{
 			get
@@ -1284,49 +1230,25 @@ namespace Starvers
 		//以下4个属性均为支线任务(未启用)使用
 		public int FishCode
 		{
-			get
-			{
-				return TBCodes[0];
-			}
-			set
-			{
-				TBCodes[0] = value;
-			}
+			get => TBCodes[0];
+			set => TBCodes[0] = value;
 		}
 		public int MineCode
 		{
-			get
-			{
-				return TBCodes[1];
-			}
-			set
-			{
-				TBCodes[1] = value;
-			}
+			get => TBCodes[1];
+			set => TBCodes[1] = value;
 		}
 		public int CollectCode
 		{
-			get
-			{
-				return TBCodes[2];
-			}
-			set
-			{
-				TBCodes[2] = value;
-			}
+			get => TBCodes[2];
+			set => TBCodes[2] = value;
 		}
 		public int HunterCode
-		{
-			get
-			{
-				return TBCodes[3];
-			}
-			set
-			{
-				TBCodes[3] = value;
-			}
+		{ 
+			get => TBCodes[3]; 
+			set => TBCodes[3] = value;
 		}
-		public string Buffer;
+		internal string Buffer;
 		/// <summary>
 		/// 上一次释放技能时间
 		/// </summary>
@@ -1516,13 +1438,11 @@ namespace Starvers
 			int* end = begin + 5;
 			int* iterator = begin;
 			using (stream = new MemoryStream(buffer, true))
+			using (writer = new BinaryWriter(stream))
 			{
-				using (writer = new BinaryWriter(stream))
+				while (iterator != end)
 				{
-					while (iterator != end)
-					{
-						writer.Write(*iterator++);
-					}
+					writer.Write(*iterator++);
 				}
 			}
 		}
@@ -1543,17 +1463,9 @@ namespace Starvers
 		}
 		#endregion
 		#region clearbuffer
-		private unsafe static void ClearBuffer()
+		private static void ClearBuffer()
 		{
-			fixed (byte* begin = &buffer[0])
-			{
-				byte* end = begin + buffer.Length;
-				byte* iterator = begin;
-				while (iterator != end)
-				{
-					*iterator++ = 0;
-				}
-			}
+			Array.Clear(buffer, 0, buffer.Length);
 		}
 		#endregion
 		#region InitializeSkills

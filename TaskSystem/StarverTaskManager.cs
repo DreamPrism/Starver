@@ -17,7 +17,7 @@ namespace Starvers.TaskSystem
 		public bool Enabled => Config.EnableTask;
 		public static StarverConfig Config => StarverConfig.Config;
 		public static StarverTask[] Tasks { get; private set; } = new StarverTask[StarverTask.MAINLINE];
-		public static StarverTask Task { get { return Tasks[Config.TaskNow]; } }
+		public static StarverTask Task => Tasks[Config.TaskNow];
 		public static bool LoadedTask { get; private set; } = false;
 		public static DateTime Last { get; protected set; } = DateTime.Now;
 		#endregion

@@ -8,10 +8,10 @@ using TShockAPI;
 
 namespace Starvers.WeaponSystem
 {
-	using Starvers.WeaponSystem.Weapons;
-	using Starvers.WeaponSystem.Weapons.Ranged;
-	using Starvers.WeaponSystem.Weapons.Magic;
-	using Starvers.WeaponSystem.Weapons.Melee;
+	using Weapons;
+	using Weapons.Ranged;
+	using Weapons.Magic;
+	using Weapons.Melee;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class StarverWeaponManager : IStarverPlugin
 	{
@@ -48,7 +48,7 @@ namespace Starvers.WeaponSystem
 			Minion
 		};
 		#endregion
-		#region interfaces
+		#region Iterfaces
 		public StarverConfig Config => StarverConfig.Config;
 		public bool Enabled => Config.EnableAura && Config.EnableBoss;
 		public void Load()
@@ -66,12 +66,7 @@ namespace Starvers.WeaponSystem
 		{
 			if (args.Parameters.Count < 1)
 			{
-				args.Player.SendErrorMessage("用法错误");
-				args.Player.SendErrorMessage("正确用法:");
-				args.Player.SendErrorMessage("    <Career> <Name> : Career 武器类型;Name 武器名");
-				args.Player.SendErrorMessage("武器类型为:");
-				args.Player.SendErrorMessage("  Melee\n  Ranged\n  Magic\n  Minion");
-				args.Player.SendErrorMessage("    <Career> : 查看该类型武器");
+				args.Player.SendErrorMessage(HelpTexts.Weapon);
 				return;
 			}
 			else
