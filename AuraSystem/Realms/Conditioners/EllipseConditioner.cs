@@ -7,14 +7,14 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 
-namespace Starvers.AuraSystem.Realms.Generics
+namespace Starvers.AuraSystem.Realms.Conditioners
 {
+	using Interfaces;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
-	public class EllipseReflector : IRealmReflector
+	public class EllipseConditioner : IBorderConditioner
 	{
 		protected const int BorderMax = 60;
 		protected int[] Border;
-		protected int projID;
 		protected double angleVel;
 
 		/// <summary>
@@ -33,12 +33,12 @@ namespace Starvers.AuraSystem.Realms.Generics
 		/// 旋转度数(弧度制)
 		/// </summary>
 		public double Rotation { get; set; }
+		/// <summary>
+		/// 边界弹幕类型
+		/// </summary>
+		public int ProjID { get; set; }
 		public Vector2 Center { get; set; }
 
-		public bool AtBorder(Entity entity)
-		{
-			return InternalAtBorder((Vector)entity.position);
-		}
 		public bool InRange(Entity entity)
 		{
 			return InternalInRange((Vector)entity.Center);
@@ -71,7 +71,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 					(
 					position: Center + RelativePosition(angle: Math.PI * 2 / BorderMax * i),
 					velocity: Vector2.Zero,
-					Type: projID,
+					Type: ProjID,
 					Damage: 0,
 					KnockBack: 0,
 					Owner: Main.myPlayer
@@ -92,14 +92,14 @@ namespace Starvers.AuraSystem.Realms.Generics
 			Vector2 Pos;
 			for (int i = 0; i < Border.Length; i++)
 			{
-				Pos = Center + RelativePosition( Math.PI * 2 / BorderMax * i);
-				if (Main.projectile[Border[i]].active == false || Main.projectile[Border[i]].type != projID)
+				Pos = Center + RelativePosition(Math.PI * 2 / BorderMax * i);
+				if (Main.projectile[Border[i]].active == false || Main.projectile[Border[i]].type != ProjID)
 				{
 					Border[i] = Utils.NewProj
 						  (
 						  position: Pos,
 						  velocity: Vector2.Zero,
-						  Type: projID,
+						  Type: ProjID,
 						  Damage: 0,
 						  KnockBack: 0,
 						  Owner: Main.myPlayer
@@ -111,41 +111,21 @@ namespace Starvers.AuraSystem.Realms.Generics
 				Main.projectile[Border[i]].SendData();
 			}
 		}
-		public void Reflect(Entity entity)
+		public bool AtBorder(Entity entity)
 		{
-			entity.velocity = CalcReflectedVelocity(entity);
+			return InternalAtBorder((Vector)entity.position);
 		}
 
-		public EllipseReflector()
+		public EllipseConditioner()
 		{
-			projID = ProjectileID.Bat;
+			ProjID = ProjectileID.Bat;
 			ShaftA = 16 * 20;
 			ShaftB = 16 * 30;
-			angleVel = Math.PI / 120; 
+			angleVel = Math.PI / 120;
 		}
 
-		private Vector CalcReflectedVelocity(Entity entity)
-		{
-			Vector relativePos = (Vector)(entity.Center - Center);
-			Vector vel = (Vector)entity.velocity;
 
-			vel.Angle -= Rotation;
-			relativePos.Angle -= Rotation;
-
-			Vector r = (relativePos.Y, -relativePos.X);
-
-			vel -= r * (float)angleVel;
-
-			double alpha = Math.Atan2(relativePos.X / ShaftA, relativePos.Y / ShaftB);
-			Vector u = (ShaftA * Math.Cos(alpha), ShaftB * Math.Sin(alpha));
-
-			vel -= 2 * Vector.Dot(vel, u) * u / u.LengthSquared;
-
-			vel += r * (float)angleVel;
-			vel.Angle += Rotation;
-			return vel;
-		}
-		private bool InternalAtBorder(Vector Pos)
+		protected virtual bool InternalAtBorder(Vector Pos)
 		{
 			Pos -= (Vector)Center;
 			Pos.Angle -= Rotation;
@@ -174,7 +154,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 		/// <summary>
 		/// 判断是否与两点线段相交(不计算旋转)
 		/// </summary>
-		private bool CrossedRotated(Vector p1,Vector p2)
+		private bool CrossedRotated(Vector p1, Vector p2)
 		{
 			throw new NotImplementedException();
 		}
@@ -185,5 +165,6 @@ namespace Starvers.AuraSystem.Realms.Generics
 			value.Angle += Rotation;
 			return value;
 		}
+
 	}
 }

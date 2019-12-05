@@ -85,9 +85,11 @@
     <Compile Include="AuraSystem\Realms\BlindingRealm.cs" />
     <Compile Include="AuraSystem\Realms\CircleRealm.cs" />
     <Compile Include="AuraSystem\Realms\Generics\BlindingRealm.cs" />
-    <Compile Include="AuraSystem\Realms\Generics\EllipseReflector.cs" />
-    <Compile Include="AuraSystem\Realms\Generics\IRealmConditioner.cs" />
-    <Compile Include="AuraSystem\Realms\Generics\IRealmReflector.cs" />
+    <Compile Include="AuraSystem\Realms\Conditioners\EllipseConditioner.cs" />
+    <Compile Include="AuraSystem\Realms\Conditioners\EllipseReflector.cs" />
+    <Compile Include="AuraSystem\Realms\Interfaces\IBorderConditioner.cs" />
+    <Compile Include="AuraSystem\Realms\Interfaces\IRealmConditioner.cs" />
+    <Compile Include="AuraSystem\Realms\Interfaces\IRealmReflector.cs" />
     <Compile Include="AuraSystem\Realms\Generics\ReflectingRealm.cs" />
     <Compile Include="AuraSystem\Realms\IRealm.cs" />
     <Compile Include="AuraSystem\Realms\StarverRealm.cs" />

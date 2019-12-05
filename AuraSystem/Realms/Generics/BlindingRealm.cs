@@ -9,6 +9,7 @@ using Terraria.ID;
 namespace Starvers.AuraSystem.Realms.Generics
 {
 	using Terraria;
+	using Interfaces;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class BlindingRealm<T> : StarverRealm
 		where T : IRealmConditioner, new()
@@ -16,10 +17,16 @@ namespace Starvers.AuraSystem.Realms.Generics
 		private const int Blind = BuffID.Obstructed;
 		private const int MaxTimeLeft = 60 * 60 * 2;
 		private T Conditioner;
-		public BlindingRealm() : base(true)
+
+		public BlindingRealm() : this(new T())
+		{
+
+		}
+
+		public BlindingRealm(T conditioner) : base(true)
 		{
 			DefaultTimeLeft = MaxTimeLeft;
-			Conditioner = new T();
+			Conditioner = conditioner;
 		}
 
 		public override void Kill()

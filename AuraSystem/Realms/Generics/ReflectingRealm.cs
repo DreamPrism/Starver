@@ -8,6 +8,7 @@ using Terraria;
 
 namespace Starvers.AuraSystem.Realms.Generics
 {
+	using Interfaces;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class ReflectingRealm<ReflectorType> : StarverRealm
 		where ReflectorType : IRealmReflector, new()
@@ -20,11 +21,16 @@ namespace Starvers.AuraSystem.Realms.Generics
 			get => base.Center;
 			set => Reflector.Center = base.Center = value;
 		}
-		public ReflectingRealm() : base(true)
+
+		public ReflectingRealm(): this(new ReflectorType())
+		{
+
+		}
+		public ReflectingRealm(ReflectorType reflector) : base(true)
 		{
 			Owner = Main.myPlayer;
 			DefaultTimeLeft = 60 * 30;
-			Reflector = new ReflectorType();
+			Reflector = reflector;
 		}
 
 		public ReflectingRealm(int owner) : this()

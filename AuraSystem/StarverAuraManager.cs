@@ -10,6 +10,8 @@ using Terraria.ID;
 using TShockAPI;
 using Starvers.AuraSystem.Realms;
 using Starvers.AuraSystem.Realms.Generics;
+using Starvers.AuraSystem.Realms.Interfaces;
+using Starvers.AuraSystem.Realms.Conditioners;
 
 namespace Starvers.AuraSystem
 {
@@ -63,7 +65,7 @@ namespace Starvers.AuraSystem
 				typeof(BlindingRealm),
 				typeof(ReflectingRealm),
 				typeof(ReflectingRealm<EllipseReflector>),
-				typeof(BlindingRealm<EllipseReflector>)
+				typeof(BlindingRealm<EllipseConditioner>)
 			};
 		}
 		private void LoadHandlers()

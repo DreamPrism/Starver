@@ -39,16 +39,16 @@ namespace Starvers.AuraSystem.Realms
 						continue;
 					if (InRange(player))
 					{
-						damage = Math.Max(1, player.Life / 20);
+						damage = Math.Max(1, player.Life / 60);
 						player.Life -= damage;
 						player.SendCombatMSsg(damage.ToString(), Color.Blue);
 					}
 				}
 			}
-			if (TimeLeft % 4 == 0)
 			{
 				int idx = Utils.NewProj(Center + Vector.FromPolar(angle, Radium), new Vector2(0.001f, 0.001f), ProjectileID.VortexVortexLightning, 1, 20, 255);
-				Main.projectile[idx].aiStyle = -1;
+				Main.projectile[idx].aiStyle = -2;
+				Main.projectile[idx].timeLeft = 60;
 				angle += MathHelper.Pi / 30;
 			}
 		}

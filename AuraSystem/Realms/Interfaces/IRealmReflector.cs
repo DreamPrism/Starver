@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 
-namespace Starvers.AuraSystem.Realms.Generics
+namespace Starvers.AuraSystem.Realms.Interfaces
 {
-	public interface IRealmReflector : IRealmConditioner
+	public interface IRealmReflector : IBorderConditioner
 	{
-		public bool AtBorder(Entity entity);
 		public void Reflect(Entity entity);
 	}
 }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 
-namespace Starvers.AuraSystem.Realms.Generics
+namespace Starvers.AuraSystem.Realms.Interfaces
 {
 	public interface IRealmConditioner
 	{
