@@ -12,9 +12,10 @@ namespace Starvers.AuraSystem.Realms
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class BlindingRealm : CircleRealm
 	{
+		private const int Proj = ProjectileID.Bat;
 		private const int Blind = BuffID.Obstructed;
 		private const int MaxTimeLeft = 60 * 20;
-		private int[] Blasters;
+		private int[] Border;
 		public BlindingRealm() : base(true)
 		{
 			DefaultTimeLeft = MaxTimeLeft;
@@ -23,7 +24,7 @@ namespace Starvers.AuraSystem.Realms
 		public override void Kill()
 		{
 			base.Kill();
-			foreach(var idx in Blasters)
+			foreach(var idx in Border)
 			{
 				Main.projectile[idx].type = 0;
 				Main.projectile[idx].active = false;
@@ -34,19 +35,20 @@ namespace Starvers.AuraSystem.Realms
 		public override void Start()
 		{
 			base.Start();
-			Blasters = new int[60];
-			for (int i = 0; i < Blasters.Length; i++)
+			Border = new int[60];
+			for (int i = 0; i < Border.Length; i++)
 			{
-				Blasters[i] = Utils.NewProj
+				Border[i] = Utils.NewProj
 					(
 					position: Center + Vector.FromPolar(Math.PI * 2 / 60 * i, Radium),
 					velocity: Vector2.Zero,
-					Type: ProjectileID.NebulaSphere,
+					Type: Proj,
 					Damage: 0,
 					KnockBack: 0,
 					Owner: 255
 					);
-				Main.projectile[Blasters[i]].aiStyle = -1;
+				Main.projectile[Border[i]].friendly = false;
+				Main.projectile[Border[i]].aiStyle = -2;
 			}
 		}
 
@@ -75,9 +77,23 @@ namespace Starvers.AuraSystem.Realms
 		}
 		protected void UpdateBorders()
 		{
-			for (int i = 0; i < Blasters.Length; i++)
+			for (int i = 0; i < Border.Length; i++)
 			{
-				StarverPlayer.All.SendData(PacketTypes.ProjectileNew, "", Blasters[i]);
+				if (!Main.projectile[Border[i]].active || Main.projectile[Border[i]].type != Proj)
+				{
+					Border[i] = Utils.NewProj
+						(
+						position: Center + Vector.FromPolar(Math.PI * 2 / 60 * i, Radium),
+						velocity: Vector2.Zero,
+						Type: Proj,
+						Damage: 0,
+						KnockBack: 0,
+						Owner: 255
+						);
+					Main.projectile[Border[i]].friendly = false;
+					Main.projectile[Border[i]].aiStyle = -2;
+				}
+				StarverPlayer.All.SendData(PacketTypes.ProjectileNew, "", Border[i]);
 			}
 		}
 	}
