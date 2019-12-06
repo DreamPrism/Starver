@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
+	using Microsoft.Xna.Framework;
+	using Terraria.ID;
 
 namespace Starvers.BossSystem
 {
 	using Bosses;
 	using Bosses.Base;
-	using Microsoft.Xna.Framework;
-	using Starvers.BossSystem.Bosses.Clover;
-	using Terraria.ID;
-
+	using Bosses.Clover;
 	public class StarverBossManager : IStarverPlugin
 	{
 		#region Fields

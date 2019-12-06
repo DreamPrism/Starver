@@ -26,7 +26,7 @@ namespace Starvers.TaskSystem
 		public int Level { get; protected set; }
 		public int Exp { get; protected set; }
 		public bool Normal { get; protected set; } = true;
-		public bool CheckLevel { get; protected set; } = false;
+		public bool CheckLevel { get; protected set; }
 		public bool CheckItem { get; protected set; } = true;
 		#endregion
 		#region Statics

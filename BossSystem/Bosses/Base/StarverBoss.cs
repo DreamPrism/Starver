@@ -81,7 +81,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		/// <summary>
 		/// 召唤时无提示
 		/// </summary>
-		public bool Silence { get; protected set; } 
+		public bool Silence { get; protected set; }
 		public string Name { get; protected set; }
 		public Vector2 LastCenter { get; protected set; }
 		public string DownedMessage { get; protected set; }
@@ -164,7 +164,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region KillMe
 		public override void KillMe()
 		{
-			if(!_active)
+			if (!_active)
 			{
 				return;
 			}
@@ -178,13 +178,13 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region BeDown
 		protected virtual void BeDown()
 		{
-			if(DownedMessage != null)
+			if (DownedMessage != null)
 			{
 				StarverPlayer.All.SendMessage(DownedMessage, DownedMessageColor);
 			}
-			if(Downed != true)
+			if (Downed != true)
 			{
-				using(BinaryWriter writer = new BinaryWriter(new FileStream(DataPath,FileMode.Create)))
+				using (BinaryWriter writer = new BinaryWriter(new FileStream(DataPath, FileMode.Create)))
 				{
 					writer.Write(Downed = true);
 				}
@@ -288,7 +288,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region Rush
 		protected void Rush()
 		{
-			FakeVelocity = (Vector)(TargetPlayer.Center - Center) ;
+			FakeVelocity = (Vector)(TargetPlayer.Center - Center);
 			FakeVelocity.Length = 26 * DamageIndex;
 		}
 		#endregion
@@ -359,9 +359,9 @@ namespace Starvers.BossSystem.Bosses.Base
 			ExVersion = Level > CriticalLevel;
 			AliveBoss++;
 			Index = 0;
-			for(int i=0;i<Main.npc.Length;i++)
+			for (int i = 0; i < Main.npc.Length; i++)
 			{
-				if(!Main.npc[i].active)
+				if (!Main.npc[i].active)
 				{
 					Index = i;
 					break;
@@ -425,11 +425,11 @@ namespace Starvers.BossSystem.Bosses.Base
 				damage -= Life;
 				Life = 0;
 				LifeDown();
-				if(Lifes < 1)
+				if (Lifes < 1)
 				{
 					return;
 				}
-				if(DontTakeDamage)
+				if (DontTakeDamage)
 				{
 					return;
 				}
@@ -447,7 +447,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		public virtual void LifeDown()
 		{
 			Lifes--;
-			if(Lifes < 1)
+			if (Lifes < 1)
 			{
 				TSPlayer.All.SendMessage($"{DisplayName} 被打败了", Color.Blue);
 				BeDown();
@@ -457,9 +457,9 @@ namespace Starvers.BossSystem.Bosses.Base
 #if DEBUG
 				TSPlayer.All.SendMessage($"{Name}当前生命:{Lifes}/[c/0fff00:{LifesMax}]", Color.Yellow);
 #endif
-				if(Lifes % 10 == 0)
+				if (Lifes % 10 == 0)
 				{
-					TSPlayer.All.SendMessage($"{DisplayName}被打掉了1条生命",Color.Blue);
+					TSPlayer.All.SendMessage($"{DisplayName}被打掉了1条生命", Color.Blue);
 					TSPlayer.All.SendMessage($"{DisplayName}当前生命:{Lifes / 10}/[c/0fff00:{(int)(LifesMax / 10f + 0.999f)}]", Color.Blue);
 				}
 				LastCenter = Center;
@@ -476,7 +476,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			{
 				return _active;
 			}
-			else if (Index == -1 || (!RealNPC.active) || (CheckType && RealNPC.type != RawType)) 
+			else if (Index == -1 || (!RealNPC.active) || (CheckType && RealNPC.type != RawType))
 			{
 #if DEBUG
 				StarverPlayer.All.SendDeBugMessage($"{TypeName} ReSpawned");
@@ -543,9 +543,9 @@ namespace Starvers.BossSystem.Bosses.Base
 					return;
 				}
 			}
-			if(Vector2.Distance(Center,TargetPlayer.Center) > 16 * 300)
+			if (Vector2.Distance(Center, TargetPlayer.Center) > 16 * 300)
 			{
-				if(IgnoreDistance)
+				if (IgnoreDistance)
 				{
 					Center = TargetPlayer.Center + Rand.NextVector2(16 * 20);
 				}
@@ -555,13 +555,13 @@ namespace Starvers.BossSystem.Bosses.Base
 					return;
 				}
 			}
-			if(NightBoss && Main.dayTime)
+			if (NightBoss && Main.dayTime)
 			{
 				TSPlayer.Server.SetTime(false, 0);
 			}
 			++Timer;
 			RealAI();
-			if(WallActive)
+			if (WallActive)
 			{
 				UpdateWall();
 			}
@@ -576,7 +576,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 			*/
 			#endregion
-			Velocity = FakeVelocity ;
+			Velocity = FakeVelocity;
 			SendData();
 		}
 		#endregion
