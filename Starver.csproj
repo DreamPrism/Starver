@@ -241,6 +241,8 @@
     <Content Include="lib\Newtonsoft.Json.dll" />
     <Content Include="lib\OTAPI.dll" />
     <Content Include="lib\TerrariaServer.exe" />
+    <Content Include="lib\TOFOUT.Terraria.Server.dll" />
+    <Content Include="lib\TOFOUT.Windows.Forms.dll" />
     <Content Include="lib\TShockAPI.dll" />
   </ItemGroup>
   <ItemGroup>
