@@ -46,7 +46,7 @@ namespace Starvers.AuraSystem.Realms
 				}
 			}
 			{
-				int idx = Utils.NewProj(Center + Vector.FromPolar(angle, Radium), new Vector2(0.001f, 0.001f), ProjectileID.VortexVortexLightning, 1, 20, 255);
+				int idx = Utils.NewProj(Center + Vector.FromPolar(angle, Radium), new Vector2(0.001f, 0.001f), ProjectileID.VortexVortexLightning, 1, 20, Main.myPlayer);
 				Main.projectile[idx].aiStyle = -2;
 				Main.projectile[idx].timeLeft = 60;
 				angle += MathHelper.Pi / 30;
