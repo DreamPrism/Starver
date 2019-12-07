@@ -41,6 +41,8 @@ namespace Starvers
 		private string ExchangeTips;
 		private ExchangeItem[] Exchanges;
 		private Forms.StarverManagerForm Manager;
+		private IStarverPlugin[] Plugins;
+		private static uint Timer;
 		#endregion
 		#region BaseProperties
 		public override string Name => "Starver";
@@ -62,13 +64,11 @@ namespace Starvers
 		public static StarverPlayer[] Players { get; private set; } 
 		public static BaseNPC[] NPCs { get; private set; }
 		public StarverAuraManager Aura { get; private set; }
-		public static IStarverPlugin[] Plugins { get; private set; }
 		public static int CombatTextPacket { get; private set; }
 		public static StarverConfig Config => StarverConfig.Config;
 		public static bool IsPE { get; private set; }
 		public static MySqlConnection DB => StarverPlayer.DB;
 		public static Starver Instance { get; private set; }
-		public static uint Timer { get; private set; }
 		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20 + (Config.EvilWorld ? 10000 : 0));
 		#endregion
 		#region Ctor & Initialize & Dispose
@@ -306,7 +306,7 @@ namespace Starvers
 		}
 		#endregion
 		#region OnStrike
-		internal void OnStrike(NpcStrikeEventArgs args)
+		private void OnStrike(NpcStrikeEventArgs args)
 		{
 			if (Config.EnableAura && args.Npc.type != NPCID.SolarCrawltipedeTail)
 			{
@@ -434,7 +434,7 @@ namespace Starvers
 		*/
 		#endregion
 		#region OnChat
-		public static void OnChat(ServerChatEventArgs args)
+		private static void OnChat(ServerChatEventArgs args)
 		{
 			if (args.Text.IndexOf(TShock.Config.CommandSilentSpecifier) == 0 || args.Text.IndexOf(TShock.Config.CommandSpecifier) == 0)
 			{
@@ -600,7 +600,7 @@ namespace Starvers
 		}
 		#endregion
 		#region OnLogin
-		public void OnLogin(PlayerPostLoginEventArgs args)
+		private void OnLogin(PlayerPostLoginEventArgs args)
 		{
 			//new Thread(() =>
 			//{
@@ -867,7 +867,7 @@ namespace Starvers
 		}
 		#endregion
 		#region LvlPrefixColor
-		public static string LvlPrefixColor(int lvl)
+		private static string LvlPrefixColor(int lvl)
 		{
 			if (lvl < 1000)
 			{
@@ -916,7 +916,7 @@ namespace Starvers
 		}
 		#endregion
 		#region LvlPrefix
-		public static string LvlPrefix(int lvl)
+		private static string LvlPrefix(int lvl)
 		{
 			if (lvl < 10000)
 			{
