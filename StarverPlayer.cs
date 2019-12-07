@@ -52,7 +52,15 @@ namespace Starvers
 		#region RemoveBuff
 		public void RemoveBuff(int type)
 		{
-			int idx = TPlayer.FindBuffIndex(type);
+			int idx = -1;
+			for(int i=0;i<TPlayer.buffType.Length;i++)
+			{
+				if(TPlayer.buffType[i] == type)
+				{
+					idx = i;
+					break;
+				}
+			}
 			if (idx != -1)
 			{
 				TPlayer.buffTime[idx] = 0;

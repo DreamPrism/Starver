@@ -45,60 +45,21 @@ namespace Starvers
 		#endregion
 		#region Properties
 		public delegate int Calculator(int parament);
-		public static Calculator UpGradeExp { get; private set; } = StarverAuraManager.UpGradeExp;
-		public static Calculator BagExp { get; private set; } = StarverAuraManager.BagExp;
-		public static Random Rand { get; private set; } = new Random();
+		public static Calculator UpGradeExp { get; private set; } 
+		public static Calculator BagExp { get; private set; } 
+		public static Random Rand { get; private set; } 
 		public static DirectoryInfo MainFolder { get; private set; }
 		public static DirectoryInfo PlayerFolder { get; private set; }
 		public static DirectoryInfo BossFolder { get; private set; }
-		public static string SavePathMain { get; private set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Starver");
-		public static string SavePathPlayers { get; private set; } = Path.Combine(SavePathMain, "Players");
-		public static string SavePathBosses { get; private set; } = Path.Combine(SavePathMain, "Bosses");
+		public static string SavePathMain { get; private set; } 
+		public static string SavePathPlayers { get; private set; } 
+		public static string SavePathBosses { get; private set; }
 		public static string ExchangeTips { get; private set; }
-		public static StarverPlayer[] Players { get; private set; } = new StarverPlayer[Main.player.Length];
-		public static BaseNPC[] NPCs { get; private set; } = new BaseNPC[Main.maxNPCs];
+		public static StarverPlayer[] Players { get; private set; } 
+		public static BaseNPC[] NPCs { get; private set; }
 		public StarverAuraManager Aura { get; private set; }
-		public static IStarverPlugin[] Plugins { get; private set; } = new IStarverPlugin[]
-		{
-			new StarverTaskManager(),
-			new StarverAuraManager(),
-			new StarverBossManager(),
-			new StarverWeaponManager(),
-			new StarverNPCManager()
-		};
-		public static ExchangeItem[] Exchanges { get; private set; } = new ExchangeItem[]
-		{
-			new ExchangeItem(ItemID.CopperOre,ItemID.TinOre),
-			new ExchangeItem(ItemID.TinOre,ItemID.CopperOre),
-			new ExchangeItem(ItemID.IronOre,ItemID.LeadOre),
-			new ExchangeItem(ItemID.LeadOre,ItemID.IronOre),
-			new ExchangeItem(ItemID.SilverOre,ItemID.TungstenOre),
-			new ExchangeItem(ItemID.TungstenOre,ItemID.SilverOre),
-			new ExchangeItem(ItemID.GoldOre,ItemID.PlatinumOre),
-			new ExchangeItem(ItemID.PlatinumOre,ItemID.GoldOre),
-			new ExchangeItem(ItemID.CobaltOre,ItemID.PalladiumOre),
-			new ExchangeItem(ItemID.PalladiumOre,ItemID.CobaltOre),
-			new ExchangeItem(ItemID.MythrilOre,ItemID.OrichalcumOre),
-			new ExchangeItem(ItemID.OrichalcumOre,ItemID.MythrilOre),
-			new ExchangeItem(ItemID.AdamantiteOre,ItemID.TitaniumOre),
-			new ExchangeItem(ItemID.TitaniumOre,ItemID.AdamantiteOre),
-			new ExchangeItem(ItemID.Ichor,ItemID.CursedFlame),
-			new ExchangeItem(ItemID.CursedFlame,ItemID.Ichor),
-			new ExchangeItem(ItemID.RottenChunk,ItemID.Vertebrae),
-			new ExchangeItem(ItemID.Vertebrae,ItemID.RottenChunk),
-			new ExchangeItem(ItemID.DemoniteOre,ItemID.CrimtaneOre),
-			new ExchangeItem(ItemID.CrimtaneOre,ItemID.DemoniteOre),
-			new ExchangeItem(ItemID.HallowedKey,ItemID.RainbowGun),
-			new ExchangeItem(ItemID.CorruptionKey,ItemID.ScourgeoftheCorruptor),
-			new ExchangeItem(ItemID.CrimsonKey,ItemID.VampireKnives),
-			new ExchangeItem(ItemID.JungleKey,ItemID.PiranhaGun),
-			new ExchangeItem(ItemID.FrozenKey,ItemID.StaffoftheFrostHydra),
-			new ExchangeItem(ItemID.GoldenKey,ItemID.LockBox),
-			new ExchangeItem(ItemID.VileMushroom,ItemID.ViciousMushroom),
-			new ExchangeItem(ItemID.ViciousMushroom,ItemID.VileMushroom),
-			new ExchangeItem(ItemID.LockBox,ItemID.Nazar),
-			new ExchangeItem(ItemID.LunarTabletFragment,ItemID.PixelBox,40,"放在背包最后一格")
-		};
+		public static IStarverPlugin[] Plugins { get; private set; }
+		public static ExchangeItem[] Exchanges { get; private set; } 
 		public static int CombatTextPacket { get; private set; }
 		public static StarverConfig Config => StarverConfig.Config;
 		public static bool IsPE { get; private set; }
@@ -138,6 +99,56 @@ namespace Starvers
 		#region Initialize
 		public override void Initialize()
 		{
+			{
+				Rand = new Random();
+				BagExp = StarverAuraManager.BagExp;
+				UpGradeExp = StarverAuraManager.UpGradeExp;
+				SavePathMain = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Starver");
+				SavePathPlayers = Path.Combine(SavePathMain, "Players");
+				SavePathBosses = Path.Combine(SavePathMain, "Bosses");
+				Players = new StarverPlayer[Main.player.Length];
+				Exchanges = new ExchangeItem[]
+				{
+					new ExchangeItem(ItemID.CopperOre,ItemID.TinOre),
+					new ExchangeItem(ItemID.TinOre,ItemID.CopperOre),
+					new ExchangeItem(ItemID.IronOre,ItemID.LeadOre),
+					new ExchangeItem(ItemID.LeadOre,ItemID.IronOre),
+					new ExchangeItem(ItemID.SilverOre,ItemID.TungstenOre),
+					new ExchangeItem(ItemID.TungstenOre,ItemID.SilverOre),
+					new ExchangeItem(ItemID.GoldOre,ItemID.PlatinumOre),
+					new ExchangeItem(ItemID.PlatinumOre,ItemID.GoldOre),
+					new ExchangeItem(ItemID.CobaltOre,ItemID.PalladiumOre),
+					new ExchangeItem(ItemID.PalladiumOre,ItemID.CobaltOre),
+					new ExchangeItem(ItemID.MythrilOre,ItemID.OrichalcumOre),
+					new ExchangeItem(ItemID.OrichalcumOre,ItemID.MythrilOre),
+					new ExchangeItem(ItemID.AdamantiteOre,ItemID.TitaniumOre),
+					new ExchangeItem(ItemID.TitaniumOre,ItemID.AdamantiteOre),
+					new ExchangeItem(ItemID.Ichor,ItemID.CursedFlame),
+					new ExchangeItem(ItemID.CursedFlame,ItemID.Ichor),
+					new ExchangeItem(ItemID.RottenChunk,ItemID.Vertebrae),
+					new ExchangeItem(ItemID.Vertebrae,ItemID.RottenChunk),
+					new ExchangeItem(ItemID.DemoniteOre,ItemID.CrimtaneOre),
+					new ExchangeItem(ItemID.CrimtaneOre,ItemID.DemoniteOre),
+					new ExchangeItem(ItemID.HallowedKey,ItemID.RainbowGun),
+					new ExchangeItem(ItemID.CorruptionKey,ItemID.ScourgeoftheCorruptor),
+					new ExchangeItem(ItemID.CrimsonKey,ItemID.VampireKnives),
+					new ExchangeItem(ItemID.JungleKey,ItemID.PiranhaGun),
+					new ExchangeItem(ItemID.FrozenKey,ItemID.StaffoftheFrostHydra),
+					new ExchangeItem(ItemID.GoldenKey,ItemID.LockBox),
+					new ExchangeItem(ItemID.VileMushroom,ItemID.ViciousMushroom),
+					new ExchangeItem(ItemID.ViciousMushroom,ItemID.VileMushroom),
+					new ExchangeItem(ItemID.LockBox,ItemID.Nazar),
+					new ExchangeItem(ItemID.LunarTabletFragment,ItemID.PixelBox,40,"放在背包最后一格")
+				};
+				Plugins = new IStarverPlugin[]
+				{
+					new StarverTaskManager(),
+					new StarverAuraManager(),
+					new StarverBossManager(),
+					new StarverWeaponManager(),
+					new StarverNPCManager()
+				};
+			}
 			StarverConfig.Config = StarverConfig.Read();
 			foreach (var plugin in Plugins)
 			{

@@ -45,7 +45,7 @@ namespace Starvers.AuraSystem.Realms.Conditioners
 			Border = new int[Max];
 			for (int i = 0; i < Border.Length; i++)
 			{
-				Border[i] = Utils.NewProj(Center + Vector.FromPolar(Math.PI * 2 / 60 * i, Radium), default, ProjID, 1, 20, 255);
+				Border[i] = Utils.NewProj(Center + Vector.FromPolar(Math.PI * 2 / 60 * i, Radium), default, ProjID, 1, 20, Main.myPlayer);
 				Main.projectile[Border[i]].aiStyle = -2;
 				if (DefProjTimeLeft != 0)
 				{
@@ -65,7 +65,7 @@ namespace Starvers.AuraSystem.Realms.Conditioners
 			{
 				if (!Main.projectile[Border[i]].active || Main.projectile[Border[i]].type != ProjID)
 				{
-					Border[i] = Utils.NewProj(Center + Vector.FromPolar(Math.PI * 2 / 60 * i, Radium), default, ProjID, 1, 20, 255);
+					Border[i] = Utils.NewProj(Center + Vector.FromPolar(Math.PI * 2 / 60 * i, Radium), default, ProjID, 1, 20, Main.myPlayer);
 					Main.projectile[Border[i]].aiStyle = -2;
 					if (DefProjTimeLeft != 0)
 					{

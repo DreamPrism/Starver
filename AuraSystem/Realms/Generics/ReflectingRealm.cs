@@ -34,7 +34,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 
 		public ReflectingRealm(int owner) : this()
 		{
-			if (0 <= owner && owner <= 255)
+			if (0 <= owner && owner <= Main.myPlayer)
 			{
 				Owner = owner;
 			}

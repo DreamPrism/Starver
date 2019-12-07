@@ -45,7 +45,7 @@ namespace Starvers.AuraSystem.Realms
 					Type: Proj,
 					Damage: 0,
 					KnockBack: 0,
-					Owner: 255
+					Owner: Main.myPlayer
 					);
 				Main.projectile[Border[i]].friendly = false;
 				Main.projectile[Border[i]].aiStyle = -2;
@@ -88,7 +88,7 @@ namespace Starvers.AuraSystem.Realms
 						Type: Proj,
 						Damage: 0,
 						KnockBack: 0,
-						Owner: 255
+						Owner: Main.myPlayer
 						);
 					Main.projectile[Border[i]].friendly = false;
 					Main.projectile[Border[i]].aiStyle = -2;
