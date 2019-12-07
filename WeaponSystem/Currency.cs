@@ -13,6 +13,6 @@ namespace Starvers.WeaponSystem
 		public const int Ranged = ItemID.Fake_newchest2;
 		public const int Magic = ItemID.BlueCultistCasterBanner;
 		public const int Minion = ItemID.BlueCultistFighterBanner;
-		public static int[] Shards { get; private set; } = new int[] { Melee, Ranged, Magic, Minion };
+		public static int[] Shards { get; } = new int[] { Melee, Ranged, Magic, Minion };
 	}
 }

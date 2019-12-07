@@ -617,7 +617,7 @@ namespace Starvers
 			player.BufferToSkill();
 			player.TBCodes = JsonConvert.DeserializeObject<int[]>(reader.GetString("TBCodes"));
 			player.level = reader.GetInt32("Level");
-			player.Exp = reader.GetInt32("Exp");
+			player.exp = reader.GetInt32("Exp");
 			return player;
 		}
 		private void ReadFromReader(MySqlDataReader reader)
@@ -627,7 +627,7 @@ namespace Starvers
 			BufferToSkill();
 			TBCodes = JsonConvert.DeserializeObject<int[]>(reader.GetString("TBCodes"));
 			level = reader.GetInt32("Level");
-			Exp = reader.GetInt32("Exp");
+			exp = reader.GetInt32("Exp");
 		}
 		#endregion
 		#region Add
@@ -1024,9 +1024,17 @@ namespace Starvers
 		}
 		#endregion
 		#region Kick
+		public void Disconnect(string reason)
+		{
+			TSPlayer.Disconnect(reason);
+		}
 		public void Kick(string reason, bool silence = false)
 		{
-			TShock.Utils.Kick(this, reason, true, silence);
+			Disconnect(reason);
+			if(!silence)
+			{
+				StarverPlayer.All.SendErrorMessage($"玩家{Name} 被 Kick了: {reason}");
+			}
 		}
 		#endregion
 		#region GetSkill
@@ -1061,16 +1069,14 @@ namespace Starvers
 						{
 							return false;
 						}
-						using (MySqlDataReader reader = db.QueryReader("select * from starver where UserID=@0", ID.Value))
+						using MySqlDataReader reader = db.QueryReader("select * from starver where UserID=@0", ID.Value);
+						if (reader.Read())
 						{
-							if (reader.Read())
-							{
-								player = new StarverPlayer(ID.Value, true);
-								player.ReadFromReader(reader);
-								return true;
-							}
-							return false;
+							player = new StarverPlayer(ID.Value, true);
+							player.ReadFromReader(reader);
+							return true;
 						}
+						return false;
 					}
 				case SaveModes.Json:
 					{

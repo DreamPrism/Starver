@@ -21,7 +21,7 @@ namespace Starvers.TaskSystem
 		public static bool LoadedTask { get; private set; } = false;
 		public static DateTime Last { get; protected set; } = DateTime.Now;
 		#endregion
-		#region I&D
+		#region I & D
 		public void Load()
 		{
 			Commands.ChatCommands.Add(new Command(Perms.Task.Normal, MainCommand, "task", "tsks") { HelpText = HelpTexts.Task });

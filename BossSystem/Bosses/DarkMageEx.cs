@@ -36,7 +36,7 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 26;
 			Name = "dark膜法师";
 			LifeperPlayerType = ByLifes;
-			RawType = NPCID.DD2DarkMageT3;
+			RawType = Starver.IsPE ? NPCID.MartianProbe : NPCID.DD2DarkMageT3;
 			DefaultLifes = 60;
 			DamagedIndex = 0.0004f;
 			DefaultLife = 32500;

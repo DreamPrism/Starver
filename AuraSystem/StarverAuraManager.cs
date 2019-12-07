@@ -22,8 +22,7 @@ namespace Starvers.AuraSystem
 		private Command TestCommand;
 		private SkillManager Skill;
 		private string[] SkillLists;
-		private LinkedList<IRealm> TheRealms;
-		private List<IRealm> RemoveList;
+		private Queue<IRealm> TheRealms;
 		private List<Type> RealmTypes;
 		private string[] RealmNames;
 		#endregion
@@ -58,8 +57,7 @@ namespace Starvers.AuraSystem
 		private void LoadVars()
 		{
 			Skill = new SkillManager();
-			TheRealms = new LinkedList<IRealm>();
-			RemoveList = new List<IRealm>(10);
+			TheRealms = new Queue<IRealm>();
 			RealmTypes = new List<Type>
 			{
 				typeof(ApoptoticRealm),
@@ -154,24 +152,21 @@ namespace Starvers.AuraSystem
 		public void AddRealm(IRealm realm)
 		{
 			realm.Start();
-			TheRealms.AddLast(realm);
+			TheRealms.Enqueue(realm);
 		}
 		private void UpdateRealms()
 		{
-			foreach (var realm in TheRealms)
+			int count = TheRealms.Count;
+			IRealm realm;
+			for (int i = 0; i < count; i++)
 			{
+				realm = TheRealms.Dequeue();
 				realm.Update();
-				if (!realm.Active)
+				if (realm.Active)
 				{
-					RemoveList.Add(realm);
+					TheRealms.Enqueue(realm);
 				}
 			}
-			for (int i = 0; i < RemoveList.Count; i++)
-			{
-				TheRealms.Remove(RemoveList[i]);
-				RemoveList[i] = null;
-			}
-			RemoveList.Clear();
 		}
 		#endregion
 		#region Hooks

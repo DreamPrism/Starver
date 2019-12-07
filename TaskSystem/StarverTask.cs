@@ -10,12 +10,13 @@ using Terraria.ID;
 namespace Starvers.TaskSystem
 {
 	using BossSystem;
+    using CheckDelegate = Func<StarverPlayer, bool>;
 	using StarverBoss = BossSystem.Bosses.Base.StarverBoss;
 	public class StarverTask
 	{
 		#region Properties
 		public static StarverBoss[] Bosses => StarverBossManager.Bosses;
-		public StarverBoss Boss { get; protected set; } = null;
+		public StarverBoss Boss { get; protected set; }
 		public int ID { get; protected set; }
 		public string Description { get; protected set; }
 		public TaskItem[] Needs { get; protected set; }
@@ -1023,7 +1024,7 @@ namespace Starvers.TaskSystem
 		#region SetDefault
 		protected virtual void SetDefaut()
 		{
-			Check = DefaultCheck;
+			checker = DefaultCheck;
 			StringBuilder SB = new StringBuilder("");
 			SB.AppendFormat("主线任务#{0}--({1}){2}", ID, Name, Story == null ? "" : ("\n\"" + Story + "\""));
 			if (CheckItem)
@@ -1044,9 +1045,12 @@ namespace Starvers.TaskSystem
 		#endregion
 		#region Checks
 		#region Check
-		public delegate bool CheckDelegate(StarverPlayer player);
-		public CheckDelegate Check;
-		public bool DefaultCheck(StarverPlayer player)
+		protected CheckDelegate checker;
+        public bool Check(StarverPlayer player)
+        {
+            return checker(player);
+        }
+		protected bool DefaultCheck(StarverPlayer player)
 		{
 			bool flag = true;
 			if (Normal)
@@ -1148,7 +1152,7 @@ namespace Starvers.TaskSystem
 		}
 		#endregion
 		#region EatItems
-		private void EatChestItem(Item[] items)
+		protected void EatChestItem(Item[] items)
 		{
 			for (int i = 1; i < items.Length; i++)
 			{
@@ -1157,11 +1161,11 @@ namespace Starvers.TaskSystem
 		}
 		#endregion
 		#region Reward
-		private void RewardChestItem(Chest chest)
+		protected void RewardChestItem(Chest chest)
 		{
 			for (int i = 0; i < Rewards.Length && i < chest.item.Length; i++)
 			{
-				int num = Item.NewItem(new Vector2(0, 0), new Vector2(0, 0), Rewards[i].ID, Rewards[i].Stack, false, Rewards[i].Prefix);
+				int num = Utils.NewItem(Rewards[i].ID, Rewards[i].Stack, Rewards[i].Prefix);
 				chest.AddShop(Main.item[num]);
 			}
 		}

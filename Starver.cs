@@ -80,13 +80,15 @@ namespace Starvers
 		public override void Initialize()
 		{
 			{
+				IsPE = Main.player.Length != 256;
+				CombatTextPacket = IsPE ? (int)PacketTypes.CreateCombatText : (int)PacketTypes.CreateCombatTextExtended;
 				Rand = new Random();
 				BagExp = StarverAuraManager.BagExp;
 				UpGradeExp = StarverAuraManager.UpGradeExp;
 				SavePathMain = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Starver");
 				SavePathPlayers = Path.Combine(SavePathMain, "Players");
 				SavePathBosses = Path.Combine(SavePathMain, "Bosses");
-				Players = new StarverPlayer[Main.player.Length];
+				Players = new StarverPlayer[TShock.Players.Length];
 				Exchanges = new ExchangeItem[]
 				{
 					new ExchangeItem(ItemID.CopperOre,ItemID.TinOre),
@@ -128,7 +130,6 @@ namespace Starvers
 					new StarverWeaponManager(),
 					new StarverNPCManager()
 				};
-
 
 				if (!File.Exists(SavePathMain))
 				{
@@ -210,8 +211,6 @@ namespace Starvers
 			{
 				NPCs = new BaseNPC[Main.maxNPCs];
 			}
-			IsPE = Main.player.Length != 256;
-			CombatTextPacket = IsPE ? (int)PacketTypes.CreateCombatText : (int)PacketTypes.CreateCombatTextExtended;
 #if DEBUG
 			Console.BackgroundColor = ConsoleColor.Yellow;
 			Console.ForegroundColor = ConsoleColor.Cyan;
@@ -308,7 +307,7 @@ namespace Starvers
 			}
 			NPC RealNPC;
 			RealNPC = Main.npc[args.Npc.realLife >= 0 ? args.Npc.realLife : args.Npc.whoAmI];
-			BaseNPC snpc = NPCs[RealNPC.whoAmI];
+			BaseNPC snpc = NPCs?[RealNPC.whoAmI];
 			BossSystem.Bosses.Base.StarverBoss TheBoss = null;
 			StarverPlayer player = Players[args.Player.whoAmI];
 			float damageindex = 1;
@@ -492,7 +491,7 @@ namespace Starvers
 			}
 			#endregion
 			#region Save
-			if ((Timer / 60) % Config.SaveInterval == 0) 
+			if (Timer % (60 * Config.SaveInterval) == 0) 
 			{
 				Utils.SaveAll();
 			}
@@ -612,7 +611,17 @@ namespace Starvers
 					{
 						ID = ply.Account.ID;
 					}
-					Players[args.Player.Index] = StarverPlayer.Read(ID);
+					try
+					{
+						Players[args.Player.Index] = StarverPlayer.Read(ID);
+					}
+					catch(Exception e)
+					{
+						string msg = e.ToString();
+						StarverPlayer.Server.SendErrorMessage($"玩家{args.Player.Name}({args.Player.Index})Read StarverPlayer失败");
+						args.Player.Disconnect(msg);
+						TShock.Log.ConsoleError(msg);
+					}
 					UpdateForm(Players[args.Player.Index]);
 				}
 				if (Players[args.Player.Index].Level < Config.LevelNeed)
@@ -626,7 +635,7 @@ namespace Starvers
 			}
 			catch (Exception E)
 			{
-				TShock.Log.Info(E.ToString());
+				TShock.Log.ConsoleError(E.ToString());
 			}
 			//}).Start();
 		}

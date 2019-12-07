@@ -400,6 +400,20 @@ namespace Starvers
 			NetMessage.SendData((int)PacketTypes.PlayerUpdate, -1, -1, null, player.whoAmI);
 		}
 		#endregion
+		#region NewItem
+		public static int NewItem(int type, int stack = 1, int prefix = 0)
+		{
+			return Utils.NewItem(default, type, stack, prefix);
+		}
+		public static int NewItem(Vector2 position, int type, int stack = 1, int prefix = 0)
+		{
+			return Item.NewItem((int)position.X, (int)position.Y, 0, 0, type, stack, false, prefix);
+		}
+		public static int NewItem(Vector position, int type, int stack = 1, int prefix = 0)
+		{
+			return Item.NewItem((int)position.X, (int)position.Y, 0, 0, type, stack, false, prefix);
+		}
+		#endregion
 		#region TheWorldSkill
 		#region ReadNPC
 		public unsafe static void ReadNPCState(Vector2* NPCVelocity, int* NPCAI)

@@ -69,7 +69,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			#region Common
 			GoToWhereToGo();
-			if (Timer % 31 == 0)
+			if (Starver.IsPE && Timer % 31 == 0)
 			{
 				StartWall(Target);
 			}

@@ -7,11 +7,11 @@ using Terraria;
 
 namespace Starvers.TaskSystem
 {
-	public class TaskItem
+	public struct TaskItem
 	{
-		public int ID { get;protected set; }
-		public int Stack { get; protected set; }
-		public int Prefix { get; protected set; } = 0;
+		public int ID { get; private set; }
+		public int Stack { get; private set; }
+		public int Prefix { get; private set; }
 		public TaskItem(int id = 2, int stack = 1, int prefix = 0)
 		{
 			ID = id;
