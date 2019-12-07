@@ -552,17 +552,15 @@ namespace Starvers
 			StarverPlayer player = new StarverPlayer(UserID);
 			if (SaveMode == SaveModes.MySQL)
 			{
-				using (MySqlDataReader result = db.QueryReader("SELECT * FROM Starver WHERE UserID=@0;", UserID))
+				using MySqlDataReader result = db.QueryReader("SELECT * FROM Starver WHERE UserID=@0;", UserID);
+				if (result.Read())
 				{
-					if (result.Read())
-					{
-						player.ReadFromReader(result);
-					}
-					else
-					{
-						TSPlayer.Server.SendInfoMessage("StarverPlugins: 玩家{0}不存在,已新建", player.Name);
-						AddNewUser(player);
-					}
+					player.ReadFromReader(result);
+				}
+				else
+				{
+					TSPlayer.Server.SendInfoMessage("StarverPlugins: 玩家{0}不存在,已新建", player.Name);
+					AddNewUser(player);
 				}
 			}
 			else

@@ -567,11 +567,7 @@ namespace Starvers.NPCSystem
 		}
 		private static void LoadAssemblies()
 		{
-			NPCFolder = new DirectoryInfo(Path.Combine(Starver.MainFolder.FullName, "NPCs"));
-			if(!NPCFolder.Exists)
-			{
-				NPCFolder.Create();
-			}
+			NPCFolder = Starver.NPCFolder;
 			NPCPlugins.Add(System.Reflection.Assembly.GetExecutingAssembly());
 			FileInfo[] Files = NPCFolder.GetFiles("*.dll");
 			foreach(var file in Files)

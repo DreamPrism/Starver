@@ -39,7 +39,6 @@ namespace Starvers.Forms
 			TheBorder.SendToBack();
 			Brush_Selected = new SolidBrush(Color.DarkGray);
 			Brush_Font = new SolidBrush(PlayerList.ForeColor);
-			Starver.Manager = this;
 			Paint += OnPaint;
 			PlayerList.DrawItem += OnDrawList;
 			PSChange += UpdateInfosInUI;

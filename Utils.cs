@@ -24,13 +24,10 @@ namespace Starvers
 	public static class Utils
 	{
 		#region Properties
-		public static Random Rand { get { return Starver.Rand; } }
-		public static DirectoryInfo MainFolder { get { return Starver.MainFolder; } }
-		public static DirectoryInfo BossFolder { get { return Starver.BossFolder; } }
-		public static DirectoryInfo PlayerFolder { get { return Starver.PlayerFolder; } }
-		public static MySqlConnection DB { get { return StarverPlayer.DB; } }
-		public static StarverPlayer[] Players { get { return Starver.Players; } }
-		public static StarverConfig Config { get { return StarverConfig.Config; } }
+		public static Random Rand => Starver.Rand;
+		public static MySqlConnection DB => StarverPlayer.DB;
+		public static StarverPlayer[] Players => Starver.Players;
+		public static StarverConfig Config => StarverConfig.Config;
 		#endregion
 		#region SaveAll
 		public static void SaveAll()
@@ -51,39 +48,35 @@ namespace Starvers
 			if (Config.SaveMode == SaveModes.MySQL)
 			{
 				SaveAll();
-				using (MySqlConnection connection = DB.Clone() as MySqlConnection)
+				using MySqlConnection connection = DB.Clone() as MySqlConnection;
+				connection.Open();
+				using MySqlCommand cmd = new MySqlCommand("Select UserID,Level from Starver", connection);
+				using MySqlDataReader Reader = cmd.ExecuteReader(CommandBehavior.Default);
+				do
 				{
-					connection.Open();
-					using (MySqlCommand cmd = new MySqlCommand("Select UserID,Level from Starver", connection))
-					using (MySqlDataReader Reader = cmd.ExecuteReader(CommandBehavior.Default))
+					try
 					{
-						do
+						if (Reader.Read())
 						{
-							try
+							int UserID = Reader.Get<int>("UserID");
+							int Level = Reader.Get<int>("Level");
+							if (Level > 120)
 							{
-								if (Reader.Read())
-								{
-									int UserID = Reader.Get<int>("UserID");
-									int Level = Reader.Get<int>("Level");
-									if (Level > 120)
-									{
-										Level += lvlup;
-									}
-									DB.Query("update Starver set Level=@0 WHERE UserID=@1", Level, UserID);
-								}
+								Level += lvlup;
 							}
-							catch (Exception e)
-							{
-								TSPlayer.Server.SendInfoMessage(e.ToString());
-							}
+							DB.Query("update Starver set Level=@0 WHERE UserID=@1", Level, UserID);
 						}
-						while (Reader.NextResult());
+					}
+					catch (Exception e)
+					{
+						TSPlayer.Server.SendInfoMessage(e.ToString());
 					}
 				}
+				while (Reader.NextResult());
 			}
 			else
 			{
-				FileInfo[] files = PlayerFolder.GetFiles("*.json");
+				FileInfo[] files = Starver.PlayerFolder.GetFiles("*.json");
 				foreach (var ply in Starver.Players)
 				{
 					if (ply is null)
@@ -146,7 +139,7 @@ namespace Starvers
 				}
 				else
 				{
-					FileInfo[] files = PlayerFolder.GetFiles("*.json");
+					FileInfo[] files = Starver.PlayerFolder.GetFiles("*.json");
 					foreach (var file in files)
 					{
 						StarverPlayer player = StarverPlayer.Read(file.Name);

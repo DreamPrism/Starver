@@ -31,10 +31,16 @@ namespace Starvers
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using BigInt = System.Numerics.BigInteger;
 	using Skill = AuraSystem.Skills.Base.Skill;
+	using Calculator = Func<int, int>;
 	[ApiVersion(2, 1)]
 	public class Starver : TerrariaPlugin
 	{
 		#region Fields
+		private Calculator UpGradeExp;
+		private Calculator BagExp;
+		private string ExchangeTips;
+		private ExchangeItem[] Exchanges;
+		private Forms.StarverManagerForm Manager;
 		#endregion
 		#region BaseProperties
 		public override string Name => "Starver";
@@ -44,33 +50,29 @@ namespace Starvers
 		public override bool Enabled => true;
 		#endregion
 		#region Properties
-		public delegate int Calculator(int parament);
-		public static Calculator UpGradeExp { get; private set; } 
-		public static Calculator BagExp { get; private set; } 
-		public static Random Rand { get; private set; } 
 		public static DirectoryInfo MainFolder { get; private set; }
 		public static DirectoryInfo PlayerFolder { get; private set; }
 		public static DirectoryInfo BossFolder { get; private set; }
-		public static string SavePathMain { get; private set; } 
-		public static string SavePathPlayers { get; private set; } 
+		public static DirectoryInfo NPCFolder { get; private set; }
+		public static string SavePathMain { get; private set; }
+		public static string SavePathPlayers { get; private set; }
 		public static string SavePathBosses { get; private set; }
-		public static string ExchangeTips { get; private set; }
+		public static string SavePathNPCs { get; private set; }
+		public static Random Rand { get; private set; }
 		public static StarverPlayer[] Players { get; private set; } 
 		public static BaseNPC[] NPCs { get; private set; }
 		public StarverAuraManager Aura { get; private set; }
 		public static IStarverPlugin[] Plugins { get; private set; }
-		public static ExchangeItem[] Exchanges { get; private set; } 
 		public static int CombatTextPacket { get; private set; }
 		public static StarverConfig Config => StarverConfig.Config;
 		public static bool IsPE { get; private set; }
 		public static MySqlConnection DB => StarverPlayer.DB;
 		public static Starver Instance { get; private set; }
-		public static Forms.StarverManagerForm Manager { get; internal set; }
 		public static uint Timer { get; private set; }
 		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20 + (Config.EvilWorld ? 10000 : 0));
 		#endregion
-		#region ctor & Initialize & Dispose
-		#region ctor
+		#region Ctor & Initialize & Dispose
+		#region Ctor
 		public Starver(Main game) : base(game)
 		{
 			Instance = this;
@@ -85,9 +87,6 @@ namespace Starvers
 				Rand = new Random();
 				BagExp = StarverAuraManager.BagExp;
 				UpGradeExp = StarverAuraManager.UpGradeExp;
-				SavePathMain = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Starver");
-				SavePathPlayers = Path.Combine(SavePathMain, "Players");
-				SavePathBosses = Path.Combine(SavePathMain, "Bosses");
 				Players = new StarverPlayer[TShock.Players.Length];
 				Exchanges = new ExchangeItem[]
 				{
@@ -130,22 +129,34 @@ namespace Starvers
 					new StarverWeaponManager(),
 					new StarverNPCManager()
 				};
+				{
+					SavePathMain = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Starver");
+					SavePathNPCs = Path.Combine(SavePathMain, "NPCs");
+					SavePathPlayers = Path.Combine(SavePathMain, "Players");
+					SavePathBosses = Path.Combine(SavePathMain, "Bosses");
 
-				if (!File.Exists(SavePathMain))
-				{
-					Directory.CreateDirectory(SavePathMain);
+					if (!File.Exists(SavePathMain))
+					{
+						Directory.CreateDirectory(SavePathMain);
+					}
+					if (!File.Exists(SavePathNPCs))
+					{
+						Directory.CreateDirectory(SavePathNPCs);
+					}
+					if (!File.Exists(SavePathPlayers))
+					{
+						Directory.CreateDirectory(SavePathPlayers);
+					}
+					if (!File.Exists(SavePathBosses))
+					{
+						Directory.CreateDirectory(SavePathBosses);
+					}
+
+					MainFolder = new DirectoryInfo(SavePathMain);
+					NPCFolder = new DirectoryInfo(SavePathNPCs);
+					PlayerFolder = new DirectoryInfo(SavePathPlayers);
+					BossFolder = new DirectoryInfo(SavePathBosses);
 				}
-				if (!File.Exists(SavePathPlayers))
-				{
-					Directory.CreateDirectory(SavePathPlayers);
-				}
-				if (!File.Exists(SavePathBosses))
-				{
-					Directory.CreateDirectory(SavePathBosses);
-				}
-				MainFolder = new DirectoryInfo(SavePathMain);
-				PlayerFolder = new DirectoryInfo(SavePathPlayers);
-				BossFolder = new DirectoryInfo(SavePathBosses);
 			}
 			StarverConfig.Config = StarverConfig.Read();
 			foreach (var plugin in Plugins)
@@ -589,7 +600,7 @@ namespace Starvers
 		}
 		#endregion
 		#region OnLogin
-		public static void OnLogin(PlayerPostLoginEventArgs args)
+		public void OnLogin(PlayerPostLoginEventArgs args)
 		{
 			//new Thread(() =>
 			//{
@@ -641,7 +652,7 @@ namespace Starvers
 		}
 		#endregion
 		#region OnGreet
-		private static void OnGreet(GreetPlayerEventArgs args)
+		private void OnGreet(GreetPlayerEventArgs args)
 		{
 			TSPlayer player = TShock.Players[args.Who];
 			if (Config.SaveMode == SaveModes.MySQL)
@@ -697,7 +708,7 @@ namespace Starvers
 		}
 		#endregion
 		#region OnLeave
-		private static void OnLeave(LeaveEventArgs args)
+		private void OnLeave(LeaveEventArgs args)
 		{
 			if (Players[args.Who] == null)
 			{
@@ -936,10 +947,10 @@ namespace Starvers
 		}
 		#endregion
 		#region PtrTest
-		public unsafe void PtrTest(CommandArgs args) { }
+		private static unsafe void PtrTest(CommandArgs args) { }
 		#endregion
 		#region FromAura
-		internal void Command_Aura(CommandArgs args)
+		private void Command_Aura(CommandArgs args)
 		{
 			string p = args.Parameters.Count < 1 ? "None" : args.Parameters[0];
 			StarverPlayer player = args.SPlayer();
@@ -1125,7 +1136,7 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region UpdateForm
-		private static void UpdateForm(StarverPlayer player, bool delete = false)
+		private void UpdateForm(StarverPlayer player, bool delete = false)
 		{
 			#region Temp
 			//mod群的某人从灾厄搬出来的
