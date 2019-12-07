@@ -70,26 +70,6 @@ namespace Starvers
 		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20 + (Config.EvilWorld ? 10000 : 0));
 		#endregion
 		#region ctor & Initialize & Dispose
-		#region cctor
-		static Starver()
-		{
-			if (!File.Exists(SavePathMain))
-			{
-				Directory.CreateDirectory(SavePathMain);
-			}
-			if (!File.Exists(SavePathPlayers))
-			{
-				Directory.CreateDirectory(SavePathPlayers);
-			}
-			if (!File.Exists(SavePathBosses))
-			{
-				Directory.CreateDirectory(SavePathBosses);
-			}
-			MainFolder = new DirectoryInfo(SavePathMain);
-			PlayerFolder = new DirectoryInfo(SavePathPlayers);
-			BossFolder = new DirectoryInfo(SavePathBosses);
-		}
-		#endregion
 		#region ctor
 		public Starver(Main game) : base(game)
 		{
@@ -148,6 +128,23 @@ namespace Starvers
 					new StarverWeaponManager(),
 					new StarverNPCManager()
 				};
+
+
+				if (!File.Exists(SavePathMain))
+				{
+					Directory.CreateDirectory(SavePathMain);
+				}
+				if (!File.Exists(SavePathPlayers))
+				{
+					Directory.CreateDirectory(SavePathPlayers);
+				}
+				if (!File.Exists(SavePathBosses))
+				{
+					Directory.CreateDirectory(SavePathBosses);
+				}
+				MainFolder = new DirectoryInfo(SavePathMain);
+				PlayerFolder = new DirectoryInfo(SavePathPlayers);
+				BossFolder = new DirectoryInfo(SavePathBosses);
 			}
 			StarverConfig.Config = StarverConfig.Read();
 			foreach (var plugin in Plugins)
