@@ -175,6 +175,10 @@ namespace Starvers.AuraSystem
 		private void OnUpdate(object args)
 		{
 			UpdateRealms();
+			if(Config.EnableTask && Config.EvilWorld || NPC.downedMoonlord)
+			{
+				UpdateEvilGate();
+			}
 		}
 		#endregion
 		#region OnProj
@@ -199,6 +203,19 @@ namespace Starvers.AuraSystem
 			}
 		}
 		#endregion
+		#endregion
+		#region UpdateEvilGate
+		private void UpdateEvilGate()
+		{
+			if (TheRealms.Where(realm => realm is GateOfEvil<CircleConditioner>).Count() == 0)
+			{
+				var gate = new GateOfEvil<CircleConditioner>
+				{
+					Center = new Vector2(Main.spawnTileX, Main.spawnTileY - 200) * 16
+				};
+				AddRealm(gate);
+			}
+		}
 		#endregion
 		#region Command
 		private void CommandForTest(CommandArgs args)
