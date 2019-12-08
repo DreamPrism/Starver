@@ -36,8 +36,12 @@ namespace Starvers
 	public class Starver : TerrariaPlugin
 	{
 		#region Fields
+		private int curRelease;
 		private Calculator UpGradeExp;
 		private Calculator BagExp;
+		private string FolderForTransfer;
+		private string FolderBacking;
+		private string FolderSending;
 		private string ExchangeTips;
 		private ExchangeItem[] Exchanges;
 		private Forms.StarverManagerForm Manager;
@@ -82,6 +86,22 @@ namespace Starvers
 		public override void Initialize()
 		{
 			{
+				{
+					var field = typeof(Main).GetFields().Where(fld => fld.Name == "curRelease").First();
+					try
+					{
+						curRelease = (int)field.GetValue(null);
+					}
+					catch
+					{
+						curRelease = (int)field.GetRawConstantValue();
+					}
+				}
+				{
+					FolderForTransfer = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Stellaria", curRelease.ToString());
+					FolderBacking = Path.Combine(FolderForTransfer, "Backings");
+					FolderSending = Path.Combine(FolderForTransfer, "Sendings");
+				}
 				IsPE = Main.player.Length != 256;
 				CombatTextPacket = IsPE ? (int)PacketTypes.CreateCombatText : (int)PacketTypes.CreateCombatTextExtended;
 				Rand = new Random();
@@ -123,9 +143,9 @@ namespace Starvers
 				};
 				Plugins = new IStarverPlugin[]
 				{
+					new StarverBossManager(),
 					new StarverTaskManager(),
 					new StarverAuraManager(),
-					new StarverBossManager(),
 					new StarverWeaponManager(),
 					new StarverNPCManager()
 				};
@@ -217,7 +237,7 @@ namespace Starvers
 					GetDataHandlers.KillMe += OnDeath;
 				}
 			}
-			Aura = Plugins[1] as StarverAuraManager;
+			Aura = Plugins[2] as StarverAuraManager;
 			if(Config.EnableNPC)
 			{
 				NPCs = new BaseNPC[Main.maxNPCs];
@@ -926,6 +946,16 @@ namespace Starvers
 			{
 				return string.Format("[c/{0}:[][c/{0}:Lv.{1}][c/{0}:]]", "{0}", new string('?', Math.Min(6, (lvl - 5000) / 5000)));
 			}
+		}
+		#endregion
+		#region Transport
+		public static void SendToEvil(StarverPlayer player)
+		{
+			File.Create(Path.Combine(Instance.FolderSending, player.Index.ToString())).Dispose();
+		}
+		public static void BackToHard(StarverPlayer player)
+		{
+			File.Create(Path.Combine(Instance.FolderBacking, player.Index.ToString())).Dispose();
 		}
 		#endregion
 		#region Commands

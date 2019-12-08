@@ -190,30 +190,38 @@ namespace Starvers.NPCSystem
 			{
 				return;
 			}
-			if (RealNPC.aiStyle == None)
+			try
 			{
-				if (Target < 0 || Target > Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
+				if (RealNPC.aiStyle == None)
 				{
-					TargetClosest();
-					if (Target == None || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500)
+					if (Target < 0 || Target > Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 					{
+						TargetClosest();
+						if (Target == None || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500)
+						{
 #if DEBUG
 						StarverPlayer.All.SendDeBugMessage($"{Name} killed itself");
 #endif
-						KillMe();
-						return;
+							KillMe();
+							return;
+						}
 					}
+					Velocity = FakeVelocity;
 				}
-				Velocity = FakeVelocity;
+				if (Terraria.Main.dayTime && AfraidSun && RealNPC.Center.Y / 16 < Terraria.Main.rockLayer)
+				{
+					KillMe();
+					return;
+				}
+				if (TheWorld <= 0)
+				{
+					RealAI();
+				}
 			}
-			if (Terraria.Main.dayTime && AfraidSun && RealNPC.Center.Y / 16 < Terraria.Main.rockLayer)
+			catch(IndexOutOfRangeException)
 			{
 				KillMe();
 				return;
-			}
-			if (TheWorld <= 0)
-			{
-				RealAI();
 			}
 			SendData();
 			++Timer;

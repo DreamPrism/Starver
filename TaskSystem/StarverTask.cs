@@ -1017,12 +1017,12 @@ namespace Starvers.TaskSystem
 					Rewards = DefaultReward;
 				}
 
-				SetDefaut();
+				SetDefault();
 			}
 		}
 		#endregion
 		#region SetDefault
-		protected virtual void SetDefaut()
+		protected virtual void SetDefault()
 		{
 			checker = DefaultCheck;
 			StringBuilder SB = new StringBuilder("");

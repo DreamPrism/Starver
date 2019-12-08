@@ -89,6 +89,8 @@
     <Compile Include="AuraSystem\Realms\Generics\BlindingRealm.cs" />
     <Compile Include="AuraSystem\Realms\Conditioners\EllipseConditioner.cs" />
     <Compile Include="AuraSystem\Realms\Conditioners\EllipseReflector.cs" />
+    <Compile Include="AuraSystem\Realms\Generics\GateOfEvil.cs" />
+    <Compile Include="AuraSystem\Realms\Generics\StarverRealm.cs" />
     <Compile Include="AuraSystem\Realms\Interfaces\IBorderConditioner.cs" />
     <Compile Include="AuraSystem\Realms\Interfaces\IRealmConditioner.cs" />
     <Compile Include="AuraSystem\Realms\Interfaces\IRealmReflector.cs" />

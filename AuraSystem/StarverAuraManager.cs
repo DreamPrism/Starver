@@ -65,7 +65,8 @@ namespace Starvers.AuraSystem
 				typeof(ReflectingRealm),
 				typeof(ReflectingRealm<EllipseReflector>),
 				typeof(BlindingRealm<EllipseConditioner>),
-				typeof(ReflectingRealm<CircleReflector>)
+				typeof(ReflectingRealm<CircleReflector>),
+				typeof(GateOfEvil<CircleConditioner>)
 			};
 			{
 				RealmNames = new string[RealmTypes.Count];

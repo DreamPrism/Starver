@@ -28,13 +28,6 @@ namespace Starvers.BossSystem
 		internal static bool Cleared;
 		#endregion
 		#region ctor
-		static StarverBossManager()
-		{
-			foreach(var boss in Bosses)
-			{
-				BossAIs.Add(boss.AI);
-			}
-		}
 		#endregion
 		#region Interfaces
 		public delegate void AIDelegate(object args);
@@ -57,6 +50,11 @@ namespace Starvers.BossSystem
 		}
 		public void Load()
 		{
+			foreach (var boss in Bosses)
+			{
+				BossAIs.Add(boss.AI);
+			}
+
 			ServerApi.Hooks.NpcKilled.Register(Starver.Instance, OnKilled);
 			ServerApi.Hooks.NpcLootDrop.Register(Starver.Instance, OnDrop);
 			Commands.ChatCommands.Add(new Command(Perms.Boss.Spawn, BossCommand, "stboss"));
@@ -83,25 +81,25 @@ namespace Starvers.BossSystem
 			set => StarverBoss.EndTrialProcess = value;
 		}
 		public static StarverBoss[] Bosses { get; private set; } = new StarverBoss[]
-		{
-			new EyeEx(),
-			new BrainEx(),
-			new QueenBeeEx(),
-			new SkeletronEx(),
-			new DarkMageEx(),
-			new RedDevilEx(),
-			new PigronEx(),
-			new PrimeEx(),
-			new DestroyerEx(),
-			new RetinazerEx(),
-			new SpazmatismEx(),
-			new StarverWander(),
-			new StarverRedeemer(),
-			new StarverAdjudicator(),
-			new StarverDestroyer(),
-			new StarverManager(),
-			new CultistEx()
-		};
+			{
+				new EyeEx(),
+				new BrainEx(),
+				new QueenBeeEx(),
+				new SkeletronEx(),
+				new DarkMageEx(),
+				new RedDevilEx(),
+				new PigronEx(),
+				new PrimeEx(),
+				new DestroyerEx(),
+				new RetinazerEx(),
+				new SpazmatismEx(),
+				new StarverWander(),
+				new StarverRedeemer(),
+				new StarverAdjudicator(),
+				new StarverDestroyer(),
+				new StarverManager(),
+				new CultistEx()
+			};
 		public static StarverManager Clover => Bosses[Bosses.Length - 2] as StarverManager;
 		public static Random Rand => Starver.Rand;
 		public static List<AIDelegate> BossAIs = new List<AIDelegate>();
