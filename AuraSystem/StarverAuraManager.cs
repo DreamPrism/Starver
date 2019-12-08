@@ -18,6 +18,7 @@ namespace Starvers.AuraSystem
 	public class StarverAuraManager : IStarverPlugin
 	{
 		#region Fields
+		private int timer;
 		private Command AuraCommand;
 		private Command TestCommand;
 		private SkillManager Skill;
@@ -174,6 +175,7 @@ namespace Starvers.AuraSystem
 		#region OnUpdate
 		private void OnUpdate(object args)
 		{
+			timer++;
 			UpdateRealms();
 			if(Config.EnableTask && Config.EvilWorld || NPC.downedMoonlord)
 			{
@@ -207,7 +209,7 @@ namespace Starvers.AuraSystem
 		#region UpdateEvilGate
 		private void UpdateEvilGate()
 		{
-			if (TheRealms.Where(realm => realm is GateOfEvil<CircleConditioner>).Count() == 0)
+			if (TheRealms.Where(realm => realm is GateOfEvil<CircleConditioner>).Count() == 0 && timer % (60 * 5) == 0) 
 			{
 				var gate = new GateOfEvil<CircleConditioner>
 				{
