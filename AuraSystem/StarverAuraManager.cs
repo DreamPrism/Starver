@@ -626,5 +626,5 @@ namespace Starvers.AuraSystem
 		}
 		#endregion
 		#endregion
-	}
+	};
 }
