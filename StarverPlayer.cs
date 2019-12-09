@@ -281,6 +281,12 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region Methods
+		#region Spawn
+		public void Spawn()
+		{
+			TSPlayer.Spawn();
+		}
+		#endregion
 		#region GiveItem
 		public void GiveItem(int type, int stack = 1, int prefix = 0)
 		{

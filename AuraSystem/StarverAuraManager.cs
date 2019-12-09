@@ -19,6 +19,9 @@ namespace Starvers.AuraSystem
 	{
 		#region Fields
 		private int timer;
+		internal static int EvilGateSpawnCountDown;
+		private dynamic Stellaria;
+		internal Vector2[] LastPos;
 		private Command AuraCommand;
 		private Command TestCommand;
 		private SkillManager Skill;
@@ -57,6 +60,20 @@ namespace Starvers.AuraSystem
 		#region Loads
 		private void LoadVars()
 		{
+			if (Config.EnableTask)
+			{
+				EvilGateSpawnCountDown = 60 * 9;
+				try
+				{
+					Stellaria = ServerApi.Plugins.Where(container => container.Plugin.Name == nameof(Stellaria)).First().Plugin;
+				}
+				catch(Exception)
+				{
+					Console.WriteLine("Aura 寻找 Stellaria失败");
+				}
+				LastPos = Stellaria?.LastPos;
+			}
+
 			Skill = new SkillManager();
 			TheRealms = new Queue<IRealm>();
 			RealmTypes = new List<Type>
@@ -209,11 +226,14 @@ namespace Starvers.AuraSystem
 		#region UpdateEvilGate
 		private void UpdateEvilGate()
 		{
-			if (TheRealms.Where(realm => realm is GateOfEvil<CircleConditioner>).Count() == 0 && timer % (60 * 5) == 0) 
+			if (EvilGateSpawnCountDown > 0) 
 			{
+				if (--EvilGateSpawnCountDown != 0)
+					return;
 				var gate = new GateOfEvil<CircleConditioner>
 				{
-					Center = new Vector2(Main.spawnTileX, Main.spawnTileY - 200) * 16
+					Center = new Vector2(Main.spawnTileX, Main.spawnTileY - 100) * 16,
+					NewBySystem = true
 				};
 				AddRealm(gate);
 			}
@@ -255,13 +275,16 @@ namespace Starvers.AuraSystem
 							{
 								owner = 255;
 							}
-							var Realm = new ReflectingRealm(owner);
-							if(args.Parameters.Count >= 3 && int.TryParse(args.Parameters[2], out int timeLeft))
+							var Realm = new ReflectingRealm(owner)
+							{
+								Center = args.TPlayer.Center
+							};
+							if (args.Parameters.Count >= 3 && int.TryParse(args.Parameters[2], out int timeLeft))
 							{
 								Realm.DefaultTimeLeft = timeLeft;
 							}
 							realm = Realm;
-						break;
+							break;
 						}
 					case 4:
 						{
@@ -274,7 +297,10 @@ namespace Starvers.AuraSystem
 							{
 								owner = 255;
 							}
-							var Realm = new ReflectingRealm<EllipseReflector>(owner);
+							var Realm = new ReflectingRealm<EllipseReflector>(owner)
+							{
+								Center = args.TPlayer.Center
+							};
 							if (args.Parameters.Count >= 3 && int.TryParse(args.Parameters[2], out int timeLeft))
 							{
 								Realm.DefaultTimeLeft = timeLeft;
@@ -282,13 +308,21 @@ namespace Starvers.AuraSystem
 							realm = Realm;
 							break;
 						}
+					case 7:
+						{
+							realm = new GateOfEvil<CircleConditioner>
+							{
+								Center = args.TPlayer.Center + new Vector2(0, -16 * 40)
+							};
+							break;
+						}
 					default:
 						{
 							realm = Activator.CreateInstance(RealmTypes[value - 1]) as IRealm;
+							realm.Center = args.TPlayer.Center;
 							break;
 						}
 				}
-				realm.Center = args.TPlayer.Center;
 				AddRealm(realm);
 			}
 		}

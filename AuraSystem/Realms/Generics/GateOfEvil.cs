@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 namespace Starvers.AuraSystem.Realms.Generics
 {
 	using Interfaces;
+    using Microsoft.Xna.Framework;
+    using Terraria;
     using Terraria.ID;
 
     public class GateOfEvil<T> : StarverRealm<T>
 		where T : IBorderConditioner,new()
 	{
+		public bool NewBySystem { get; set; }
 		public GateOfEvil() : base(false)
 		{
 			conditioner = new T()
@@ -24,14 +27,26 @@ namespace Starvers.AuraSystem.Realms.Generics
 			base.InternalUpdate();
 			foreach (var player in Starver.Players)
 			{
-				if (player == null || !player.Active || !IsCross(player))
+				if (player == null || !player.Active || !InRange(player))
 					continue;
+				if (NewBySystem)
+				{
+					StarverAuraManager.EvilGateSpawnCountDown = 60 * 5;
+				}
 				if (Starver.Config.EvilWorld)
 				{
 					Starver.BackToHard(player);
 				}
 				else
 				{
+					if (NewBySystem && Starver.Instance.Aura.LastPos != null)
+					{
+						Starver.Instance.Aura.LastPos[player] = new Vector2
+						{
+							X = Main.spawnTileX * 16,
+							Y = Main.spawnTileY * 16
+						};
+					}
 					Starver.SendToEvil(player);
 				}
 				Kill();

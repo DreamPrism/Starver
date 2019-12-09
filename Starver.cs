@@ -322,7 +322,7 @@ namespace Starvers
 		#region OnDeath
 		private static void OnDeath(object sender, GetDataHandlers.KillMeEventArgs args)
 		{
-			TShock.Players[args.PlayerId].Disconnect("你被神秘力量逐出了魔界");
+			//TShock.Players[args.PlayerId].Disconnect("你被神秘力量逐出了魔界");
 		}
 		#endregion
 		#region OnStrike
