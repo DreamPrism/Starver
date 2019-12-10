@@ -20,7 +20,7 @@ namespace Starvers.AuraSystem
 		#region Fields
 		private int timer;
 		internal static int EvilGateSpawnCountDown;
-		private dynamic Stellaria;
+		internal dynamic Stellaria;
 		internal Vector2[] LastPos;
 		private Command AuraCommand;
 		private Command TestCommand;
@@ -70,8 +70,16 @@ namespace Starvers.AuraSystem
 				catch(Exception)
 				{
 					Console.WriteLine("Aura 寻找 Stellaria失败");
+					return;
 				}
-				LastPos = Stellaria?.LastPos;
+				try
+				{
+					LastPos = Stellaria.LastPos;
+				}
+				catch
+				{
+					Console.WriteLine("Aura 需要使用魔改过的 Stellaria");
+				}
 			}
 
 			Skill = new SkillManager();

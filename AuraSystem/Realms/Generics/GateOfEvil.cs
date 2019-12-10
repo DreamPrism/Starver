@@ -24,7 +24,16 @@ namespace Starvers.AuraSystem.Realms.Generics
 		}
 		protected override void InternalUpdate()
 		{
-			base.InternalUpdate();
+			if (Starver.Instance.Aura.Stellaria != null)
+			{
+#if DEBUG
+				StarverPlayer.Server.SendErrorMessage(@"未检测到 ""Stellaria"" 
+魔界之门已自动关闭");
+#endif
+				Kill();
+				return;
+			}
+				base.InternalUpdate();
 			foreach (var player in Starver.Players)
 			{
 				if (player == null || !player.Active || !InRange(player))
@@ -39,7 +48,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 				}
 				else
 				{
-					if (NewBySystem && Starver.Instance.Aura.LastPos != null)
+					if (NewBySystem)
 					{
 						Starver.Instance.Aura.LastPos[player] = new Vector2
 						{
