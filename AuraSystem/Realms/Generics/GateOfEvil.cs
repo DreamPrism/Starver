@@ -24,7 +24,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 		}
 		protected override void InternalUpdate()
 		{
-			if (Starver.Instance.Aura.Stellaria != null)
+			if (Starver.Instance.Aura.Stellaria == null)
 			{
 #if DEBUG
 				StarverPlayer.Server.SendErrorMessage(@"未检测到 ""Stellaria"" 
