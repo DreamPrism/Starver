@@ -60,9 +60,9 @@ namespace Starvers.AuraSystem
 		#region Loads
 		private void LoadVars()
 		{
-			if (Config.EnableTask)
 			{
-				EvilGateSpawnCountDown = 60 * 9;
+				if (Config.EnableTask)
+					EvilGateSpawnCountDown = 60 * 9;
 				try
 				{
 					Stellaria = ServerApi.Plugins.Where(container => container.Plugin.Name == nameof(Stellaria)).First().Plugin;
@@ -195,6 +195,23 @@ namespace Starvers.AuraSystem
 				}
 			}
 		}
+		#region UpdateEvilGate
+		private void UpdateEvilGate()
+		{
+			bool canSpawn = NPC.downedMoonlord || Starver.Config.EvilWorld;
+			if (canSpawn && EvilGateSpawnCountDown > 0) 
+			{
+				if (--EvilGateSpawnCountDown != 0)
+					return;
+				var gate = new GateOfEvil<CircleConditioner>
+				{
+					Center = new Vector2(Main.spawnTileX, Main.spawnTileY - 100) * 16,
+					NewBySystem = true
+				};
+				AddRealm(gate);
+			}
+		}
+		#endregion
 		#endregion
 		#region Hooks
 		#region OnUpdate
@@ -230,22 +247,6 @@ namespace Starvers.AuraSystem
 			}
 		}
 		#endregion
-		#endregion
-		#region UpdateEvilGate
-		private void UpdateEvilGate()
-		{
-			if (EvilGateSpawnCountDown > 0) 
-			{
-				if (--EvilGateSpawnCountDown != 0)
-					return;
-				var gate = new GateOfEvil<CircleConditioner>
-				{
-					Center = new Vector2(Main.spawnTileX, Main.spawnTileY - 100) * 16,
-					NewBySystem = true
-				};
-				AddRealm(gate);
-			}
-		}
 		#endregion
 		#region Command
 		private void CommandForTest(CommandArgs args)
