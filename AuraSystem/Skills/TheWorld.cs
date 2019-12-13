@@ -8,7 +8,7 @@ namespace Starvers.AuraSystem.Skills
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using System.Threading;
+	using System.Threading;
 
 	public class TheWorld : Skill
 	{

@@ -8,10 +8,10 @@ namespace Starvers.AuraSystem.Skills
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using Terraria;
-    using Terraria.ID;
+	using Terraria;
+	using Terraria.ID;
 
-    public class FishingRod : Skill
+	public class FishingRod : Skill
 	{
 		public FishingRod() : base(SkillIDs.FishingRod)
 		{

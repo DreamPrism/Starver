@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Terraria;
-    using Terraria.ID;
+	using Terraria.ID;
 
 namespace Starvers.AuraSystem.Realms.Generics
 {
 	using Interfaces;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class ReflectingRealm<ReflectorType> : StarverRealm
 		where ReflectorType : IRealmReflector, new()
 	{

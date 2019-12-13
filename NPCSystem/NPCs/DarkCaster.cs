@@ -8,8 +8,8 @@ using Starvers.TaskSystem;
 
 namespace Starvers.NPCSystem.NPCs
 {
-    using Terraria;
-    using TOFOUT.Terraria.Server;
+	using Terraria;
+	using TOFOUT.Terraria.Server;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class DarkCaster : StarverNPC
 	{

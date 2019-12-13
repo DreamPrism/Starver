@@ -8,10 +8,10 @@ namespace Starvers.AuraSystem.Skills
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using Terraria;
-    using Terraria.ID;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
-    public class GreenWind : Skill
+	using Terraria;
+	using Terraria.ID;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
+	public class GreenWind : Skill
 	{
 		private const float Radium = 16 * 90;
 		public GreenWind() : base(SkillIDs.GreenWind)

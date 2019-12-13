@@ -10,7 +10,7 @@ namespace Starvers.BossSystem.Bosses
 	using Microsoft.Xna.Framework;
 	using Starvers.WeaponSystem;
 	using System.Reflection;
-    using System.Runtime.InteropServices;
+	using System.Runtime.InteropServices;
 	using Terraria;
 	using Terraria.ID;
 	using TShockAPI;
@@ -218,7 +218,7 @@ namespace Starvers.BossSystem.Bosses
 			else
 			{
 				RealNPC.dontTakeDamage = !WhichDontTakeDamage;
-				Center = RealCenter;    //TargetPlayer.Center + RelativePos;
+				Center = RealCenter;	//TargetPlayer.Center + RelativePos;
 			}
 			//RealNPC.rotation = (float)(TargetPlayer.Center - Center).Angle();
 			//SendData(); 在StarverBoss::AI()里头有

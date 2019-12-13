@@ -8,9 +8,9 @@ namespace Starvers.AuraSystem.Skills
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using System.Threading;
-    using Terraria.ID;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
+	using System.Threading;
+	using Terraria.ID;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class ChordMana : Skill
 	{
 		public ChordMana() : base(SkillIDs.ChordMana)

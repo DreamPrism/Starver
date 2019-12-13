@@ -10,7 +10,7 @@ namespace Starvers.BossSystem.Bosses
 	using Microsoft.Xna.Framework;
 	using Starvers.WeaponSystem;
 	using Terraria;
-    using Terraria.ID;
+	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class StarverDestroyer : StarverBoss
 	{

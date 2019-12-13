@@ -143,8 +143,8 @@ namespace Starvers
 				};
 				Plugins = new IStarverPlugin[]
 				{
-					new StarverBossManager(),
 					new StarverTaskManager(),
+					new StarverBossManager(),
 					new StarverAuraManager(),
 					new StarverWeaponManager(),
 					new StarverNPCManager()

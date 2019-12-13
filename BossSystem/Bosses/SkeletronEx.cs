@@ -10,8 +10,8 @@ namespace Starvers.BossSystem.Bosses
 	using Microsoft.Xna.Framework;
 	using Starvers.WeaponSystem;
 	using Terraria;
-    using Terraria.ID;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
+	using Terraria.ID;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class SkeletronEx : StarverBoss
 	{
 		#region Fields

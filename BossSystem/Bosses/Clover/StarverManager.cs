@@ -10,7 +10,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 {
 	using Base;
 	using Starvers.WeaponSystem;
-    using Terraria.ID;
+	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public partial class StarverManager : StarverBoss
 	{

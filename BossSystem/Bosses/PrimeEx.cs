@@ -11,7 +11,7 @@ namespace Starvers.BossSystem.Bosses
 	using Starvers.WeaponSystem;
 	using System.Threading;
 	using Terraria.ID;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class PrimeEx : StarverBoss
 	{
 		#region Fields

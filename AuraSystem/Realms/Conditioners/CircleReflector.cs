@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Starvers.AuraSystem.Realms.Conditioners
 {
 	using Interfaces;
-    using Microsoft.Xna.Framework;
-    using Terraria;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
+	using Microsoft.Xna.Framework;
+	using Terraria;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class CircleReflector : CircleConditioner, IRealmReflector
 	{
 		public void Reflect(Entity entity)

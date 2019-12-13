@@ -440,7 +440,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		#region ToString
 		public override string ToString()
 		{
-			return string.Format("[Lv.{0}]{1}\nHP:{2}/{3}    Lifes:{4}/{5}\nMode:{6}", Level, Name, Life, LifeMax, Lifes, LifesMax, mode);
+			return string.Format("[Lv.{0}]{1}\nHP:{2}/{3}	Lifes:{4}/{5}\nMode:{6}", Level, Name, Life, LifeMax, Lifes, LifesMax, mode);
 		}
 		#endregion
 		#region lifes--

@@ -8,8 +8,8 @@ namespace Starvers.AuraSystem.Skills
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using Terraria.ID;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
+	using Terraria.ID;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class StarEruption : Skill
 	{
 		/// <summary>

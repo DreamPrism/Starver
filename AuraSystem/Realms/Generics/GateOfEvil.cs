@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Starvers.AuraSystem.Realms.Generics
 {
 	using Interfaces;
-    using Microsoft.Xna.Framework;
-    using Terraria;
-    using Terraria.ID;
+	using Microsoft.Xna.Framework;
+	using Terraria;
+	using Terraria.ID;
 
-    public class GateOfEvil<T> : StarverRealm<T>
+	public class GateOfEvil<T> : StarverRealm<T>
 		where T : IBorderConditioner,new()
 	{
 		public bool NewBySystem { get; set; }

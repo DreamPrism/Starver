@@ -35,10 +35,7 @@ namespace Starvers.TaskSystem
 		#region OnLoadWorld
 		private void OnConnectWorld(EventArgs args)
 		{
-			for (int i = 0; i < StarverTask.MAINLINE; i++)
-			{
-				Tasks[i] = new StarverTask(i + 1);
-			}
+			LoadTasks();
 		}
 		#endregion
 		#region OnUpdate
@@ -221,11 +218,23 @@ namespace Starvers.TaskSystem
 			}
 		}
 		#endregion
+		#region LoadTask
+		private void LoadTasks()
+		{
+			if (Tasks[0] != null)
+				return;
+			for (int i = 0; i < StarverTask.MAINLINE; i++)
+			{
+				Tasks[i] = new StarverTask(i + 1);
+			}
+		}
+		#endregion
 		#region cmd
 		private void MainCommand(CommandArgs args)
 		{
 			string p = args.Parameters.Count < 1 ? "None" : args.Parameters[0];
-			StarverPlayer player = args.SPlayer();
+			var player = args.SPlayer();
+			LoadTasks();
 			switch (p.ToLower())
 			{
 				#region Check
@@ -308,7 +317,7 @@ namespace Starvers.TaskSystem
 						{
 							player.SendMessage("错误的用法!",Color.Red);
 							player.SendMessage("请正确输入想要的任务序号",Color.Red);
-							player.SendMessage("/Task set <任务序号>    设置当前任务为制定任务", Color.Red);
+							player.SendMessage("/Task set <任务序号>	设置当前任务为制定任务", Color.Red);
 						}
 					}
 					break;
@@ -318,15 +327,15 @@ namespace Starvers.TaskSystem
 					player.SendInfoMessage(HelpTexts.Task);
 					if (player.HasPerm(Perms.Task.ListAll))
 					{
-						player.SendInfoMessage("    listall:    列出所有任务");
+						player.SendInfoMessage("	listall:	列出所有任务");
 					}
 					if (player.HasPerm(Perms.Task.FFF))
 					{
-						player.SendInfoMessage("    fff:    无视条件强制完成任务");
+						player.SendInfoMessage("	fff:	无视条件强制完成任务");
 					}
 					if (player.HasPerm(Perms.Task.Set))
 					{
-						player.SendInfoMessage("    set <任务序号>    设置当前任务为制定任务");
+						player.SendInfoMessage("	set <任务序号>	设置当前任务为制定任务");
 					}
 					break;
 					#endregion

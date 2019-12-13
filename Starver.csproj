@@ -219,6 +219,7 @@
     <Compile Include="HelpTexts.cs" />
     <Compile Include="TaskSystem\StarverTask.cs" />
     <Compile Include="TaskSystem\StarverTaskManager.cs" />
+    <Compile Include="TaskSystem\TaskDifficulty.cs" />
     <Compile Include="TaskSystem\TaskID.cs" />
     <Compile Include="TaskSystem\TaskItem.cs" />
     <Compile Include="Utils.cs" />

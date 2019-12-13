@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Starvers.WeaponSystem.Weapons.Magic
 {
-    using System.Runtime.InteropServices;
-    using TShockAPI;
+	using System.Runtime.InteropServices;
+	using TShockAPI;
 	using IID = Terraria.ID.ItemID;
 	using PID = Terraria.ID.ProjectileID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;

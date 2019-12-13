@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Starvers.WeaponSystem.Weapons.Melee
 {
-    using System.Runtime.CompilerServices;
-    using System.Threading;
-    using TShockAPI;
+	using System.Runtime.CompilerServices;
+	using System.Threading;
+	using TShockAPI;
 	using IID = Terraria.ID.ItemID;
 	using PID = Terraria.ID.ProjectileID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;

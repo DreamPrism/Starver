@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Starvers.AuraSystem.Realms.Generics
 {
 	using Interfaces;
-    using Terraria;
+	using Terraria;
 
-    public abstract class StarverRealm<T> : StarverRealm
+	public abstract class StarverRealm<T> : StarverRealm
 		where T : IRealmConditioner, new()
 	{
 		protected T conditioner;

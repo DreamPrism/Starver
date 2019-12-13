@@ -984,7 +984,7 @@ namespace Starvers
 				if (!ServerDoThis)
 				{
 					TSPlayer.SendErrorMessage("错误的技能名");
-					TSPlayer.SendErrorMessage("list:    查看技能列表");
+					TSPlayer.SendErrorMessage("list:	查看技能列表");
 				}
 			}
 		}

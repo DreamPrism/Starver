@@ -8,14 +8,14 @@ namespace Starvers.AuraSystem.Skills
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using System.Threading;
-    using Terraria;
-    using Terraria.ID;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
+	using System.Threading;
+	using Terraria;
+	using Terraria.ID;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using Circle = TOFOUT.Terraria.Server.Shapes.RoundRing;
-    using System.Runtime.CompilerServices;
+	using System.Runtime.CompilerServices;
 
-    public class NatureStorm : Skill
+	public class NatureStorm : Skill
 	{
 		#region Fields
 		private const float XDistance = 16 * 65;

@@ -40,5 +40,19 @@ namespace Starvers.TaskSystem
 				return string.Format("[i/p{0}:{1}]", Prefix, ID);
 			}
 		}
+
+
+		public static implicit operator TaskItem(short value)
+		{
+			return new TaskItem(value);
+		}
+		public static implicit operator TaskItem((int, int) value)
+		{
+			return new TaskItem(value.Item1, value.Item2);
+		}
+		public static implicit operator TaskItem((int, int, int) value)
+		{
+			return new TaskItem(value.Item1, value.Item2, value.Item3);
+		}
 	}
 }

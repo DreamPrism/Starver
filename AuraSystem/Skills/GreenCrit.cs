@@ -8,11 +8,11 @@ namespace Starvers.AuraSystem.Skills
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using System.Threading;
-    using Terraria;
-    using Terraria.ID;
+	using System.Threading;
+	using Terraria;
+	using Terraria.ID;
 
-    public class GreenCrit : Skill
+	public class GreenCrit : Skill
 	{
 		public GreenCrit() : base(SkillIDs.GreenCrit)
 		{

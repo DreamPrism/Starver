@@ -9,8 +9,8 @@ using Microsoft.Xna.Framework;
 namespace Starvers.AuraSystem.Realms.Conditioners
 {
 	using Interfaces;
-    using static Starvers.AuraSystem.Realms.InternalShapes;
-    using Vector = TOFOUT.Terraria.Server.Vector2;
+	using static Starvers.AuraSystem.Realms.InternalShapes;
+	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class CircleConditioner  : IBorderConditioner
 	{
 		private const int Max = 60;

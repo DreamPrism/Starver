@@ -8,10 +8,10 @@ namespace Starvers.AuraSystem.Skills
 {
 	using Base;
 	using Microsoft.Xna.Framework;
-    using System.Threading;
-    using Terraria.ID;
+	using System.Threading;
+	using Terraria.ID;
 
-    public class FrozenCraze : Skill
+	public class FrozenCraze : Skill
 	{
 		private int[] Projs =
 		{

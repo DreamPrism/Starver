@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Starvers.BossSystem.Bosses
 {
 	using Base;
-    using Microsoft.Xna.Framework;
+	using Microsoft.Xna.Framework;
 	using Starvers.WeaponSystem;
 	using System.Threading;
-    using Terraria;
-    using Terraria.ID;
+	using Terraria;
+	using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
-    public class EyeEx : StarverBoss
+	public class EyeEx : StarverBoss
 	{
 		#region Fields
 		private Vector Unit = new Vector(0, -16 * 16);
