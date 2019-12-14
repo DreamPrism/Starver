@@ -225,7 +225,7 @@ namespace Starvers.TaskSystem
 				return;
 			for (int i = 0; i < StarverTask.MAINLINE; i++)
 			{
-				Tasks[i] = new StarverTask(i + 1);
+				Tasks[i] = new StarverTask(i + 1, Config.TaskLevel);
 			}
 		}
 		#endregion

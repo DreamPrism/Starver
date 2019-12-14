@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TShockAPI;
 using Newtonsoft.Json;
+using Starvers.TaskSystem;
 
 namespace Starvers
 {
@@ -14,10 +15,12 @@ namespace Starvers
 		#region Properties
 		public static StarverConfig Config { get; internal set; }
 		public static DateTime LastSave { get; set; } = DateTime.Now;
+		[JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+		public TaskDifficulty TaskLevel { get; set; } = TaskDifficulty.Hard;
 		public int DefaultLevel { get; set; } = 1;
 		public int SaveInterval { get; set; } = 60;
 		public int TaskNow { get; set; }
-		public int TaskLock { get; set; } = TaskSystem.StarverTask.MAINLINE;
+		public int TaskLock { get; set; } = StarverTask.MAINLINE;
 		public int LevelNeed { get; set; }
 		public bool EnableStrongerNPC { get; set; } = true;
 		public bool EnableTask { get; set; } = true;

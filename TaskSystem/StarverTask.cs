@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -362,7 +362,7 @@ namespace Starvers.TaskSystem
 						{
 							(ItemID.Bone, 150),
 							(ItemID.AngryBonesBanner, 4),
-							(ItemID.CursedSkullBanner, 1),
+							(ItemID.CursedSkullBanner),
 							(ItemID.OrichalcumOre, 222 * 2 / 3)
 						};
 						var Hard = new TaskItem[]
@@ -469,7 +469,7 @@ namespace Starvers.TaskSystem
 						var Easy = new TaskItem[]
 						{
 							(ItemID.ChlorophyteOre, 333),
-							(ItemID.AngryTrapperBanner, 1),
+							(ItemID.AngryTrapperBanner),
 						};
 						var Hard = new TaskItem[]
 						{
@@ -678,9 +678,9 @@ namespace Starvers.TaskSystem
 						var Easy = new TaskItem[]
 						{
 							(ItemID.SolarCoriteBanner, 2),
-							(ItemID.SolarDrakomireBanner, 1),
-							(ItemID.SolarSolenianBanner, 1),
-							(ItemID.SolarSrollerBanner, 1)
+							(ItemID.SolarDrakomireBanner),
+							(ItemID.SolarSolenianBanner),
+							(ItemID.SolarSrollerBanner)
 						};
 						var Normal = new TaskItem[]
 						{
@@ -725,575 +725,1000 @@ namespace Starvers.TaskSystem
 					{
 						Name = "星尘粒子";
 						Story = "超自然的声音环绕在你的周围...";
+
+						var Easy = new TaskItem[]
+						{
+								(ItemID.StardustJellyfishBanner),
+								(ItemID.StardustLargeCellBanner),
+								(ItemID.StardustWormBanner),
+								(ItemID.StardustSoldierBanner)
+						};
+						var Hard = new TaskItem[]
+						{
+								(ItemID.StardustJellyfishBanner, 3),
+								(ItemID.StardustLargeCellBanner, 3),
+								(ItemID.StardustWormBanner, 3),
+								(ItemID.StardustSoldierBanner, 3)
+						};
+
 						NeedEx = new ItemLists
 						{
-							[TaskDifficulty.Hard] = new TaskItem[]{
-												(ItemID.StardustJellyfishBanner,5),
-												(ItemID.StardustLargeCellBanner,5),
-												(ItemID.StardustWormBanner,5),
-												(ItemID.StardustSoldierBanner,5)
-						}
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
 						};
 						Rewards = new TaskItem[]
 						{
-												(ItemID.StardustMonolith,99)
+							(ItemID.StardustMonolith,99)
+						};
+						break;
+					}
+				#endregion
+				#region Vortex
+				case 21:
+					{
+						TaskID.MoonLord = ID;
+						Name = "漩涡能量";
+						Story = "月亮末日慢慢靠近...";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.VortexSoldierBanner),
+							(ItemID.VortexRiflemanBanner, 2),
+							(ItemID.VortexHornetQueenBanner, 5)
+						}; 
+						var Hard = new TaskItem[]
+						 {
+							(ItemID.VortexSoldierBanner, 3),
+							(ItemID.VortexRiflemanBanner, 4),
+							(ItemID.VortexHornetQueenBanner, 15)
+						 };
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.VortexMonolith,99)
+						};
+						break;
+					}
+				#endregion
+				#region EyeEx
+				case 22:
+					{
+						Name = "恐惧之眼-The Eye of Phobia";
+						Story = "恐惧的本质是什么？未知的事物？死亡的接近？力量总是与诅咒并存，张裂的瞳膜里只剩下恐惧与悲伤";
+
+						var Easy = new TaskItem[]
+						 {
+							(ItemID.Lens, 20),
+							(ItemID.BlackLens),
+							(ItemID.SoulofFright, 60),
+							(ItemID.WillsWings)
+						 };
+						var Hard = new TaskItem[]
+						{
+							(ItemID.Lens, 50),
+							(ItemID.BlackLens, 3),
+							(ItemID.SoulofFright, 180),
+							(ItemID.WillsWings)
+						}; 
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LunarBar, 80),
+							(ItemID.NebulaPickup1)
+						};
+						break;
+					}
+				#endregion
+				#region BrainEX
+				case 23:
+					{
+						Boss = Bosses[0];
+						Name = "混乱思维-Cerebrain";
+						Story = "从猩红中被剥离出来，膨胀的血管与不断脱落的肉块使这个生物痛苦不堪。精神的力量会扭曲肉体，最终造就可怖的事实";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.Ichor, 55),
+							(ItemID.CrimsonFishingCrate, 5),
+							(ItemID.SoulofNight, 100),
+							(ItemID.SoulofLight, 100),
+							(ItemID.Vertebrae, 44)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.Ichor, 99),
+							(ItemID.CrimsonFishingCrate, 15),
+							(ItemID.SoulofNight, 200),
+							(ItemID.SoulofLight, 200),
+							(ItemID.Vertebrae, 77)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LunarBar, 80),
+							(ItemID.NebulaPickup1)
+						};
+						break;
+					}
+				#endregion
+				#region BeeEx
+				case 24:
+					{
+						Boss = Bosses[1];
+						Name = "蜂巢意志-Hive Mind";
+						Story = "愚钝的成员构成了群体的智慧。蜂群的聚合体。单一个体无法完成的壮举，依靠群体便可以达成";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.LifeFruit, 25),
+							(ItemID.SoulofFlight, 100),
+							(ItemID.Honeyfin, 10),
+							(ItemID.Hive, 222)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.LifeFruit, 75),
+							(ItemID.SoulofFlight, 200),
+							(ItemID.Honeyfin, 30),
+							(ItemID.Hive, 666)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.RodofDiscord),
+							(ItemID.RodofDiscord),
+							(ItemID.RodofDiscord),
+							(ItemID.RodofDiscord)
+						};
+						break;
+					}
+				#endregion
+				#region SkeletonEx
+				case 25:
+					{
+						TaskID.SkeletronEx = ID;
+						Boss = Bosses[2];
+						Name = "失落骨架-Hyperosteogeny";
+						Story = "脱胎于某个高等存在的残骸，仍然残存有些许威力。力量不会随着肉体的消亡而蒸发，而是如同跗骨之蛆一般留存";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.Bone, 666),
+							(ItemID.LockBox, 8),
+							(ItemID.PaladinBanner)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.Bone, 666),
+							(ItemID.Bone, 999),
+							(ItemID.LockBox, 16),
+							(ItemID.PaladinBanner, 3)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LunarBar, 880)
+						};
+						break;
+					}
+				#endregion
+				#region DarkMage
+				case 26:
+					{
+						Boss = Bosses[3];
+						Name = "流放巫师-The Banished Enchater";
+						Story = "远古封印的守卫者，被某种能量所侵蚀。他现在所能做的，仅仅只是维持其中的三道封印";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.DefenderMedal, 500),
+							(ItemID.ManaCrystal, 20),
+							(ItemID.Yoraiz0rWings)
+						}; 
+						var Hard = new TaskItem[]
+						{
+							(ItemID.DefenderMedal, 999),
+							(ItemID.ManaCrystal, 60),
+							(ItemID.DD2EnergyCrystal, 50),
+							(ItemID.Yoraiz0rWings)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LunarBar, 990),
+							(ItemID.Yoraiz0rWings),
+							(ItemID.Yoraiz0rWings),
+							(ItemID.Yoraiz0rWings)
+						};
+						break;
+					}
+				#endregion
+				#region StarverWander
+				case 27:
+					{
+						Boss = Bosses[4];
+						Name = "徘徊者-The StarverWander";
+						Story = "饥饿，迷失，徘徊。这具畸变的肉体中寄宿着旋涡的能量";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.FragmentVortex, 200),
+							(ItemID.TruffleWorm, 2),
+							(ItemID.SDMG, 1, 82)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.FragmentVortex, 400),
+							(ItemID.TruffleWorm, 6),
+							(ItemID.SDMG, 1, 82)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.Xenopopper),
+							(ItemID.Xenopopper),
+							(ItemID.Xenopopper),
+							(ItemID.Xenopopper)
+						};
+						break;
+					}
+				#endregion
+				#region StarverRedeemer
+				case 28:
+					{
+						Boss = Bosses[Bosses.Length - 6];
+						Name = "清赎者-The StarverRedeemer";
+						Story = "苦难，炼狱，救赎。这具畸变的肉体中填满了星尘的微粒";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.FragmentStardust, 200),
+							(ItemID.TruffleWorm, 2),
+							(ItemID.MasterBait, 100),
+							(ItemID.RainbowCrystalStaff, 1, 83)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.FragmentStardust, 400),
+							(ItemID.TruffleWorm, 6),
+							(ItemID.MasterBait, 200),
+							(ItemID.RainbowCrystalStaff, 1, 83)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.HotlineFishingHook),
+							(ItemID.HotlineFishingHook),
+							(ItemID.GoldenFishingRod),
+							(ItemID.GoldenFishingRod)
+						};
+						break;
+					}
+				#endregion
+				#region StarverAdjudicator
+				case 29:
+					{
+						Boss = Bosses[Bosses.Length - 5];
+						Name = "裁决者-The StarverAdjudicator";
+						Story = "仲裁，审判，裁决。这具畸变的肉体中蕴含着星云的奥秘";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.FragmentNebula, 200),
+							(ItemID.TruffleWorm, 2),
+							(ItemID.LihzahrdBrick, 300),
+							(ItemID.CoinGun),
+							(ItemID.LunarFlareBook, 1, PrefixID.Mythical)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.FragmentNebula, 400),
+							(ItemID.TruffleWorm, 6),
+							(ItemID.LihzahrdBrick, 400),
+							(ItemID.CoinGun),
+							(ItemID.LunarFlareBook, 1, PrefixID.Mythical)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LaserMachinegun),
+							(ItemID.LaserMachinegun),
+							(ItemID.LaserMachinegun),
+							(ItemID.LaserMachinegun)
+						};
+						break;
+					}
+				#endregion
+				#region StarverDestroyer
+				case 30:
+					{
+						Boss = Bosses[Bosses.Length - 4];
+						Name = "毁灭者-The StarverDestroyer";
+						Story = "毁灭，创造，平衡。宇宙的暴怒内蕴其中。现实总是与理想相违背，努力的结果往往被他人夺去";
+
+						var head = ItemID.SquirePlating;
+						var armor = ItemID.SquireAltShirt;
+						var leg = ItemID.SquireAltPants;
+
+						if(Starver.IsPE)
+						{
+							head = ItemID.HallowedMask;
+							armor = ItemID.HallowedPlateMail;
+							leg = ItemID.HallowedGreaves;
+						}
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.FragmentSolar, 400),
+							(ItemID.TruffleWorm, 2),
+							(head),
+							(armor),
+							(leg),
+							(ItemID.RocketIV, 999),
+							(ItemID.StarWrath, 1, 81)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.FragmentSolar, 400),
+							(ItemID.TruffleWorm, 6),
+							(head),
+							(armor),
+							(leg),
+							(ItemID.RocketIV, 999),
+							(ItemID.RocketIV, 999),
+							(ItemID.RocketIV, 999),
+							(ItemID.StarWrath, 1, 81)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.InfluxWaver),
+							(ItemID.InfluxWaver),
+							(ItemID.InfluxWaver),
+							(ItemID.InfluxWaver)
+						};
+						break;
+					}
+				#endregion
+				#region Sleep
+				case 31:
+					{
+						Boss = Bosses[Bosses.Length - 3];
+						Name = "稍作休整";
+						Story = "片刻的宁静";
+
+						var Require = new TaskItem[]
+						{
+							(ItemID.CookedMarshmallow, 30),
+							(ItemID.CookedShrimp, 30),
+							(ItemID.BowlofSoup, 30),
+							(ItemID.Sake, 30),
+							(ItemID.BeachBall),
+							(ItemID.UnicornonaStick)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Require,
+							[TaskDifficulty.Normal] = Require,
+							[TaskDifficulty.Hard] = Require,
+							[TaskDifficulty.Hell] = Require
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LunarBar, 999),
+							(ItemID.LunarBar, 999),
+							(ItemID.Pigronata, 300),
+							(ItemID.FlaskofParty, 30)
 						};
 					}
 					break;
 				#endregion
-				#region Vortex
-				case 21:
-					TaskID.MoonLord = ID;
-					Name = "漩涡能量";
-					Story = "月亮末日慢慢靠近...";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(ItemID.VortexSoldierBanner,5),
-												(ItemID.VortexRiflemanBanner,5),
-												(ItemID.VortexHornetQueenBanner,20)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.VortexMonolith,99)
-					};
-					break;
-				#endregion
-				#region EyeEx
-				case 22:
-					Name = "恐惧之眼-The Eye of Phobia";
-					Story = "恐惧的本质是什么？未知的事物？死亡的接近？力量总是与诅咒并存，张裂的瞳膜里只剩下恐惧与悲伤";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(ItemID.Lens, 50),
-												(ItemID.BlackLens, 4),
-												(ItemID.SoulofFright, 200),
-												(1584)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 80),
-												(3453)
-					};
-					break;
-				#endregion
-				#region BrainEX
-				case 23:
-					Boss = Bosses[0];
-					Name = "混乱思维-Cerebrain";
-					Story = "从猩红中被剥离出来，膨胀的血管与不断脱落的肉块使这个生物痛苦不堪。精神的力量会扭曲肉体，最终造就可怖的事实";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(ItemID.Ichor, 99),
-												(ItemID.CrimsonFishingCrate, 20),
-												(ItemID.SoulofNight, 200),
-												(ItemID.SoulofLight, 200),
-												(ItemID.Vertebrae, 99)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 80),
-												(3453)
-					};
-					break;
-				#endregion
-				#region BeeEx
-				case 24:
-					Boss = Bosses[1];
-					Name = "蜂巢意志-Hive Mind";
-					Story = "愚钝的成员构成了群体的智慧。蜂群的聚合体。单一个体无法完成的壮举，依靠群体便可以达成";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(ItemID.LifeFruit, 80),
-												(ItemID.SoulofFlight, 200),
-												(ItemID.Honeyfin, 30),
-												(ItemID.Hive, 99)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.RodofDiscord),
-												(ItemID.RodofDiscord),
-												(ItemID.RodofDiscord),
-												(ItemID.RodofDiscord)
-					};
-					break;
-				#endregion
-				#region SkeletonEx
-				case 25:
-					TaskID.SkeletronEx = ID;
-					Boss = Bosses[2];
-					Name = "失落骨架-Hyperosteogeny";
-					Story = "脱胎于某个高等存在的残骸，仍然残存有些许威力。力量不会随着肉体的消亡而蒸发，而是如同跗骨之蛆一般留存";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(154, 888),
-												(3085, 15),
-												(1612)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 80)
-					};
-					break;
-				#endregion
-				#region DarkMage
-				case 26:
-					Boss = Bosses[3];
-					Name = "流放巫师-The Banished Enchater";
-					Story = "远古封印的守卫者，被某种能量所侵蚀。他现在所能做的，仅仅只是维持其中的三道封印";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(3817, 500),
-												(109, 50),
-												(ItemID.DD2EnergyCrystal, 500),
-												(3580)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 120),
-												(3580)
-					};
-					break;
-				#endregion
-				#region StarverWander
-				case 27:
-					Boss = Bosses[4];
-					Name = "徘徊者-The StarverWander";
-					Story = "饥饿，迷失，徘徊。这具畸变的肉体中寄宿着旋涡的能量";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(3456, 400),
-												(ItemID.TruffleWorm, 10),
-												(1164, 1),
-												(1553, 1, 82)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(2797, 1),
-												(2797, 1),
-												(2797, 1),
-												(2797, 1)
-					};
-					break;
-				#endregion
-				#region StarverRedeemer
-				case 28:
-					Boss = Bosses[Bosses.Length - 6];
-					Name = "清赎者-The StarverRedeemer";
-					Story = "苦难，炼狱，救赎。这具畸变的肉体中填满了星尘的微粒";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(3459, 400),
-												(ItemID.TruffleWorm, 10),
-												(2676, 200),
-												(3571, 1, 83)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(2422, 1),
-												(2422, 1),
-												(2294, 1),
-												(2294, 1)
-					};
-					break;
-				#endregion
-				#region StarverAdjudicator
-				case 29:
-					Boss = Bosses[Bosses.Length - 5];
-					Name = "裁决者-The StarverAdjudicator";
-					Story = "仲裁，审判，裁决。这具畸变的肉体中蕴含着星云的奥秘";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(3457, 400),
-												(ItemID.TruffleWorm, 10),
-												(1101, 300),
-												(905, 1),
-												(3541, 1, 60)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(2795, 1),
-												(2795, 1),
-												(2795, 1),
-												(2795, 1)
-					};
-					break;
-				#endregion
-				#region StarverDestroyer
-				case 30:
-					Boss = Bosses[Bosses.Length - 4];
-					Name = "毁灭者-The StarverDestroyer";
-					Story = "毁灭，创造，平衡。宇宙的暴怒内蕴其中。现实总是与理想相违背，努力的结果往往被他人夺去";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(3458, 400),
-												(ItemID.TruffleWorm, 10),
-												(3801, 1),
-												(3872, 1),
-												(3873, 1),
-												(774, 999),
-												(3065, 1, 81)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(2880, 1),
-												(2880, 1),
-												(2880, 1),
-												(2880, 1),
-					};
-					break;
-				#endregion
-				#region Sleep
-				case 31:
-					Boss = Bosses[Bosses.Length - 3];
-					Name = "稍作休整";
-					Story = "片刻的宁静";
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(969, 30),
-												(2426, 30),
-												(357, 30),
-												(2266, 30),
-												(859, 1),
-												(856, 1)
-						}
-					};
-					NeedEx = new ItemLists
-					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(3467, 200),
-												(3746, 300),
-												(1358, 30)
-						}
-					};
-					break;
-				#endregion
 				#region RedDevil
 				case 32:
-					Name = "地狱领主-The Lord of the Underworld";
-					Story = "恶魔一族的君主，似乎能够自如地使用地狱的威能。苦痛的亡魂在熔岩中挣扎，他们呼喊着那个早已消逝的名字";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(2701, 999),
-												(1518, 3),
-												(683, 1),
-												(1445, 1),
-												(2312, 120)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 80)
-					};
-					break;
+						Name = "地狱领主-The Lord of the Underworld";
+						Story = "恶魔一族的君主，似乎能够自如地使用地狱的威能。苦痛的亡魂在熔岩中挣扎，他们呼喊着那个早已消逝的名字";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.LivingFireBlock, 200),
+							(ItemID.FireFeather, 1),
+							(ItemID.UnholyTrident),
+							(ItemID.InfernoFork),
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.LivingFireBlock, 600),
+							(ItemID.FireFeather, 3),
+							(ItemID.UnholyTrident),
+							(ItemID.InfernoFork),
+							//(ItemID.FlarefinKoi, 120)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.NebulaPickup1),
+							(ItemID.LunarBar, 680),
+							(ItemID.LunarBar, 680),
+							(ItemID.LunarBar, 680),
+							(ItemID.LunarBar, 680)
+						};
+						break;
+					}
 				#endregion
 				#region Pigron
 				case 33:
-					Boss = Bosses[5];
-					Name = "畸变生物-thAt d15ToRt10N";
-					Story = "在被污染的冰窟中滋生的畸形生物，无节制地进行着自我增殖。自我循环或外界摄取，这个世界支配着残酷的法则";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(3532, 20),
-												(2429, 1),
-												(2337, 20),
-												(2338, 20),
-												(2339, 20)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(1067, 50)
-					};
-					break;
+						Boss = Bosses[5];
+						Name = "畸变生物-thAt d15ToRt10N";
+						Story = "在被污染的冰窟中滋生的畸形生物，无节制地进行着自我增殖。自我循环或外界摄取，这个世界支配着残酷的法则";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.Bacon, 20),
+							(ItemID.ScalyTruffle),
+							(ItemID.OldShoe, 5),
+							(ItemID.FishingSeaweed, 5),
+							(ItemID.TinCan, 5)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.Bacon, 20),
+							(ItemID.ScalyTruffle),
+							(ItemID.OldShoe, 15),
+							(ItemID.FishingSeaweed, 15),
+							(ItemID.TinCan, 15)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.NebulaPickup2),
+							(ItemID.IntenseRainbowDye, 50)
+						};
+						break;
+					}
 				#endregion
 				#region PrimeEx
 				case 34:
-					Boss = Bosses[6];
-					Name = "骷髅暴徒 - The Skeletrorist";
-					Story = "这位恐惧之主早已失去了往日的荣光，变异的躯壳只寄宿着无尽的愤怒。暴虐与残忍，嗜血与屠戮，欲望和执念造就的只有悲剧";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(1367, 5),
-												(WorldGen.crimson ? 1569 : 1571, 1, 59),
-												(1260, 1, 83),
-												(1156, 1, 82),
-												(1572, 1, 83)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 90),
-												(3035, 1),
-												(3035, 1),
-												(3035, 1),
-												(3035, 1)
-					};
-					break;
+						Boss = Bosses[6];
+						Name = "骷髅暴徒 - The Skeletrorist";
+						Story = "这位恐惧之主早已失去了往日的荣光，变异的躯壳只寄宿着无尽的愤怒。暴虐与残忍，嗜血与屠戮，欲望和执念造就的只有悲剧";
+
+						var evil = WorldGen.crimson ? ItemID.VampireKnives : ItemID.ScourgeoftheCorruptor;
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.SkeletronPrimeTrophy, 2),
+							(evil, 1, 59),
+							(ItemID.RainbowGun, 1, 83),
+							(ItemID.PiranhaGun, 1, 82),
+							(ItemID.StaffoftheFrostHydra, 1, 83)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.SkeletronPrimeTrophy, 6),
+							(evil, 1, 59),
+							(ItemID.RainbowGun, 1, 83),
+							(ItemID.PiranhaGun, 1, 82),
+							(ItemID.StaffoftheFrostHydra, 1, 83)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.NebulaPickup3),
+							(ItemID.LunarBar, 990),
+							(ItemID.LunarBar, 990),
+							(ItemID.LunarBar, 990),
+							(ItemID.GreedyRing),
+							(ItemID.GreedyRing),
+							(ItemID.GreedyRing),
+							(ItemID.GreedyRing)
+						};
+						break;
+					}
 				#endregion
 				#region Worm
 				case 35:
-					Boss = Bosses[7];
-					Name = "地脉吸食者-The Seisminth";
-					Story = "吸食了地脉的精华，但仍然保留着蠕虫的姿态。这片大地已经千疮百孔，在一次次的轮回中逐渐褪色";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(ItemID.RottenChunk,99),
-												(ItemID.CursedFlame,99),
-												(3794,30),
-												(3380,200)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 200),
-												(2768)
+						Boss = Bosses[7];
+						Name = "地脉吸食者-The Seisminth";
+						Story = "吸食了地脉的精华，但仍然保留着蠕虫的姿态。这片大地已经千疮百孔，在一次次的轮回中逐渐褪色";
 
-					};
-					break;
+						var material = ItemID.RottenChunk;
+						var wpmaterial = ItemID.CursedFlame;
+
+						if(WorldGen.crimson)
+						{
+							material = ItemID.Vertebrae;
+							wpmaterial = ItemID.Ichor;
+						}
+
+						var Easy = new TaskItem[]
+						{
+							(material, 99),
+							(wpmaterial, 99),
+							(ItemID.AncientCloth, 10),
+							(ItemID.FossilOre, 100)
+						};
+						var Hard = new TaskItem[]
+						{
+							(material, 99),
+							(material, 50),
+							(wpmaterial, 99),
+							(wpmaterial, 50),
+							(ItemID.AncientCloth, 30),
+							(ItemID.FossilOre, 300)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LunarBar, 200),
+							(ItemID.DrillContainmentUnit)
+
+						};
+						break;
+					}
 				#endregion
 				#region Retinazer
 				case 36:
-					Boss = Bosses[8];
-					Name = "预视全知的左眼-The Propheyes";
-					Story = "最终的劫难已逐渐逼近，艰难的旅程也终于抵达尾声。未来的图景从未如此朦胧";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(ItemID.RetinazerTrophy, 6)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 120),
-												(678,30)
-					};
-					break;
+						Boss = Bosses[8];
+						Name = "预视全知的左眼-The Propheyes";
+						Story = "最终的劫难已逐渐逼近，艰难的旅程也终于抵达尾声。未来的图景从未如此朦胧";
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = new TaskItem[]{ (ItemID.RetinazerTrophy, 2) },
+							[TaskDifficulty.Normal] = new TaskItem[]{ (ItemID.RetinazerTrophy, 4) },
+							[TaskDifficulty.Hard] = new TaskItem[]{ (ItemID.RetinazerTrophy, 6) },
+							[TaskDifficulty.Hell] = new TaskItem[]{ (ItemID.RetinazerTrophy, 8) }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LunarBar, 120),
+							(ItemID.RedPotion, 30)
+						};
+						break;
+					}
 				#endregion
 				#region Spazmatism
 				case 37:
-					Boss = Bosses[9];
-					Name = "洞悉过往的右眼-The Propheyes";
-					Story = "历史的书页遗失了一角，某个过往的存在切断了与这个世界的联系。他是连接一切的钥匙";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(ItemID.SpazmatismTrophy, 6)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3467, 120),
-												(678,30)
-					};
-					break;
+						Boss = Bosses[9];
+						Name = "洞悉过往的右眼-The Propheyes";
+						Story = "历史的书页遗失了一角，某个过往的存在切断了与这个世界的联系。他是连接一切的钥匙";
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.SpazmatismTrophy, 2) },
+							[TaskDifficulty.Normal] = new TaskItem[] { (ItemID.SpazmatismTrophy, 4) },
+							[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.SpazmatismTrophy, 6) },
+							[TaskDifficulty.Hell] = new TaskItem[] { (ItemID.SpazmatismTrophy, 8) }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LunarBar, 120),
+							(ItemID.RedPotion, 30)
+						};
+						break;
+					}
 				#endregion
 				#region EndTrial1
 				case 38:
-					Boss = Bosses[10];
-					Name = "末世预言--凶兆";
-					Story = "T.S.K.S:--==欢迎==--初次联络--stardust的玩家们，你们迄今为止的努力着实令人敬佩，而现在，我们有一项伟大而光荣的委托要交付于你们";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{(20, 66),
-												(703, 66),
-												(22, 66),
-												(704, 66),
-												(21, 66),
-												(705, 66),
-												(19, 66),
-												(706, 66),
-												(57, 66),
-												(1257, 66),
-												(175, 66),
-												(1184, 66),
-												(381, 66),
-												(382, 66),
-												(1191, 66),
-												(391, 66),
-												(1198, 66)
-							}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3706, 99),
-												(3706, 99),
-												(3706, 99),
-												(3706, 99)
-					};
-					Level += 1250;
-					break;
+						Boss = Bosses[10];
+						Name = "末世预言--凶兆";
+						Story = "T.S.K.S:--==欢迎==--初次联络--stardust的玩家们，你们迄今为止的努力着实令人敬佩，而现在，我们有一项伟大而光荣的委托要交付于你们";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.CopperBar, 22),
+							(ItemID.TinBar, 22),
+							(ItemID.IronBar, 22),
+							(ItemID.LeadBar, 22),
+							(ItemID.SilverBar, 22),
+							(ItemID.TungstenBar, 22),
+							(ItemID.GoldBar, 22),
+							(ItemID.PlatinumBar, 22),
+							(ItemID.DemoniteBar, 22),
+							(ItemID.CrimtaneBar, 22),
+							(ItemID.HellstoneBar, 22),
+							(ItemID.PalladiumBar, 22),
+							(ItemID.CobaltBar, 22),
+							(ItemID.MythrilBar, 22),
+							(ItemID.OrichalcumBar, 22),
+							(ItemID.AdamantiteBar, 22),
+							(ItemID.TitaniumBar, 22)
+						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.CopperBar, 44),
+							(ItemID.TinBar, 44),
+							(ItemID.IronBar, 44),
+							(ItemID.LeadBar, 44),
+							(ItemID.SilverBar, 44),
+							(ItemID.TungstenBar, 44),
+							(ItemID.GoldBar, 44),
+							(ItemID.PlatinumBar, 44),
+							(ItemID.DemoniteBar, 44),
+							(ItemID.CrimtaneBar, 44),
+							(ItemID.HellstoneBar, 44),
+							(ItemID.PalladiumBar, 44),
+							(ItemID.CobaltBar, 44),
+							(ItemID.MythrilBar, 44),
+							(ItemID.OrichalcumBar, 44),
+							(ItemID.AdamantiteBar, 44),
+							(ItemID.TitaniumBar, 44)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.CopperBar, 66),
+							(ItemID.TinBar, 66),
+							(ItemID.IronBar, 66),
+							(ItemID.LeadBar, 66),
+							(ItemID.SilverBar, 66),
+							(ItemID.TungstenBar, 66),
+							(ItemID.GoldBar, 66),
+							(ItemID.PlatinumBar, 66),
+							(ItemID.DemoniteBar, 66),
+							(ItemID.CrimtaneBar, 66),
+							(ItemID.HellstoneBar, 66),
+							(ItemID.PalladiumBar, 66),
+							(ItemID.CobaltBar, 66),
+							(ItemID.MythrilBar, 66),
+							(ItemID.OrichalcumBar, 66),
+							(ItemID.AdamantiteBar, 66),
+							(ItemID.TitaniumBar, 66)
+						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.CopperBar, 88),
+							(ItemID.TinBar, 88),
+							(ItemID.IronBar, 88),
+							(ItemID.LeadBar, 88),
+							(ItemID.SilverBar, 88),
+							(ItemID.TungstenBar, 88),
+							(ItemID.GoldBar, 88),
+							(ItemID.PlatinumBar, 88),
+							(ItemID.DemoniteBar, 88),
+							(ItemID.CrimtaneBar, 88),
+							(ItemID.HellstoneBar, 88),
+							(ItemID.PalladiumBar, 88),
+							(ItemID.CobaltBar, 88),
+							(ItemID.MythrilBar, 88),
+							(ItemID.OrichalcumBar, 88),
+							(ItemID.AdamantiteBar, 88),
+							(ItemID.TitaniumBar, 88)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell,
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.Fake_newchest2, 99),
+							(ItemID.Fake_newchest2, 99),
+							(ItemID.Fake_newchest2, 99),
+							(ItemID.Fake_newchest2, 99)
+						};
+						Level += 1250;
+						break;
+					}
 				#endregion
 				#region EndTrial2
 				case 39:
-					Name = "末世预言--混乱";
-					Story = "T.S.K.S:你们之前已经漂亮地完成了我们的每一次委托，所以我们相信这一件委托这对你们来说绝非难事";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(2430, 1),
-												(2491, 1),
-												(2502, 1),
-												(2428, 1),
-												(3771, 1),
-												(3260, 1),
-												(1914, 1),
-												(2771, 1),
-												(2769, 1)
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(2903, 99),
-												(2903, 99),
-												(2903, 99),
-												(2903, 99)
-					};
-					Level += 1250;
-					break;
+						Name = "末世预言--混乱";
+						Story = "T.S.K.S:你们之前已经漂亮地完成了我们的每一次委托，所以我们相信这一件委托这对你们来说绝非难事";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.SlimySaddle),
+							(ItemID.HardySaddle),
+							(ItemID.HoneyedGoggles),
+							(ItemID.FuzzyCarrot),
+							(ItemID.BlessedApple),
+						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.SlimySaddle),
+							(ItemID.HardySaddle),
+							(ItemID.HoneyedGoggles),
+							(ItemID.FuzzyCarrot),
+							(ItemID.AncientHorn),
+							(ItemID.BlessedApple),
+							(ItemID.CosmicCarKey)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.SlimySaddle),
+							(ItemID.HardySaddle),
+							(ItemID.HoneyedGoggles),
+							(ItemID.FuzzyCarrot),
+							(ItemID.AncientHorn),
+							(ItemID.BlessedApple),
+							(ItemID.BrainScrambler),
+							(ItemID.CosmicCarKey)
+						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.SlimySaddle),
+							(ItemID.HardySaddle),
+							(ItemID.HoneyedGoggles),
+							(ItemID.FuzzyCarrot),
+							(ItemID.AncientHorn),
+							(ItemID.BlessedApple),
+							(ItemID.ReindeerBells),
+							(ItemID.BrainScrambler),
+							(ItemID.CosmicCarKey)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.BlueCultistFighterBanner, 99),
+							(ItemID.BlueCultistFighterBanner, 99),
+							(ItemID.BlueCultistFighterBanner, 99),
+							(ItemID.BlueCultistFighterBanner, 99)
+						};
+						Level += 1250;
+						break;
+					}
 				#endregion
 				#region EndTrial3
 				case 40:
-					Name = "末世预言--秩序";
-					Story = "T.S.K.S:我们的确掌握着某种限制大型怪物生成的技术，但归根究底其源泉也是我们所共有的AURA能量";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{(493, 1),
-												(492, 1),
-												(1515, 1),
-												(749, 1),
-												(761, 1),
-												(1165, 1),
-												(785, 1),
-												(821, 1),
-												(822, 1),
-												(1162, 1)
-							}
-					};
-					Rewards = new TaskItem[]
-					{
-												(2902, 99),
-												(2902, 99),
-												(2902, 99),
-												(2902, 99)
-					};
-					Level += 1250;
-					break;
+						Name = "末世预言--秩序";
+						Story = "T.S.K.S:我们的确掌握着某种限制大型怪物生成的技术，但归根究底其源泉也是我们所共有的AURA能量";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.AngelWings),
+							(ItemID.DemonWings),
+							(ItemID.LeafWings)
+						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.AngelWings),
+							(ItemID.DemonWings),
+							(ItemID.BeeWings),
+							(ItemID.ButterflyWings),
+							(ItemID.LeafWings)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.AngelWings),
+							(ItemID.DemonWings),
+							(ItemID.BeeWings),
+							(ItemID.ButterflyWings),
+							(ItemID.FairyWings),
+							(ItemID.BatWings),
+							(ItemID.LeafWings)
+						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.AngelWings),
+							(ItemID.DemonWings),
+							(ItemID.BeeWings),
+							(ItemID.ButterflyWings),
+							(ItemID.FairyWings),
+							(ItemID.BatWings),
+							(ItemID.HarpyWings),
+							(ItemID.FlameWings),
+							(ItemID.FrozenWings),
+							(ItemID.LeafWings)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.BlueCultistCasterBanner, 99),
+							(ItemID.BlueCultistCasterBanner, 99),
+							(ItemID.BlueCultistCasterBanner, 99),
+							(ItemID.BlueCultistCasterBanner, 99)
+						};
+						Level += 1250;
+						break;
+					}
 				#endregion
 				#region EndTrial4
 				case 41:
-					Name = "末世预言--开端";
-					Story = "T.S.K.S:但是，不知道各位是否想过，AURA的源泉又是什么呢？我们解析过这种能量的构造，其波动与你们的某一种欲望十分符合";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{(3278, 1),
-												(3262, 1),
-												(3289, 1),
-												(3281, 1),
-												(3280, 1),
-												(3279, 1),
-												(3292, 1),
-												(3286, 1),
-												(3291, 1),
-												(3285, 1),
-												(3283, 1),
-												(3282, 1),
-												(3290, 1),
-												(3317, 1),
-												(3315, 1),
-												(3284, 1),
-												(3316, 1)
-							}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3705, 99),
-												(3705, 99),
-												(3705, 99),
-												(3705, 99)
-					};
-					Level += 1250;
-					break;
+						Name = "末世预言--开端";
+						Story = @"T.S.K.S:但是, 不知道各位是否想过,AURA的源泉又是什么呢?
+我们解析过这种能量的构造,其波动与你们的某一种欲望十分符合";
+
+						var Require = new TaskItem[]
+						{
+							(ItemID.WoodYoyo),
+							(ItemID.Code1),
+							(ItemID.Amarok),
+							(ItemID.JungleYoyo),
+							(ItemID.CrimsonYoyo),
+							(ItemID.CorruptYoyo),
+							(ItemID.TheEyeOfCthulhu),
+							(ItemID.Yelets),
+							(ItemID.Kraken),
+							(ItemID.Rally),
+							(ItemID.Chik),
+							(ItemID.Cascade),
+							(ItemID.HelFire),
+							(ItemID.Valor),
+							(ItemID.FormatC),
+							(ItemID.Code2),
+							(ItemID.Gradient)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Require,
+							[TaskDifficulty.Normal] = Require,
+							[TaskDifficulty.Hard] = Require,
+							[TaskDifficulty.Hell] = Require
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.Fake_newchest1, 99),
+							(ItemID.Fake_newchest1, 99),
+							(ItemID.Fake_newchest1, 99),
+							(ItemID.Fake_newchest1, 99)
+						};
+						Level += 1250;
+						break;
+					}
 				#endregion
 				#region EndTrial5
 				case 42:
-					Name = "末世预言--降临";
-					Story = "T.S.K.S:至于委托的内容...啊，谢谢各位，我们已经快要完成了...通过这几次的任务...";
-					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Hard] = new TaskItem[]{
-												(562),
-												(1600),
-												(564),
-												(1601),
-												(1596),
-												(1603),
-												(1604),
-												(1597),
-												(566),
-												(1610),
-												(568),
-												(569),
-												(1598),
-												(571),
-												(3237),
-												(1605),
-												(1608),
-												(563),
-												(1609),
-												(3371),
-												(3236),
-												(3235),
-												(1963),
-												(1965),
-												(3796),
-												(3869),
-												(3370),
-												(567),
-												(572),
-												(574),
-												(1599),
-												(1607),
-												(1606),
-												(3044),
-						}
-					};
-					Rewards = new TaskItem[]
-					{
-												(3725, 50)
-					};
-					break;
+						Name = "末世预言--降临";
+						Story = "T.S.K.S:至于委托的内容...啊，谢谢各位，我们已经快要完成了...通过这几次的任务...";
+
+						var Require = new TaskItem[]
+						{
+							(ItemID.MusicBoxOverworldDay),
+							(ItemID.MusicBoxAltOverworldDay),
+							(ItemID.MusicBoxNight),
+							(ItemID.MusicBoxRain),
+							(ItemID.MusicBoxSnow),
+							(ItemID.MusicBoxDesert),
+							(ItemID.MusicBoxOcean),
+							(ItemID.MusicBoxSpace),
+							(ItemID.MusicBoxUnderground),
+							(ItemID.MusicBoxMushrooms),
+							(ItemID.MusicBoxJungle),
+							(ItemID.MusicBoxCorruption),
+							(ItemID.MusicBoxCrimson),
+							(ItemID.MusicBoxTheHallow),
+							(ItemID.MusicBoxHell),
+							(ItemID.MusicBoxDungeon),
+							(ItemID.MusicBoxTemple),
+							(ItemID.MusicBoxEerie),
+							(ItemID.MusicBoxEclipse),
+							(ItemID.MusicBoxGoblins),
+							(ItemID.MusicBoxPirates),
+							(ItemID.MusicBoxMartians),
+							(ItemID.MusicBoxPumpkinMoon),
+							(ItemID.MusicBoxFrostMoon),
+							(ItemID.MusicBoxSandstorm),
+							(ItemID.MusicBoxDD2),
+							(ItemID.MusicBoxTowers),
+							(ItemID.MusicBoxBoss1),
+							(ItemID.MusicBoxBoss2),
+							(ItemID.MusicBoxBoss3),
+							(ItemID.MusicBoxBoss4),
+							(ItemID.MusicBoxBoss5),
+							(ItemID.MusicBoxPlantera),
+							(ItemID.MusicBoxLunarBoss),
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Require,
+							[TaskDifficulty.Normal] = Require,
+							[TaskDifficulty.Hard] = Require,
+							[TaskDifficulty.Hell] = Require
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.PixelBox, 50)
+						};
+						break;
+					}
 				#endregion
 				#region End
 				case 43:
-					Name = "末世预言--终末";
-					Boss = Bosses[Bosses.Length - 2];
-					Story = "THE STARDUST KARMA SACRIFICE--T.S.K.S:终于...我找到了...";
-					break;
+					{
+						Name = "末世预言--终末";
+						Boss = Bosses[Bosses.Length - 2];
+						Story = "THE STARDUST KARMA SACRIFICE--T.S.K.S:终于...我找到了...";
+						break;
+					}
 					#endregion
 			}
 			if (Normal)
@@ -1470,4 +1895,4 @@ namespace Starvers.TaskSystem
 		#endregion
 		#endregion
 	}
-}
+}
