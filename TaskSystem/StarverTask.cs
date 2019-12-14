@@ -46,10 +46,11 @@ namespace Starvers.TaskSystem
 		#region cctor
 		static StarverTask()
 		{
+			var two = 2;
 			if (WorldGen.oreTier1 == -1)
 			{
 				WorldGen.oreTier1 = 107;
-				if (Starver.Rand.Next(2) == 0)
+				if (Starver.Rand.Next(two) == 0)
 				{
 					WorldGen.oreTier1 = 221;
 				}
@@ -57,7 +58,7 @@ namespace Starvers.TaskSystem
 			if (WorldGen.oreTier2 == -1)
 			{
 				WorldGen.oreTier2 = 108;
-				if (Starver.Rand.Next(2) == 0)
+				if (Starver.Rand.Next(two) == 0)
 				{
 					WorldGen.oreTier2 = 222;
 				}
@@ -65,7 +66,7 @@ namespace Starvers.TaskSystem
 			if (WorldGen.oreTier3 == -1)
 			{
 				WorldGen.oreTier3 = 111;
-				if (Starver.Rand.Next(2) == 0)
+				if (Starver.Rand.Next(two) == 0)
 				{
 					WorldGen.oreTier3 = 223;
 				}
@@ -87,8 +88,8 @@ namespace Starvers.TaskSystem
 					Story = "美味又易燃";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Easy, new TaskItem[]{ (ItemID.Gel, 20) } },
-						{ TaskDifficulty.Hard, new TaskItem[]{ (ItemID.Gel, 99) } }
+						[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.Gel, 20) },
+						[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.Gel, 99) }
 					};
 					Rewards = new TaskItem[]
 					{
@@ -111,8 +112,8 @@ namespace Starvers.TaskSystem
 
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, new TaskItem[]{ (ItemID.Lens, 10) } },
-							{ TaskDifficulty.Hard, Hard }
+							[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.Lens, 10) },
+							[TaskDifficulty.Hard] = Hard
 						};
 						Rewards = new TaskItem[]
 						{
@@ -145,8 +146,8 @@ namespace Starvers.TaskSystem
 						}
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, new TaskItem[] { (material, 10), (mushroom, 10) } },
-							{ TaskDifficulty.Hard, new TaskItem[] { (material, 28), (mushroom, 15) } }
+							[TaskDifficulty.Easy] = new TaskItem[] { (material, 10), (mushroom, 10) },
+							[TaskDifficulty.Hard] = new TaskItem[] { (material, 28), (mushroom, 15) }
 						};
 						break;
 					}
@@ -158,14 +159,14 @@ namespace Starvers.TaskSystem
 						Story = "古老的军团";
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, new TaskItem[] { (ItemID.FallenStar, 12) } },
-							{ TaskDifficulty.Hard, new TaskItem[] { (ItemID.FallenStar, 40), (ItemID.MolotovCocktail, 99) } }
+							[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.FallenStar, 12) },
+							[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.FallenStar, 40), (ItemID.MolotovCocktail, 99) }
 						};
 						Rewards = new TaskItem[]
 						{
 							(ItemID.DefendersForge,2)
 						};
-					break;
+						break;
 					}
 				#endregion
 				#region Bee
@@ -190,8 +191,8 @@ namespace Starvers.TaskSystem
 
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, Easy },
-							{ TaskDifficulty.Hard, Hard }
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
 						};
 						Rewards = new TaskItem[]
 						{
@@ -206,8 +207,8 @@ namespace Starvers.TaskSystem
 					Story = "打破诅咒";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Easy, new TaskItem[] { (ItemID.ZombieArm), (ItemID.ZombieArm) } },
-						{ TaskDifficulty.Hard, new TaskItem[] { (ItemID.BoneKey) } }
+						[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.ZombieArm), (ItemID.ZombieArm) },
+						[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.BoneKey) }
 					};
 					Rewards = new TaskItem[]
 					{
@@ -230,9 +231,9 @@ namespace Starvers.TaskSystem
 						};
 
 						NeedEx = new ItemLists
-						{  
-							{ TaskDifficulty.Easy, new TaskItem[] { (ItemID.HellstoneBar, 70) } },
-							{ TaskDifficulty.Hard, Hard }
+						{
+							[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.HellstoneBar, 70) },
+							[TaskDifficulty.Hard] = Hard
 						};
 						Rewards = new TaskItem[]
 						{
@@ -265,8 +266,8 @@ namespace Starvers.TaskSystem
 
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, Easy },
-							{ TaskDifficulty.Hard, Hard }
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
 						};
 						Rewards = new TaskItem[]
 						{
@@ -308,8 +309,8 @@ namespace Starvers.TaskSystem
 
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, Easy },
-							{ TaskDifficulty.Hard, Hard }
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
 						};
 
 						Rewards = new TaskItem[]
@@ -340,8 +341,8 @@ namespace Starvers.TaskSystem
 
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, Easy },
-							{ TaskDifficulty.Hard, Hard }
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
 						};
 
 						Rewards = new TaskItem[]
@@ -374,8 +375,8 @@ namespace Starvers.TaskSystem
 
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, Easy },
-							{ TaskDifficulty.Hard, Hard }
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
 						};
 						Rewards = new TaskItem[]
 						{
@@ -417,8 +418,8 @@ namespace Starvers.TaskSystem
 
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, Easy },
-							{ TaskDifficulty.Hard, Hard }
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
 						};
 
 						Rewards = new TaskItem[]
@@ -449,8 +450,8 @@ namespace Starvers.TaskSystem
 
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, Easy },
-							{ TaskDifficulty.Hard, Hard }
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
 						};
 						Rewards = new TaskItem[]
 						{
@@ -461,162 +462,283 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region Plantera
 				case 14:
-					Name = "大南方植物";
-					Story = "世纪之花灯泡";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.ChlorophyteOre,999),
-												(ItemID.TortoiseBanner,3),
-												(ItemID.AngryTrapperBanner,3),
-						}}
-};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.TheAxe),
-												(ItemID.TheAxe),
-												(ItemID.TheAxe)
-					};
-					break;
+						Name = "大南方植物";
+						Story = "世纪之花灯泡";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.ChlorophyteOre, 333),
+							(ItemID.AngryTrapperBanner, 1),
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.ChlorophyteOre,666),
+							(ItemID.TortoiseBanner,1),
+							(ItemID.AngryTrapperBanner,3),
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.TheAxe),
+							(ItemID.TheAxe),
+							(ItemID.TheAxe)
+						};
+						break;
+					}
 				#endregion
 				#region Golem
 				case 15:
-					Name = "蜥蜴信仰";
-					Story = "太阳图腾";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.TempleKey,20),
-												(ItemID.LihzahrdBanner,10),
-												(ItemID.FlyingSnakeBanner,10),
-												(ItemID.LunarTabletFragment,99)
-						}}
-};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.LihzahrdPowerCell,10)
-					};
-					break;
+						Name = "蜥蜴信仰";
+						Story = "太阳图腾";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.TempleKey, 7),
+							(ItemID.LihzahrdBanner, 2),
+							(ItemID.FlyingSnakeBanner, 2),
+							(ItemID.LunarTabletFragment, 33)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.TempleKey, 15),
+							(ItemID.LihzahrdBanner, 6),
+							(ItemID.FlyingSnakeBanner, 6),
+							(ItemID.LunarTabletFragment, 66)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LihzahrdPowerCell,10)
+						};
+						break;
+					}
 				#endregion
 				#region DD2 T3
 				case 16:
-					Name = "Betsy";
-					Story = "灾难的化身";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.MartianConduitPlating,999),
-												(ItemID.BeetleHusk,99)
-						}}
-};
-					break;
+						Name = "Betsy";
+						Story = "灾难的化身";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.MartianConduitPlating, 150),
+							(ItemID.BeetleHusk, 50)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.MartianConduitPlating,450),
+							(ItemID.BeetleHusk,99)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						break;
+					}
 				#endregion
 				#region Cultist
 				case 17:
-					Name = "狂热教徒";
-					Story = "献祭与祈祷";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.GoldenKey),
-												(ItemID.ShadowKey),
-												(WorldGen.crimson?ItemID.CrimsonKey:ItemID.CorruptionKey),
-												(ItemID.FrozenKey),
-												(ItemID.JungleKey),
-												(ItemID.HallowedKey),
-												(ItemID.CosmicCarKey),
-												(ItemID.NightKey),
-												(ItemID.LightKey)
-						}}
-};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.CultistBossBag),
-												(ItemID.CultistBossBag),
-												(ItemID.CultistBossBag),
-												(ItemID.CultistBossBag),
-												(ItemID.CultistBossBag),
-												(ItemID.CultistBossBag),
-												(ItemID.CultistBossBag),
-												(ItemID.CultistBossBag)
-					};
-					break;
+						Name = "狂热教徒";
+						Story = "献祭与祈祷";
+
+						var evilKey = WorldGen.crimson ? ItemID.CrimsonKey : ItemID.CorruptionKey;
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.GoldenKey),
+							(ItemID.ShadowKey),
+							(ItemID.CosmicCarKey),
+							(ItemID.NightKey),
+							(ItemID.LightKey)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.GoldenKey),
+							(ItemID.ShadowKey),
+							(evilKey),
+							(ItemID.FrozenKey),
+							(ItemID.JungleKey),
+							(ItemID.HallowedKey),
+							(ItemID.CosmicCarKey),
+							(ItemID.NightKey),
+							(ItemID.LightKey)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard
+						};
+						Rewards = new TaskItem[]
+						{
+						(ItemID.CultistBossBag),
+						(ItemID.CultistBossBag),
+						(ItemID.CultistBossBag),
+						(ItemID.CultistBossBag),
+						(ItemID.CultistBossBag),
+						(ItemID.CultistBossBag),
+						(ItemID.CultistBossBag),
+						(ItemID.CultistBossBag)
+						};
+						break;
+					}
 				#endregion
 				#region Solar
 				case 18:
-					Name = "宇宙之怒";
-					Story = "你的头脑变得麻木...";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.AncientCultistTrophy),
-												(ItemID.BossTrophyBetsy),
-												(ItemID.BossTrophyDarkmage),
-												(ItemID.BossTrophyOgre),
-												(WorldGen.crimson?ItemID.BrainofCthulhuTrophy:ItemID.EaterofWorldsTrophy),
-												(ItemID.EverscreamTrophy),
-												(ItemID.EyeofCthulhuTrophy),
-												(ItemID.GolemTrophy),
-												(ItemID.IceQueenTrophy),
-												(ItemID.KingSlimeTrophy),
-												(ItemID.MartianSaucerTrophy),
-												(ItemID.MourningWoodTrophy),
-												(ItemID.PlanteraTrophy),
-												(ItemID.PumpkingTrophy),
-												(ItemID.QueenBeeTrophy),
-												(ItemID.RetinazerTrophy),
-												(ItemID.SantaNK1Trophy),
-												(ItemID.SkeletronPrimeTrophy),
-												(ItemID.SpazmatismTrophy),
-												(ItemID.WallofFleshTrophy),
-												(ItemID.DestroyerTrophy),
-												(ItemID.DukeFishronTrophy)
-						}}
-};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.PlatinumCoin,99)
-					};
-					break;
+						Name = "宇宙之怒";
+						Story = "你的头脑变得麻木...";
+
+						var evil = WorldGen.crimson ? ItemID.BrainofCthulhuTrophy : ItemID.EaterofWorldsTrophy;
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.KingSlimeTrophy),
+							(ItemID.EyeofCthulhuTrophy),
+							(evil),
+							(ItemID.QueenBeeTrophy),
+							(ItemID.WallofFleshTrophy),
+						};
+						var Hard = new TaskItem[]
+						{
+							(evil),
+							(ItemID.EyeofCthulhuTrophy),
+							(ItemID.GolemTrophy),
+							(ItemID.KingSlimeTrophy),
+							(ItemID.MartianSaucerTrophy),
+							(ItemID.PlanteraTrophy),
+							(ItemID.QueenBeeTrophy),
+							(ItemID.RetinazerTrophy),
+							(ItemID.SkeletronPrimeTrophy),
+							(ItemID.SpazmatismTrophy),
+							(ItemID.WallofFleshTrophy),
+							(ItemID.DestroyerTrophy),
+							(ItemID.DukeFishronTrophy)
+						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.AncientCultistTrophy),
+							(ItemID.BossTrophyBetsy),
+							(ItemID.BossTrophyDarkmage),
+							(ItemID.BossTrophyOgre),
+							(evil),
+							(ItemID.EverscreamTrophy),
+							(ItemID.EyeofCthulhuTrophy),
+							(ItemID.GolemTrophy),
+							(ItemID.IceQueenTrophy),
+							(ItemID.KingSlimeTrophy),
+							(ItemID.MartianSaucerTrophy),
+							(ItemID.MourningWoodTrophy),
+							(ItemID.PlanteraTrophy),
+							(ItemID.PumpkingTrophy),
+							(ItemID.QueenBeeTrophy),
+							(ItemID.RetinazerTrophy),
+							(ItemID.SantaNK1Trophy),
+							(ItemID.SkeletronPrimeTrophy),
+							(ItemID.SpazmatismTrophy),
+							(ItemID.WallofFleshTrophy),
+							(ItemID.DestroyerTrophy),
+							(ItemID.DukeFishronTrophy)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.PlatinumCoin,99)
+						};
+						break;
+					}
 				#endregion
 				#region Nebula
 				case 19:
-					Name = "银河之力";
-					Story = "你痛苦不堪...";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.SolarCoriteBanner,10),
-												(ItemID.SolarCrawltipedeBanner,1),
-												(ItemID.SolarDrakomireBanner,5),
-												(ItemID.SolarSolenianBanner,5),
-												(ItemID.SolarSrollerBanner,5)
-						}}
-};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.SolarMonolith,99),
-												(ItemID.NebulaMonolith,99)
-					};
-					break;
+						Name = "银河之力";
+						Story = "你痛苦不堪...";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.SolarCoriteBanner, 2),
+							(ItemID.SolarDrakomireBanner, 1),
+							(ItemID.SolarSolenianBanner, 1),
+							(ItemID.SolarSrollerBanner, 1)
+						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.SolarCoriteBanner, 3),
+							(ItemID.SolarDrakomireBanner, 2),
+							(ItemID.SolarSolenianBanner, 2),
+							(ItemID.SolarSrollerBanner, 2)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.SolarCoriteBanner, 6),
+							(ItemID.SolarDrakomireBanner, 3),
+							(ItemID.SolarSolenianBanner, 3),
+							(ItemID.SolarSrollerBanner, 3)
+						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.SolarCoriteBanner, 8),
+							(ItemID.SolarCrawltipedeBanner,1),
+							(ItemID.SolarDrakomireBanner, 4),
+							(ItemID.SolarSolenianBanner, 4),
+							(ItemID.SolarSrollerBanner, 4)
+						};
+
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.SolarMonolith,99),
+							(ItemID.NebulaMonolith,99)
+						};
+						break;
+					}
 				#endregion
 				#region Stardust
 				case 20:
-					Name = "星尘粒子";
-					Story = "超自然的声音环绕在你的周围...";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						Name = "星尘粒子";
+						Story = "超自然的声音环绕在你的周围...";
+						NeedEx = new ItemLists
+						{
+							[TaskDifficulty.Hard] = new TaskItem[]{
 												(ItemID.StardustJellyfishBanner,5),
 												(ItemID.StardustLargeCellBanner,5),
 												(ItemID.StardustWormBanner,5),
 												(ItemID.StardustSoldierBanner,5)
-						}}
-};
-					Rewards = new TaskItem[]
-					{
+						}
+						};
+						Rewards = new TaskItem[]
+						{
 												(ItemID.StardustMonolith,99)
-					};
+						};
+					}
 					break;
 				#endregion
 				#region Vortex
@@ -626,12 +748,12 @@ namespace Starvers.TaskSystem
 					Story = "月亮末日慢慢靠近...";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(ItemID.VortexSoldierBanner,5),
 												(ItemID.VortexRiflemanBanner,5),
 												(ItemID.VortexHornetQueenBanner,20)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(ItemID.VortexMonolith,99)
@@ -644,13 +766,13 @@ namespace Starvers.TaskSystem
 					Story = "恐惧的本质是什么？未知的事物？死亡的接近？力量总是与诅咒并存，张裂的瞳膜里只剩下恐惧与悲伤";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(ItemID.Lens, 50),
 												(ItemID.BlackLens, 4),
 												(ItemID.SoulofFright, 200),
 												(1584)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 80),
@@ -665,14 +787,14 @@ namespace Starvers.TaskSystem
 					Story = "从猩红中被剥离出来，膨胀的血管与不断脱落的肉块使这个生物痛苦不堪。精神的力量会扭曲肉体，最终造就可怖的事实";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(ItemID.Ichor, 99),
 												(ItemID.CrimsonFishingCrate, 20),
 												(ItemID.SoulofNight, 200),
 												(ItemID.SoulofLight, 200),
 												(ItemID.Vertebrae, 99)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 80),
@@ -687,13 +809,13 @@ namespace Starvers.TaskSystem
 					Story = "愚钝的成员构成了群体的智慧。蜂群的聚合体。单一个体无法完成的壮举，依靠群体便可以达成";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(ItemID.LifeFruit, 80),
 												(ItemID.SoulofFlight, 200),
 												(ItemID.Honeyfin, 30),
 												(ItemID.Hive, 99)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(ItemID.RodofDiscord),
@@ -711,12 +833,12 @@ namespace Starvers.TaskSystem
 					Story = "脱胎于某个高等存在的残骸，仍然残存有些许威力。力量不会随着肉体的消亡而蒸发，而是如同跗骨之蛆一般留存";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(154, 888),
 												(3085, 15),
 												(1612)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 80)
@@ -730,13 +852,13 @@ namespace Starvers.TaskSystem
 					Story = "远古封印的守卫者，被某种能量所侵蚀。他现在所能做的，仅仅只是维持其中的三道封印";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(3817, 500),
 												(109, 50),
 												(ItemID.DD2EnergyCrystal, 500),
 												(3580)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 120),
@@ -751,13 +873,13 @@ namespace Starvers.TaskSystem
 					Story = "饥饿，迷失，徘徊。这具畸变的肉体中寄宿着旋涡的能量";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(3456, 400),
 												(ItemID.TruffleWorm, 10),
 												(1164, 1),
 												(1553, 1, 82)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(2797, 1),
@@ -774,13 +896,13 @@ namespace Starvers.TaskSystem
 					Story = "苦难，炼狱，救赎。这具畸变的肉体中填满了星尘的微粒";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(3459, 400),
 												(ItemID.TruffleWorm, 10),
 												(2676, 200),
 												(3571, 1, 83)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(2422, 1),
@@ -797,14 +919,14 @@ namespace Starvers.TaskSystem
 					Story = "仲裁，审判，裁决。这具畸变的肉体中蕴含着星云的奥秘";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(3457, 400),
 												(ItemID.TruffleWorm, 10),
 												(1101, 300),
 												(905, 1),
 												(3541, 1, 60)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(2795, 1),
@@ -821,7 +943,7 @@ namespace Starvers.TaskSystem
 					Story = "毁灭，创造，平衡。宇宙的暴怒内蕴其中。现实总是与理想相违背，努力的结果往往被他人夺去";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(3458, 400),
 												(ItemID.TruffleWorm, 10),
 												(3801, 1),
@@ -829,8 +951,8 @@ namespace Starvers.TaskSystem
 												(3873, 1),
 												(774, 999),
 												(3065, 1, 81)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(2880, 1),
@@ -847,23 +969,23 @@ namespace Starvers.TaskSystem
 					Story = "片刻的宁静";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(969, 30),
 												(2426, 30),
 												(357, 30),
 												(2266, 30),
 												(859, 1),
 												(856, 1)
-						}}
-};
+						}
+					};
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(3467, 200),
 												(3746, 300),
 												(1358, 30)
-						}}
-};
+						}
+					};
 					break;
 				#endregion
 				#region RedDevil
@@ -872,14 +994,14 @@ namespace Starvers.TaskSystem
 					Story = "恶魔一族的君主，似乎能够自如地使用地狱的威能。苦痛的亡魂在熔岩中挣扎，他们呼喊着那个早已消逝的名字";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(2701, 999),
 												(1518, 3),
 												(683, 1),
 												(1445, 1),
 												(2312, 120)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 80)
@@ -893,14 +1015,14 @@ namespace Starvers.TaskSystem
 					Story = "在被污染的冰窟中滋生的畸形生物，无节制地进行着自我增殖。自我循环或外界摄取，这个世界支配着残酷的法则";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(3532, 20),
 												(2429, 1),
 												(2337, 20),
 												(2338, 20),
 												(2339, 20)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(1067, 50)
@@ -914,14 +1036,14 @@ namespace Starvers.TaskSystem
 					Story = "这位恐惧之主早已失去了往日的荣光，变异的躯壳只寄宿着无尽的愤怒。暴虐与残忍，嗜血与屠戮，欲望和执念造就的只有悲剧";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(1367, 5),
 												(WorldGen.crimson ? 1569 : 1571, 1, 59),
 												(1260, 1, 83),
 												(1156, 1, 82),
 												(1572, 1, 83)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 90),
@@ -939,13 +1061,13 @@ namespace Starvers.TaskSystem
 					Story = "吸食了地脉的精华，但仍然保留着蠕虫的姿态。这片大地已经千疮百孔，在一次次的轮回中逐渐褪色";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(ItemID.RottenChunk,99),
 												(ItemID.CursedFlame,99),
 												(3794,30),
 												(3380,200)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 200),
@@ -961,10 +1083,10 @@ namespace Starvers.TaskSystem
 					Story = "最终的劫难已逐渐逼近，艰难的旅程也终于抵达尾声。未来的图景从未如此朦胧";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(ItemID.RetinazerTrophy, 6)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 120),
@@ -979,10 +1101,10 @@ namespace Starvers.TaskSystem
 					Story = "历史的书页遗失了一角，某个过往的存在切断了与这个世界的联系。他是连接一切的钥匙";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(ItemID.SpazmatismTrophy, 6)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3467, 120),
@@ -997,7 +1119,7 @@ namespace Starvers.TaskSystem
 					Story = "T.S.K.S:--==欢迎==--初次联络--stardust的玩家们，你们迄今为止的努力着实令人敬佩，而现在，我们有一项伟大而光荣的委托要交付于你们";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{(20, 66),
+						[TaskDifficulty.Hard] = new TaskItem[]{(20, 66),
 												(703, 66),
 												(22, 66),
 												(704, 66),
@@ -1014,8 +1136,8 @@ namespace Starvers.TaskSystem
 												(1191, 66),
 												(391, 66),
 												(1198, 66)
-							}}
-};
+							}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3706, 99),
@@ -1032,7 +1154,7 @@ namespace Starvers.TaskSystem
 					Story = "T.S.K.S:你们之前已经漂亮地完成了我们的每一次委托，所以我们相信这一件委托这对你们来说绝非难事";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(2430, 1),
 												(2491, 1),
 												(2502, 1),
@@ -1042,8 +1164,8 @@ namespace Starvers.TaskSystem
 												(1914, 1),
 												(2771, 1),
 												(2769, 1)
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(2903, 99),
@@ -1060,7 +1182,7 @@ namespace Starvers.TaskSystem
 					Story = "T.S.K.S:我们的确掌握着某种限制大型怪物生成的技术，但归根究底其源泉也是我们所共有的AURA能量";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{(493, 1),
+						[TaskDifficulty.Hard] = new TaskItem[]{(493, 1),
 												(492, 1),
 												(1515, 1),
 												(749, 1),
@@ -1070,8 +1192,8 @@ namespace Starvers.TaskSystem
 												(821, 1),
 												(822, 1),
 												(1162, 1)
-							}}
-};
+							}
+					};
 					Rewards = new TaskItem[]
 					{
 												(2902, 99),
@@ -1088,7 +1210,7 @@ namespace Starvers.TaskSystem
 					Story = "T.S.K.S:但是，不知道各位是否想过，AURA的源泉又是什么呢？我们解析过这种能量的构造，其波动与你们的某一种欲望十分符合";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{(3278, 1),
+						[TaskDifficulty.Hard] = new TaskItem[]{(3278, 1),
 												(3262, 1),
 												(3289, 1),
 												(3281, 1),
@@ -1105,8 +1227,8 @@ namespace Starvers.TaskSystem
 												(3315, 1),
 												(3284, 1),
 												(3316, 1)
-							}}
-};
+							}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3705, 99),
@@ -1123,7 +1245,7 @@ namespace Starvers.TaskSystem
 					Story = "T.S.K.S:至于委托的内容...啊，谢谢各位，我们已经快要完成了...通过这几次的任务...";
 					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
+						[TaskDifficulty.Hard] = new TaskItem[]{
 												(562),
 												(1600),
 												(564),
@@ -1158,8 +1280,8 @@ namespace Starvers.TaskSystem
 												(1607),
 												(1606),
 												(3044),
-						}}
-};
+						}
+					};
 					Rewards = new TaskItem[]
 					{
 												(3725, 50)
@@ -1176,7 +1298,7 @@ namespace Starvers.TaskSystem
 			}
 			if (Normal)
 			{
-				if (NeedEx!= null && NeedEx.ContainsKey(Difficulty))
+				if (NeedEx != null && NeedEx.ContainsKey(Difficulty))
 					Needs = NeedEx[Difficulty];
 				if (Needs == null || StarverConfig.Config.TaskNeedNoItem)
 				{
@@ -1200,7 +1322,7 @@ namespace Starvers.TaskSystem
 			if (CheckItem)
 			{
 				SB.AppendFormat("\n物品要求:\n[i:{0}](标识物,不消耗)", Mark);
-				foreach(object obj in Needs)
+				foreach (object obj in Needs)
 				{
 					SB.Append(obj);
 				}
@@ -1231,9 +1353,9 @@ namespace Starvers.TaskSystem
 			bool flag = true;
 			if (Normal)
 			{
-				if(!(Boss is null))
+				if (!(Boss is null))
 				{
-					if(!Boss.Downed)
+					if (!Boss.Downed)
 					{
 						StarverPlayer.All.SendMessage($"这个任务被{Boss.Name}诅咒了...", Color.Red);
 						return false;
@@ -1242,12 +1364,12 @@ namespace Starvers.TaskSystem
 				if (CheckLevel)
 				{
 					flag = flag && Utils.AverageLevel >= Level;
-					if(flag == false)
+					if (flag == false)
 					{
-						StarverPlayer.All.SendMessage($"全员平均等级未达标({Level})",Color.Red);
+						StarverPlayer.All.SendMessage($"全员平均等级未达标({Level})", Color.Red);
 					}
 				}
-				if(CheckItem)
+				if (CheckItem)
 				{
 					flag = flag && CheckChests();
 				}
@@ -1262,7 +1384,7 @@ namespace Starvers.TaskSystem
 		#region CheckChests
 		protected bool CheckChests()
 		{
-			foreach (Chest chest in Main.chest) 
+			foreach (Chest chest in Main.chest)
 			{
 				if (chest == null || !CheckItems(chest.item))
 				{
@@ -1271,7 +1393,7 @@ namespace Starvers.TaskSystem
 				EatChestItem(chest.item);
 				RewardChestItem(chest);
 				return true;
-			Continue:
+				Continue:
 				continue;
 			}
 			return false;
@@ -1322,7 +1444,7 @@ namespace Starvers.TaskSystem
 					chest.item[i] = new Item();
 				}
 				return true;
-			loops:;
+				loops:;
 			}
 			return false;
 		}
