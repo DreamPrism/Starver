@@ -88,332 +88,376 @@ namespace Starvers.TaskSystem
 					NeedEx = new ItemLists
 					{
 						{ TaskDifficulty.Easy, new TaskItem[]{ (ItemID.Gel, 20) } },
-						{ TaskDifficulty.Hard, new TaskItem[]
-							{
-														(ItemID.Gel, 99)
-									}}
+						{ TaskDifficulty.Hard, new TaskItem[]{ (ItemID.Gel, 99) } }
 					};
 					Rewards = new TaskItem[]
 					{
-												(ItemID.SlimeCrown ,5)
+						(ItemID.SlimeCrown ,5)
 					};
 					break;
 				#endregion
 				#region Eye
 				case 2:
-					TaskID.Eye = ID;
-					Name = "凝视";
-					Story = "希望站在我们和克苏鲁之眼间的不是弱小的你";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Easy, new TaskItem[]{ (ItemID.Lens, 10) } },
-						{ TaskDifficulty.Hard, new TaskItem[]
-							{
-								 (ItemID.Lens, 36),
-								 (ItemID.DemonEyeBanner, 2)
-									}}
-					};
-					Rewards = new TaskItem[]
-					{
-														(ItemID.SuspiciousLookingEye,5)
-					};
-					break;
+						TaskID.Eye = ID;
+						Name = "凝视";
+						Story = "希望站在我们和克苏鲁之眼间的不是弱小的你";
+
+						var Hard = new TaskItem[]
+						{
+							(ItemID.Lens, 36),
+							(ItemID.DemonEyeBanner, 2)
+						};
+
+						NeedEx = new ItemLists
+						{
+							{ TaskDifficulty.Easy, new TaskItem[]{ (ItemID.Lens, 10) } },
+							{ TaskDifficulty.Hard, Hard }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.SuspiciousLookingEye,5)
+						};
+						break;
+					}
 				#endregion
 				#region Evil
 				case 3:
-					int material;
-					int mushroom;
-					Rewards = new TaskItem[1];
-					if (WorldGen.crimson)
 					{
-						Name = "猩红之手";
-						Story = "血肉与脊骨";
-						material = ItemID.Vertebrae;
-						mushroom = ItemID.ViciousMushroom;
-						Rewards[0] = (ItemID.BloodySpine, 5);
+						int material;
+						int mushroom;
+						Rewards = new TaskItem[1];
+						if (WorldGen.crimson)
+						{
+							Name = "猩红之手";
+							Story = "血肉与脊骨";
+							material = ItemID.Vertebrae;
+							mushroom = ItemID.ViciousMushroom;
+							Rewards[0] = (ItemID.BloodySpine, 5);
+						}
+						else
+						{
+							Name = "幽暗裂缝";
+							Story = "邪恶意识的结合体";
+							material = ItemID.RottenChunk;
+							mushroom = ItemID.VileMushroom;
+							Rewards[0] = (ItemID.WormFood, 5);
+						}
+						NeedEx = new ItemLists
+						{
+							{ TaskDifficulty.Easy, new TaskItem[] { (material, 10), (mushroom, 10) } },
+							{ TaskDifficulty.Hard, new TaskItem[] { (material, 28), (mushroom, 15) } }
+						};
+						break;
 					}
-					else
-					{
-						Name = "幽暗裂缝";
-						Story = "邪恶意识的结合体";
-						material = ItemID.RottenChunk;
-						mushroom = ItemID.VileMushroom;
-						Rewards[0] = (ItemID.WormFood, 5);
-					}
-					NeedEx = new ItemLists
-					{
-						{ TaskDifficulty.Easy, new TaskItem[] { (material, 10), (mushroom, 10) } },
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(material,28),
-												(mushroom,15)
-						}}
-					};
-					break;
 				#endregion
 				#region DD2 T1
 				case 4:
-					Name = "暗黑法师";
-					Story = "古老的军团";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Easy, new TaskItem[] { (ItemID.FallenStar, 12)} },
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.FallenStar, 40),
-												(ItemID.MolotovCocktail,99)
-						}}
-					};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.DefendersForge,2)
-					};
+						Name = "暗黑法师";
+						Story = "古老的军团";
+						NeedEx = new ItemLists
+						{
+							{ TaskDifficulty.Easy, new TaskItem[] { (ItemID.FallenStar, 12) } },
+							{ TaskDifficulty.Hard, new TaskItem[] { (ItemID.FallenStar, 40), (ItemID.MolotovCocktail, 99) } }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.DefendersForge,2)
+						};
 					break;
+					}
 				#endregion
 				#region Bee
 				case 5:
-					Name = "蜂巢主妇";
-					Story = "我的蜂蜜在哪?";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Easy, new TaskItem[]
-												{ 
-																			(ItemID.Stinger, 9), 
-																			(ItemID.Hive, 30) ,
-																			(ItemID.BottledHoney, 10)
-														}},
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.Stinger, 32),
-												(ItemID.Vine, 16),
-												(ItemID.Hive,99),
-												(ItemID.BottledHoney,30)
-						}}
-					};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.Abeemination,5)
-					};
-					break;
+						Name = "蜂巢主妇";
+						Story = "我的蜂蜜在哪?";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.Stinger, 9),
+							(ItemID.Hive, 30) ,
+							(ItemID.BottledHoney, 10)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.Stinger, 32),
+							(ItemID.Vine, 16),
+							(ItemID.Hive, 99),
+							(ItemID.BottledHoney, 30)
+						};
+
+						NeedEx = new ItemLists
+						{
+							{ TaskDifficulty.Easy, Easy },
+							{ TaskDifficulty.Hard, Hard }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.Abeemination,5)
+						};
+						break;
+					}
 				#endregion
 				#region Skeletron
 				case 6:
 					Name = "深黑地牢";
 					Story = "打破诅咒";
 					NeedEx = new ItemLists
-{
-						{ TaskDifficulty.Easy, new TaskItem[] 
-												{ 
-																			(ItemID.ZombieArm),
-																			(ItemID.ZombieArm)
-														}},
-						{ TaskDifficulty.Hard, new TaskItem[]{
-#if false
-													(ItemID.Bone, 200),
-												(ItemID.Skull),
-												(ItemID.BoneSword),
-												(ItemID.BoneKey),
-#endif
-													(ItemID.BoneKey),
-						}}
-};
+					{
+						{ TaskDifficulty.Easy, new TaskItem[] { (ItemID.ZombieArm), (ItemID.ZombieArm) } },
+						{ TaskDifficulty.Hard, new TaskItem[] { (ItemID.BoneKey) } }
+					};
 					Rewards = new TaskItem[]
 					{
-												(ItemID.BoneKey),
-												(ItemID.ClothierVoodooDoll)
+						(ItemID.BoneKey),
+						(ItemID.ClothierVoodooDoll)
 					};
 					break;
 				#endregion
 				#region Wall
 				case 7:
-					Name = "仍然饥饿";
-					Story = "地下世界的主人与核心";
-					NeedEx = new ItemLists
-					{	{ TaskDifficulty.Easy, new TaskItem[] { (ItemID.HellstoneBar, 70) } },
-						{ TaskDifficulty.Hard, new TaskItem[] 
-												{ 
-																			(ItemID.HellstoneBrick, 100),
-																			(ItemID.LavaSlimeBanner, 4),
-																			(ItemID.Fireblossom, 20)
-														}}
-					};
-					Rewards = new TaskItem[]
 					{
-												(ItemID.GuideVoodooDoll),
-												(ItemID.GuideVoodooDoll),
-												(ItemID.GuideVoodooDoll),
-												(ItemID.TrueNightsEdge,1,PrefixID.Legendary)
-					};
-					break;
+						Name = "仍然饥饿";
+						Story = "地下世界的主人与核心";
+
+						var Hard = new TaskItem[]
+						{
+							(ItemID.HellstoneBrick, 100),
+							(ItemID.LavaSlimeBanner, 4),
+							(ItemID.Fireblossom, 20)
+						};
+
+						NeedEx = new ItemLists
+						{  
+							{ TaskDifficulty.Easy, new TaskItem[] { (ItemID.HellstoneBar, 70) } },
+							{ TaskDifficulty.Hard, Hard }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.GuideVoodooDoll),
+							(ItemID.GuideVoodooDoll),
+							(ItemID.GuideVoodooDoll),
+							(ItemID.TrueNightsEdge, 1, PrefixID.Legendary)
+						};
+						break;
+					}
 				#endregion
 				#region Light
 				case 8:
-					Name = "光与暗(其一)";
-					Story = "虚华美好的假象";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Easy, new TaskItem[]
-												{ 
-																			(ItemID.SoulofLight, 20),
-																			(ItemID.CrystalShard, 20),
-																			(ItemID.LightShard, 3)
-														}},
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.SoulofLight, 170),
-												(ItemID.CrystalShard, 60),
-												(ItemID.LightShard, 8)
-								}}
-					};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.LightKey,15)
-					};
-					break;
+						Name = "光与暗(其一)";
+						Story = "虚华美好的假象";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.SoulofLight, 20),
+							(ItemID.CrystalShard, 20),
+							(ItemID.LightShard, 3)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.SoulofLight, 170),
+							(ItemID.CrystalShard, 60),
+							(ItemID.LightShard, 8)
+						};
+
+						NeedEx = new ItemLists
+						{
+							{ TaskDifficulty.Easy, Easy },
+							{ TaskDifficulty.Hard, Hard }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.LightKey,15)
+						};
+						break;
+					}
 				#endregion
 				#region Night
 				case 9:
-					Name = "光与暗(其二)";
-					if (WorldGen.crimson)
 					{
-						Story = "血腥弥漫";
+						Name = "光与暗(其二)";
+
+						int material;
+
+						if (WorldGen.crimson)
+						{
+							Story = "血腥弥漫";
+							material = ItemID.Ichor;
+						}
+						else
+						{
+							Story = "腐臭四散";
+							material = ItemID.CursedFlame;
+						}
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.SoulofNight, 20),
+							(material, 20),
+							(ItemID.DarkShard, 2)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.SoulofNight, 170),
+							(material, 60),
+							(ItemID.DarkShard, 8)
+						};
+
 						NeedEx = new ItemLists
 						{
-							{ TaskDifficulty.Easy, new TaskItem[]
-													{
-																				(ItemID.SoulofNight, 20),
-																				(ItemID.Ichor, 20),
-																				(ItemID.DarkShard, 2) 
-															}},
-							{ TaskDifficulty.Hard, new TaskItem[]
-													{
-																				(ItemID.SoulofNight, 170),
-																				(ItemID.Ichor, 60),
-																				(ItemID.DarkShard, 8)
-															}}
+							{ TaskDifficulty.Easy, Easy },
+							{ TaskDifficulty.Hard, Hard }
 						};
-					}
-					else
-					{
-						Story = "腐臭四散";
-						NeedEx = new ItemLists
+
+						Rewards = new TaskItem[]
 						{
-							{ TaskDifficulty.Easy, new TaskItem[]
-													{
-																				(ItemID.SoulofNight, 20),
-																				(ItemID.CursedFlame, 20),
-																				(ItemID.DarkShard, 2)
-															}},
-							{ TaskDifficulty.Hard, new TaskItem[]
-													{
-																				(ItemID.SoulofNight, 170),
-																				(ItemID.CursedFlame, 60),
-																				(ItemID.DarkShard, 8)
-															}}
+							(ItemID.NightKey,15)
 						};
+						break;
 					}
-					Rewards = new TaskItem[]
-					{
-												(ItemID.NightKey,15)
-					};
-					break;
 				#endregion
 				#region Twins
 				case 10:
-					Name = "全知之眼";
-					Story = "这将会是一个可怕的夜晚...";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Easy, new TaskItem[]
-												{
-													(ItemID.Lens, 30),
-													(ItemID.DemonEyeBanner, 2),
-													(ItemID.PalladiumOre, 222)
+						Name = "全知之眼";
+						Story = "这将会是一个可怕的夜晚...";
 
-												} },
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.Lens,60),
-												(ItemID.DemonEyeBanner,6),
-												(ItemID.PalladiumOre,444)
-						}}
-};
-					Rewards = new TaskItem[]
-					{
-						(ItemID.MechanicalEye,5)
-					};
-					break;
+						var Easy = new TaskItem[]
+						{
+							(ItemID.Lens, 30),
+							(ItemID.DemonEyeBanner, 2),
+							(ItemID.PalladiumOre, 222)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.Lens, 60),
+							(ItemID.DemonEyeBanner, 6),
+							(ItemID.PalladiumOre, 444)
+						};
+
+						NeedEx = new ItemLists
+						{
+							{ TaskDifficulty.Easy, Easy },
+							{ TaskDifficulty.Hard, Hard }
+						};
+
+						Rewards = new TaskItem[]
+						{
+							(ItemID.MechanicalEye,5)
+						};
+						break;
+					}
 				#endregion
 				#region Prime
 				case 11:
-					Name = "恐惧之主";
-					Story = "周围的空气越来越冷...";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Easy, new TaskItem[]
-												{
-													(ItemID.Bone,150),
-													(ItemID.AngryBonesBanner,4),
-													(ItemID.CursedSkullBanner,1),
-													(ItemID.OrichalcumOre,222 * 2 / 3)
-												} },
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.Bone,280),
-												(ItemID.AngryBonesBanner,6),
-												(ItemID.CursedSkullBanner,2),
-												(ItemID.OrichalcumOre,444 * 2 / 3),
-						} }
-					};
-					Rewards = new TaskItem[]
-					{
-						(ItemID.MechanicalSkull,5)
-					};
-					break;
+						Name = "恐惧之主";
+						Story = "周围的空气越来越冷...";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.Bone, 150),
+							(ItemID.AngryBonesBanner, 4),
+							(ItemID.CursedSkullBanner, 1),
+							(ItemID.OrichalcumOre, 222 * 2 / 3)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.Bone, 280),
+							(ItemID.AngryBonesBanner, 6),
+							(ItemID.CursedSkullBanner, 2),
+							(ItemID.OrichalcumOre, 444 * 2 / 3),
+						};
+
+						NeedEx = new ItemLists
+						{
+							{ TaskDifficulty.Easy, Easy },
+							{ TaskDifficulty.Hard, Hard }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.MechanicalSkull,5)
+						};
+						break;
+					}
 				#endregion
 				#region Destroyer
 				case 12:
-					Name = "破坏之王";
-					Story = "你感到来自地下深处的震动...";
-					if (WorldGen.crimson)
 					{
-						NeedEx = new ItemLists
-					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-													(ItemID.Vertebrae, 80),
-													(ItemID.HerplingBanner, 8),
-													(ItemID.TitaniumOre, 333)
-							}}
+						Name = "破坏之王";
+						Story = "你感到来自地下深处的震动...";
+						int material;
+						int banner;
+						if (WorldGen.crimson)
+						{
+							material = ItemID.Vertebrae;
+							banner = ItemID.HerplingBanner;
+						}
+						else
+						{
+							material = ItemID.RottenChunk;
+							banner = ItemID.CorruptorBanner;
+						}
+
+						var Easy = new TaskItem[]
+						{
+							(material, 20),
+							(banner, 2),
+							(ItemID.TitaniumOre, 222 / 3)
 						};
-					}
-					else
-					{
+						var Hard = new TaskItem[]
+						{
+							(material, 60),
+							(banner, 6),
+							(ItemID.TitaniumOre, 444 / 3)
+						};
+
 						NeedEx = new ItemLists
-					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-													(ItemID.RottenChunk, 80),
-													(ItemID.CorruptorBanner, 8),
-													(ItemID.TitaniumOre, 222)
-							}}
-};
+						{
+							{ TaskDifficulty.Easy, Easy },
+							{ TaskDifficulty.Hard, Hard }
+						};
+
+						Rewards = new TaskItem[]
+						{
+							(ItemID.MechanicalWorm, 5)
+						};
+						break;
 					}
-					Rewards = new TaskItem[]
-					{
-												(ItemID.MechanicalWorm,5)
-					};
-					break;
 				#endregion
 				#region DD2 T2
 				case 13:
-					Name = "食人巨魔";
-					Story = "异世界的访客";
-					NeedEx = new ItemLists
 					{
-						{ TaskDifficulty.Hard, new TaskItem[]{
-												(ItemID.SoulofMight, 270),
-												(ItemID.SoulofSight, 270),
-												(ItemID.SoulofFright, 270)
-						}}
-};
-					Rewards = new TaskItem[]
-					{
-												(ItemID.DD2ElderCrystal,20)
-					};
-					break;
+						Name = "食人巨魔";
+						Story = "异世界的访客";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.SoulofMight, 140),
+							(ItemID.SoulofSight, 140),
+							(ItemID.SoulofFright,140)
+						};
+						var Hard = new TaskItem[]
+						{
+							(ItemID.SoulofMight, 270),
+							(ItemID.SoulofSight, 270),
+							(ItemID.SoulofFright,270)
+						};
+
+						NeedEx = new ItemLists
+						{
+							{ TaskDifficulty.Easy, Easy },
+							{ TaskDifficulty.Hard, Hard }
+						};
+						Rewards = new TaskItem[]
+						{
+							(ItemID.DD2ElderCrystal,20)
+						};
+						break;
+					}
 				#endregion
 				#region Plantera
 				case 14:
