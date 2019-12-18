@@ -45,6 +45,12 @@ namespace Starvers
 		#region UpGradeAll
 		public static void UpGradeAll(int lvlup)
 		{
+			foreach(var player in Starver.Players)
+			{
+				player.Level += lvlup;
+				player.Save();
+			}
+#if false
 			if (Config.SaveMode == SaveModes.MySQL)
 			{
 				SaveAll();
@@ -103,6 +109,7 @@ namespace Starvers
 				}
 				ply.Reload();
 			}
+#endif
 		}
 		#endregion
 		#region AverageLevel

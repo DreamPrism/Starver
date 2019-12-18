@@ -279,6 +279,20 @@ namespace Starvers
 		#region HeldItem
 		public Item HeldItem => TPlayer.inventory[TPlayer.selectedItem];
 		#endregion
+		#region ActiveChest
+		public int ActiveChest
+		{
+			get
+			{
+				return TSPlayer.ActiveChest;
+			}
+			set
+			{
+				TSPlayer.ActiveChest = value;
+				SendData(PacketTypes.ChestOpen, "", value);
+			}
+		}
+		#endregion
 		#endregion
 		#region Methods
 		#region Spawn
@@ -1268,7 +1282,7 @@ namespace Starvers
 		}
 		internal string Buffer;
 		/// <summary>
-		/// 上一次释放技能时间
+		/// 技能CD
 		/// </summary>
 		internal int[] CDs = new int[Skill.MaxSlots] 
 		{

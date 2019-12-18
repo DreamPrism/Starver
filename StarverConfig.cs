@@ -20,7 +20,7 @@ namespace Starvers
 		public int DefaultLevel { get; set; } = 1;
 		public int SaveInterval { get; set; } = 60;
 		public int TaskNow { get; set; }
-		public int TaskLock { get; set; } = StarverTask.MAINLINE;
+		public int TaskLock { get; set; } = MainLineTask.MainLineCount;
 		public int LevelNeed { get; set; }
 		public bool EnableStrongerNPC { get; set; } = true;
 		public bool EnableTask { get; set; } = true;

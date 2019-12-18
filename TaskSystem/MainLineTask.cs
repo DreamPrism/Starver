@@ -13,22 +13,21 @@ namespace Starvers.TaskSystem
 	using CheckDelegate = Func<StarverPlayer, bool>;
 	using StarverBoss = BossSystem.Bosses.Base.StarverBoss;
 	using ItemLists = Dictionary<TaskDifficulty, TaskItem[]>;
-	public class StarverTask
+	public class MainLineTask : ITask
 	{
+		#region Fields
+		protected ItemLists NeedEx;
+		protected ItemLists RewardEx;
+		#endregion
 		#region Properties
 		public static StarverBoss[] Bosses => StarverBossManager.Bosses;
+		public bool IsFinished => StarverConfig.Config.TaskNow >= ID;
 		public StarverBoss Boss { get; protected set; }
 		public int ID { get; protected set; }
 		public TaskDifficulty Difficulty { get; protected set; }
 		public string Description { get; protected set; }
-		#region Need
-		protected ItemLists NeedEx;
 		public TaskItem[] Needs { get; protected set; }
-		#endregion
-		#region Reward
-		protected ItemLists RewardEx;
 		public TaskItem[] Rewards { get; protected set; }
-		#endregion
 		public string Name { get; protected set; }
 		public string Story { get; protected set; }
 		public int Mark { get; protected set; } = ItemID.MagicMirror;
@@ -41,10 +40,9 @@ namespace Starvers.TaskSystem
 		#region Statics
 		public readonly static TaskItem[] DefaultReward = new TaskItem[] { (ItemID.PlatinumCoin) };
 		public readonly static TaskItem[] DefaultNeed = new TaskItem[] { (ItemID.Gel) };
-		public const int MAINLINE = 43;
 		#endregion
-		#region cctor
-		static StarverTask()
+		#region CCtor
+		static MainLineTask()
 		{
 			var two = 2;
 			if (WorldGen.oreTier1 == -1)
@@ -73,9 +71,9 @@ namespace Starvers.TaskSystem
 			}
 		}
 		#endregion
-		#region ctor
-		protected StarverTask() { }
-		public StarverTask(int id, TaskDifficulty difficulty = TaskDifficulty.Hard)
+		#region Ctor
+		protected MainLineTask() { }
+		public MainLineTask(int id, TaskDifficulty difficulty = TaskDifficulty.Hard)
 		{
 			ID = id;
 			Level = 10 * ID;
@@ -89,7 +87,9 @@ namespace Starvers.TaskSystem
 					NeedEx = new ItemLists
 					{
 						[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.Gel, 20) },
-						[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.Gel, 99) }
+						[TaskDifficulty.Normal] = new TaskItem[] { (ItemID.Gel, 40) },
+						[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.Gel, 60) },
+						[TaskDifficulty.Hell] = new TaskItem[] { (ItemID.Gel, 99) },
 					};
 					Rewards = new TaskItem[]
 					{
@@ -104,16 +104,32 @@ namespace Starvers.TaskSystem
 						Name = "凝视";
 						Story = "希望站在我们和克苏鲁之眼间的不是弱小的你";
 
+						var Easy = new TaskItem[]
+						{
+							(ItemID.Lens, 10)
+						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.Lens, 15),
+							(ItemID.DemonEyeBanner, 1)
+						};
 						var Hard = new TaskItem[]
 						{
 							(ItemID.Lens, 36),
 							(ItemID.DemonEyeBanner, 2)
 						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.Lens, 42),
+							(ItemID.DemonEyeBanner, 3)
+						};
 
 						NeedEx = new ItemLists
 						{
-							[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.Lens, 10) },
-							[TaskDifficulty.Hard] = Hard
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
 						};
 						Rewards = new TaskItem[]
 						{
@@ -147,7 +163,9 @@ namespace Starvers.TaskSystem
 						NeedEx = new ItemLists
 						{
 							[TaskDifficulty.Easy] = new TaskItem[] { (material, 10), (mushroom, 10) },
-							[TaskDifficulty.Hard] = new TaskItem[] { (material, 28), (mushroom, 15) }
+							[TaskDifficulty.Normal] = new TaskItem[] { (material, 16), (mushroom, 12) },
+							[TaskDifficulty.Hard] = new TaskItem[] { (material, 25), (mushroom, 15) },
+							[TaskDifficulty.Hell] = new TaskItem[] { (material, 32), (mushroom, 20) }
 						};
 						break;
 					}
@@ -157,10 +175,33 @@ namespace Starvers.TaskSystem
 					{
 						Name = "暗黑法师";
 						Story = "古老的军团";
+
+						var Easy = new TaskItem[]
+						{
+							(ItemID.FallenStar, 12)
+						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.FallenStar, 28)
+						};
+						var Hard = new TaskItem[] 
+						{ 
+							(ItemID.FallenStar, 40), 
+							(ItemID.MolotovCocktail, 99)
+						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.FallenStar, 50),
+							(ItemID.MolotovCocktail, 99),
+							(ItemID.GoldBar, 30)
+						};
+
 						NeedEx = new ItemLists
 						{
-							[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.FallenStar, 12) },
-							[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.FallenStar, 40), (ItemID.MolotovCocktail, 99) }
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
 						};
 						Rewards = new TaskItem[]
 						{
@@ -181,6 +222,12 @@ namespace Starvers.TaskSystem
 							(ItemID.Hive, 30) ,
 							(ItemID.BottledHoney, 10)
 						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.Stinger, 15),
+							(ItemID.Hive, 60) ,
+							(ItemID.BottledHoney, 15)
+						};
 						var Hard = new TaskItem[]
 						{
 							(ItemID.Stinger, 32),
@@ -188,11 +235,19 @@ namespace Starvers.TaskSystem
 							(ItemID.Hive, 99),
 							(ItemID.BottledHoney, 30)
 						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.HornetBanner, 3),
+							(ItemID.Hive, 99),
+							(ItemID.BottledHoney, 30)
+						};
 
 						NeedEx = new ItemLists
 						{
 							[TaskDifficulty.Easy] = Easy,
-							[TaskDifficulty.Hard] = Hard
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
 						};
 						Rewards = new TaskItem[]
 						{
@@ -207,8 +262,10 @@ namespace Starvers.TaskSystem
 					Story = "打破诅咒";
 					NeedEx = new ItemLists
 					{
-						[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.ZombieArm), (ItemID.ZombieArm) },
-						[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.BoneKey) }
+						[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.Bone, 100) },
+						[TaskDifficulty.Normal] = new TaskItem[] { (ItemID.Bone, 300) },
+						[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.BoneKey) },
+						[TaskDifficulty.Hell] = new TaskItem[] { (ItemID.BoneKey), (ItemID.BoneKey) }
 					};
 					Rewards = new TaskItem[]
 					{
@@ -223,17 +280,34 @@ namespace Starvers.TaskSystem
 						Name = "仍然饥饿";
 						Story = "地下世界的主人与核心";
 
+						var Easy = new TaskItem[]
+						{
+							(ItemID.HellstoneBar, 70)
+						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.HellstoneBar, 70),
+							(ItemID.LavaBatBanner, 1)
+						};
 						var Hard = new TaskItem[]
 						{
 							(ItemID.HellstoneBrick, 100),
 							(ItemID.LavaSlimeBanner, 4),
 							(ItemID.Fireblossom, 20)
 						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.LavaBatBanner, 5),
+							(ItemID.LavaSlimeBanner, 5),
+							(ItemID.FireblossomSeeds, 5)
+						};
 
 						NeedEx = new ItemLists
 						{
-							[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.HellstoneBar, 70) },
-							[TaskDifficulty.Hard] = Hard
+							[TaskDifficulty.Easy] = Easy,
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
 						};
 						Rewards = new TaskItem[]
 						{
@@ -257,17 +331,31 @@ namespace Starvers.TaskSystem
 							(ItemID.CrystalShard, 20),
 							(ItemID.LightShard, 3)
 						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.SoulofLight, 80),
+							(ItemID.CrystalShard, 40),
+							(ItemID.LightShard, 5)
+						};
 						var Hard = new TaskItem[]
 						{
 							(ItemID.SoulofLight, 170),
 							(ItemID.CrystalShard, 60),
 							(ItemID.LightShard, 8)
 						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.SoulofLight, 300),
+							(ItemID.CrystalShard, 80),
+							(ItemID.LightShard, 10)
+						};
 
 						NeedEx = new ItemLists
 						{
 							[TaskDifficulty.Easy] = Easy,
-							[TaskDifficulty.Hard] = Hard
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
 						};
 						Rewards = new TaskItem[]
 						{
@@ -300,17 +388,31 @@ namespace Starvers.TaskSystem
 							(material, 20),
 							(ItemID.DarkShard, 2)
 						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.SoulofNight, 80),
+							(material, 40),
+							(ItemID.DarkShard, 5)
+						};
 						var Hard = new TaskItem[]
 						{
 							(ItemID.SoulofNight, 170),
 							(material, 60),
 							(ItemID.DarkShard, 8)
 						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.SoulofNight, 130070),
+							(material, 80),
+							(ItemID.DarkShard, 10)
+						};
 
 						NeedEx = new ItemLists
 						{
 							[TaskDifficulty.Easy] = Easy,
-							[TaskDifficulty.Hard] = Hard
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
 						};
 
 						Rewards = new TaskItem[]
@@ -328,21 +430,35 @@ namespace Starvers.TaskSystem
 
 						var Easy = new TaskItem[]
 						{
-							(ItemID.Lens, 30),
+							(ItemID.Lens, 20),
 							(ItemID.DemonEyeBanner, 2),
 							(ItemID.PalladiumOre, 222)
 						};
+						var Normal = new TaskItem[]
+						{
+							(ItemID.Lens, 25),
+							(ItemID.DemonEyeBanner, 4),
+							(ItemID.PalladiumOre, 333)
+						};
 						var Hard = new TaskItem[]
 						{
-							(ItemID.Lens, 60),
+							(ItemID.Lens, 40),
 							(ItemID.DemonEyeBanner, 6),
 							(ItemID.PalladiumOre, 444)
+						};
+						var Hell = new TaskItem[]
+						{
+							(ItemID.Lens, 50),
+							(ItemID.DemonEyeBanner, 8),
+							(ItemID.PalladiumOre, 555)
 						};
 
 						NeedEx = new ItemLists
 						{
 							[TaskDifficulty.Easy] = Easy,
-							[TaskDifficulty.Hard] = Hard
+							[TaskDifficulty.Normal] = Normal,
+							[TaskDifficulty.Hard] = Hard,
+							[TaskDifficulty.Hell] = Hell
 						};
 
 						Rewards = new TaskItem[]
@@ -765,7 +881,7 @@ namespace Starvers.TaskSystem
 							(ItemID.VortexSoldierBanner),
 							(ItemID.VortexRiflemanBanner, 2),
 							(ItemID.VortexHornetQueenBanner, 5)
-						}; 
+						};
 						var Hard = new TaskItem[]
 						 {
 							(ItemID.VortexSoldierBanner, 3),
@@ -804,7 +920,7 @@ namespace Starvers.TaskSystem
 							(ItemID.BlackLens, 3),
 							(ItemID.SoulofFright, 180),
 							(ItemID.WillsWings)
-						}; 
+						};
 
 						NeedEx = new ItemLists
 						{
@@ -939,7 +1055,7 @@ namespace Starvers.TaskSystem
 							(ItemID.DefenderMedal, 500),
 							(ItemID.ManaCrystal, 20),
 							(ItemID.Yoraiz0rWings)
-						}; 
+						};
 						var Hard = new TaskItem[]
 						{
 							(ItemID.DefenderMedal, 999),
@@ -1085,7 +1201,7 @@ namespace Starvers.TaskSystem
 						var armor = ItemID.SquireAltShirt;
 						var leg = ItemID.SquireAltPants;
 
-						if(Starver.IsPE)
+						if (Starver.IsPE)
 						{
 							head = ItemID.HallowedMask;
 							armor = ItemID.HallowedPlateMail;
@@ -1294,7 +1410,7 @@ namespace Starvers.TaskSystem
 						var material = ItemID.RottenChunk;
 						var wpmaterial = ItemID.CursedFlame;
 
-						if(WorldGen.crimson)
+						if (WorldGen.crimson)
 						{
 							material = ItemID.Vertebrae;
 							wpmaterial = ItemID.Ichor;
@@ -1339,10 +1455,10 @@ namespace Starvers.TaskSystem
 						Story = "最终的劫难已逐渐逼近，艰难的旅程也终于抵达尾声。未来的图景从未如此朦胧";
 						NeedEx = new ItemLists
 						{
-							[TaskDifficulty.Easy] = new TaskItem[]{ (ItemID.RetinazerTrophy, 2) },
-							[TaskDifficulty.Normal] = new TaskItem[]{ (ItemID.RetinazerTrophy, 4) },
-							[TaskDifficulty.Hard] = new TaskItem[]{ (ItemID.RetinazerTrophy, 6) },
-							[TaskDifficulty.Hell] = new TaskItem[]{ (ItemID.RetinazerTrophy, 8) }
+							[TaskDifficulty.Easy] = new TaskItem[] { (ItemID.RetinazerTrophy, 2) },
+							[TaskDifficulty.Normal] = new TaskItem[] { (ItemID.RetinazerTrophy, 4) },
+							[TaskDifficulty.Hard] = new TaskItem[] { (ItemID.RetinazerTrophy, 6) },
+							[TaskDifficulty.Hell] = new TaskItem[] { (ItemID.RetinazerTrophy, 8) }
 						};
 						Rewards = new TaskItem[]
 						{
@@ -1796,7 +1912,7 @@ namespace Starvers.TaskSystem
 				}
 				if (CheckItem)
 				{
-					flag = flag && CheckChests();
+					flag = flag && CheckChests(player);
 				}
 			}
 			else
@@ -1807,19 +1923,16 @@ namespace Starvers.TaskSystem
 		}
 		#endregion
 		#region CheckChests
-		protected bool CheckChests()
+		protected bool CheckChests(StarverPlayer player)
 		{
-			foreach (Chest chest in Main.chest)
+			for (int i = 0; i < Main.chest.Length; i++)
 			{
-				if (chest == null || !CheckItems(chest.item))
+				if (Main.chest[i] == null || !CheckItems(Main.chest[i].item))
 				{
-					goto Continue;
+					continue;
 				}
-				EatChestItem(chest.item);
-				RewardChestItem(chest);
+				Reward(player, i);
 				return true;
-				Continue:
-				continue;
 			}
 			return false;
 		}
@@ -1883,7 +1996,24 @@ namespace Starvers.TaskSystem
 			}
 		}
 		#endregion
-		#region Reward
+		#endregion
+		#region Rewards
+		protected void Reward(StarverPlayer player, int chestIndex)
+		{
+			EatChestItem(Main.chest[chestIndex].item);
+			RewardChestItem(Main.chest[chestIndex]);
+			if (player.ActiveChest == chestIndex)
+			{
+				player.ActiveChest = -1;
+			}
+			if (!CheckLevel)
+				RewardLevel();
+		}
+		protected void RewardLevel()
+		{
+			Utils.UpGradeAll(Level);
+			StarverPlayer.All.SendInfoMessage($"获得等级奖励: {Level}");
+		}
 		protected void RewardChestItem(Chest chest)
 		{
 			for (int i = 0; i < Rewards.Length && i < chest.item.Length; i++)
@@ -1892,7 +2022,6 @@ namespace Starvers.TaskSystem
 				chest.AddShop(Main.item[num]);
 			}
 		}
-		#endregion
 		#endregion
 	}
 }

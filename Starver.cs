@@ -878,9 +878,6 @@ namespace Starvers
 				}
 				if (npc.Active)
 				{
-#if DEBUG
-					//StarverPlayer.All.SendDeBugMessage($"{npc.Name}({npc.Index}) AIUpdate");
-#endif
 					npc.AI();
 				}
 			}

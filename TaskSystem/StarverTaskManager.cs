@@ -13,13 +13,17 @@ namespace Starvers.TaskSystem
 {
 	public class StarverTaskManager : IStarverPlugin
 	{
+		#region Fields
+		private int Timer;
+		private bool LoadedTask;
+		public const int MainLineCount = 43;
+		#endregion
 		#region Properties
 		public bool Enabled => Config.EnableTask;
-		public static StarverConfig Config => StarverConfig.Config;
-		public static StarverTask[] Tasks { get; private set; } = new StarverTask[StarverTask.MAINLINE];
-		public static StarverTask Task => Tasks[Config.TaskNow];
-		public static bool LoadedTask { get; private set; } = false;
-		public static DateTime Last { get; protected set; } = DateTime.Now;
+		public ITask[] MainLine { get; private set; } = new ITask[MainLineCount];
+		public ITask CurrentTask => MainLine[Config.TaskNow];
+
+		private static StarverConfig Config => StarverConfig.Config;
 		#endregion
 		#region I & D
 		public void Load()
@@ -32,32 +36,22 @@ namespace Starvers.TaskSystem
 			ServerApi.Hooks.GameUpdate.Deregister(Starver.Instance, OnGameUpdate);
 		}
 		#endregion
-		#region OnLoadWorld
-		private void OnConnectWorld(EventArgs args)
-		{
-			LoadTasks();
-		}
-		#endregion
 		#region OnUpdate
 		private void OnGameUpdate(EventArgs args)
 		{
-			if(!LoadedTask)
+			LoadTasks();
+			Timer++;
+			if (Timer % 60 == 0)
 			{
-				LoadedTask = true;
-				OnConnectWorld(args);
-			}
-			if((DateTime.Now-Last).TotalSeconds > 1)
-			{
-				Last = DateTime.Now;
 				#region ClearNPC
 				foreach (NPC npc in Main.npc)
 				{
-					if (npc == null || !npc.active)
+					if (!npc.active)
 					{
 						continue;
 					}
 					bool EatThis = false;
-					switch(npc.type)
+					switch (npc.type)
 					{
 						case NPCID.KingSlime:
 							if (Config.TaskNow < 1)
@@ -66,7 +60,7 @@ namespace Starvers.TaskSystem
 							}
 							break;
 						case NPCID.EyeofCthulhu:
-							if(Config.TaskNow<2)
+							if (Config.TaskNow < 2)
 							{
 								EatThis = true;
 							}
@@ -75,17 +69,17 @@ namespace Starvers.TaskSystem
 						case NPCID.EaterofWorldsBody:
 						case NPCID.EaterofWorldsTail:
 						case NPCID.BrainofCthulhu:
-							if(Config.TaskNow<3)
+							if (Config.TaskNow < 3)
 							{
 								EatThis = true;
 							}
 							break;
 						case NPCID.DD2EterniaCrystal:
-							if(Config.TaskNow < 4)
+							if (Config.TaskNow < 4)
 							{
 								EatThis = true;
 							}
-							else if(Config.TaskNow >= 10 && Config.TaskNow < 13)
+							else if (Config.TaskNow >= 10 && Config.TaskNow < 13)
 							{
 								EatThis = true;
 							}
@@ -95,26 +89,26 @@ namespace Starvers.TaskSystem
 							}
 							break;
 						case NPCID.QueenBee:
-							if(Config.TaskNow < 5)
+							if (Config.TaskNow < 5)
 							{
 								EatThis = true;
 							}
 							break;
 						case NPCID.SkeletronHead:
-							if(Config.TaskNow < 6)
+							if (Config.TaskNow < 6)
 							{
 								EatThis = true;
 							}
 							break;
 						case NPCID.WallofFlesh:
-							if(Config.TaskNow < 7)
+							if (Config.TaskNow < 7)
 							{
 								EatThis = true;
 							}
 							break;
 						case NPCID.Retinazer:
 						case NPCID.Spazmatism:
-							if(Config.TaskNow < 10)
+							if (Config.TaskNow < 10)
 							{
 								EatThis = true;
 							}
@@ -145,7 +139,7 @@ namespace Starvers.TaskSystem
 							}
 							break;
 						case NPCID.CultistBoss:
-							if(Config.TaskNow < 17)
+							if (Config.TaskNow < 17)
 							{
 								EatThis = true;
 							}
@@ -163,7 +157,7 @@ namespace Starvers.TaskSystem
 							}
 							break;
 						case NPCID.LunarTowerVortex:
-							if(Config.TaskNow < 20)
+							if (Config.TaskNow < 20)
 							{
 								EatThis = true;
 							}
@@ -193,7 +187,7 @@ namespace Starvers.TaskSystem
 		}
 		#endregion
 		#region Finish
-		private void Finish(bool flag,bool force = false)
+		private void Finish(bool flag, bool force = false)
 		{
 			flag |= force;
 			if (!flag)
@@ -202,16 +196,14 @@ namespace Starvers.TaskSystem
 			}
 			else
 			{
-				Utils.UpGradeAll(Tasks[Config.TaskNow].Level);
-				TSPlayer.All.SendSuccessMessage("主线任务#{0}已完成", Config.TaskNow + 1);
-				TSPlayer.All.SendSuccessMessage("全员获得等级奖励:{0}", Tasks[Config.TaskNow].Level);
+				TSPlayer.All.SendSuccessMessage($"主线任务#{Config.TaskNow + 1}已完成");
 				if (!force)
 				{
-					TSPlayer.All.SendMessage("物品奖励详见箱子",Color.SkyBlue);
+					TSPlayer.All.SendMessage("物品奖励详见箱子", Color.SkyBlue);
 				}
 				else
 				{
-					TSPlayer.All.SendMessage("强制完成任务不会得到物品奖励", Color.SkyBlue);
+					TSPlayer.All.SendMessage("强制完成任务不会得到任何奖励", Color.SkyBlue);
 				}
 				Config.TaskNow++;
 				Config.Write();
@@ -221,15 +213,16 @@ namespace Starvers.TaskSystem
 		#region LoadTask
 		private void LoadTasks()
 		{
-			if (Tasks[0] != null)
+			if (LoadedTask)
 				return;
-			for (int i = 0; i < StarverTask.MAINLINE; i++)
+			for (int i = 0; i < MainLineCount; i++)
 			{
-				Tasks[i] = new StarverTask(i + 1, Config.TaskLevel);
+				MainLine[i] = new MainLineTask(i + 1, Config.TaskLevel);
 			}
+			LoadedTask = true;
 		}
 		#endregion
-		#region cmd
+		#region Commands
 		private void MainCommand(CommandArgs args)
 		{
 			string p = args.Parameters.Count < 1 ? "None" : args.Parameters[0];
@@ -245,7 +238,7 @@ namespace Starvers.TaskSystem
 					}
 					else
 					{
-						bool flag = Tasks[Config.TaskNow].Check(player);
+						bool flag = MainLine[Config.TaskNow].Check(player);
 						Finish(flag);
 					}
 					break;
@@ -266,7 +259,7 @@ namespace Starvers.TaskSystem
 				case "list":
 					if (Config.TaskNow < Config.TaskLock)
 					{
-						args.Player.SendInfoMessage(Task.Description);
+						args.Player.SendInfoMessage(CurrentTask.Description);
 					}
 					else
 					{
@@ -276,13 +269,13 @@ namespace Starvers.TaskSystem
 				#endregion
 				#region ListAll
 				case "listall":
-					if(!player.HasPerm(Perms.Task.ListAll))
+					if (!player.HasPerm(Perms.Task.ListAll))
 					{
 						goto default;
 					}
 					else
 					{
-						foreach(StarverTask task in Tasks)
+						foreach (MainLineTask task in MainLine)
 						{
 							player.SendInfoMessage(task.Description);
 						}
@@ -301,11 +294,11 @@ namespace Starvers.TaskSystem
 						{
 							int to = int.Parse(args.Parameters[1]);
 							Config.TaskNow = to;
-							if(Config.TaskNow > StarverTask.MAINLINE)
+							if (Config.TaskNow > MainLineCount)
 							{
-								Config.TaskNow = StarverTask.MAINLINE;
+								Config.TaskNow = MainLineCount;
 							}
-							else if(Config.TaskNow < 0)
+							else if (Config.TaskNow < 0)
 							{
 								Config.TaskNow = 0;
 							}
@@ -313,10 +306,10 @@ namespace Starvers.TaskSystem
 							TSPlayer.All.SendSuccessMessage("{0}设置当前已完成任务至主线任务#{1}", player.Name, Config.TaskNow);
 							TSPlayer.All.SendMessage(string.Format("要是完成任务后怪物太强玩家们打不过,尽管去捶{0}", player.Name), Color.Blue);
 						}
-						catch(Exception)
+						catch (Exception)
 						{
-							player.SendMessage("错误的用法!",Color.Red);
-							player.SendMessage("请正确输入想要的任务序号",Color.Red);
+							player.SendMessage("错误的用法!", Color.Red);
+							player.SendMessage("请正确输入想要的任务序号", Color.Red);
 							player.SendMessage("/Task set <任务序号>	设置当前任务为制定任务", Color.Red);
 						}
 					}
