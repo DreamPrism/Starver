@@ -246,8 +246,9 @@ namespace Starvers.TaskSystem
 				}
 				return true;
 			}
-			catch
+			catch(Exception e)
 			{
+				Console.WriteLine(e);
 				return false;
 			}
 		}

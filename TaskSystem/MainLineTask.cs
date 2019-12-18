@@ -13,6 +13,7 @@ namespace Starvers.TaskSystem
 	using CheckDelegate = Func<StarverPlayer, bool>;
 	using StarverBoss = BossSystem.Bosses.Base.StarverBoss;
 	using ItemLists = Dictionary<TaskDifficulty, TaskItem[]>;
+	using SuperID = TaskItem.SuperID;
 	public class MainLineTask : ITask
 	{
 		#region Fields
@@ -79,7 +80,8 @@ namespace Starvers.TaskSystem
 			Level = data.LevelReward;
 			NeedEx = data.Needs;
 			RewardEx = data.Rewards;
-			Description = Description;
+			Name = data.Name;
+			Story = data.Story;
 			SetDefault();
 		}
 		public MainLineTask(int id, TaskDifficulty difficulty = TaskDifficulty.Hard)
@@ -150,16 +152,16 @@ namespace Starvers.TaskSystem
 				#region Evil
 				case 3:
 					{
-						int material;
-						int mushroom;
-						Rewards = new TaskItem[1];
+						SuperID material;
+						SuperID mushroom;
+						SuperID summon;
 						if (WorldGen.crimson)
 						{
 							Name = "猩红之手";
 							Story = "血肉与脊骨";
 							material = ItemID.Vertebrae;
 							mushroom = ItemID.ViciousMushroom;
-							Rewards[0] = (ItemID.BloodySpine, 5);
+							summon = ItemID.BloodySpine;
 						}
 						else
 						{
@@ -167,14 +169,23 @@ namespace Starvers.TaskSystem
 							Story = "邪恶意识的结合体";
 							material = ItemID.RottenChunk;
 							mushroom = ItemID.VileMushroom;
-							Rewards[0] = (ItemID.WormFood, 5);
+							summon = ItemID.WormFood;
 						}
+
+						material.RuntimeBind = true;
+						mushroom.RuntimeBind = true;
+						summon.RuntimeBind = true;
+
 						NeedEx = new ItemLists
 						{
 							[TaskDifficulty.Easy] = new TaskItem[] { (material, 10), (mushroom, 10) },
 							[TaskDifficulty.Normal] = new TaskItem[] { (material, 16), (mushroom, 12) },
 							[TaskDifficulty.Hard] = new TaskItem[] { (material, 25), (mushroom, 15) },
 							[TaskDifficulty.Hell] = new TaskItem[] { (material, 32), (mushroom, 20) }
+						};
+						Rewards = new TaskItem[]
+						{
+							(summon, 5)
 						};
 						break;
 					}
@@ -378,7 +389,7 @@ namespace Starvers.TaskSystem
 					{
 						Name = "光与暗(其二)";
 
-						int material;
+						SuperID material;
 
 						if (WorldGen.crimson)
 						{
@@ -415,6 +426,8 @@ namespace Starvers.TaskSystem
 							(material, 80),
 							(ItemID.DarkShard, 10)
 						};
+
+						material.RuntimeBind = true;
 
 						NeedEx = new ItemLists
 						{
@@ -515,8 +528,8 @@ namespace Starvers.TaskSystem
 					{
 						Name = "破坏之王";
 						Story = "你感到来自地下深处的震动...";
-						int material;
-						int banner;
+						SuperID material;
+						SuperID banner;
 						if (WorldGen.crimson)
 						{
 							material = ItemID.Vertebrae;
@@ -540,6 +553,9 @@ namespace Starvers.TaskSystem
 							(banner, 6),
 							(ItemID.TitaniumOre, 444 / 3)
 						};
+
+						material.RuntimeBind = true;
+						banner.RuntimeBind = true;
 
 						NeedEx = new ItemLists
 						{
@@ -1416,14 +1432,17 @@ namespace Starvers.TaskSystem
 						Name = "地脉吸食者-The Seisminth";
 						Story = "吸食了地脉的精华，但仍然保留着蠕虫的姿态。这片大地已经千疮百孔，在一次次的轮回中逐渐褪色";
 
-						var material = ItemID.RottenChunk;
-						var wpmaterial = ItemID.CursedFlame;
+						SuperID material = ItemID.RottenChunk;
+						SuperID wpmaterial = ItemID.CursedFlame;
 
 						if (WorldGen.crimson)
 						{
 							material = ItemID.Vertebrae;
 							wpmaterial = ItemID.Ichor;
 						}
+
+						material.RuntimeBind = true;
+						wpmaterial.RuntimeBind = true;
 
 						var Easy = new TaskItem[]
 						{
@@ -1451,7 +1470,6 @@ namespace Starvers.TaskSystem
 						{
 							(ItemID.LunarBar, 200),
 							(ItemID.DrillContainmentUnit)
-
 						};
 						break;
 					}
@@ -1857,6 +1875,20 @@ namespace Starvers.TaskSystem
 		{
 			if (NeedEx != null && NeedEx.ContainsKey(Difficulty))
 				Needs = NeedEx[Difficulty];
+			if(RewardEx == null)
+			{
+				RewardEx = new ItemLists
+				{
+					[TaskDifficulty.Easy] = Rewards,
+					[TaskDifficulty.Normal] = Rewards,
+					[TaskDifficulty.Hard] = Rewards,
+					[TaskDifficulty.Hell] = Rewards
+				};
+			}
+			else
+			{
+				Rewards = RewardEx[Difficulty];
+			}
 			if (Needs == null || StarverConfig.Config.TaskNeedNoItem)
 			{
 				Needs = DefaultNeed;
@@ -1865,6 +1897,27 @@ namespace Starvers.TaskSystem
 			{
 				Rewards = DefaultReward;
 			}
+
+			Boss ??= ID switch
+			{
+				23 => Bosses[0],
+				24 => Bosses[1],
+				25 => Bosses[2],
+				26 => Bosses[3],
+				27 => Bosses[4],
+				28 => Bosses[Bosses.Length - 6],
+				29 => Bosses[Bosses.Length - 5],
+				30 => Bosses[Bosses.Length - 4],
+				31 => Bosses[Bosses.Length - 3],
+				33 => Bosses[5],
+				34 => Bosses[6],
+				35 => Bosses[7],
+				36 => Bosses[8],
+				37 => Bosses[9],
+				38 => Bosses[10],
+				43 => Bosses[Bosses.Length - 2],
+				_ => null
+			};
 
 			checker = DefaultCheck;
 			if (Description == null && Name != null && Story != null)
@@ -1893,7 +1946,8 @@ namespace Starvers.TaskSystem
 		{
 			return new MainLineTaskData
 			{
-				Description = Description,
+				Name = Name,
+				Story = Story,
 				Rewards = RewardEx,
 				Needs = NeedEx,
 				LevelReward = Level

@@ -10,7 +10,8 @@ namespace Starvers.TaskSystem
 	{
 		public Dictionary<TaskDifficulty, TaskItem[]> Needs { get; set; }
 		public Dictionary<TaskDifficulty, TaskItem[]> Rewards { get; set; }
-		public string Description { get; set; }
+		public string Name { get; set; }
+		public string Story { get; set; }
 		public int LevelReward { get; set; }
 	}
 }

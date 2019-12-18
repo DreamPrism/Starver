@@ -5,29 +5,138 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 
 namespace Starvers.TaskSystem
 {
 	public struct TaskItem
 	{
+		#region Convert
+		public struct SuperID
+		{
+			public enum Specials
+			{
+				None,
+				RuntimeBind
+			}
+			public Specials Prop;
+			public short ID;
+			[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+			public bool RuntimeBind
+			{
+				get => Prop == Specials.RuntimeBind;
+				set => Prop = value ? Specials.RuntimeBind : Specials.None;
+			}
+
+			public override string ToString()
+			{
+				return ID.ToString();
+			}
+
+			public static implicit operator short(SuperID id)
+			{
+				return id.ID;
+			}
+			public static implicit operator SuperID(short id)
+			{
+				return new SuperID
+				{
+					ID = id
+				};
+			}
+		}
 		private class IDConvert : JsonConverter
 		{
 			#region Statics
-			private static Dictionary<int, string> Map;
-			private static Dictionary<string, int> UnMap;
+			private static class EvilItems
+			{
+				public static class Keys
+				{
+					/// <summary>
+					/// 腐肉 / 椎骨
+					/// </summary>
+					public const string Material1 = "EvilItems.Material_1";
+					/// <summary>
+					/// 蘑菇
+					/// </summary>
+					public const string Mushroom = "EvilItems.Mushroom";
+					/// <summary>
+					/// 咒火 / 脓血
+					/// </summary>
+					public const string Material2 = "EvilItems.Material_22";
+					/// <summary>
+					/// 腐化者 / 跳跳虫旗帜
+					/// </summary>
+					public const string MostEnemyBanner = "EvilItems.EnemyBanner";
+					/// <summary>
+					/// 地牢箱子钥匙
+					/// </summary>
+					public const string EnvironmentKey = "EvilItems.EnvironmentKey";
+					/// <summary>
+					/// 对应地牢箱子物品
+					/// </summary>
+					public const string DungeonWeapon = "EvilItems.DungeonWeapon";
+					/// <summary>
+					/// 虫子 / 脑子召唤物
+					/// </summary>
+					public const string BossSummoner = "EvilItems.BossSummoner";
+				}
+
+				public static bool HasKey(string key)
+				{
+					return items.ContainsKey(key);
+				}
+
+				public static short GetValue(string key)
+				{
+					return items[key];
+				}
+
+				public static string GetKey(short value)
+				{
+					return items.Where(pair => pair.Value == value).First().Key;
+				}
+
+				private static Dictionary<string, short> items;
+
+				static EvilItems()
+				{
+					items = new Dictionary<string, short>()
+					{
+						[Keys.Material1] = ItemID.RottenChunk,
+						[Keys.Mushroom] = ItemID.VileMushroom,
+						[Keys.Material2] = ItemID.CursedFlame,
+						[Keys.MostEnemyBanner] = ItemID.CorruptorBanner,
+						[Keys.EnvironmentKey] = ItemID.CorruptionKey,
+						[Keys.BossSummoner] = ItemID.WormFood
+					};
+					if(WorldGen.crimson)
+					{
+						items[Keys.Material1] = ItemID.Vertebrae;
+						items[Keys.Mushroom] = ItemID.ViciousMushroom;
+						items[Keys.Material2] = ItemID.Ichor;
+						items[Keys.MostEnemyBanner] = ItemID.HerplingBanner;
+						items[Keys.EnvironmentKey] = ItemID.CrimsonKey;
+						items[Keys.BossSummoner] = ItemID.BloodySpine;
+					}
+				}
+			}
+			private static Dictionary<short, string> Map;
+			private static Dictionary<string, short> UnMap;
 			static IDConvert()
 			{
-				var ItemID = typeof(Terraria.ID.ItemID);
-				var Literals = ItemID.GetFields().Where(field => field.IsLiteral);
+				var Literals = typeof(ItemID).GetFields().Where(field => field.IsLiteral);
 
-				Map = new Dictionary<int, string>(Literals.Count());
-				UnMap = new Dictionary<string, int>(Literals.Count());
+				Map = new Dictionary<short, string>(Literals.Count());
+				UnMap = new Dictionary<string, short>(Literals.Count());
 
-				int value;
+				short value;
+
+
 
 				foreach (var literal in Literals)
 				{
-					value = (int)literal.GetRawConstantValue();
+					value = (short)literal.GetRawConstantValue();
 					Map.Add(value, literal.Name);
 					UnMap.Add(literal.Name, value);
 				}
@@ -39,19 +148,48 @@ namespace Starvers.TaskSystem
 			}
 			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 			{
-				string id = reader.ReadAsString();
-				return UnMap[id];
+				string id = (string)reader.Value;
+				if (short.TryParse(id, out short result))
+				{
+					return (SuperID)result;
+				}
+				else if (EvilItems.HasKey(id))
+				{
+					return new SuperID
+					{
+						ID = EvilItems.GetValue(id),
+						Prop = SuperID.Specials.RuntimeBind
+					};
+				}
+				try
+				{
+					return (SuperID)UnMap[id];
+				}
+				catch(KeyNotFoundException)
+				{
+					Console.WriteLine(id);
+					throw;
+				}
 			}
 			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 			{
-				writer.WriteValue(Map[(int)value]);
+				var id = (SuperID)value;
+				if (id.RuntimeBind)
+				{
+					writer.WriteValue(EvilItems.GetKey(id));
+				}
+				else
+				{
+					writer.WriteValue(Map[id]);
+				}
 			}
 		}
+		#endregion
 		[JsonConverter(typeof(IDConvert))]
-		public int ID;
+		public SuperID ID;
 		public int Stack;
 		public int Prefix;
-		public TaskItem(int id = 2, int stack = 1, int prefix = 0)
+		public TaskItem(SuperID id, int stack = 1, int prefix = 0)
 		{
 			ID = id;
 			Stack = stack;
@@ -85,13 +223,13 @@ namespace Starvers.TaskSystem
 		{
 			return new TaskItem(value);
 		}
-		public static implicit operator TaskItem((int, int) value)
+		public static implicit operator TaskItem((SuperID ID, int Stack) value)
 		{
-			return new TaskItem(value.Item1, value.Item2);
+			return new TaskItem(value.ID, value.Stack);
 		}
-		public static implicit operator TaskItem((int, int, int) value)
+		public static implicit operator TaskItem((SuperID ID, int Stack, int Prefix) value)
 		{
-			return new TaskItem(value.Item1, value.Item2, value.Item3);
+			return new TaskItem(value.ID, value.Stack, value.Prefix);
 		}
 	}
 }
