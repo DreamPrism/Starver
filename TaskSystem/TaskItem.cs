@@ -144,7 +144,7 @@ namespace Starvers.TaskSystem
 			#endregion
 			public override bool CanConvert(Type type)
 			{
-				return type == typeof(int);
+				return true;
 			}
 			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 			{
@@ -180,11 +180,29 @@ namespace Starvers.TaskSystem
 				}
 				else
 				{
-					writer.WriteValue(Map[id]);
+					try
+					{
+						writer.WriteValue(Map[id]);
+					}
+					catch(KeyNotFoundException e)
+					{
+						Console.WriteLine(id);
+						Console.WriteLine(e);
+					}
 				}
 			}
 		}
 		#endregion
+		private static short MaxID;
+		static TaskItem()
+		{
+			MaxID = (short)typeof(ItemID)
+				.GetFields()
+				.Where(fld => fld.Name == nameof(ItemID.Count))
+				.First()
+				.GetRawConstantValue();
+		}
+
 		[JsonConverter(typeof(IDConvert))]
 		public SuperID ID;
 		public int Stack;
@@ -194,6 +212,13 @@ namespace Starvers.TaskSystem
 			ID = id;
 			Stack = stack;
 			Prefix = prefix;
+
+			if(id >= MaxID)
+			{
+				ID = ItemID.Gel;
+				Stack = 1;
+				Prefix = 0;
+			}
 		}
 		public bool Match(Item item)
 		{
@@ -219,6 +244,10 @@ namespace Starvers.TaskSystem
 		}
 
 
+		public static implicit operator TaskItem(SuperID value)
+		{
+			return new TaskItem(value);
+		}
 		public static implicit operator TaskItem(short value)
 		{
 			return new TaskItem(value);

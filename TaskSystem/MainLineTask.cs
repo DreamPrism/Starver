@@ -225,7 +225,7 @@ namespace Starvers.TaskSystem
 						};
 						Rewards = new TaskItem[]
 						{
-							(ItemID.DefendersForge,2)
+							(ItemID.DefendersForge, 2)
 						};
 						break;
 					}
@@ -596,7 +596,7 @@ namespace Starvers.TaskSystem
 						};
 						Rewards = new TaskItem[]
 						{
-							(ItemID.DD2ElderCrystal,20)
+							(ItemID.DD2ElderCrystal, 20)
 						};
 						break;
 					}
@@ -679,8 +679,8 @@ namespace Starvers.TaskSystem
 						};
 						var Hard = new TaskItem[]
 						{
-							(ItemID.MartianConduitPlating,450),
-							(ItemID.BeetleHusk,99)
+							(ItemID.MartianConduitPlating, 450),
+							(ItemID.BeetleHusk, 99)
 						};
 
 						NeedEx = new ItemLists
@@ -745,19 +745,16 @@ namespace Starvers.TaskSystem
 						Name = "宇宙之怒";
 						Story = "你的头脑变得麻木...";
 
-						var evil = WorldGen.crimson ? ItemID.BrainofCthulhuTrophy : ItemID.EaterofWorldsTrophy;
 
 						var Easy = new TaskItem[]
 						{
 							(ItemID.KingSlimeTrophy),
 							(ItemID.EyeofCthulhuTrophy),
-							(evil),
 							(ItemID.QueenBeeTrophy),
 							(ItemID.WallofFleshTrophy),
 						};
 						var Hard = new TaskItem[]
 						{
-							(evil),
 							(ItemID.EyeofCthulhuTrophy),
 							(ItemID.GolemTrophy),
 							(ItemID.KingSlimeTrophy),
@@ -777,7 +774,6 @@ namespace Starvers.TaskSystem
 							(ItemID.BossTrophyBetsy),
 							(ItemID.BossTrophyDarkmage),
 							(ItemID.BossTrophyOgre),
-							(evil),
 							(ItemID.EverscreamTrophy),
 							(ItemID.EyeofCthulhuTrophy),
 							(ItemID.GolemTrophy),
