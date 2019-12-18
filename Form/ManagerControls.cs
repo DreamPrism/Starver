@@ -271,7 +271,7 @@ namespace Starvers.Forms
 		public void SetTask()
 		{
 			int now = TaskNow.Value;
-			if (now < 0 || now > TaskSystem.MainLineTask.MainLineCount)
+			if (now < 0 || now > TaskSystem.StarverTaskManager.MainLineCount)
 			{
 				now = 0;
 			}
