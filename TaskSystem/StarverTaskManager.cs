@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using Terraria;
 using Terraria.ID;
 using TerrariaApi.Server;
@@ -16,6 +18,7 @@ namespace Starvers.TaskSystem
 		#region Fields
 		private int Timer;
 		private bool LoadedTask;
+		private string TasksPath;
 		public const int MainLineCount = 43;
 		#endregion
 		#region Properties
@@ -30,6 +33,7 @@ namespace Starvers.TaskSystem
 		{
 			Commands.ChatCommands.Add(new Command(Perms.Task.Normal, MainCommand, "task", "tsks") { HelpText = HelpTexts.Task });
 			ServerApi.Hooks.GameUpdate.Register(Starver.Instance, OnGameUpdate);
+			TasksPath = Path.Combine(TShock.SavePath, "StarverTasks.json");
 		}
 		public void UnLoad()
 		{
@@ -215,11 +219,56 @@ namespace Starvers.TaskSystem
 		{
 			if (LoadedTask)
 				return;
+			if (!TryLoadFromJSON())
+			{
+				LoadNewTask();
+				SaveTaskToJSON();
+			}
+			LoadedTask = true;
+		}
+		#endregion
+		#region LoadNewTask
+		private bool TryLoadFromJSON()
+		{
+			if (!File.Exists(TasksPath))
+			{
+				return false;
+			}
+			try
+			{
+				string text = File.ReadAllText(TasksPath);
+				MainLineTaskData[] datas = JsonConvert.DeserializeObject<MainLineTaskData[]>(text);
+				if (datas.Length != MainLine.Length)
+					return false;
+				for (int i = 0; i < MainLine.Length; i++)
+				{
+					MainLine[i] = new MainLineTask(i, Config.TaskLevel, datas[i]);
+				}
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+		private void LoadNewTask()
+		{
 			for (int i = 0; i < MainLineCount; i++)
 			{
 				MainLine[i] = new MainLineTask(i + 1, Config.TaskLevel);
 			}
-			LoadedTask = true;
+		}
+		#endregion
+		#region SaveTaskToJSON
+		private void SaveTaskToJSON()
+		{
+			var datas = new MainLineTaskData[MainLine.Length];
+			for (int i = 0; i < datas.Length; i++)
+			{
+				datas[i] = ((MainLineTask)MainLine[i]).ToDatas();
+			}
+			string text = JsonConvert.SerializeObject(datas, Formatting.Indented);
+			File.WriteAllText(TasksPath, text);
 		}
 		#endregion
 		#region Commands

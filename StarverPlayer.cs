@@ -14,7 +14,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using System.Reflection;
 using Terraria.ID;
-	using Terraria.Localization;
+using Terraria.Localization;
 using System.Runtime.InteropServices;
 
 namespace Starvers

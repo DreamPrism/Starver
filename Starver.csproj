@@ -220,6 +220,7 @@
     <Compile Include="TaskSystem\ITask.cs" />
     <Compile Include="TaskSystem\MainLineTask.cs" />
     <Compile Include="TaskSystem\StarverTaskManager.cs" />
+    <Compile Include="TaskSystem\MainLineTaskData.cs" />
     <Compile Include="TaskSystem\TaskDifficulty.cs" />
     <Compile Include="TaskSystem\TaskID.cs" />
     <Compile Include="TaskSystem\TaskItem.cs" />

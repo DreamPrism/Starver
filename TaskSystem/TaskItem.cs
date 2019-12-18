@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,47 @@ namespace Starvers.TaskSystem
 {
 	public struct TaskItem
 	{
-		public int ID { get; private set; }
-		public int Stack { get; private set; }
-		public int Prefix { get; private set; }
+		private class IDConvert : JsonConverter
+		{
+			#region Statics
+			private static Dictionary<int, string> Map;
+			private static Dictionary<string, int> UnMap;
+			static IDConvert()
+			{
+				var ItemID = typeof(Terraria.ID.ItemID);
+				var Literals = ItemID.GetFields().Where(field => field.IsLiteral);
+
+				Map = new Dictionary<int, string>(Literals.Count());
+				UnMap = new Dictionary<string, int>(Literals.Count());
+
+				int value;
+
+				foreach (var literal in Literals)
+				{
+					value = (int)literal.GetRawConstantValue();
+					Map.Add(value, literal.Name);
+					UnMap.Add(literal.Name, value);
+				}
+			}
+			#endregion
+			public override bool CanConvert(Type type)
+			{
+				return type == typeof(int);
+			}
+			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+			{
+				string id = reader.ReadAsString();
+				return UnMap[id];
+			}
+			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+			{
+				writer.WriteValue(Map[(int)value]);
+			}
+		}
+		[JsonConverter(typeof(IDConvert))]
+		public int ID;
+		public int Stack;
+		public int Prefix;
 		public TaskItem(int id = 2, int stack = 1, int prefix = 0)
 		{
 			ID = id;

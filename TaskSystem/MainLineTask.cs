@@ -18,6 +18,8 @@ namespace Starvers.TaskSystem
 		#region Fields
 		protected ItemLists NeedEx;
 		protected ItemLists RewardEx;
+		protected string Name;
+		protected string Story;
 		#endregion
 		#region Properties
 		public static StarverBoss[] Bosses => StarverBossManager.Bosses;
@@ -28,11 +30,8 @@ namespace Starvers.TaskSystem
 		public string Description { get; protected set; }
 		public TaskItem[] Needs { get; protected set; }
 		public TaskItem[] Rewards { get; protected set; }
-		public string Name { get; protected set; }
-		public string Story { get; protected set; }
 		public int Mark { get; protected set; } = ItemID.MagicMirror;
 		public int Level { get; protected set; }
-		public int Exp { get; protected set; }
 		public bool Normal { get; protected set; } = true;
 		public bool CheckLevel { get; protected set; }
 		public bool CheckItem { get; protected set; } = true;
@@ -73,6 +72,16 @@ namespace Starvers.TaskSystem
 		#endregion
 		#region Ctor
 		protected MainLineTask() { }
+		public MainLineTask(int id, TaskDifficulty difficulty, MainLineTaskData data)
+		{
+			ID = id;
+			Difficulty = difficulty;
+			Level = data.LevelReward;
+			NeedEx = data.Needs;
+			RewardEx = data.Rewards;
+			Description = Description;
+			SetDefault();
+		}
 		public MainLineTask(int id, TaskDifficulty difficulty = TaskDifficulty.Hard)
 		{
 			ID = id;
@@ -184,9 +193,9 @@ namespace Starvers.TaskSystem
 						{
 							(ItemID.FallenStar, 28)
 						};
-						var Hard = new TaskItem[] 
-						{ 
-							(ItemID.FallenStar, 40), 
+						var Hard = new TaskItem[]
+						{
+							(ItemID.FallenStar, 40),
 							(ItemID.MolotovCocktail, 99)
 						};
 						var Hell = new TaskItem[]
@@ -1839,17 +1848,6 @@ namespace Starvers.TaskSystem
 			}
 			if (Normal)
 			{
-				if (NeedEx != null && NeedEx.ContainsKey(Difficulty))
-					Needs = NeedEx[Difficulty];
-				if (Needs == null || StarverConfig.Config.TaskNeedNoItem)
-				{
-					Needs = DefaultNeed;
-				}
-				if (Rewards == null)
-				{
-					Rewards = DefaultReward;
-				}
-
 				SetDefault();
 			}
 		}
@@ -1857,23 +1855,49 @@ namespace Starvers.TaskSystem
 		#region SetDefault
 		protected virtual void SetDefault()
 		{
-			checker = DefaultCheck;
-			StringBuilder SB = new StringBuilder("");
-			SB.AppendFormat("主线任务#{0}--({1}){2}", ID, Name, Story == null ? "" : ("\n\"" + Story + "\""));
-			if (CheckItem)
+			if (NeedEx != null && NeedEx.ContainsKey(Difficulty))
+				Needs = NeedEx[Difficulty];
+			if (Needs == null || StarverConfig.Config.TaskNeedNoItem)
 			{
-				SB.AppendFormat("\n物品要求:\n[i:{0}](标识物,不消耗)", Mark);
-				foreach (object obj in Needs)
-				{
-					SB.Append(obj);
-				}
-				SB.Append("\n物品奖励:\n");
-				foreach (object obj in Rewards)
-				{
-					SB.Append(obj);
-				}
+				Needs = DefaultNeed;
 			}
-			Description = SB.ToString();
+			if (Rewards == null)
+			{
+				Rewards = DefaultReward;
+			}
+
+			checker = DefaultCheck;
+			if (Description == null && Name != null && Story != null)
+			{
+				StringBuilder SB = new StringBuilder("");
+				SB.AppendFormat("主线任务#{0}--({1}){2}", ID, Name, Story == null ? "" : ("\n\"" + Story + "\""));
+				if (CheckItem)
+				{
+					SB.AppendFormat("\n物品要求:\n[i:{0}](标识物,不消耗)", Mark);
+					foreach (object obj in Needs)
+					{
+						SB.Append(obj);
+					}
+					SB.Append("\n物品奖励:\n");
+					foreach (object obj in Rewards)
+					{
+						SB.Append(obj);
+					}
+				}
+				Description = SB.ToString();
+			}
+		}
+		#endregion
+		#region ToDatas
+		public MainLineTaskData ToDatas()
+		{
+			return new MainLineTaskData
+			{
+				Description = Description,
+				Rewards = RewardEx,
+				Needs = NeedEx,
+				LevelReward = Level
+			};
 		}
 		#endregion
 		#region ToString
