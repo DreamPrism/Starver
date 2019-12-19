@@ -67,7 +67,7 @@ namespace Starvers.AuraSystem
 				{
 					Stellaria = ServerApi.Plugins.Where(container => container.Plugin.Name == nameof(Stellaria)).First().Plugin;
 				}
-				catch(Exception)
+				catch (Exception)
 				{
 					Console.WriteLine("Aura 寻找 Stellaria失败");
 					return;
@@ -199,7 +199,7 @@ namespace Starvers.AuraSystem
 		private void UpdateEvilGate()
 		{
 			bool canSpawn = NPC.downedMoonlord || Starver.Config.EvilWorld;
-			if (canSpawn && EvilGateSpawnCountDown > 0) 
+			if (canSpawn && EvilGateSpawnCountDown > 0)
 			{
 				if (--EvilGateSpawnCountDown != 0)
 					return;
@@ -219,7 +219,7 @@ namespace Starvers.AuraSystem
 		{
 			timer++;
 			UpdateRealms();
-			if(Config.EnableTask && Config.EvilWorld || NPC.downedMoonlord)
+			if (Config.EnableTask && Config.EvilWorld || NPC.downedMoonlord)
 			{
 				UpdateEvilGate();
 			}
@@ -240,7 +240,7 @@ namespace Starvers.AuraSystem
 				return;
 			}
 			int slot = SkillManager.GetSlot(args.Type);
-			if (slot > 0 && slot < 6 && (DateTime.Now - Starver.Players[args.Owner].LastHandle).TotalSeconds > 1) 
+			if (slot > 0 && slot < 6 && (DateTime.Now - Starver.Players[args.Owner].LastHandle).TotalSeconds > 1)
 			{
 				Starver.Players[args.Owner].LastHandle = DateTime.Now;
 				Skill.Handle(Starver.Players[args.Owner], args.Velocity, slot);
@@ -436,7 +436,7 @@ namespace Starvers.AuraSystem
 						int page = 1;
 						if (args.Parameters.Count > 1)
 						{
-							if(!int.TryParse(args.Parameters[1], out page))
+							if (!int.TryParse(args.Parameters[1], out page))
 							{
 								page = 1;
 							}
@@ -459,7 +459,7 @@ namespace Starvers.AuraSystem
 					try
 					{
 						need = int.Parse(args.Parameters[1]) - 1;
-						if(player.Exp >= SkillSlot[need].Cost)
+						if (player.Exp >= SkillSlot[need].Cost)
 						{
 							player.GiveItem(SkillSlot[need].Item);
 							player.Exp -= SkillSlot[need].Cost;
@@ -467,7 +467,7 @@ namespace Starvers.AuraSystem
 						}
 						else
 						{
-							player.SendMessage("你需要更多的经验来获取该技能物品",Color.Red);
+							player.SendMessage("你需要更多的经验来获取该技能物品", Color.Red);
 						}
 					}
 					catch
@@ -494,7 +494,7 @@ namespace Starvers.AuraSystem
 				#endregion
 				#region CDLess
 				case "cd":
-					if(!player.HasPerm(Perms.Aura.IgnoreCD))
+					if (!player.HasPerm(Perms.Aura.IgnoreCD))
 					{
 						goto default;
 					}
@@ -512,12 +512,12 @@ namespace Starvers.AuraSystem
 					}
 					catch
 					{
-						if(args.Parameters.Count >= 2)
+						if (args.Parameters.Count >= 2)
 						{
 							string sklname = args.Parameters[1].ToLower();
-							foreach(var skl in SkillManager.Skills)
+							foreach (var skl in SkillManager.Skills)
 							{
-								if(skl.Name.ToLower().IndexOf(sklname) == 0)
+								if (skl.Name.ToLower().IndexOf(sklname) == 0)
 								{
 									args.Player.SendMessage(skl.Name, Color.Aqua);
 									args.Player.SendMessage(skl.Text, Color.Aqua);
@@ -586,11 +586,11 @@ namespace Starvers.AuraSystem
 		#region UpgradeExp
 		internal static int UpGradeExp(int lvl)
 		{
-			if(lvl < 1000)
+			if (lvl < 1000)
 			{
 				return (int)(lvl * 10.5f);
 			}
-			else if(lvl < 2500)
+			else if (lvl < 2500)
 			{
 				return (int)(lvl * 15.5f);
 			}
@@ -598,7 +598,7 @@ namespace Starvers.AuraSystem
 			{
 				return Math.Min((int)6.25e6f, (int)(lvl * Math.Log(lvl)));
 			}
-			else if(lvl < (int)1e5)
+			else if (lvl < (int)1e5)
 			{
 				return Math.Min((int)5.1e5f, (int)(lvl * 10 * Math.Log(lvl)));
 			}
@@ -626,11 +626,13 @@ namespace Starvers.AuraSystem
 			{
 				exp = BagExp(ItemID.FishronBossBag);
 			}
+#if false
 			else if (id >= ItemID.WhiteCultistArcherBanner && id <= ItemID.WhiteCultistFighterBanner)
 			{
 				id = id - ItemID.WhiteCultistArcherBanner + 2;
 				exp = 1000000 * id;
 			}
+#endif
 			return exp;
 		}
 		#endregion

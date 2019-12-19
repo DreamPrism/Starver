@@ -26,6 +26,8 @@ namespace Starvers.BossSystem
 		internal static int SpawnIndex;
 		internal static int SpawnDelay;
 		internal static bool Cleared;
+
+		public const short EndTrialSummoner = ItemID.WhiteCultistArcherBanner;
 		#endregion
 		#region ctor
 		#endregion
@@ -108,7 +110,7 @@ namespace Starvers.BossSystem
 		#region OnSlot
 		private void OnSlot(object sender, GetDataHandlers.PlayerSlotEventArgs args)
 		{
-			if (args.Slot == 49 && args.Type == ItemID.PixelBox)
+			if (args.Slot == 49 && args.Type == EndTrialSummoner)
 			{
 				if (Bosses[Bosses.Length - 1].CanSpawn && !Bosses[Bosses.Length - 1].Active)
 				{

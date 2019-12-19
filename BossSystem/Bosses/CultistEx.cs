@@ -33,7 +33,7 @@ namespace Starvers.BossSystem.Bosses
 			DefaultDefense = 380;
 			Drops = new DropItem[]
 			{
-				new DropItem(new int[]{ ItemID.WhiteCultistArcherBanner }, 23, 49, 0.35f),
+				// new DropItem(new int[]{ ItemID.WhiteCultistArcherBanner }, 23, 49, 0.35f),
 				new DropItem(new int[]{ ItemID.WhiteCultistFighterBanner }, 23, 49, 0.35f),
 				new DropItem(new int[]{ ItemID.WhiteCultistCasterBanner }, 23, 49, 0.35f),
 			};

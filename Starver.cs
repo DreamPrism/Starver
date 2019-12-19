@@ -139,7 +139,7 @@ namespace Starvers
 					new ExchangeItem(ItemID.VileMushroom,ItemID.ViciousMushroom),
 					new ExchangeItem(ItemID.ViciousMushroom,ItemID.VileMushroom),
 					new ExchangeItem(ItemID.LockBox,ItemID.Nazar),
-					new ExchangeItem(ItemID.LunarTabletFragment,ItemID.PixelBox,40,"放在背包最后一格")
+					new ExchangeItem(ItemID.LunarTabletFragment,StarverBossManager.EndTrialSummoner,40,"放在背包最后一格")
 				};
 				Plugins = new IStarverPlugin[]
 				{
@@ -1129,13 +1129,15 @@ namespace Starvers
 				int p = item.type;
 				foreach (ExchangeItem eit in Exchanges)
 				{
-					if (p == eit.From)
+					if (p == eit.From && stack / eit.Need > 0)
 					{
 						p = eit.To;
 						args.TPlayer.inventory[0].netDefaults(0);
 						NetMessage.SendData((int)PacketTypes.PlayerSlot, -1, -1, Terraria.Localization.NetworkText.Empty, args.Player.Index, 0);
 						//int num = Item.NewItem(new Vector2(0,0),new Vector2(0,0),p,stack);
-						args.SPlayer().GiveItem(p, stack);
+						args.SPlayer().GiveItem(p, stack/ eit.Need);
+						stack %= eit.Need;
+						args.SPlayer().GiveItem(eit.From, stack/ eit.Need);
 						args.Player.SendInfoMessage("兑换完毕");
 						return;
 					}

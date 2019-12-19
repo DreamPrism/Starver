@@ -1845,7 +1845,7 @@ namespace Starvers.TaskSystem
 						};
 						Rewards = new TaskItem[]
 						{
-							(ItemID.PixelBox, 50)
+							(StarverBossManager.EndTrialSummoner, 50)
 						};
 						break;
 					}
