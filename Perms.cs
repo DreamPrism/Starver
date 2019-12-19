@@ -21,6 +21,7 @@ namespace Starvers
 			public const string ListAll   = "starver.task.listall";
 			public const string FFF   = "starver.task.fff";
 			public const string Set   = "starver.task.set";
+			public const string Reload = "starver.task.reload";
 		}
 		public static class Aura
 		{

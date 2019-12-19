@@ -19,6 +19,8 @@ namespace Starvers.TaskSystem
 		private int Timer;
 		private bool LoadedTask;
 		private string TasksPath;
+		private string ConfigHelpPath;
+		private string ItemIDsPath;
 		public const int MainLineCount = 43;
 		#endregion
 		#region Properties
@@ -33,7 +35,10 @@ namespace Starvers.TaskSystem
 		{
 			Commands.ChatCommands.Add(new Command(Perms.Task.Normal, MainCommand, "task", "tsks") { HelpText = HelpTexts.Task });
 			ServerApi.Hooks.GameUpdate.Register(Starver.Instance, OnGameUpdate);
+			
 			TasksPath = Path.Combine(TShock.SavePath, "StarverTasks.json");
+			ConfigHelpPath = Path.Combine(TShock.SavePath, "关于StarverTasks.json.txt");
+			ItemIDsPath = Path.Combine(TShock.SavePath, "ItemIDs.txt");
 		}
 		public void UnLoad()
 		{
@@ -221,7 +226,25 @@ namespace Starvers.TaskSystem
 				return;
 			if (!TryLoadFromJSON())
 			{
+				StarverPlayer.Server.SendErrorMessage("从Json中加载任务失败, 已使用默认任务");
 				LoadNewTask();
+			}
+			SaveTaskToJSON();
+			LoadedTask = true;
+		}
+		private void ReLoadTasks()
+		{
+			if(!LoadedTask)
+			{
+				LoadTasks();
+				return;
+			}
+			if (!TryLoadFromJSON())
+			{
+				StarverPlayer.Server.SendErrorMessage("从Json中加载任务失败, 仍然使用当前任务");
+			}
+			else
+			{
 				SaveTaskToJSON();
 			}
 			LoadedTask = true;
@@ -242,7 +265,7 @@ namespace Starvers.TaskSystem
 					return false;
 				for (int i = 0; i < MainLine.Length; i++)
 				{
-					MainLine[i] = new MainLineTask(i, Config.TaskLevel, datas[i]);
+					MainLine[i] = new MainLineTask(i + 1, Config.TaskLevel, datas[i]);
 				}
 				return true;
 			}
@@ -270,6 +293,8 @@ namespace Starvers.TaskSystem
 			}
 			string text = JsonConvert.SerializeObject(datas, Formatting.Indented);
 			File.WriteAllText(TasksPath, text);
+			File.WriteAllText(ConfigHelpPath, MainLineTaskData.ReadMe);
+			File.WriteAllText(ItemIDsPath, MainLineTaskData.ItemIDs);
 		}
 		#endregion
 		#region Commands
@@ -280,6 +305,28 @@ namespace Starvers.TaskSystem
 			LoadTasks();
 			switch (p.ToLower())
 			{
+				#region Reload
+				case "reload":
+					if(args.Player.HasPermission(Perms.Task.Reload))
+					{
+						try
+						{
+							ReLoadTasks();
+						}
+						catch(Exception e)
+						{
+							args.Player.SendErrorMessage("重新加载任务失败");
+							args.Player.SendErrorMessage(e.ToString());
+							break;
+						}
+						args.Player.SendInfoMessage("任务已成功重新加载");
+					}
+					else
+					{
+						goto default;
+					}
+					break;
+				#endregion
 				#region Check
 				case "check":
 					if (Config.TaskNow >= Config.TaskLock)
@@ -370,7 +417,7 @@ namespace Starvers.TaskSystem
 					player.SendInfoMessage(HelpTexts.Task);
 					if (player.HasPerm(Perms.Task.ListAll))
 					{
-						player.SendInfoMessage("	listall:	列出所有任务");
+						player.SendInfoMessage("	listall 	列出所有任务");
 					}
 					if (player.HasPerm(Perms.Task.FFF))
 					{
@@ -379,6 +426,10 @@ namespace Starvers.TaskSystem
 					if (player.HasPerm(Perms.Task.Set))
 					{
 						player.SendInfoMessage("	set <任务序号>	设置当前任务为制定任务");
+					}
+					if (player.HasPerm(Perms.Task.Reload))
+					{
+						player.SendInfoMessage("	reload	 重新加载任务");
 					}
 					break;
 					#endregion

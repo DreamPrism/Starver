@@ -1383,7 +1383,8 @@ namespace Starvers.TaskSystem
 						Name = "骷髅暴徒 - The Skeletrorist";
 						Story = "这位恐惧之主早已失去了往日的荣光，变异的躯壳只寄宿着无尽的愤怒。暴虐与残忍，嗜血与屠戮，欲望和执念造就的只有悲剧";
 
-						var evil = WorldGen.crimson ? ItemID.VampireKnives : ItemID.ScourgeoftheCorruptor;
+						SuperID evil = WorldGen.crimson ? ItemID.VampireKnives : ItemID.ScourgeoftheCorruptor;
+						evil.RuntimeBind = true;
 
 						var Easy = new TaskItem[]
 						{
@@ -1946,7 +1947,8 @@ namespace Starvers.TaskSystem
 				Story = Story,
 				Rewards = RewardEx,
 				Needs = NeedEx,
-				LevelReward = Level
+				LevelReward = Level,
+				ID = ID
 			};
 		}
 		#endregion

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 
 namespace Starvers.TaskSystem
 {
@@ -57,13 +58,13 @@ namespace Starvers.TaskSystem
 					/// </summary>
 					public const string Material1 = "EvilItems.Material_1";
 					/// <summary>
+					/// 咒火 / 脓血
+					/// </summary>
+					public const string Material2 = "EvilItems.Material_2";
+					/// <summary>
 					/// 蘑菇
 					/// </summary>
 					public const string Mushroom = "EvilItems.Mushroom";
-					/// <summary>
-					/// 咒火 / 脓血
-					/// </summary>
-					public const string Material2 = "EvilItems.Material_22";
 					/// <summary>
 					/// 腐化者 / 跳跳虫旗帜
 					/// </summary>
@@ -108,6 +109,7 @@ namespace Starvers.TaskSystem
 						[Keys.Material2] = ItemID.CursedFlame,
 						[Keys.MostEnemyBanner] = ItemID.CorruptorBanner,
 						[Keys.EnvironmentKey] = ItemID.CorruptionKey,
+						[Keys.DungeonWeapon] = ItemID.ScourgeoftheCorruptor,
 						[Keys.BossSummoner] = ItemID.WormFood
 					};
 					if(WorldGen.crimson)
@@ -117,8 +119,10 @@ namespace Starvers.TaskSystem
 						items[Keys.Material2] = ItemID.Ichor;
 						items[Keys.MostEnemyBanner] = ItemID.HerplingBanner;
 						items[Keys.EnvironmentKey] = ItemID.CrimsonKey;
+						items[Keys.DungeonWeapon] = ItemID.VampireKnives;
 						items[Keys.BossSummoner] = ItemID.BloodySpine;
 					}
+
 				}
 			}
 			private static Dictionary<short, string> Map;
@@ -132,14 +136,44 @@ namespace Starvers.TaskSystem
 
 				short value;
 
-
-
 				foreach (var literal in Literals)
 				{
 					value = (short)literal.GetRawConstantValue();
 					Map.Add(value, literal.Name);
 					UnMap.Add(literal.Name, value);
 				}
+
+				int Count = UnMap[nameof(ItemID.Count)];
+
+				{
+					string introduce = @"关于为什么会有这东西的存在:
+	由于直接使用数字表示物品ID, 会导致可读性不高, 不便修改
+	而且某些邪恶物品是成对的, 无法使用数字表示, 于是就用Key来表示
+	Key列表如下所示
+
+
+
+";
+					StringBuilder SB = new StringBuilder(introduce, introduce.Length + Count * 30);
+
+					SB.AppendLine("None: 0 // 不对应任何物品");
+
+					for (short i = 1; i < Count; i++)
+					{
+						SB.AppendFormat("{0}: {1} // {2}", Map[i], i, Lang.GetItemName(i));
+						SB.AppendLine();
+					}
+
+					SB.AppendLine(EvilItems.Keys.Material1 + ": 腐肉 / 椎骨");
+					SB.AppendLine(EvilItems.Keys.Material2 + ": 咒火 / 脓血");
+					SB.AppendLine(EvilItems.Keys.Mushroom + ": 当前世界对应邪恶蘑菇");
+					SB.AppendLine(EvilItems.Keys.MostEnemyBanner + ": 腐化者 / 跳跳兽旗帜");
+					SB.AppendLine(EvilItems.Keys.EnvironmentKey + ": 腐化 / 血腥钥匙");
+					SB.AppendLine(EvilItems.Keys.DungeonWeapon + ": 腐蚀咒怨 / 吸血飞刀");
+					SB.AppendLine(EvilItems.Keys.BossSummoner + ": 虫子 / 脑子召唤物");
+					MainLineTaskData.ItemIDs = SB.ToString();
+				}
+
 			}
 			#endregion
 			public override bool CanConvert(Type type)
