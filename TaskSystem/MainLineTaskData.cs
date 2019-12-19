@@ -33,7 +33,7 @@ namespace Starvers.TaskSystem
 {
 	""Easy"": 
 	[
-		//所需物品谢在这里, 用英文逗号分开每一项
+		//所需物品写在这里, 用英文逗号分开每一项
 	],
 	""Normal"": 
 	[
