@@ -629,7 +629,7 @@ namespace Starvers.NPCSystem
 
 
 		public static int TheWorld { get; set; }
-		public static StarverNPC[] NPCs = new StarverNPC[Terraria.Main.maxNPCs];
+		public static StarverNPC[] NPCs { get; } = new StarverNPC[Terraria.Main.maxNPCs];
 		public static void DoUpDate(object args)
 		{
 			SpawnTimer++;
@@ -640,7 +640,7 @@ namespace Starvers.NPCSystem
 			}
 			foreach (var player in Starver.Players)
 			{
-				if (player is null || !player.Active)
+				if (player is null || !player.Active || player.IsGuest)
 				{
 					continue;
 				}
@@ -652,7 +652,7 @@ namespace Starvers.NPCSystem
 						{
 							NewNPC(npc.CalcSpawnPos((Vector)player.Center), Vector.Zero, npc);
 						}
-						catch(Exception e)
+						catch
 						{
 							
 						}

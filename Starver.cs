@@ -530,7 +530,7 @@ namespace Starvers
 			#region Fast
 			foreach (var player in Players)
 			{
-				if (player is null || player.IsGuest)
+				if (player is null || !player.Active || player.IsGuest)
 				{
 					continue;
 				}
