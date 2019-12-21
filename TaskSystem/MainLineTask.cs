@@ -2007,7 +2007,14 @@ namespace Starvers.TaskSystem
 				{
 					continue;
 				}
-				Reward(player, i);
+				try
+				{
+					Reward(player, i);
+				}
+				catch(Exception e)
+				{
+					StarverPlayer.Server.SendErrorMessage($"Task 奖励物品失败: \n{e}");
+				}
 				return true;
 			}
 			return false;

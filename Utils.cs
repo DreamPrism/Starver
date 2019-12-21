@@ -34,7 +34,7 @@ namespace Starvers
 		{
 			for (int i = 0; i < Starver.Players.Length; i++)
 			{
-				if (Players[i] == null || Players[i].UserID < 0)
+				if (Players[i] == null || !Players[i].Active || Players[i].UserID < 0) 
 				{
 					continue;
 				}
@@ -47,6 +47,10 @@ namespace Starvers
 		{
 			foreach(var player in Starver.Players)
 			{
+				if(player is null || !player.Active || player.IsGuest)
+				{
+					continue;
+				}
 				player.Level += lvlup;
 				player.Save();
 			}

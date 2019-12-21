@@ -575,7 +575,7 @@ namespace Starvers
 				#endregion
 				foreach (StarverPlayer player in Players)
 				{
-					if (player == null || player.IsGuest)
+					if (player == null || !player.Active || player.IsGuest) 
 					{
 						continue;
 					}
