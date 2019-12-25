@@ -20,19 +20,23 @@ using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using TShockAPI.Hooks;
 using System.Threading;
-using Starvers.BossSystem;
 using System.Windows.Forms;
-using Starvers.NPCSystem.NPCs;
-using Starvers.WeaponSystem;
-using Starvers.NPCSystem;
 
 namespace Starvers
 {
+	using BossSystem;
+	using NPCSystem;
+	using NPCSystem.NPCs;
+	using WeaponSystem;
+
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using BigInt = System.Numerics.BigInteger;
 	using Skill = AuraSystem.Skills.Base.Skill;
+	using StarverBoss = BossSystem.Bosses.Base.StarverBoss;
 	using Calculator = Func<int, int>;
-	[ApiVersion(2, 1)]
+    using Starvers.Events;
+
+    [ApiVersion(2, 1)]
 	public class Starver : TerrariaPlugin
 	{
 		#region Fields
@@ -339,7 +343,7 @@ namespace Starvers
 			NPC RealNPC;
 			RealNPC = Main.npc[args.Npc.realLife >= 0 ? args.Npc.realLife : args.Npc.whoAmI];
 			BaseNPC snpc = NPCs?[RealNPC.whoAmI];
-			BossSystem.Bosses.Base.StarverBoss TheBoss = null;
+			StarverBoss TheBoss = null;
 			StarverPlayer player = Players[args.Player.whoAmI];
 			float damageindex = 1;
 			if (Config.EnableAura)
@@ -353,7 +357,7 @@ namespace Starvers
 			{
 				interdamage *= 2;
 			}
-			if (Config.EnableBoss && BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
+			if (Config.EnableBoss && StarverBoss.AliveBoss > 0)
 			{
 				foreach (var boss in StarverBossManager.Bosses)
 				{
@@ -371,14 +375,24 @@ namespace Starvers
 				interdamage *= snpc.DamagedIndex;
 			}
 			int realdamage = (int)interdamage;
+
+			var NArgs = new NPCStrikeEventArgs(args.Npc, RealNPC, interdamage)
+			{
+				Crit = args.Critical,
+				RealDamage = realdamage,
+				RawDamage = args.Damage,
+			};
+			player.StrikingNPC(NArgs);
+			realdamage = NArgs.RealDamage;
+
 			if (args.Npc.dontTakeDamage)
 			{
 				realdamage = 0;
-				goto Junped;
 			}
-			realdamage = Math.Max(1, realdamage);
-			Junped:
-			player.Exp += realdamage;
+			else
+			{
+				realdamage = Math.Max(1, realdamage);
+			}
 			if (Config.EnableAura)
 			{
 				args.Npc.SendCombatMsg(realdamage.ToString(), Color.Yellow);
@@ -397,6 +411,7 @@ namespace Starvers
 				}
 				*/
 			}
+			player.Exp += realdamage;
 			RealNPC.life -= realdamage;
 			RealNPC.playerInteraction[player.Index] = true;
 			player.TPlayer.OnHit((int)RealNPC.Center.X, (int)RealNPC.Center.Y, RealNPC);
@@ -433,6 +448,7 @@ namespace Starvers
 				snpc?.OnStrike(realdamage, args.KnockBack, player);
 				TheBoss?.OnStrike(realdamage, args.KnockBack, player);
 			}
+			player.StrikedNPC(NArgs);
 		}
 		#endregion
 		#region OnKill

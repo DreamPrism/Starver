@@ -1172,7 +1172,6 @@ namespace Starvers
 		/// 技能ID列表
 		/// </summary>
 		public int[] Skills { get; set; }
-		public LockedSkill?[] LockedSkills { get; protected set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public bool Temp { get; set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -1282,6 +1281,7 @@ namespace Starvers
 			set
 			{
 				mp = Math.Min(value, MaxMP);
+				mp = Math.Max(0, mp);
 			}
 		}
 		/// <summary>
@@ -1393,7 +1393,6 @@ namespace Starvers
 			Temp = temp;
 			Skills = new int[Skill.MaxSlots];
 			CDs = new int[Skill.MaxSlots];
-			LockedSkills = new LockedSkill?[Skill.MaxSlots];
 		}
 		private StarverPlayer(int userID, bool temp = false) : this(temp)
 		{

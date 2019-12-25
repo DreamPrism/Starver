@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Starvers.AuraSystem.Skills;
 using Starvers.AuraSystem.Skills.Base;
+using Starvers.Events;
 using TShockAPI;
 
 namespace Starvers.AuraSystem
@@ -64,14 +65,27 @@ namespace Starvers.AuraSystem
 			try
 			{
 				slot -= 1;
-				Skill skill = player.LockedSkills[slot]?.Skill ?? Skills[player.Skills[slot]];
-				int cd = player.LockedSkills[slot]?.CDOverride ?? skill.CD;
-				//flag = Boss.AnyActive;
-				if (skill.BossBan && BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
+
+				var skill = Skills[player.Skills[slot]];
+
+				ReleaseSkillEventArgs args = new ReleaseSkillEventArgs
+				{
+					Slot = slot,
+					SkillID = (SkillIDs)player.Skills[slot],
+					Banned = skill.BossBan && BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0,
+					MPCost = skill.MP,
+					CD = skill.CD
+				};
+
+				player.ReleasingSkill(args);
+
+				skill = Skills[(int)args.SkillID];
+
+				if (args.Banned)
 				{
 					player.SendCombatMSsg("该技能已被禁用", Color.Pink);
 				}
-				else if (skill.MP > player.MP)
+				else if (args.MPCost > player.MP)
 				{
 					player.SendCombatMSsg("MP不足", Color.Pink);
 				}
@@ -84,12 +98,13 @@ namespace Starvers.AuraSystem
 					skill.Release(player, vel);
 					if (skill.ForceCD || !player.IgnoreCD)
 					{
-						player.CDs[slot] += cd;
+						player.CDs[slot] += args.CD;
 					}
-					player.MP -= skill.MP;
-					player.LastSkill = skill.Index;
+					player.MP -= args.MPCost;
+					player.LastSkill = (int)args.SkillID;
 				}
-				player.MP = Math.Max(0, Math.Min(player.MP, player.MaxMP));
+
+				player.ReleasedSkill(args);
 			}
 			catch(Exception e)
 			{

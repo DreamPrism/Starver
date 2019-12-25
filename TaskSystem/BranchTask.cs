@@ -8,10 +8,14 @@ using TShockAPI;
 
 namespace Starvers.TaskSystem
 {
-	public abstract class BranchTask : ITask, ICloneable
+	public abstract class BranchTask : ITask
 	{
 		public StarverPlayer TargetPlayer { get; }
 		public string Description { get; protected set; }
+		/// <summary>
+		/// 属于哪条支线?
+		/// </summary>
+		public abstract BranchLines WhichLine { get; }
 
 		protected BranchTask(StarverPlayer player)
 		{
@@ -55,9 +59,6 @@ namespace Starvers.TaskSystem
 
 		}
 
-		public virtual object Clone()
-		{
-			return MemberwiseClone();
-		}
+		public abstract BranchTask NewTask(StarverPlayer player);
 	}
 }

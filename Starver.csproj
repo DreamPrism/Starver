@@ -220,6 +220,7 @@
     <Compile Include="BaseNPC.cs" />
     <Compile Include="StarverPlayer.cs" />
     <Compile Include="HelpTexts.cs" />
+    <Compile Include="TaskSystem\BranchLines.cs" />
     <Compile Include="TaskSystem\BranchTask.cs" />
     <Compile Include="TaskSystem\ITask.cs" />
     <Compile Include="TaskSystem\MainLineTask.cs" />
