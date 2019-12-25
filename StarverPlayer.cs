@@ -19,6 +19,8 @@ using System.Runtime.InteropServices;
 
 namespace Starvers
 {
+	using Events;
+	using TaskSystem;
 	using DB;
 	using BigInt = System.Numerics.BigInteger;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
@@ -473,8 +475,11 @@ namespace Starvers
 		#region Update
 		public void Update()
 		{
+			timer++;
+			BranchTask?.Updating(timer);
 			UpdateCD();
 			UpdateTilePoint();
+			BranchTask?.Updated(timer);
 		}
 		protected void UpdateTilePoint()
 		{
@@ -1140,6 +1145,24 @@ namespace Starvers
 		}
 		#endregion
 		#endregion
+		#region Hooks
+		public void StrikingNPC(NPCStrikeEventArgs args)
+		{
+			BranchTask?.StrikingNPC(args);
+		}
+		public void StrikedNPC(NPCStrikeEventArgs args)
+		{
+			BranchTask?.StrikedNPC(args);
+		}
+		public void ReleasingSkill(ReleaseSkillEventArgs args)
+		{
+			BranchTask?.ReleasingSkill(args);
+		}
+		public void ReleasedSkill(ReleaseSkillEventArgs args)
+		{
+			BranchTask?.ReleasedSkill(args);
+		}
+		#endregion
 		#region Datas
 		/// <summary>
 		/// 技能CD
@@ -1149,8 +1172,11 @@ namespace Starvers
 		/// 技能ID列表
 		/// </summary>
 		public int[] Skills { get; set; }
+		public LockedSkill?[] LockedSkills { get; protected set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public bool Temp { get; set; }
+		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+		public BranchTask BranchTask { get; set; }
 		public int AvalonGradation { get; set; }
 		public string Name { get; set; }
 		/// <summary>
@@ -1351,6 +1377,7 @@ namespace Starvers
 		#region Privates
 		#region Fields
 		private Point TilePoint;
+		private int timer;
 		private bool IsServer;
 		private int MoonIndex = -1;
 		private bool disposed;
@@ -1366,6 +1393,7 @@ namespace Starvers
 			Temp = temp;
 			Skills = new int[Skill.MaxSlots];
 			CDs = new int[Skill.MaxSlots];
+			LockedSkills = new LockedSkill?[Skill.MaxSlots];
 		}
 		private StarverPlayer(int userID, bool temp = false) : this(temp)
 		{

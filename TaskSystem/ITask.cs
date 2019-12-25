@@ -8,8 +8,6 @@ namespace Starvers.TaskSystem
 {
 	public interface ITask
 	{
-		public bool IsFinished { get; }
 		public string Description { get; }
-		public bool Check(StarverPlayer player);
 	}
 }

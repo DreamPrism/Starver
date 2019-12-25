@@ -15,7 +15,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			BossBan = true;
 			MP = 200;
-			CD = 500;
+			CD = 60 * 500;
 			Level = 50000;
 			Description = "三叶草制作的最强技能";
 			Author = "三叶草";

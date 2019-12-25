@@ -20,7 +20,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			Level = 30;
 			MP = 20;
-			CD = 20;
+			CD = 60 * 20;
 			Description = "制造若干个射向最近敌人位置的导弹";
 			Author = "Deaths";
 			SetText();

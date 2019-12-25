@@ -14,7 +14,7 @@ namespace Starvers.AuraSystem.Skills
 		public Shuriken():base(SkillIDs.Shuriken)
 		{
 			MP = 8;
-			CD = 1;
+			CD = 60 * 1;
 			Author = "三叶草";
 			Description = "你的初始技能,mp消耗低,cd短，显然最适合新手";
 			SetText();

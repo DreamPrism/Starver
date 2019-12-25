@@ -17,7 +17,7 @@ namespace Starvers.AuraSystem.Skills
 		public NatureGuard() : base(SkillIDs.NatureGuard)
 		{
 			MP = 10;
-			CD = 60;
+			CD = 60 * 60;
 			Level = 50;
 			Author = "zhou_Qi";
 			Description = @"生成几个纯粹由自然之力构成的哨卫

@@ -33,7 +33,7 @@ namespace Starvers.AuraSystem.Skills
 		};
 		public StarEruption() : base(SkillIDs.StarEruption)
 		{
-			CD = 2 * 60;
+			CD = 60 * 2 * 60;
 			MP = 130;
 			Level = 800;
 			Author = "zhou_Qi";

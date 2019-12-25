@@ -13,7 +13,7 @@ namespace Starvers.AuraSystem.Skills
 		public Sacrifice():base(SkillIDs.Sacrifice)
 		{
 			MP = 0;
-			CD = 20;
+			CD = 60 * 20;
 			Author = "三叶草";
 			Description = "血量减少最大血量的一半,回复你所有的mp";
 			Level = 10;

@@ -13,7 +13,7 @@ namespace Starvers.AuraSystem.Skills
 	{
 		public Musket() : base(SkillIDs.Musket)
 		{
-			CD = 0;
+			CD = 60 * 0;
 			MP = 70;
 			Description = "这东西很没用?\n怎么可能\n这可是唯一一个无CD技能";
 			Level = 50;

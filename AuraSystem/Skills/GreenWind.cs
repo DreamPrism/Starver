@@ -16,7 +16,7 @@ namespace Starvers.AuraSystem.Skills
 		private const float Radium = 16 * 90;
 		public GreenWind() : base(SkillIDs.GreenWind)
 		{
-			CD = 20;
+			CD = 60 * 20;
 			MP = 150;
 			Level = 750;
 			Author = "zhou_Qi";

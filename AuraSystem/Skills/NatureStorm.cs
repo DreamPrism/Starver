@@ -30,7 +30,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			Level = 50000;
 			MP = 8000;
-			CD = 60 * 10;
+			CD = 60 * 60 * 10;
 			ForceCD = true;
 		}
 		#endregion

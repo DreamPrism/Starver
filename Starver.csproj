@@ -147,6 +147,9 @@
     <Compile Include="AuraSystem\Skills\WindRealm.cs" />
     <Compile Include="BlockSystem\StarverBlockManager.cs" />
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.cs" />
+    <Compile Include="Events\NPCStrikeEventArgs.cs" />
+    <Compile Include="Events\ReleaseSkillEventArgs.cs" />
+    <Compile Include="LockedSkill.cs" />
     <Compile Include="ProjContainers\IProjSet.cs" />
     <Compile Include="ProjContainers\ProjPair.cs" />
     <Compile Include="ProjContainers\ProjQueue.cs" />
@@ -217,6 +220,7 @@
     <Compile Include="BaseNPC.cs" />
     <Compile Include="StarverPlayer.cs" />
     <Compile Include="HelpTexts.cs" />
+    <Compile Include="TaskSystem\BranchTask.cs" />
     <Compile Include="TaskSystem\ITask.cs" />
     <Compile Include="TaskSystem\MainLineTask.cs" />
     <Compile Include="TaskSystem\StarverTaskManager.cs" />

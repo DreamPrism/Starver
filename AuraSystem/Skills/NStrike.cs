@@ -16,7 +16,7 @@ namespace Starvers.AuraSystem.Skills
 		public NStrike() : base(SkillIDs.NStrike)
 		{
 			MP = 350;
-			CD = 500;
+			CD = 60 * 500;
 			Level = 50000;
 			Author = "wither";
 			Description = "能够和咖喱棒平起平坐的技能!\n对一定范围内的敌对生物发动攻击";

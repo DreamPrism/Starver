@@ -47,7 +47,7 @@ namespace Starvers.AuraSystem.Skills
 		//打算让UltimateBlast直接继承这个,省点事,到时候直接重写AsyncRelease
 		protected UltimateSlash(SkillIDs ID) : base(ID)
 		{
-			CD = 10 * 60;
+			CD = 60 * 10 * 60;
 			MP = 6000;
 			Level = 40000;
 			ForceCD = true;

@@ -16,7 +16,7 @@ namespace Starvers.AuraSystem.Skills
 	{
 		public GreenCrit() : base(SkillIDs.GreenCrit)
 		{
-			CD = 300;
+			CD = 60 * 300;
 			MP = 25000;
 			Level = 25000;
 		}

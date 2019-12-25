@@ -59,12 +59,13 @@ namespace Starvers.AuraSystem
 		};
 		#endregion
 		#region Handle
-		public unsafe void Handle(StarverPlayer player,Vector2 vel,int slot)
+		public void Handle(StarverPlayer player,Vector2 vel,int slot)
 		{
 			try
 			{
 				slot -= 1;
-				Skill skill = Skills[player.Skills[slot]];
+				Skill skill = player.LockedSkills[slot]?.Skill ?? Skills[player.Skills[slot]];
+				int cd = player.LockedSkills[slot]?.CDOverride ?? skill.CD;
 				//flag = Boss.AnyActive;
 				if (skill.BossBan && BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
 				{
@@ -83,7 +84,7 @@ namespace Starvers.AuraSystem
 					skill.Release(player, vel);
 					if (skill.ForceCD || !player.IgnoreCD)
 					{
-						player.CDs[slot] += skill.CD;
+						player.CDs[slot] += cd;
 					}
 					player.MP -= skill.MP;
 					player.LastSkill = skill.Index;

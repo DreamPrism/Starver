@@ -14,7 +14,7 @@ namespace Starvers.AuraSystem.Skills
 	{
 		public MagnetStorm() : base(SkillIDs.MagnetStorm)
 		{
-			CD = 15;
+			CD = 60 * 15;
 			MP = 120;
 			Author = "1413";
 			Description = "制造若干个击向周围的磁球";

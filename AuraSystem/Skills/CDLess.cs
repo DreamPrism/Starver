@@ -15,7 +15,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			Author = "1413";
 			Description = "技能CD太长了？来试试他吧!\n5s内其他技能无CD";
-			CD = 360;
+			CD = 60 * 360;
 			MP = 20;
 			Level = 500;
 			ForceCD = true;

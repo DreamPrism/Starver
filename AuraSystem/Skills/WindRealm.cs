@@ -16,7 +16,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			BossBan = true;
 			MP = 12;
-			CD = 10;
+			CD = 60 * 10;
 			Author = "三叶草";
 			Description = "吹飞所有怪物";
 			Level = 175;

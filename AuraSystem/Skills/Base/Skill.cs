@@ -18,7 +18,7 @@ namespace Starvers.AuraSystem.Skills.Base
 		public int CD
 		{
 			get => cd;
-			protected set => cd = value * 60;
+			protected set => cd = value;
 		}
 		public int MP { get; protected set; }
 		public int Level { get; protected set; }

@@ -27,7 +27,7 @@ namespace Starvers.AuraSystem.Skills
 		};
 		public AlcoholFeast() : base(SkillIDs.AlcoholFeast)
 		{
-			CD = 20;
+			CD = 60 * 20;
 			MP = 35;
 			Level = 5;
 			Author = "zhou_Qi";

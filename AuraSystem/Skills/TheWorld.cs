@@ -23,7 +23,7 @@ namespace Starvers.AuraSystem.Skills
 		public TheWorld() : base(SkillIDs.TheWorld)
 		{
 			MP = 110;
-			CD = 120;
+			CD = 60 * 120;
 			Author = "逍遥";
 			Description = $"让所有怪物以及弹幕暂停一段时间({StopTime / 1000}s)";
 			Level = 3000;

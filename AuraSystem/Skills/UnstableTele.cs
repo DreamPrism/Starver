@@ -16,7 +16,7 @@ namespace Starvers.AuraSystem.Skills
 		private const int Max = 18;
 		public UnstableTele() : base(SkillIDs.UnstableTele)
 		{
-			CD = 2 * 60;
+			CD = 60 * 2 * 60;
 			MP = 20;
 			Level = 5;
 			Author = "zhou_Qi";

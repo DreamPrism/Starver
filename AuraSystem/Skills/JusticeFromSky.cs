@@ -13,7 +13,7 @@ namespace Starvers.AuraSystem.Skills
 	{
 		public JusticeFromSky():base(SkillIDs.JusticeFromSky)
 		{
-			CD = 20;
+			CD = 60 * 20;
 			MP = 100;
 			Level = 350;
 			Author = "1413";

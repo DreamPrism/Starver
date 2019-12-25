@@ -40,7 +40,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			MP = 110;
 			Level = 250;
-			CD = 30;
+			CD = 60 * 30;
 			Author = "zhou_Qi";
 			Description = @"[可成长]向前方发射花叶，潜藏着净化的威能
 ""软弱的花叶亦可以锐如刀刃，温和的自然也具有它独特的侵略性""";

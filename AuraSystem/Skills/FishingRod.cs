@@ -17,7 +17,7 @@ namespace Starvers.AuraSystem.Skills
 		{
 			Level = 10;
 			MP = 25;
-			CD = 3 * 60;
+			CD = 60 * 3 * 60;
 			Author = "zhou_Qi";
 			Description = @"抛射多根随机种类的鱼竿
 ""Deaths会很喜欢这个技能的""

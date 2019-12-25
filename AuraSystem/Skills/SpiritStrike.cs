@@ -19,7 +19,7 @@ namespace Starvers.AuraSystem.Skills
 		public SpiritStrike():base(SkillIDs.SpiritStrike)
 		{
 			MP = 35;
-			CD = 20;
+			CD = 60 * 20;
 			Level = 80;
 			Author = "wither";
 			Description = "对一定范围内的敌对生物发动攻击";

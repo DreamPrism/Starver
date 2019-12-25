@@ -14,7 +14,7 @@ namespace Starvers.AuraSystem.Skills
 		public LawAias() : base(SkillIDs.LawAias)
 		{
 			MP = 300;
-			CD = 120;
+			CD = 60 * 120;
 			BossBan = true;
 			Level = 5000;
 			Author = "三叶草";

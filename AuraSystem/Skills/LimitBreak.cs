@@ -13,7 +13,7 @@ namespace Starvers.AuraSystem.Skills
 	{
 		public LimitBreak() : base(SkillIDs.LimitBreak)
 		{
-			CD = 30;
+			CD = 60 * 30;
 			Level = 20;
 			MP = 80;
 			Author = "zhou_Qi";

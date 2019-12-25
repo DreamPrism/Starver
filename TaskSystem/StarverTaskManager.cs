@@ -25,7 +25,7 @@ namespace Starvers.TaskSystem
 		#endregion
 		#region Properties
 		public bool Enabled => Config.EnableTask;
-		public ITask[] MainLine { get; private set; } = new ITask[MainLineCount];
+		public MainLineTask[] MainLine { get; private set; } = new MainLineTask[MainLineCount];
 		public ITask CurrentTask => MainLine[Config.TaskNow];
 
 		private static StarverConfig Config => StarverConfig.Config;
@@ -289,7 +289,7 @@ namespace Starvers.TaskSystem
 			var datas = new MainLineTaskData[MainLine.Length];
 			for (int i = 0; i < datas.Length; i++)
 			{
-				datas[i] = ((MainLineTask)MainLine[i]).ToDatas();
+				datas[i] = MainLine[i].ToDatas();
 			}
 			string text = JsonConvert.SerializeObject(datas, Formatting.Indented);
 			File.WriteAllText(TasksPath, text);
