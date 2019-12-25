@@ -170,10 +170,6 @@ namespace Starvers.Forms
 			}
 			set
 			{
-				if(player != null && player.Temp)
-				{
-					player.Dispose();
-				}
 				player = value;
 				if (player == null)
 				{
@@ -190,16 +186,13 @@ namespace Starvers.Forms
 				}
 				else
 				{
-					unsafe
-					{
 						for (int i = 0; i < 5; i++)
-						{
-							Skills[i].Text = AuraSystem.SkillManager.Skills[SkillList[i]].Name;
-							if (i < 4)
-							{
-								TBCodes[i].Text = TBStates[i].ToString();
-							}
-						}
+					{
+						Skills[i].Text = player.GetSkill(i).Name;
+					}
+					for (int i = 0; i < TBStates.Length; i++)
+					{
+						TBCodes[i].Text = TBStates[i].ToString();
 					}
 					Level.Text = player.Level.ToString();
 					Exp.Text = player.Exp.ToString();
@@ -207,7 +200,7 @@ namespace Starvers.Forms
 				}
 			}
 		}
-		public unsafe int* SkillList
+		public int[] SkillList
 		{
 			get
 			{

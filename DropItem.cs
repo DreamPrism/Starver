@@ -10,7 +10,7 @@ namespace Starvers
 {
 	public class DropItem
 	{
-		#region ctor
+		#region Ctor
 		/// <summary>
 		/// emmmmm
 		/// </summary>
@@ -41,11 +41,11 @@ namespace Starvers
 		/// <param name="npc">"掉落"物品的npc</param>
 		public void Drop(NPC npc)
 		{
-			Vector2 pos = npc.Center;
 			if (Starver.Rand.NextDouble() > chance)
 			{
 				return;
 			}
+			Vector2 pos = npc.Center + Starver.Rand.NextVector2(npc.width / 2, npc.height / 2);
 			int itemid = Starver.Rand.Next(IDs.Length);
 			itemid = IDs[itemid];
 			int itemstack = Starver.Rand.Next(stacks[0], stacks[1]);
@@ -63,7 +63,7 @@ namespace Starvers
 #if DEBUG
 				StarverPlayer.All.SendMessage(string.Format("掉落:{0},{1}:[i/s{1}:{0}]", itemid, itemstack), Color.Blue);
 #endif
-				num = Item.NewItem(pos, new Vector2(5, 5), itemid, itemstack);
+				num = Utils.NewItem(pos, itemid, itemstack);
 				NetMessage.SendData((int)PacketTypes.ItemDrop, -1, -1, null, num);
 			}
 

@@ -627,7 +627,6 @@ namespace Starvers
 			try
 			{
 				//Thread.Sleep(2000);
-				Players[args.Player.Index]?.Dispose();
 				Players[args.Player.Index] = null;
 				if (Config.SaveMode == SaveModes.MySQL)
 				{
@@ -736,7 +735,6 @@ namespace Starvers
 			}
 			UpdateForm(Players[args.Who], true);
 			Players[args.Who].Save();
-			Players[args.Who].Dispose();
 			Players[args.Who] = null;
 		}
 		#endregion
@@ -1107,10 +1105,8 @@ namespace Starvers
 				try
 				{
 					var ID = StarverPlayer.GetUserIDByName(args.Parameters[0]);
-					using (StarverPlayer player = StarverPlayer.Read((int)ID))
-					{
-						player.ShowInfos(args.Player);
-					}
+					StarverPlayer player = StarverPlayer.Read((int)ID);
+					player.ShowInfos(args.Player);
 				}
 				catch
 				{
