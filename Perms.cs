@@ -22,6 +22,7 @@ namespace Starvers
 			public const string FFF   = "starver.task.fff";
 			public const string Set   = "starver.task.set";
 			public const string Reload = "starver.task.reload";
+			public const string BranchT = "starver.task.brancht";
 		}
 		public static class Aura
 		{

@@ -121,6 +121,14 @@ namespace Starvers
 				TSPlayer.SendInfoMessage(msg);
 			}
 		}
+		public void SendSuccessMessage(string msg)
+		{
+			SendMessage(msg, Color.DarkGreen);
+		}
+		public void SendFailMessage(string msg)
+		{
+			SendMessage(msg, Color.Blue);
+		}
 		public void SendDeBugMessage(string msg)
 		{
 			SendMessage(msg, Color.Blue);
@@ -303,11 +311,31 @@ namespace Starvers
 			TSPlayer.Spawn();
 		}
 		#endregion
+		#region BranchTaskEnd
+		public void BranchTaskEnd(bool success)
+		{
+			if(success)
+			{
+				SendInfoMessage($"支线任务{BranchTask}已完成");
+			}
+			else
+			{
+				SendFailMessage($"支线任务{BranchTask}失败");
+			}
+			BranchTask = null;
+		}
+		#endregion
 		#region GiveItem
 		public void GiveItem(int type, int stack = 1, int prefix = 0)
 		{
 			int number = Item.NewItem((int)Center.X, (int)Center.Y, TPlayer.width, TPlayer.height, type, stack, true, prefix, true, false);
 			SendData(PacketTypes.ItemDrop, "", number);
+		}
+		#endregion
+		#region HasItem
+		public bool HasItem(int type)
+		{
+			return TPlayer.HasItem(type);
 		}
 		#endregion
 		#region GetUser

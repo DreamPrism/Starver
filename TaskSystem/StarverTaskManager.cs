@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using Starvers.TaskSystem.Branches;
 using Terraria;
 using Terraria.ID;
 using TerrariaApi.Server;
@@ -26,6 +27,11 @@ namespace Starvers.TaskSystem
 		#region Properties
 		public bool Enabled => Config.EnableTask;
 		public MainLineTask[] MainLine { get; private set; } = new MainLineTask[MainLineCount];
+		public BranchLine[] BranchTaskLines { get; } = new BranchLine[]
+		{
+			null,
+			new TestLine1()
+		};
 		public ITask CurrentTask => MainLine[Config.TaskNow];
 
 		private static StarverConfig Config => StarverConfig.Config;
@@ -412,6 +418,44 @@ namespace Starvers.TaskSystem
 					}
 					break;
 				#endregion
+				#region Bt
+				case "bt":
+					{
+						if (!player.HasPerm(Perms.Task.BranchT))
+						{
+							goto default;
+						}
+						if (args.Parameters.Count < 2 || !int.TryParse(args.Parameters[1], out int line) || line >= BranchTaskLines.Length)
+						{
+							for (int i = 0; i < BranchTaskLines.Length; i++)
+							{
+								player.SendInfoMessage($"{i} {BranchTaskLines[i]}");
+							}
+						}
+						else if (args.Parameters.Count < 3 || !int.TryParse(args.Parameters[2], out int id))
+						{
+							for (int i = 0; i < BranchTaskLines[line].Count; i++)
+							{
+								player.SendInfoMessage($"{i}: {BranchTaskLines[line][i].Description}");
+							}
+						}
+						else
+						{
+							var result = BranchTaskLines[line].TryStartTask(player, id);
+							if (!result.Started)
+							{
+								player.SendFailMessage("任务开启失败");
+								player.SendFailMessage($"详细原因: {result.Message}");
+							}
+							else
+							{
+								player.SendCombatMSsg($"任务开始: {player.BranchTask}", Color.Green);
+								player.SendSuccessMessage(result.Message ?? string.Empty);
+							}
+						}
+						break;
+					}
+				#endregion
 				#region SendHelpText
 				default:
 					player.SendInfoMessage(HelpTexts.Task);
@@ -430,6 +474,10 @@ namespace Starvers.TaskSystem
 					if (player.HasPerm(Perms.Task.Reload))
 					{
 						player.SendInfoMessage("	reload	 重新加载任务");
+					}
+					if (player.HasPerm(Perms.Task.BranchT))
+					{
+						player.SendInfoMessage("	bt	 branch line test");
 					}
 					break;
 					#endregion

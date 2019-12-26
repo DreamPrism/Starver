@@ -71,6 +71,7 @@ namespace Starvers
 		public static Random Rand { get; private set; }
 		public static StarverPlayer[] Players { get; private set; } 
 		public static BaseNPC[] NPCs { get; private set; }
+		public StarverTaskManager TSKS { get; private set; }
 		public StarverAuraManager Aura { get; private set; }
 		public static int CombatTextPacket { get; private set; }
 		public static StarverConfig Config => StarverConfig.Config;
@@ -241,6 +242,7 @@ namespace Starvers
 					GetDataHandlers.KillMe += OnDeath;
 				}
 			}
+			TSKS = Plugins[0] as StarverTaskManager;
 			Aura = Plugins[2] as StarverAuraManager;
 			if(Config.EnableNPC)
 			{
@@ -402,6 +404,8 @@ namespace Starvers
 				TheBoss.ReceiveDamage(realdamage);
 				RealNPC.playerInteraction[player.Index] = true;
 				player.TPlayer.OnHit((int)RealNPC.Center.X, (int)RealNPC.Center.Y, RealNPC);
+				NArgs.KilledNPC = !TheBoss.Active;
+				player.StrikedNPC(NArgs);
 				return;
 				/*
 				if (TheBoss.Life - realdamage < 1)
@@ -426,6 +430,7 @@ namespace Starvers
 				{
 					RealNPC.checkDead();
 				}
+				NArgs.KilledNPC = true;
 			}
 			else
 			{
@@ -962,11 +967,13 @@ namespace Starvers
 		#region Transport
 		public static void SendToEvil(StarverPlayer player)
 		{
-			File.Create(Path.Combine(Instance.FolderSending, player.Index.ToString())).Dispose();
+			Instance.Aura.Stellaria?.SendPlayer(player.TSPlayer);
+			//File.Create(Path.Combine(Instance.FolderSending, player.Index.ToString())).Dispose();
 		}
 		public static void BackToHard(StarverPlayer player)
 		{
-			File.Create(Path.Combine(Instance.FolderBacking, player.Index.ToString())).Dispose();
+			Instance.Aura.Stellaria?.SendPlayerBack(player.TSPlayer);
+			//File.Create(Path.Combine(Instance.FolderBacking, player.Index.ToString())).Dispose();
 		}
 		#endregion
 		#region Commands

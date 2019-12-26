@@ -12,6 +12,10 @@ namespace Starvers.TaskSystem
 	[Flags]
 	public enum BranchLines
 	{
-		None
+		None,
+		/// <summary>
+		/// 测试: 指定武器击杀NPC
+		/// </summary>
+		TestLine1
 	}
 }

@@ -26,10 +26,6 @@ namespace Starvers.TaskSystem
 		{
 
 		}
-		public virtual void End()
-		{
-
-		}
 
 
 		public virtual void Updating(int Timer)
@@ -58,7 +54,5 @@ namespace Starvers.TaskSystem
 		{
 
 		}
-
-		public abstract BranchTask NewTask(StarverPlayer player);
 	}
 }

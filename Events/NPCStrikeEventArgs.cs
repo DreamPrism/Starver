@@ -26,5 +26,10 @@ namespace Starvers.Events
 		/// </summary>
 		public int RealDamage { get; set; }
 		public bool Crit { get; set; }
+		/// <summary>
+		/// 是否Kill了NPC
+		/// 在Striked里使用，仅判断用途
+		/// </summary>
+		public bool KilledNPC { get; set; }
 	}
 }
