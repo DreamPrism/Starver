@@ -48,7 +48,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 				}
 				else
 				{
-					if (NewBySystem)
+					if (NewBySystem && Starver.Instance.Aura.LastPos != null)
 					{
 						Starver.Instance.Aura.LastPos[player] = new Vector2
 						{

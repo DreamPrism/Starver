@@ -70,7 +70,6 @@ namespace Starvers.AuraSystem
 				catch (Exception)
 				{
 					Console.WriteLine("Aura 寻找 Stellaria失败");
-					return;
 				}
 				try
 				{
