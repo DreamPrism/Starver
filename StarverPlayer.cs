@@ -1408,7 +1408,6 @@ namespace Starvers
 		private int timer;
 		private bool IsServer;
 		private int MoonIndex = -1;
-		private bool disposed;
 		private static StarverPlayer all = new StarverPlayer() { Name = "All", level = int.MaxValue, Index = -1, UserID = -1 };
 		private static StarverPlayer server = new StarverPlayer() { Name = "Server", level = int.MaxValue, Index = -2, UserID = -2, IsServer = true };
 		private static string SavePath => Starver.SavePathPlayers;

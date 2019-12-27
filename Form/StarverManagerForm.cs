@@ -32,7 +32,7 @@ namespace Starvers.Forms
 		private static Pen Border_Pen = new Pen(Color.FromArgb(30, 30, 30), 88);
 		private static readonly StringFormat PlyListFmt = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 		#endregion
-		#region ctor OnClosed
+		#region Ctor OnClosed
 		public StarverManagerForm()
 		{
 			InitializeComponent();

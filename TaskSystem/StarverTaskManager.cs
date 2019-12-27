@@ -429,28 +429,31 @@ namespace Starvers.TaskSystem
 						{
 							for (int i = 0; i < BranchTaskLines.Length; i++)
 							{
-								player.SendInfoMessage($"{i} {BranchTaskLines[i]}");
+								player.SendInfoMessage($"{i}: {BranchTaskLines[i]}");
 							}
 						}
 						else if (args.Parameters.Count < 3 || !int.TryParse(args.Parameters[2], out int id))
 						{
 							for (int i = 0; i < BranchTaskLines[line].Count; i++)
 							{
-								player.SendInfoMessage($"{i}: {BranchTaskLines[line][i].Description}");
+								player.SendInfoMessage($"{i}:  {BranchTaskLines[line][i].Description}");
 							}
 						}
 						else
 						{
-							var result = BranchTaskLines[line].TryStartTask(player, id);
-							if (!result.Started)
+							var (Success, Message) = BranchTaskLines[line].TryStartTask(player, id);
+							if (!Success)
 							{
 								player.SendFailMessage("任务开启失败");
-								player.SendFailMessage($"详细原因: {result.Message}");
+								player.SendFailMessage($"详细原因: {Message}");
 							}
 							else
 							{
 								player.SendCombatMSsg($"任务开始: {player.BranchTask}", Color.Green);
-								player.SendSuccessMessage(result.Message ?? string.Empty);
+								if(Message != null)
+								{
+									player.SendSuccessMessage(Message);
+								}
 							}
 						}
 						break;
@@ -461,23 +464,23 @@ namespace Starvers.TaskSystem
 					player.SendInfoMessage(HelpTexts.Task);
 					if (player.HasPerm(Perms.Task.ListAll))
 					{
-						player.SendInfoMessage("	listall 	列出所有任务");
+						player.SendInfoMessage("    listall    列出所有任务");
 					}
 					if (player.HasPerm(Perms.Task.FFF))
 					{
-						player.SendInfoMessage("	fff:	无视条件强制完成任务");
+						player.SendInfoMessage("    fff:     无视条件强制完成任务");
 					}
 					if (player.HasPerm(Perms.Task.Set))
 					{
-						player.SendInfoMessage("	set <任务序号>	设置当前任务为制定任务");
+						player.SendInfoMessage("    set <任务序号>  设置当前任务为制定任务");
 					}
 					if (player.HasPerm(Perms.Task.Reload))
 					{
-						player.SendInfoMessage("	reload	 重新加载任务");
+						player.SendInfoMessage("    reload   重新加载任务");
 					}
 					if (player.HasPerm(Perms.Task.BranchT))
 					{
-						player.SendInfoMessage("	bt	 branch line test");
+						player.SendInfoMessage("    bt       branch line test");
 					}
 					break;
 					#endregion

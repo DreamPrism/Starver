@@ -32,7 +32,7 @@ namespace Starvers.TaskSystem
 		/// </summary>
 		/// <param name="player">试图开始任务的玩家</param>
 		/// <param name="index">任务序号 [0, <see cref="Count"/>) </param>
-		/// <returns>result.Started: 是否成功开始任务 Message: 有关消息(可能包含任务不能开启的原因)</returns>
-		public abstract (bool Started, string Message) TryStartTask(StarverPlayer player, int index);
+		/// <returns>Success: 是否成功开始任务 Message: 有关消息(可能包含任务不能开启的原因)</returns>
+		public abstract (bool Success, string Message) TryStartTask(StarverPlayer player, int index);
 	}
 }
