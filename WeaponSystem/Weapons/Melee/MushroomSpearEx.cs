@@ -12,7 +12,7 @@ namespace Starvers.WeaponSystem.Weapons.Melee
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class MushroomSpearEx : Weapon
 	{
-		#region ctor
+		#region Ctor
 		public MushroomSpearEx() : base(2,IID.MushroomSpear,PID.InfluxWaver,CareerType.Melee,312)
 		{
 			CatchID = PID.MushroomSpear;

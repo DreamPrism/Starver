@@ -22,7 +22,7 @@ namespace Starvers.BossSystem.Bosses
 		private IProjSet FireBalls = new ProjQueue();
 		private IProjSet ShadowBalls = new ProjQueue(90);
 		#endregion
-		#region ctor
+		#region Ctor
 		public CultistEx() : base(3)
 		{
 			TaskNeed = 42;

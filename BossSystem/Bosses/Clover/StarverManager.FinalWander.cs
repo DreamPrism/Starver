@@ -18,7 +18,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			private StarverManager Manager;
 			private Vector ForRounding;
 			#endregion
-			#region ctor
+			#region Ctor
 			public FinalWander()
 			{
 				Silence = true;

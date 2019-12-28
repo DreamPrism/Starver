@@ -17,7 +17,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 			private float Radium = StarverManager.Radium;
 			private StarverManager Manager;
 			#endregion
-			#region ctor
+			#region Ctor
 			public FinalRedeemer()
 			{
 				Silence = true;

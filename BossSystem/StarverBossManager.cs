@@ -29,7 +29,7 @@ namespace Starvers.BossSystem
 
 		public const short EndTrialSummoner = ItemID.WhiteCultistArcherBanner;
 		#endregion
-		#region ctor
+		#region Ctor
 		#endregion
 		#region Interfaces
 		public delegate void AIDelegate(object args);

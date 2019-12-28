@@ -30,7 +30,7 @@ namespace Starvers.BossSystem.Bosses
 			new DropItem(new int[]{ Currency.Magic }, 30, 55),
 		};
 		#endregion
-		#region ctor
+		#region Ctor
 		public StarverAdjudicator() : base(4)
 		{
 			TaskNeed = 29;

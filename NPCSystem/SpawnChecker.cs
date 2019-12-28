@@ -31,7 +31,7 @@ namespace Starvers.NPCSystem
 		private static SpawnChecker underGroundLike;
 		private static SpawnChecker rareNight;
 		#endregion
-		#region ctor
+		#region Ctor
 		static SpawnChecker()
 		{
 			zombieLike = new SpawnChecker

@@ -16,7 +16,7 @@ namespace Starvers.BossSystem.Bosses
 	{
 		#region Fields
 		#endregion
-		#region ctor
+		#region Ctor
 		public QueenBeeEx():base(2)
 		{
 			TaskNeed = 24;

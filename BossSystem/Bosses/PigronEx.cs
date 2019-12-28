@@ -22,7 +22,7 @@ namespace Starvers.BossSystem.Bosses
 		/// </summary>
 		private Vector UnitX = new Vector(16 * 24, 0);
 		#endregion
-		#region ctor
+		#region Ctor
 		public PigronEx() : base(1)
 		{
 			TaskNeed = 33;

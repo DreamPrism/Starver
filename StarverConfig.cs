@@ -37,7 +37,7 @@ namespace Starvers
 		public string MySQLHost { get; set; } = TShock.Config.MySqlHost;
 		public SaveModes SaveMode { get; set; } = TShock.Config.StorageType.ToLower() == "mysql" ? SaveModes.MySQL : SaveModes.Json;
 		#endregion
-		#region ctor & dtor
+		#region Ctor & dtor
 		private StarverConfig()
 		{
 			

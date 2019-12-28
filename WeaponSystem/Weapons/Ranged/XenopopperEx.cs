@@ -13,7 +13,7 @@ namespace Starvers.WeaponSystem.Weapons.Ranged
 	{
 		#region Fields
 		#endregion
-		#region ctor
+		#region Ctor
 		public XenopopperEx() : base(3, Terraria.ID.ItemID.Xenopopper, Terraria.ID.ProjectileID.ElectrosphereMissile, CareerType.Ranged, 223)
 		{
 			CatchID = Terraria.ID.ProjectileID.Xenopopper;

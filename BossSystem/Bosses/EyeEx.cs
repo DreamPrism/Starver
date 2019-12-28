@@ -19,7 +19,7 @@ namespace Starvers.BossSystem.Bosses
 		private Vector Unit = new Vector(0, -16 * 16);
 		private const int StartCollideDamage = 210;
 		#endregion
-		#region ctor
+		#region Ctor
 		public EyeEx() : base(3)
 		{
 			ComingMessage = "你感到一种令人恐惧的注视...";
@@ -31,9 +31,9 @@ namespace Starvers.BossSystem.Bosses
 			DefaultLife = 630000;
 			DefaultLifes = 50;
 			vector.X = 16 * 20;
-			Drops = new DropItem[] 
+			Drops = new DropItem[]
 			{
-				new DropItem(new int[] { Currency.Melee }, 1, 5, 0.4f)
+				new DropItem(new []{ Currency.Melee }, 1, 5, 0.4f)
 			};
 		}
 		#endregion
@@ -53,7 +53,7 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region RealAI
-		public unsafe override void RealAI()
+		public override void RealAI()
 		{
 			switch(Mode)
 			{
@@ -117,7 +117,7 @@ namespace Starvers.BossSystem.Bosses
 					}
 					if (Timer % 12 == 0)
 					{
-						Trident();
+						EvilTrident(90);
 					}
 					break;
 				#endregion
@@ -189,15 +189,6 @@ namespace Starvers.BossSystem.Bosses
 			NewNPC((Vector)Center, FromPolar(PI / 2, 9), NPCID.WanderingEye, 6235, 98);
 			NewNPC((Vector)Center, FromPolar(PI / 2 + PI / 6, 9), NPCID.WanderingEye, 6235, 98);
 			NewNPC((Vector)Center, FromPolar(PI / 2 - PI / 6, 9), NPCID.WanderingEye, 6235, 98);
-		}
-		#endregion
-		#region Trident
-		private void Trident()
-		{
-			vector.Angle = Rand.NextAngle();
-			Vel = -vector;
-			Vel.Length = 17;
-			Proj(TargetPlayer.Center + vector, Vel, ProjectileID.UnholyTridentHostile, 90);
 		}
 		#endregion
 		#region Sharknado

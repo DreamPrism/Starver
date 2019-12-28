@@ -69,7 +69,7 @@ namespace Starvers.NPCSystem
 		public override float DamageIndex => (StarverConfig.Config.TaskNow - 20) / 5f + 1;
 		public bool OverrideRawDrop { get; protected set; } = false;
 		#endregion
-		#region ctor & Release
+		#region Ctor & Release
 		protected StarverNPC(int AIs = 0)
 		{
 			AIUsing = new float[AIs];

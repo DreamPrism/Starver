@@ -18,7 +18,7 @@ namespace Starvers.WeaponSystem.Weapons.Magic
 		private Vector DeflectDown;
 		private unsafe DateTime* LastRelease;
 		#endregion
-		#region ctor dtor
+		#region Ctor dtor
 		public NebulaArcanumEx() : base(0, IID.NebulaArcanum, PID.NebulaArcanum, CareerType.Magic, 251)
 		{
 			CatchID = PID.NebulaArcanum;

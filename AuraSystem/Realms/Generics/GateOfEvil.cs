@@ -11,8 +11,9 @@ namespace Starvers.AuraSystem.Realms.Generics
 	using Terraria;
 	using Terraria.ID;
 
+	[Obsolete("魔界之门已废弃", true)]
 	public class GateOfEvil<T> : StarverRealm<T>
-		where T : IBorderConditioner,new()
+	where T : IBorderConditioner, new()
 	{
 		public bool NewBySystem { get; set; }
 		public GateOfEvil() : base(false)
@@ -33,7 +34,7 @@ namespace Starvers.AuraSystem.Realms.Generics
 				Kill();
 				return;
 			}
-				base.InternalUpdate();
+			base.InternalUpdate();
 			foreach (var player in Starver.Players)
 			{
 				if (player == null || !player.Active || !InRange(player))

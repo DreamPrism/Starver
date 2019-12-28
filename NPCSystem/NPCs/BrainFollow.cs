@@ -27,7 +27,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region Properties
 		public override float DamageIndex => Brain.DamageIndex;
 		#endregion
-		#region ctor
+		#region Ctor
 		public BrainFollow():base(1)
 		{
 			NoTileCollide = true;

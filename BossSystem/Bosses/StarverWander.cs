@@ -36,7 +36,7 @@ namespace Starvers.BossSystem.Bosses
 			new DropItem(new int[]{ Currency.Ranged }, 30, 55),
 		};
 		#endregion
-		#region ctor
+		#region Ctor
 		public unsafe StarverWander():base(4)
 		{
 			TaskNeed = 27;

@@ -31,7 +31,7 @@ namespace Starvers.BossSystem.Bosses
 			new DropItem(new int[]{ Currency.Melee }, 30, 55),
 		};
 		#endregion
-		#region ctor
+		#region Ctor
 		public StarverDestroyer() : base(1)
 		{
 			TaskNeed = 30;

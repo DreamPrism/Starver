@@ -19,7 +19,7 @@ namespace Starvers.BossSystem.Bosses
 		/// </summary>
 		private Vector UnitY = new Vector(0, -16 * 24);
 		#endregion
-		#region ctor
+		#region Ctor
 		public RedDevilEx():base(1)
 		{
 			TaskNeed = 32;
@@ -76,7 +76,7 @@ namespace Starvers.BossSystem.Bosses
 						ResetMode();
 						break;
 					}
-					if(Timer % 2 == 0)
+					if(Timer % 3 == 0)
 					{
 						Laser();
 					}
@@ -91,7 +91,7 @@ namespace Starvers.BossSystem.Bosses
 					}
 					if(Timer % 5 == 0)
 					{
-						Trident();
+						EvilTrident(155);
 					}
 					break;
 				#endregion
@@ -127,29 +127,21 @@ namespace Starvers.BossSystem.Bosses
 			NewNPC((Vector)Center, vector, NPCID.Demon, 30000, 34500);
 		}
 		#endregion
-		#region Trident
-		private void Trident()
-		{
-			vector = (Vector)Rand.NextVector2(16 * 30);
-			Vel = -vector;
-			Vel.Length = 28;
-			Proj(TargetPlayer.Center + vector, Vel, ProjectileID.UnholyTridentHostile, 155);
-		}
-		#endregion
 		#region Laser
 		private void Laser()
 		{
-			vector = new Vector(0, 16 * 28);
-			Vel = FromPolar(PI / 2, 23);
-			Vel.Angle += (Rand.NextAngle() - PI) / 6;
-			Proj(TargetPlayer.Center + vector, Vel.Deflect(PI), ProjectileID.EyeLaser, 149);
-			Proj(TargetPlayer.Center - vector, Vel, ProjectileID.EyeLaser, 149);
+			vector = (0, 16 * 38);
+			Vel = FromPolar(PI / 2, 24);
+			Vel.Angle += (Rand.NextAngle() - PI) / 24;
+			Proj(TargetPlayer.Center + vector, Vel.Deflect(PI), ProjectileID.EyeLaser, 109);
+			Proj(TargetPlayer.Center - vector, Vel, ProjectileID.EyeLaser, 109);
 		}
 		#endregion
 		#region Flame
 		private void Flame()
 		{
-			vector = (Vector)Rand.NextVector2(16 * 19);
+			vector = Vector.FromPolar(Math.PI / 4 + Math.PI / 2 * Rand.Next(4), 16 * 36);
+			vector += new Vector(Rand.Next(-10, 10), Rand.Next(-10, 10)) * 16;
 			Vel = -vector;
 			Vel.Length = 10;
 			Proj(TargetPlayer.Center + vector, Vel, ProjectileID.DesertDjinnCurse, 144);

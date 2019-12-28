@@ -9,7 +9,7 @@ namespace Starvers.DB
 {
 	internal class TableCreator
 	{
-		#region ctors
+		#region Ctors
 		private TableCreator()
 		{
 

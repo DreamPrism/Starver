@@ -33,7 +33,7 @@ namespace Starvers.BossSystem.Bosses
 			new DropItem(new int[]{ Currency.Minion }, 30, 55),
 		};
 		#endregion
-		#region ctor
+		#region Ctor
 		public StarverRedeemer():base(4)
 		{
 			CheckType = false;

@@ -50,7 +50,7 @@ namespace Starvers.WeaponSystem
 		#endregion
 		#region Iterfaces
 		public StarverConfig Config => StarverConfig.Config;
-		public bool Enabled => Config.EnableAura && Config.EnableBoss;
+		public bool Enabled => Config.EnableAura;
 		public void Load()
 		{
 			GetDataHandlers.NewProjectile += OnProj;

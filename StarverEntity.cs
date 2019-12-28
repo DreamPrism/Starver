@@ -66,7 +66,7 @@ namespace Starvers
 		public const int CriticalLevel = 2000;
 		public const int BaseLevel = 2000;
 		#endregion
-		#region ctor
+		#region Ctor
 		protected StarverEntity()
 		{
 

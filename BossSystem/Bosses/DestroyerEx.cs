@@ -21,7 +21,7 @@ namespace Starvers.BossSystem.Bosses
 		private const int BodyMax = 80;
 		private int[] Bodies = new int[BodyMax];
 		#endregion
-		#region ctor
+		#region Ctor
 		public DestroyerEx() : base(1)
 		{
 			TaskNeed = 35;

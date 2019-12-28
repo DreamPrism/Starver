@@ -317,12 +317,30 @@ namespace Starvers
 			if(success)
 			{
 				SendInfoMessage($"支线任务{BranchTask}已完成");
+				RandomRocket(3, 10);
 			}
 			else
 			{
 				SendFailMessage($"支线任务{BranchTask}失败");
 			}
 			BranchTask = null;
+		}
+		#endregion
+		#region RandRocket
+		public void RandomRocket(int min, int Max)
+		{
+			short[] rockets =
+			{
+				ProjectileID.RocketFireworkBlue,
+				ProjectileID.RocketFireworkGreen,
+				ProjectileID.RocketFireworkRed,
+				ProjectileID.RocketFireworkYellow
+			};
+			int count = Starver.Rand.Next(min, Max);
+			while (count-- > 0)
+			{
+				NewProj(Center + Starver.Rand.NextVector2(16 * 15, 16 * 15), Vector2.Zero, rockets.Next(), 0);
+			}
 		}
 		#endregion
 		#region GiveItem

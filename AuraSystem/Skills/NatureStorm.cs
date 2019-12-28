@@ -25,7 +25,7 @@ namespace Starvers.AuraSystem.Skills
 		private const int LeafType = ProjectileID.CrystalLeafShot;
 		private readonly static Vector2 UpingVel = new Vector2(0, -27);
 		#endregion
-		#region ctor
+		#region Ctor
 		public NatureStorm() : base(SkillIDs.NatureStorm)
 		{
 			Level = 50000;

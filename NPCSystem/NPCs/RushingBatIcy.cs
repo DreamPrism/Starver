@@ -8,7 +8,7 @@ namespace Starvers.NPCSystem.NPCs
 {
 	public class RushingBatIcy : RushingBat
 	{
-		#region ctor
+		#region Ctor
 		public RushingBatIcy()
 		{
 			Checker.Biome |= BiomeType.Icy;

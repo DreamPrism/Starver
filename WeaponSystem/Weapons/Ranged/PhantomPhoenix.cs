@@ -16,7 +16,7 @@ namespace Starvers.WeaponSystem.Weapons.Ranged
 		protected const double rad = Math.PI / 12;
 		protected double rd = 0;
 		#endregion
-		#region ctor
+		#region Ctor
 		public PhantomPhoenix() : base(2,IID.DD2PhoenixBow,PID.DD2PhoenixBowShot,CareerType.Ranged,243)
 		{
 			CatchID = PID.DD2PhoenixBow;

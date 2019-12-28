@@ -22,7 +22,7 @@ namespace Starvers.BossSystem.Bosses.Clover
 		private FinalAdjudicator Wither = new FinalAdjudicator();
 		private FinalDestroyer TOFOUT = new FinalDestroyer();
 		#endregion
-		#region ctor
+		#region Ctor
 		public StarverManager() : base(3)
 		{
 			TaskNeed = 42;

@@ -132,83 +132,19 @@ namespace Starvers.TaskSystem.Branches
 			}
 			#endregion
 			#region TaskData
-			[type: StructLayout(LayoutKind.Explicit, Size = 16)]
 			private struct TaskData
 			{
-				#region ByteValues
-				[field: FieldOffset(sizeof(byte) * 0)]
-				private byte ByteValue0;
-				[field: FieldOffset(sizeof(byte) * 1)]
-				private byte ByteValue1;
-				[field: FieldOffset(sizeof(byte) * 2)]
-				private byte ByteValue2;
-				[field: FieldOffset(sizeof(byte) * 3)]
-				private byte ByteValue3;
-				[field: FieldOffset(sizeof(byte) * 4)]
-				private byte ByteValue4;
-				[field: FieldOffset(sizeof(byte) * 5)]
-				private byte ByteValue5;
-				[field: FieldOffset(sizeof(byte) * 6)]
-				private byte ByteValue6;
-				[field: FieldOffset(sizeof(byte) * 7)]
-				private byte ByteValue7;
-				[field: FieldOffset(sizeof(byte) * 8)]
-				private byte ByteValue8;
-				[field: FieldOffset(sizeof(byte) * 9)]
-				private byte ByteValue9;
-				[field: FieldOffset(sizeof(byte) * 10)]
-				private byte ByteValue10;
-				[field: FieldOffset(sizeof(byte) * 11)]
-				private byte ByteValue11;
-				[field: FieldOffset(sizeof(byte) * 12)]
-				private byte ByteValue12;
-				[field: FieldOffset(sizeof(byte) * 13)]
-				private byte ByteValue13;
-				[field: FieldOffset(sizeof(byte) * 14)]
-				private byte ByteValue14;
-				[field: FieldOffset(sizeof(byte) * 15)]
-				private byte ByteValue15;
-				#endregion
-				#region IntValues
-				[field: FieldOffset(sizeof(int) * 0)]
-				private int IntValue0;
-				[field: FieldOffset(sizeof(int) * 1)]
-				private int IntValue1;
-				[field: FieldOffset(sizeof(int) * 2)]
-				private int IntValue2;
-				[field: FieldOffset(sizeof(int) * 3)]
-				private int IntValue3;
-				#endregion
-				#region FloatValues
-				[field: FieldOffset(sizeof(float) * 0)]
-				private float FloatValue0;
-				[field: FieldOffset(sizeof(float) * 1)]
-				private float FloatValue1;
-				[field: FieldOffset(sizeof(float) * 2)]
-				private float FloatValue2;
-				[field: FieldOffset(sizeof(float) * 3)]
-				private float FloatValue3;
-				#endregion
-				#region DoubleValues
-				[field: FieldOffset(sizeof(double) * 0)]
-				private double DoubleValue0;
-				[field: FieldOffset(sizeof(double) * 1)]
-				private double DoubleValue1;
-				#endregion
-				#region DecimalValues
-				[field: FieldOffset(sizeof(decimal) * 0)]
-				private decimal DecimalValue0;
-				#endregion
+				private Data16 data;
 
 				public int KillCount
 				{
-					get => IntValue0;
-					set => IntValue0 = value;
+					get => data.IntValue0;
+					set => data.IntValue0 = value;
 				}
 				public int RequireCount
 				{
-					get => IntValue1;
-					set => IntValue1 = value;
+					get => data.IntValue1;
+					set => data.IntValue1 = value;
 				}
 			}
 			#endregion

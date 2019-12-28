@@ -16,7 +16,7 @@ namespace Starvers.WeaponSystem.Weapons.Magic
 		private Vector Up;
 		private Vector Down;
 		#endregion
-		#region ctor
+		#region Ctor
 		public LastPrismEx() : base(2, IID.LastPrism, PID.LunarFlare, CareerType.Magic, 286)
 		{
 			CatchID = PID.LastPrism;

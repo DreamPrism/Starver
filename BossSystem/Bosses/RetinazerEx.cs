@@ -22,7 +22,7 @@ namespace Starvers.BossSystem.Bosses
 		/// </summary>
 		protected int Where = 0;
 		#endregion
-		#region ctor
+		#region Ctor
 		public RetinazerEx() : base(2)
 		{
 			TaskNeed = 36;

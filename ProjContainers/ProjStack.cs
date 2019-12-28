@@ -22,7 +22,7 @@ namespace Starvers
 		#region Fields
 		private int Size;
 		#endregion
-		#region ctor
+		#region Ctor
 		public ProjStack(int Size = 30) : base(Size)
 		{
 			this.Size = Size;

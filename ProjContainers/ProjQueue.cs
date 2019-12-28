@@ -37,7 +37,7 @@ namespace Starvers
 		/// </summary>
 		private int CurrentLaunch;
 		#endregion
-		#region ctor
+		#region Ctor
 		public ProjQueue(int size = 30)
 		{
 			Size = size;

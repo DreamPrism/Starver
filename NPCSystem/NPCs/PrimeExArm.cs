@@ -15,7 +15,7 @@ namespace Starvers.NPCSystem.NPCs
 		private PrimeEx Prime;
 		private const float Distance = 16 * 25;
 		#endregion
-		#region ctor
+		#region Ctor
 		public PrimeExArm() : base(1)
 		{
 			NoTileCollide = true;

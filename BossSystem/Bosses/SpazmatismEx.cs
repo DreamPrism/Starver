@@ -62,7 +62,7 @@ namespace Starvers.BossSystem.Bosses
 			}
 		}
 		#endregion
-		#region ctor
+		#region Ctor
 		public SpazmatismEx() : base(3)
 		{
 			TaskNeed = 37;

@@ -147,6 +147,7 @@
     <Compile Include="AuraSystem\Skills\WindRealm.cs" />
     <Compile Include="BlockSystem\StarverBlockManager.cs" />
     <Compile Include="BossSystem\Bosses\Base\StarverBoss.cs" />
+    <Compile Include="Data16.cs" />
     <Compile Include="Events\NPCStrikeEventArgs.cs" />
     <Compile Include="Events\ReleaseSkillEventArgs.cs" />
     <Compile Include="LockedSkill.cs" />

@@ -19,8 +19,11 @@ namespace Starvers.AuraSystem
 	{
 		#region Fields
 		private int timer;
+		[Obsolete("魔界之门已废弃", true)]
 		internal static int EvilGateSpawnCountDown;
+		[Obsolete("魔界之门已废弃", true)]
 		internal dynamic Stellaria;
+		[Obsolete("魔界之门已废弃", true)]
 		internal Vector2[] LastPos;
 		private Command AuraCommand;
 		private Command TestCommand;
@@ -60,6 +63,7 @@ namespace Starvers.AuraSystem
 		#region Loads
 		private void LoadVars()
 		{
+#if false
 			{
 				if (Config.EnableTask)
 					EvilGateSpawnCountDown = 60 * 9;
@@ -80,7 +84,7 @@ namespace Starvers.AuraSystem
 					Console.WriteLine("Aura 需要使用魔改过的 Stellaria");
 				}
 			}
-
+#endif
 			Skill = new SkillManager();
 			TheRealms = new Queue<IRealm>();
 			RealmTypes = new List<Type>
@@ -91,7 +95,6 @@ namespace Starvers.AuraSystem
 				typeof(ReflectingRealm<EllipseReflector>),
 				typeof(BlindingRealm<EllipseConditioner>),
 				typeof(ReflectingRealm<CircleReflector>),
-				typeof(GateOfEvil<CircleConditioner>)
 			};
 			{
 				RealmNames = new string[RealmTypes.Count];
@@ -195,6 +198,7 @@ namespace Starvers.AuraSystem
 			}
 		}
 		#region UpdateEvilGate
+		[Obsolete("魔界之门已废弃", true)]
 		private void UpdateEvilGate()
 		{
 			bool canSpawn = NPC.downedMoonlord || Starver.Config.EvilWorld;
@@ -218,10 +222,12 @@ namespace Starvers.AuraSystem
 		{
 			timer++;
 			UpdateRealms();
+#if false
 			if (Config.EnableTask && Config.EvilWorld || NPC.downedMoonlord)
 			{
 				UpdateEvilGate();
 			}
+#endif
 		}
 		#endregion
 		#region OnProj
@@ -314,14 +320,6 @@ namespace Starvers.AuraSystem
 								Realm.DefaultTimeLeft = timeLeft;
 							}
 							realm = Realm;
-							break;
-						}
-					case 7:
-						{
-							realm = new GateOfEvil<CircleConditioner>
-							{
-								Center = args.TPlayer.Center + new Vector2(0, -16 * 40)
-							};
 							break;
 						}
 					default:

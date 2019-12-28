@@ -41,7 +41,8 @@ namespace Starvers.TaskSystem
 		{
 			Commands.ChatCommands.Add(new Command(Perms.Task.Normal, MainCommand, "task", "tsks") { HelpText = HelpTexts.Task });
 			ServerApi.Hooks.GameUpdate.Register(Starver.Instance, OnGameUpdate);
-			
+			ServerApi.Hooks.GamePostInitialize.Register(Starver.Instance, OnInitialized);
+
 			TasksPath = Path.Combine(TShock.SavePath, "StarverTasks.json");
 			ConfigHelpPath = Path.Combine(TShock.SavePath, "关于StarverTasks.json.txt");
 			ItemIDsPath = Path.Combine(TShock.SavePath, "ItemIDs.txt");
@@ -49,12 +50,19 @@ namespace Starvers.TaskSystem
 		public void UnLoad()
 		{
 			ServerApi.Hooks.GameUpdate.Deregister(Starver.Instance, OnGameUpdate);
+			ServerApi.Hooks.GamePostInitialize.Deregister(Starver.Instance, OnInitialized);
+		}
+		#endregion
+		#region OnInitialized
+		private void OnInitialized(EventArgs args)
+		{
+			LoadTasks();
 		}
 		#endregion
 		#region OnUpdate
 		private void OnGameUpdate(EventArgs args)
 		{
-			LoadTasks();
+			//LoadTasks();
 			Timer++;
 			if (Timer % 60 == 0)
 			{
@@ -240,7 +248,7 @@ namespace Starvers.TaskSystem
 		}
 		private void ReLoadTasks()
 		{
-			if(!LoadedTask)
+			if (!LoadedTask)
 			{
 				LoadTasks();
 				return;
@@ -275,7 +283,7 @@ namespace Starvers.TaskSystem
 				}
 				return true;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Console.WriteLine(e);
 				return false;
@@ -308,18 +316,18 @@ namespace Starvers.TaskSystem
 		{
 			string p = args.Parameters.Count < 1 ? "None" : args.Parameters[0];
 			var player = args.SPlayer();
-			LoadTasks();
+			//LoadTasks();
 			switch (p.ToLower())
 			{
 				#region Reload
 				case "reload":
-					if(args.Player.HasPermission(Perms.Task.Reload))
+					if (args.Player.HasPermission(Perms.Task.Reload))
 					{
 						try
 						{
 							ReLoadTasks();
 						}
-						catch(Exception e)
+						catch (Exception e)
 						{
 							args.Player.SendErrorMessage("重新加载任务失败");
 							args.Player.SendErrorMessage(e.ToString());
@@ -450,7 +458,7 @@ namespace Starvers.TaskSystem
 							else
 							{
 								player.SendCombatMSsg($"任务开始: {player.BranchTask}", Color.Green);
-								if(Message != null)
+								if (Message != null)
 								{
 									player.SendSuccessMessage(Message);
 								}

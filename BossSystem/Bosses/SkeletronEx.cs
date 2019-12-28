@@ -19,7 +19,7 @@ namespace Starvers.BossSystem.Bosses
 		private int[] ArmsUpper = new int[MaxArms];
 		private int[] ArmsLower = new int[MaxArms];
 		#endregion
-		#region ctor
+		#region Ctor
 		public SkeletronEx() : base(2)
 		{
 			ComingMessage = "你感到全身上下的骨头都在战粟...";

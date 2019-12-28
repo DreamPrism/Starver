@@ -12,7 +12,7 @@ namespace Starvers
 		#region Var
 		public string Name { get; protected set; }
 		#endregion
-		#region ctor
+		#region Ctor
 		protected BaseNPC()
 		{
 

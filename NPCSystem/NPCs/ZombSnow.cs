@@ -8,7 +8,7 @@ namespace Starvers.NPCSystem.NPCs
 {
 	public class ZombSnow : Zomb
 	{
-		#region ctor
+		#region Ctor
 		public ZombSnow()
 		{
 			Types = null;

@@ -33,7 +33,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region Properties
 		protected override float CollidingIndex => DamageIndex;
 		#endregion
-		#region ctor
+		#region Ctor
 		static FloatingSkeleton()
 		{
 			Checker_UnderGround = SpawnChecker.ZombieLike;

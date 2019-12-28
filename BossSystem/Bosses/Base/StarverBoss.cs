@@ -134,12 +134,12 @@ namespace Starvers.BossSystem.Bosses.Base
 			}
 		}
 		#endregion
-		#region ctor
+		#region Ctor
 		private StarverBoss()
 		{
 			TypeName = Name = GetType().Name;
 		}
-		protected unsafe StarverBoss(int ainum) : this()
+		protected StarverBoss(int ainum) : this()
 		{
 			string path = Path.Combine(Starver.SavePathBosses, TypeName);
 			DataPath = path;
@@ -237,7 +237,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region SummonFollows
-		protected unsafe void SummonFollows()
+		protected void SummonFollows()
 		{
 			int alive = AlivePlayers();
 			int idx = NPC.NewNPC((int)Center.X, (int)Center.Y, (int)StarverAI[2], Index);
@@ -292,8 +292,21 @@ namespace Starvers.BossSystem.Bosses.Base
 			FakeVelocity.Length = 26 * DamageIndex;
 		}
 		#endregion
+		#region Trident
+		protected void EvilTrident(int damage)
+		{
+			vector = (16 * 40, Rand.Next(-16 * 9, 16 * 9));
+			if (Rand.Next(2) == 0)
+			{
+				vector *= -1;
+			}
+			Vel = -vector;
+			Vel.Length = 17;
+			Proj(TargetPlayer.Center + vector, Vel, ProjectileID.UnholyTridentHostile, damage);
+		}
+		#endregion
 		#region Spawn
-		public unsafe virtual void Spawn(Vector2 where, int lvl = CriticalLevel)
+		public virtual void Spawn(Vector2 where, int lvl = CriticalLevel)
 		{
 			if (_active)
 			{
@@ -348,7 +361,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region Spawn_Clover
-		protected unsafe void Spawn_Clover(Vector2 where, int lvl = CriticalLevel)
+		protected void Spawn_Clover(Vector2 where, int lvl = CriticalLevel)
 		{
 			if (_active)
 			{
@@ -524,7 +537,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		#endregion
 		#region AI
-		public unsafe override void AI(object args = null)
+		public override void AI(object args = null)
 		{
 			if (!CheckActive())
 			{

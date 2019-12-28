@@ -42,7 +42,7 @@ namespace Starvers.BossSystem.Bosses
 			}
 		}
 		#endregion
-		#region ctor
+		#region Ctor
 		public BrainEx() : base(2)
 		{
 			ComingMessage = "血液在沸腾...";

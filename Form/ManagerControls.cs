@@ -52,7 +52,7 @@ namespace Starvers.Forms
 				_Label.Dispose();
 			}
 			#endregion
-			#region ctor
+			#region Ctor
 			public ManagerControl(ManagerControls ManagerControls, Point Loc, string Name, int index = 0, bool numonly = false)
 			{
 				Manager = ManagerControls.Manager;
@@ -216,7 +216,7 @@ namespace Starvers.Forms
 		}
 		#endregion
 		#region Methods
-		#region ctor
+		#region Ctor
 		public ManagerControls(StarverManagerForm manager)
 		{
 			Manager = manager;

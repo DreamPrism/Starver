@@ -965,11 +965,13 @@ namespace Starvers
 		}
 		#endregion
 		#region Transport
+		[Obsolete("魔界之门已废弃", true)]
 		public static void SendToEvil(StarverPlayer player)
 		{
 			Instance.Aura.Stellaria?.SendPlayer(player.TSPlayer);
 			//File.Create(Path.Combine(Instance.FolderSending, player.Index.ToString())).Dispose();
 		}
+		[Obsolete("魔界之门已废弃", true)]
 		public static void BackToHard(StarverPlayer player)
 		{
 			Instance.Aura.Stellaria?.SendPlayerBack(player.TSPlayer);

@@ -26,7 +26,7 @@ namespace Starvers.AuraSystem.Skills
 			ProjectileID.InfluxWaver
 		};
 		#endregion
-		#region ctor
+		#region Ctor
 		public UltimateSlash() : this(SkillIDs.UltimateSlash)
 		{
 			FromOut = new int[]

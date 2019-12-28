@@ -26,7 +26,7 @@ namespace Starvers.BossSystem.Bosses
 			WhereToGo = (Vector)Center;
 		}
 		#endregion
-		#region ctor
+		#region Ctor
 		public DarkMageEx() : base(1)
 		{
 			ComingMessage = "远古的力量正在缓缓凝聚...";

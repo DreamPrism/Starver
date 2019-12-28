@@ -14,7 +14,7 @@ namespace Starvers.WeaponSystem.Weapons.Melee
 	{
 		#region Fields
 		#endregion
-		#region ctor
+		#region Ctor
 		public NorthPoleEx() : base(0,IID.NorthPole,PID.NorthPoleSpear,CareerType.Melee,271)
 		{
 			CatchID = PID.NorthPoleWeapon;

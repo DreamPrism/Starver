@@ -12,7 +12,7 @@ namespace Starvers.WeaponSystem.Weapons.Magic
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class NebulaBlazeEx : Weapon
 	{
-		#region ctor
+		#region Ctor
 		public NebulaBlazeEx() : base(1, IID.NebulaBlaze, PID.NebulaBlaze2, CareerType.Magic, 282)
 		{
 			CatchID = PID.NebulaBlaze1;

@@ -13,7 +13,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region Properties
 		protected override float CollidingIndex => DamageIndex;
 		#endregion
-		#region ctor
+		#region Ctor
 		public PossessedArmorArcher()
 		{
 			AfraidSun = true;

@@ -23,7 +23,7 @@ namespace Starvers.BossSystem.Bosses
 		#region Properties
 		internal BossMode ModeNow => Mode;
 		#endregion
-		#region ctor
+		#region Ctor
 		public PrimeEx() : base(2)
 		{
 			TaskNeed = 34;

@@ -19,7 +19,7 @@ namespace Starvers.AuraSystem.Skills
 		protected const int StopTime = 5000;
 		protected static int TimeToStop;
 		#endregion
-		#region ctor
+		#region Ctor
 		public TheWorld() : base(SkillIDs.TheWorld)
 		{
 			MP = 110;
