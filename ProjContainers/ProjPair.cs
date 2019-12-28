@@ -37,5 +37,10 @@ namespace Starvers
 		{
 			Launch((Vector)(Pos - Proj.Center).ToLenOf(vel));
 		}
+
+		public static implicit operator ProjPair((int Index, Vector Velocity) value)
+		{
+			return new ProjPair { Index = value.Index, Velocity = value.Velocity };
+		}
 	}
 }

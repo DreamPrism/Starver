@@ -112,13 +112,9 @@ namespace Starvers
 		}
 		#endregion
 		#region Reset
-		/// <summary>
-		/// 没用到
-		/// </summary>
-		/// <param name="ClearItem"></param>
-		public void Reset(bool ClearItem)
+		public void Reset()
 		{
-
+			Clear();
 		}
 		#endregion
 	}

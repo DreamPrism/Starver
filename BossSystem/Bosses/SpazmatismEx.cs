@@ -88,7 +88,7 @@ namespace Starvers.BossSystem.Bosses
 			AutoSetWhereToGo = true;
 			AutoSetFakeVelocity = true;
 			lastMode = BossMode.SpazmatismBetsyFireBall;
-			Projs.Reset(true);
+			Projs.Reset();
 			RealCenter = (Vector)RealNPC.Center;
 		}
 		#endregion

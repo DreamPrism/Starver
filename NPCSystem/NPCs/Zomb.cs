@@ -33,7 +33,7 @@ namespace Starvers.NPCSystem.NPCs
 			Checker = SpawnChecker.ZombieLike;
 			RawType = NPCID.Zombie;
 			DefaultLife = 12000;
-			DefaultDefense = 280000;
+			DefaultDefense = 200000;
 			Checker.Task = 21;
 			AIStyle = 3;
 			Types = ZombieTypes;
@@ -68,7 +68,7 @@ namespace Starvers.NPCSystem.NPCs
 					}
 					if (Microsoft.Xna.Framework.Vector2.Distance(TargetPlayer.Center, Center) < 16 * 15)
 					{
-						ply.Damage((int)(3000 * DamageIndex));
+						ply.Damage((int)(2000 * DamageIndex));
 					}
 				}
 			}

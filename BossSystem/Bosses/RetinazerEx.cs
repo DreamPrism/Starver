@@ -21,6 +21,8 @@ namespace Starvers.BossSystem.Bosses
 		/// 3:正左
 		/// </summary>
 		protected int Where = 0;
+		protected const int LaserBlueTimeMax = 60 * 4;
+		protected int defToCut;
 		#endregion
 		#region Ctor
 		public RetinazerEx() : base(2)
@@ -29,7 +31,7 @@ namespace Starvers.BossSystem.Bosses
 			RawType = NPCID.Retinazer;
 			DefaultLife = 1925000;
 			DefaultLifes = 100;
-			DefaultDefense = 720;
+			DefaultDefense = 300;
 			Drops = new DropItem[]
 			{
 				new DropItem(new int[]{ Currency.Ranged }, 1, 28, 0.5f),
@@ -44,7 +46,15 @@ namespace Starvers.BossSystem.Bosses
 		public override void Spawn(Vector2 where, int lvl = 2000)
 		{
 			base.Spawn(where, lvl);
+			defToCut = Defense / LifesMax;
 			lastMode = BossMode.RetinazerSaucerLaser;
+		}
+		#endregion
+		#region LifeDown
+		public override void LifeDown()
+		{
+			Defense -= defToCut;
+			base.LifeDown();
 		}
 		#endregion
 		#region RealAI
@@ -60,12 +70,12 @@ namespace Starvers.BossSystem.Bosses
 				#endregion
 				#region DeathLaser
 				case BossMode.RetinazerDeathLaser:
-					if(modetime > 60 * 8)
+					if (modetime > 60 * 8 || Lifes < LifesMax / 2)
 					{
 						ResetMode();
 						break;
 					}
-					if(Timer % 16 == 0)
+					if (Timer % 16 == 0)
 					{
 						DeathLaser();
 					}
@@ -73,12 +83,12 @@ namespace Starvers.BossSystem.Bosses
 				#endregion
 				#region LaserBlue
 				case BossMode.RetinazerLaserBlue:
-					if( modetime > 60 * 10)
+					if (modetime > LaserBlueTimeMax)
 					{
 						ResetMode();
 						break;
 					}
-					if(Timer % 5 == 0)
+					if (Timer % 5 == 0)
 					{
 						LaserBlue();
 					}
@@ -86,12 +96,12 @@ namespace Starvers.BossSystem.Bosses
 				#endregion
 				#region WalkerLaser
 				case BossMode.RetinazerLaserWalker:
-					if(modetime > 60 * 6)
+					if (modetime > 60 * 6)
 					{
 						ResetMode();
 						break;
 					}
-					if(Timer % 25 == 0)
+					if (Timer % 25 == 0)
 					{
 						WalkerLaser();
 					}
@@ -99,12 +109,12 @@ namespace Starvers.BossSystem.Bosses
 				#endregion
 				#region SaucerLaser
 				case BossMode.RetinazerSaucerLaser:
-					if(modetime > 60 * 9)
+					if (modetime > 60 * 9)
 					{
 						ResetMode();
 						break;
 					}
-					if(Timer % 2 == 0)
+					if (Timer % 2 == 0)
 					{
 						SaucerLaser();
 					}
@@ -126,7 +136,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			Vel = (Vector)(-RelativePos);
 			Vel.Length = 20;
-			Vel.Angle += Rand.NextAngle() / 3 - PI / 3;
+			Vel.Angle += Math.Sin(Timer * Math.PI / 90) * Math.PI / 6;
 			Proj(Center, Vel, ProjectileID.SaucerLaser, 229);
 		}
 		#endregion
@@ -134,14 +144,21 @@ namespace Starvers.BossSystem.Bosses
 		private void WalkerLaser()
 		{
 			Vel = (Vector)(-RelativePos);
-			ProjSector(TargetPlayer.Center, 21.66666666f, Vel.Length, Vel.Angle, PI * 2 / 5, 206, ProjectileID.MartianWalkerLaser, 5, 1);
+			ProjSector(TargetPlayer.Center, 16.66666666f, Vel.Length, Vel.Angle, PI * 2 / 5, 206, ProjectileID.MartianWalkerLaser, 5, 1);
 		}
 		#endregion
 		#region LaserBlue
 		private void LaserBlue()
 		{
-			vector = (Vector)Rand.NextVector2(20);
-			Proj(TargetPlayer.Center - vector * 20, vector, ProjectileID.EyeLaser, 204);
+			vector = (Vector)(-RelativePos);
+			Vel = vector.Vertical();
+			vector.Angle += Math.Cos(modetime / (double)LaserBlueTimeMax * Math.PI) * Math.PI / 3;
+			Vel.Length = 4;
+			Proj(Center + 2 * Vel, vector, ProjectileID.EyeLaser, 204 * 1 / 3);
+			Proj(Center + 1 * Vel, vector, ProjectileID.EyeLaser, 204 * 2 / 3);
+			Proj(Center, vector, ProjectileID.EyeLaser, 204);
+			Proj(Center - 1 * Vel, vector, ProjectileID.EyeLaser, 204 * 2 / 3);
+			Proj(Center - 2 * Vel, vector, ProjectileID.EyeLaser, 204 * 1 / 3);
 		}
 		#endregion
 		#region DeathLaser

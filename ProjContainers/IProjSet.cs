@@ -63,10 +63,6 @@ namespace Starvers
 		/// <param name="Pos"></param>
 		/// <param name="vel">速率</param>
 		bool LaunchTo(int HowMany, Vector Pos, float vel);
-		/// <summary>
-		/// 清楚元素
-		/// </summary>
-		/// <param name="ClearItems"></param>
-		void Reset(bool ClearItems = false);
+		void Reset();
 	}
 }
