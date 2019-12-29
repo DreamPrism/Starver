@@ -23,11 +23,7 @@ namespace Starvers
 		/// <param name="forevery">是否全员有份</param>
 		public DropItem(int[] ids, int MinStack, int MaxStack, float dropchance = 1f, bool forevery = true)
 		{
-			IDs = new int[ids.Length];
-			for (int i = 0; i < ids.Length; i++)
-			{
-				IDs[i] = ids[i];
-			}
+			IDs = ids.Clone() as int[];
 			stacks[0] = MinStack;
 			stacks[1] = MaxStack;
 			chance = dropchance;
@@ -49,12 +45,11 @@ namespace Starvers
 			int itemid = Starver.Rand.Next(IDs.Length);
 			itemid = IDs[itemid];
 			int itemstack = Starver.Rand.Next(stacks[0], stacks[1]);
-			int num;
 			if (isforevery)
 			{
-				npc.DropItemInstanced(npc.Center, npc.Size, itemid, itemstack);
+				npc.DropItemForEveryone(npc.Center, itemid, itemstack);
 #if DEBUG
-				StarverPlayer.All.SendMessage(string.Format("掉落:{0},{1}:[i/s{1}:{0}]", itemid, itemstack),Color.Blue);
+				StarverPlayer.All.SendMessage(string.Format("掉落:{0},{1}:[i/s{1}:{0}]", itemid, itemstack), Color.Blue);
 #endif
 			}
 
@@ -63,8 +58,8 @@ namespace Starvers
 #if DEBUG
 				StarverPlayer.All.SendMessage(string.Format("掉落:{0},{1}:[i/s{1}:{0}]", itemid, itemstack), Color.Blue);
 #endif
-				num = Utils.NewItem(pos, itemid, itemstack);
-				NetMessage.SendData((int)PacketTypes.ItemDrop, -1, -1, null, num);
+				int idx = Utils.NewItem(pos, itemid, itemstack);
+				NetMessage.SendData((int)PacketTypes.ItemDrop, -1, -1, null, idx);
 			}
 
 		}

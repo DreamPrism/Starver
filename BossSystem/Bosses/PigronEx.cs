@@ -9,7 +9,8 @@ namespace Starvers.BossSystem.Bosses
 	using Base;
 	using Microsoft.Xna.Framework;
 	using Starvers.WeaponSystem;
-	using Terraria.ID;
+    using Terraria;
+    using Terraria.ID;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	public class PigronEx : StarverBoss
 	{
@@ -116,9 +117,9 @@ namespace Starvers.BossSystem.Bosses
 					{
 						ResetMode();
 					}
-					if(Timer % 60 * 2.9f == 0)
+					if(Timer % 60 * 3 / 2 == 0)
 					{
-						SummonFollows();
+						SummonPigronFollows();
 					}
 					break;
 					#endregion
@@ -183,11 +184,24 @@ namespace Starvers.BossSystem.Bosses
 		}
 		#endregion
 		#region SummonFollows
-		private new void SummonFollows()
+		private void SummonPigronFollows()
 		{
 			vector = (Vector)(Center + new Vector(0, -16 * 20));
 			Vel = (Vector)(Center + new Vector(16 * 20, 0));
 			Vector Unit = (Vel - vector) / Summons;
+
+			int count = Main.npc.Count(npc =>
+			{
+				return
+				npc.active &&
+				(npc.type == NPCID.PigronCorruption || npc.type == NPCID.PigronCrimson) &&
+				(npc.defense > 30000);
+			});
+			if(count >= Summons * 4)
+			{
+				modetime = 60 * 6 + 1;
+				return;
+			}
 			while (Vector.Distance(Vel, vector) > 16 * 2f)
 			{
 				NewNPC(vector, Vector.Zero, NPCID.PigronCorruption, 23300, 40000);

@@ -131,7 +131,9 @@ namespace Starvers
 		}
 		public void SendDeBugMessage(string msg)
 		{
+#if DEBUG
 			SendMessage(msg, Color.Blue);
+#endif
 		}
 		public void SendMessage(string msg, Color color)
 		{

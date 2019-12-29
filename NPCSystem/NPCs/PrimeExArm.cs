@@ -29,7 +29,7 @@ namespace Starvers.NPCSystem.NPCs
 		private BossMode Mode => Prime.ModeNow;
 		#endregion
 		#region Spawn
-		public unsafe void Spawn(Vector where,PrimeEx prime,float ID)
+		public void Spawn(Vector where,PrimeEx prime,float ID)
 		{
 			base.Spawn(where);
 			Starver.NPCs[Index] = NPCs[Index] = this;
@@ -43,10 +43,11 @@ namespace Starvers.NPCSystem.NPCs
 		}
 		#endregion
 		#region RealAI
-		protected unsafe override void RealAI()
+		protected override void RealAI()
 		{
-			if(!Prime.Active)
+			if (!Prime.Active)
 			{
+				StarverPlayer.All.SendDeBugMessage($"{Name} Killed itself by no Prime");
 				KillMe();
 				return;
 			}

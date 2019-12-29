@@ -52,7 +52,7 @@ namespace Starvers.NPCSystem.NPCs
 			SpaceOption |= SpawnSpaceOptins.InScreen;
 			RawType = NPCID.DarkCaster;
 			DefaultLife = 15000;
-			DefaultDefense = 430000;
+			DefaultDefense = 30000;
 			Checker = SpawnChecker.RareNight;
 			Checker.Task = TaskID.SkeletronEx;
 			CollideDamage = 400;
@@ -178,7 +178,7 @@ namespace Starvers.NPCSystem.NPCs
 		#region Warp
 		protected void Warp()
 		{
-			if (Target != -1)
+			if (Target != -1 && Target < Starver.Players.Length)
 			{
 				Position = CalcSpawnPosInScreen((Vector)TargetPlayer.Center);
 			}

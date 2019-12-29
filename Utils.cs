@@ -29,6 +29,30 @@ namespace Starvers
 		public static StarverPlayer[] Players => Starver.Players;
 		public static StarverConfig Config => StarverConfig.Config;
 		#endregion
+		#region DropItemInstanced
+		public static void DropItemForEveryone(this NPC npc, Vector2 Position, int itemType, int itemStack = 1, bool interactionRequired = true)
+		{
+			if (itemType <= 0)
+			{
+				return;
+			}
+			int num = NewItem(Position, itemType, itemStack);
+			if (num == -1)
+			{
+				return;
+			}
+			Terraria.Main.itemLockoutTime[num] = 54000;
+			for (int i = 0; i < Starver.Players.Length; i++)
+			{
+				if ((npc.playerInteraction[i] || !interactionRequired) && Main.player[i].active)
+				{
+					Terraria.NetMessage.SendData(90, i, -1, null, num);
+				}
+			}
+			Terraria.Main.item[num].active = false;
+			npc.value = 0f;
+		}
+		#endregion
 		#region SaveAll
 		public static void SaveAll()
 		{

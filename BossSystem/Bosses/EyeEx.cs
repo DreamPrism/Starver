@@ -16,8 +16,17 @@ namespace Starvers.BossSystem.Bosses
 	public class EyeEx : StarverBoss
 	{
 		#region Fields
-		private Vector Unit = new Vector(0, -16 * 16);
+		private Vector _unit = (0, -16 * 24);
 		private const int StartCollideDamage = 210;
+		#endregion
+		#region Properties
+		private Vector Unit
+		{
+			get
+			{
+				return _unit + (0, 16 * 10 * Math.Sin(Timer * Math.PI / 45));
+			}
+		}
 		#endregion
 		#region Ctor
 		public EyeEx() : base(3)
@@ -55,7 +64,8 @@ namespace Starvers.BossSystem.Bosses
 		#region RealAI
 		public override void RealAI()
 		{
-			switch(Mode)
+			#region Modes
+			switch (Mode)
 			{
 				#region SelectMode
 				case BossMode.WaitForMode:
@@ -105,7 +115,7 @@ namespace Starvers.BossSystem.Bosses
 					}
 					if(Timer % 60 == 0)
 					{
-						SummonFollows();
+						SummonEyeFollows();
 					}
 					break;
 				#endregion
@@ -136,11 +146,14 @@ namespace Starvers.BossSystem.Bosses
 					break;
 					#endregion
 			}
+			#endregion
 			#region Common
 			if (Mode != BossMode.Rush)
 			{
-				Vel = (Vector)(TargetPlayer.Center + Unit - Center);
-				FakeVelocity = Vel / 10;
+				Vel = (Vector)(TargetPlayer.Center + Unit - Center) / 30;
+				FakeVelocity /= 50;
+				FakeVelocity += Vel;
+				FakeVelocity.Length = Math.Min(24, FakeVelocity.Length);
 			}
 			#endregion
 		}
@@ -150,7 +163,7 @@ namespace Starvers.BossSystem.Bosses
 		private void Explosive()
 		{
 			vector = (Vector)TargetPlayer.Center;
-			new Thread(() =>
+			ThreadPool.QueueUserWorkItem(obj =>
 			{
 				try
 				{
@@ -162,29 +175,21 @@ namespace Starvers.BossSystem.Bosses
 						Main.projectile[idx].owner = Target;
 					}
 				}
-				catch
+				catch(Exception e)
 				{
-
+					StarverPlayer.All.SendDeBugMessage(e.ToString());
 				}
-				/*
-				foreach (var player in Starver.Players)
-				{
-					if (player == null || !player.Active)
-					{
-						continue;
-					}
-					if (Vector2.Distance(player.Center, vector) < 16 * 29)
-					{
-						player.Damage((int)(DamageIndex * 1300));
-					}
-				}
-				*/
-			}).Start();
+			});
 		}
 		#endregion
 		#region SummonFollows
-		private unsafe new void SummonFollows()
+		private void SummonEyeFollows()
 		{
+			if (Main.npc.Count(npc => npc.active && npc.type == NPCID.WanderingEye && npc.lifeMax > 6000) >= 3 * 6)
+			{
+				StarverAI[1] = 6;
+				return;
+			}
 			++StarverAI[1];
 			NewNPC((Vector)Center, FromPolar(PI / 2, 9), NPCID.WanderingEye, 6235, 98);
 			NewNPC((Vector)Center, FromPolar(PI / 2 + PI / 6, 9), NPCID.WanderingEye, 6235, 98);

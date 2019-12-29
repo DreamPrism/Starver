@@ -9,10 +9,20 @@ namespace Starvers.WeaponSystem
 {
 	public static class Currency
 	{
-		public const int Melee = ItemID.Fake_newchest1;
-		public const int Ranged = ItemID.Fake_newchest2;
-		public const int Magic = ItemID.BlueCultistCasterBanner;
-		public const int Minion = ItemID.BlueCultistFighterBanner;
-		public static int[] Shards { get; } = new int[] { Melee, Ranged, Magic, Minion };
+		public static int Melee { get; private set; } = ItemID.Fake_newchest1;
+		public static int Ranged { get; private set; } = ItemID.Fake_newchest2;
+		public static int Magic { get; private set; } = ItemID.BlueCultistCasterBanner;
+		public static int Minion { get; private set; } = ItemID.BlueCultistFighterBanner;
+		public static int[] Shards { get; private set; } 
+
+		public static void Initialize()
+		{
+			if(Starver.IsPE)
+			{
+				Melee = Magic;
+				Ranged = Minion;
+			}
+			Shards = new int[] { Melee, Ranged, Magic, Minion };
+		}
 	}
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOFOUT.Terraria.Server;
+using TShockAPI;
 
 namespace Starvers.WeaponSystem.Weapons.Ranged
 {
@@ -13,6 +15,30 @@ namespace Starvers.WeaponSystem.Weapons.Ranged
 		public VortexBeaterEx() : base(0,IDs.ItemID.VortexBeater, IDs.ProjectileID.VortexBeaterRocket, CareerType.Ranged, 235)
 		{
 			CatchID = IDs.ProjectileID.VortexBeater;
+		}
+		#endregion
+		#region Release
+		public override void UseWeapon(StarverPlayer player, Vector2 Velocity, int lvl, GetDataHandlers.NewProjectileEventArgs args)
+		{
+			var vertical = Velocity.Vertical();
+			var dmg = CalcDamage(lvl);
+			vertical.Normalize();
+			if (lvl > 7)
+			{
+				player.NewProj(player.Center, Velocity + vertical * 3, ProjID, dmg, 10f);
+				player.NewProj(player.Center, Velocity - vertical * 3, ProjID, dmg, 10f);
+			}
+			if (lvl > 5)
+			{
+				player.NewProj(player.Center, Velocity + vertical * 2, ProjID, dmg, 10f);
+				player.NewProj(player.Center, Velocity - vertical * 2, ProjID, dmg, 10f);
+			}
+			if (lvl > 3)
+			{
+				player.NewProj(player.Center, Velocity + vertical * 1, ProjID, dmg, 10f);
+				player.NewProj(player.Center, Velocity - vertical * 1, ProjID, dmg, 10f);
+			}
+			player.NewProj(player.Center, Velocity, ProjID, dmg, 10f);
 		}
 		#endregion
 	}

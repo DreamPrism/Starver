@@ -431,12 +431,11 @@ namespace Starvers.BossSystem.Bosses.Base
 		/// 
 		/// </summary>
 		/// <param name="damage">已经计算过防御的伤害</param>
-		public void ReceiveDamage(int damage)
+		public virtual void ReceiveDamage(int damage)
 		{
 			while (damage >= Life)
 			{
 				damage -= Life;
-				Life = 0;
 				LifeDown();
 				if (Lifes < 1)
 				{

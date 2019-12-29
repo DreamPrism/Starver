@@ -257,7 +257,7 @@ namespace Starvers.BossSystem.Bosses
 		#region NewArms
 		private void NewArms()
 		{
-			RealNPC.dontTakeDamage = true;
+			DontTakeDamage = true;
 			for (int i = 0; i < MaxArms; i++)
 			{
 				Arms[i].Spawn((Vector)Center, this, i);

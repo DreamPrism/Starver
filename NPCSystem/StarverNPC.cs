@@ -194,14 +194,12 @@ namespace Starvers.NPCSystem
 			{
 				if (RealNPC.aiStyle == None)
 				{
-					if (Target < 0 || Target > Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
+					if (Target < 0 || Target >= Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 					{
 						TargetClosest();
-						if (Target == None || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500)
+						if (Target == None || Target >= Starver.Players.Length || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500)
 						{
-#if DEBUG
-						StarverPlayer.All.SendDeBugMessage($"{Name} killed itself");
-#endif
+							StarverPlayer.All.SendDeBugMessage($"{Name} killed by Invalid Target: {Target}");
 							KillMe();
 							return;
 						}
@@ -210,6 +208,7 @@ namespace Starvers.NPCSystem
 				}
 				if (Terraria.Main.dayTime && AfraidSun && RealNPC.Center.Y / 16 < Terraria.Main.rockLayer)
 				{
+					StarverPlayer.All.SendDeBugMessage($"{Name} Killed by Sun");
 					KillMe();
 					return;
 				}
@@ -218,10 +217,16 @@ namespace Starvers.NPCSystem
 					RealAI();
 				}
 			}
-			catch(IndexOutOfRangeException)
+			catch(IndexOutOfRangeException exception)
 			{
-				KillMe();
-				return;
+				StarverPlayer.All.SendDeBugMessage($"{Name} Invalid Target: {Target}");
+				TargetClosest();
+				if (Target == None || Target >= Starver.Players.Length || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500)
+				{
+					StarverPlayer.All.SendDeBugMessage($"{Name} killed by Invalid Target: {Target}");
+					KillMe();
+					return;
+				}
 			}
 			SendData();
 			++Timer;

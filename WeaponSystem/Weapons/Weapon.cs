@@ -102,7 +102,7 @@ namespace Starvers.WeaponSystem.Weapons
 		#region UseWeapon
 		public virtual void UseWeapon(StarverPlayer player,Vector Velocity,int lvl, TShockAPI.GetDataHandlers.NewProjectileEventArgs args)
 		{
-			player.NewProj(player.Center, Velocity, ProjID, Damage, 10f);
+			player.NewProj(player.Center, Velocity, ProjID, CalcDamage(lvl), 10f);
 		}
 		#endregion
 		#region GetShardNeed

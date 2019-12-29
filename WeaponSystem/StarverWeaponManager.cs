@@ -54,11 +54,13 @@ namespace Starvers.WeaponSystem
 		public void Load()
 		{
 			GetDataHandlers.NewProjectile += OnProj;
+			Currency.Initialize();
 			Commands.ChatCommands.Add(new TShockAPI.Command(Perms.Normal, Command, "weapon", "wp"));
 		}
 		public void UnLoad()
 		{
 			GetDataHandlers.NewProjectile -= OnProj;
+			Commands.ChatCommands.RemoveAll(cmd => cmd.HasAlias("wp"));
 		}
 		#endregion
 		#region Command
