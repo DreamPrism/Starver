@@ -91,7 +91,7 @@ namespace Starvers.NPCSystem.NPCs
 						//TShockAPI.TShock.Log.Write(e.ToString(), System.Diagnostics.TraceLevel.Error);
 						Vel = (Vector)Rand.NextVector2(19);
 					}
-					Proj(Center, Vel, ProjectileID.SkeletonBone, 200, 20);
+					Proj(Center, Vel, ProjectileID.SkeletonBone, 100, 20);
 				}
 			}
 		}

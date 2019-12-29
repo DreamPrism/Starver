@@ -11,7 +11,7 @@ namespace Starvers
 	/// 16字节结构, 用于存储数据
 	/// </summary>
 	[type: StructLayout(LayoutKind.Explicit, Size = 16)]
-	public struct Data16
+	public struct Data16 : IEquatable<Data16>
 	{
 		#region ByteValues
 		[field: FieldOffset(sizeof(byte) * 0)]
@@ -100,6 +100,33 @@ namespace Starvers
 		#region DecimalValues
 		[field: FieldOffset(sizeof(decimal) * 0)]
 		public decimal DecimalValue0;
+		#endregion
+
+		#region Equals
+		public static bool operator!=(Data16 left,Data16 right)
+		{
+			return !(left.DecimalValue0 == right.DecimalValue0);
+		}
+		public static bool operator ==(Data16 left, Data16 right)
+		{
+			return left.DecimalValue0 == right.DecimalValue0;
+		}
+		public override bool Equals(object obj)
+		{
+			if (obj is IEquatable<Data16> data)
+			{
+				return data.Equals(this);
+			}
+			return false;
+		}
+		public override int GetHashCode()
+		{
+			return DecimalValue0.GetHashCode();
+		}
+		public bool Equals(Data16 value)
+		{
+			return this == value;
+		}
 		#endregion
 	}
 }
