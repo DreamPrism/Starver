@@ -782,7 +782,7 @@ namespace Starvers
 		private byte[] SerializeSkill()
 		{
 			byte[] buffer = new byte[Skills.Length * sizeof(int)];
-			var writer = new BinaryWriter(new MemoryStream(buffer));
+			using var writer = new BinaryWriter(new MemoryStream(buffer));
 			for (int i = 0; i < Skills.Length; i++)
 			{
 				writer.Write(Skills[i]);
@@ -1519,7 +1519,7 @@ namespace Starvers
 				case SaveModes.MySQL:
 					{
 						db = NewConnection();
-						var db2 = new MySqlConnection(db.ConnectionString);
+						using var db2 = db.Clone() as MySqlConnection;
 						db2.Open();
 						var creator = new TableCreator(db2);
 						var Table = new SQLTable("Starver",

@@ -24,59 +24,47 @@ namespace Starvers.NPCSystem
 		}
 		#endregion
 		#region Static
-		#region Fields
-		private static SpawnChecker zombieLike;
-		private static SpawnChecker slimeLike;
-		private static SpawnChecker dungeonLike;
-		private static SpawnChecker underGroundLike;
-		private static SpawnChecker rareNight;
-		#endregion
-		#region Ctor
-		static SpawnChecker()
-		{
-			zombieLike = new SpawnChecker
-			{
-				Condition = SpawnConditions.Night,
-				Biome = BiomeType.Grass,
-				SpawnRate = 60 * 2 + 30,
-				SpawnChance = 0.6f,
-				Task = TaskID.MoonLord + 1
-			};
-			slimeLike = new SpawnChecker
-			{
-				Condition = SpawnConditions.Day,
-				SpawnRate = 60 * 5,
-				SpawnChance = 0.6f,
-				Task = TaskID.MoonLord + 1
-			};
-			dungeonLike = new SpawnChecker
-			{
-				Biome = BiomeType.Dungeon,
-				SpawnRate = 60 * 4,
-				SpawnChance = 0.25f,
-				Task = TaskID.MoonLord + 1
-			};
-			underGroundLike = new SpawnChecker
-			{
-				Biome = BiomeType.UnderGround,
-				SpawnRate = 60 * 2,
-				SpawnChance = 0.2f,
-				Task = TaskID.MoonLord + 1
-			};
-			rareNight = zombieLike;
-			rareNight.SpawnChance /= 4;
-			rareNight.SpawnRate *= 2;
-		}
-		#endregion
 		#region Properties
-		public static SpawnChecker ZombieLike => zombieLike;
-		public static SpawnChecker SlimeLike => slimeLike;
-		public static SpawnChecker DungeonLike => dungeonLike;
-		public static SpawnChecker UnderGroundLike => underGroundLike;
+		public static SpawnChecker ZombieLike { get; } = new SpawnChecker
+		{
+			Condition = SpawnConditions.Night,
+			Biome = BiomeType.Grass,
+			SpawnRate = 60 * 2 + 30,
+			SpawnChance = 0.6f,
+			Task = TaskID.MoonLord + 1
+		};
+		public static SpawnChecker SlimeLike { get; } = new SpawnChecker
+		{
+			Condition = SpawnConditions.Day,
+			SpawnRate = 60 * 5,
+			SpawnChance = 0.6f,
+			Task = TaskID.MoonLord + 1
+		};
+		public static SpawnChecker DungeonLike { get; } = new SpawnChecker
+		{
+			Biome = BiomeType.Dungeon,
+			SpawnRate = 60 * 4,
+			SpawnChance = 0.25f,
+			Task = TaskID.MoonLord + 1
+		};
+		public static SpawnChecker UnderGroundLike { get; } = new SpawnChecker
+		{
+			Biome = BiomeType.UnderGround,
+			SpawnRate = 60 * 2,
+			SpawnChance = 0.2f,
+			Task = TaskID.MoonLord + 1
+		};
 		/// <summary>
 		/// 晚上出生的稀有怪;
 		/// </summary>
-		public static SpawnChecker RareNight => rareNight;
+		public static SpawnChecker RareNight { get; } = new SpawnChecker
+		{
+			Condition = SpawnConditions.Night,
+			Biome = BiomeType.Grass,
+			SpawnRate = (60 * 2 + 30)*2,
+			SpawnChance = 0.6f / 4,
+			Task = TaskID.MoonLord + 1
+		};
 		#endregion
 		#endregion
 	}

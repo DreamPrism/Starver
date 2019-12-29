@@ -12,8 +12,7 @@ namespace Starvers.DB
 	{
 		internal static MySqlDataReader QueryReader(this MySqlConnection con, string cmdtxt, params object[] args)
 		{
-			var db = con.SafeClone();
-			db.ConnectionString = con.ConnectionString;
+			var db = con.Clone() as MySqlConnection;
 			db.Open();
 			MySqlDataReader result;
 			using (MySqlCommand cmd = db.CreateCommand() as MySqlCommand)
@@ -29,31 +28,20 @@ namespace Starvers.DB
 		}
 		internal static void Excute(this MySqlConnection con, string cmdtxt, params object[] args)
 		{
-			using(var con2 = con.SafeClone())
+			using var con2 = con.Clone() as MySqlConnection;
+			con2.Open();
+			using MySqlCommand cmd = con2.CreateCommand();
+			cmd.CommandText = cmdtxt;
+			for (int i = 0; i < args.Length; i++)
 			{
-				con2.ConnectionString = con.ConnectionString;
-				con2.Open();
-				using (MySqlCommand cmd = con2.CreateCommand())
-				{
-					cmd.CommandText = cmdtxt;
-					for (int i = 0; i < args.Length; i++)
-					{
-						cmd.AddParameter("@" + i, args[i]);
-					}
-					cmd.ExecuteNonQuery();
-				}
-				con.Dispose();
+				cmd.AddParameter("@" + i, args[i]);
 			}
-			
+			cmd.ExecuteNonQuery();
+
 		}
 		public static void AddParameter(this MySqlCommand command, string name, object data)
 		{
 			command.Parameters.AddWithValue(name, data);
-		}
-		public static MySqlConnection SafeClone(this MySqlConnection connection)
-		{
-			MySqlConnection db = new MySqlConnection(connection.ConnectionString);
-			return db;
 		}
 	}
 }

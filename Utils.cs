@@ -150,8 +150,8 @@ namespace Starvers
 				if (Config.SaveMode == SaveModes.MySQL)
 				{
 					SaveAll();
-					MySqlCommand cmd = new MySqlCommand("Select UserID,Level from Starver", DB);
-					MySqlDataReader Reader = cmd.ExecuteReader();
+					using MySqlCommand cmd = new MySqlCommand("Select UserID,Level from Starver", DB);
+					using MySqlDataReader Reader = cmd.ExecuteReader();
 					do
 					{
 						try
