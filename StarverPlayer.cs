@@ -25,7 +25,9 @@ namespace Starvers
 	using BigInt = System.Numerics.BigInteger;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using Skill = AuraSystem.Skills.Base.Skill;
-	public class StarverPlayer
+	using System.Diagnostics;
+
+	public partial class StarverPlayer
 	{
 		#region FromTS
 		#region Heal
@@ -341,7 +343,7 @@ namespace Starvers
 			int count = Starver.Rand.Next(min, Max);
 			while (count-- > 0)
 			{
-				NewProj(Center + Starver.Rand.NextVector2(16 * 15, 16 * 15), Vector2.Zero, rockets.Next(), 0);
+				NewProj(Center + Starver.Rand.NextVector2(16 * 60, 16 * 30), Vector2.Zero, rockets.Next(), 0);
 			}
 		}
 		#endregion
@@ -675,19 +677,19 @@ namespace Starvers
 		{
 			StarverPlayer player = new StarverPlayer();
 			player.Weapon = JsonConvert.DeserializeObject<byte[,]>(reader.GetString("Weapons"));
-			player.ReadSkillFromBinary((byte[])reader.GetValue(reader.GetOrdinal("Skills")));
-			player.TBCodes = JsonConvert.DeserializeObject<int[]>(reader.GetString("TBCodes"));
+			player.Skills = JsonConvert.DeserializeObject<int[]>(reader.GetString("Skills"));
 			player.level = reader.GetInt32("Level");
 			player.exp = reader.GetInt32("Exp");
+			player.BranchLineData = BLData.Deserialize(reader.GetFieldValue<byte[]>(reader.GetOrdinal("BranchTaskDatas")));
 			return player;
 		}
 		private void ReadFromReader(MySqlDataReader reader)
 		{
 			Weapon = JsonConvert.DeserializeObject<byte[,]>(reader.GetString("Weapons"));
-			ReadSkillFromBinary((byte[])reader.GetValue(reader.GetOrdinal("Skills")));
-			TBCodes = JsonConvert.DeserializeObject<int[]>(reader.GetString("TBCodes"));
+			Skills = JsonConvert.DeserializeObject<int[]>(reader.GetString("Skills"));
 			level = reader.GetInt32("Level");
 			exp = reader.GetInt32("Exp");
+			BranchLineData = BLData.Deserialize(reader.GetFieldValue<byte[]>(reader.GetOrdinal("BranchTaskDatas")));
 		}
 		#endregion
 		#region Add
@@ -701,9 +703,9 @@ namespace Starvers
 			int Level = player.Level;
 			int Exp = player.Exp;
 			string Weapon = JsonConvert.SerializeObject(player.Weapon);
-			byte[] buffer = player.SerializeSkill();
-			string TBCodes = JsonConvert.SerializeObject(player.TBCodes);
-			db.Excute("INSERT INTO Starver (UserId, Weapons,Skills,Level,Exp,TBCodes) VALUES ( @0 ,@1, @2, @3, @4, @5);", UserID, Weapon, buffer, Level, Exp, TBCodes);
+			string Skills = JsonConvert.SerializeObject(player.Skills);
+			db.Excute("INSERT INTO Starver (UserId, Weapons, Skills, Level, Exp, BranchTaskDatas) VALUES ( @0 ,@1, @2, @3, @4, @5);",
+				UserID, Weapon, Skills, Level, Exp, new byte[16 * 4]);
 		}
 		#endregion
 		#region Save
@@ -712,20 +714,20 @@ namespace Starvers
 		/// </summary>
 		public void Save()
 		{
-			if (UserID == -1)
+			if (UserID == -1 || IsServer || IsGuest)
 			{
 				return;
 			}
-			byte[] buffer = SerializeSkill();
+			//byte[] buffer = SerializeSkill();
 			if (SaveMode == SaveModes.MySQL)
 			{
-				string _Weapon = JsonConvert.SerializeObject(Weapon);
-				string _TBCodes = JsonConvert.SerializeObject(TBCodes);
-				db.Excute("UPDATE Starver SET Weapons=@0 WHERE UserID=@1;", _Weapon, UserID);
-				db.Excute("UPDATE Starver SET Skills=@0 WHERE UserID=@1;", buffer, UserID);
-				db.Excute("UPDATE Starver SET TBCodes=@0 WHERE UserID=@1;", _TBCodes, UserID);
+				string wps = JsonConvert.SerializeObject(Weapon);
+				string skills = JsonConvert.SerializeObject(Skills);
+				db.Excute("UPDATE Starver SET Weapons=@0 WHERE UserID=@1;", wps, UserID);
+				db.Excute("UPDATE Starver SET Skills=@0 WHERE UserID=@1;", skills, UserID);
 				db.Excute("UPDATE Starver SET Level=@0 WHERE UserID=@1;", level, UserID);
 				db.Excute("UPDATE Starver SET Exp=@0 WHERE UserID=@1;", Exp, UserID);
+				db.Excute("UPDATE Starver SET BranchTaskDatas=@0 WHERE UserID=@1;", BranchLineData.Serialize(), UserID);
 			}
 			else
 			{
@@ -751,43 +753,9 @@ namespace Starvers
 			level = tempplayer.level;
 			Skills = tempplayer.Skills;
 			Exp = tempplayer.Exp;
-			TBCodes = tempplayer.TBCodes;
 			Weapon = tempplayer.Weapon;
+			BranchLineData = tempplayer.BranchLineData;
 			Save();
-		}
-		#endregion
-		#region ReadSkillFromBinary
-		private void ReadSkillFromBinary(byte[] buffer)
-		{
-			if (buffer.Length < Skills.Length * sizeof(int))
-			{
-				throw new ArgumentException($"无效的buffer长度: {buffer.Length}(要求: {Skills.Length * sizeof(int)})", nameof(buffer));
-			}
-			for (int i = 0; i < Skills.Length; i++)
-			{
-				Skills[i] += buffer[i * sizeof(int) + 3];
-				Skills[i] <<= sizeof(byte);
-
-				Skills[i] += buffer[i * sizeof(int) + 2];
-				Skills[i] <<= sizeof(byte);
-
-				Skills[i] += buffer[i * sizeof(int) + 1];
-				Skills[i] <<= sizeof(byte);
-
-				Skills[i] += buffer[i * sizeof(int) + 0];
-			}
-		}
-		#endregion
-		#region SerializeSkill
-		private byte[] SerializeSkill()
-		{
-			byte[] buffer = new byte[Skills.Length * sizeof(int)];
-			using var writer = new BinaryWriter(new MemoryStream(buffer));
-			for (int i = 0; i < Skills.Length; i++)
-			{
-				writer.Write(Skills[i]);
-			}
-			return buffer;
 		}
 		#endregion
 		#endregion
@@ -1123,14 +1091,8 @@ namespace Starvers
 		}
 		#endregion
 		#region GetSkill
-		public unsafe Skill GetSkill(int slot)
+		public Skill GetSkill(int slot)
 		{
-#if DEBUG
-			if (slot < 0 && slot >= Skill.MaxSlots)
-			{
-				throw new IndexOutOfRangeException($"slot: {slot}");
-			}
-#endif
 			return AuraSystem.SkillManager.Skills[Skills[slot]];
 		}
 		#endregion
@@ -1356,27 +1318,7 @@ namespace Starvers
 				SendData(PacketTypes.PlayerHp, string.Empty, Index);
 			}
 		}
-		//以下4个属性均为支线任务(未启用)使用
-		public int FishCode
-		{
-			get => TBCodes[0];
-			set => TBCodes[0] = value;
-		}
-		public int MineCode
-		{
-			get => TBCodes[1];
-			set => TBCodes[1] = value;
-		}
-		public int CollectCode
-		{
-			get => TBCodes[2];
-			set => TBCodes[2] = value;
-		}
-		public int HunterCode
-		{ 
-			get => TBCodes[3]; 
-			set => TBCodes[3] = value;
-		}
+		public BLData BranchLineData { get; set; }
 		/// <summary>
 		/// 数据库连接
 		/// </summary>
@@ -1419,7 +1361,6 @@ namespace Starvers
 		/// <summary>
 		/// 支线任务使用,暂时没用
 		/// </summary>
-		internal int[] TBCodes = { 0, 0, 0, 0 };
 		private int level = StarverConfig.Config.DefaultLevel;
 		#endregion
 		#region Privates
@@ -1510,6 +1451,47 @@ namespace Starvers
 			};
 		}
 		#endregion
+		#region CheckTableExist
+		private static bool CheckTableExist()
+		{
+			return db.GetSchema("Tables").AsEnumerable().Any(value => value.Table.TableName == "Starver");
+		}
+		#endregion
+		#region CreateTableOld
+		private static void CreateTableOld()
+		{
+			var db2 = db.Clone() as MySqlConnection;
+			db2.Open();
+			var creator = new TableCreator(db2);
+			var Table = new SQLTable("Starver",
+				new SQLColumn { Name = "UserID", DataType = MySqlDbType.Int32, Length = 4 },
+				new SQLColumn { Name = "Level", DataType = MySqlDbType.Int32, Length = 4 },
+				new SQLColumn { Name = "Exp", DataType = MySqlDbType.Int32, Length = 4 },
+				new SQLColumn { Name = "TBCodes", DataType = MySqlDbType.Text, Length = 20 },
+				new SQLColumn { Name = "Skills", DataType = MySqlDbType.VarBinary, Length = 30 },
+				new SQLColumn { Name = "Weapons", DataType = MySqlDbType.Text, Length = 80 }
+				);
+			creator.CreateTable(Table);
+		}
+		#endregion
+		#region CreateTable
+		private static void CreateTable()
+		{
+			var db2 = db.Clone() as MySqlConnection;
+			db2.Open();
+			var creator = new TableCreator(db2);
+			var Table = new SQLTable("Starver",
+				new SQLColumn { Name = "UserID", DataType = MySqlDbType.Int32, Length = 4 },
+				new SQLColumn { Name = "Level", DataType = MySqlDbType.Int32, Length = 4 },
+				new SQLColumn { Name = "Exp", DataType = MySqlDbType.Int32, Length = 4 },
+				new SQLColumn { Name = "Skills", DataType = MySqlDbType.Text, Length = 30 },
+				new SQLColumn { Name = "Weapons", DataType = MySqlDbType.Text, Length = 80 },
+				new SQLColumn { Name = "BranchTaskDatas", DataType = MySqlDbType.VarBinary, Length = 4 * 16 },
+				new SQLColumn { Name = "ExtensionDatas", DataType = MySqlDbType.VarBinary, Length = 256}
+				);
+			creator.CreateTable(Table);
+		}
+		#endregion
 		#region cctor
 		static StarverPlayer()
 		{
@@ -1519,18 +1501,7 @@ namespace Starvers
 				case SaveModes.MySQL:
 					{
 						db = NewConnection();
-						using var db2 = db.Clone() as MySqlConnection;
-						db2.Open();
-						var creator = new TableCreator(db2);
-						var Table = new SQLTable("Starver",
-							new SQLColumn { Name = "UserID", DataType = MySqlDbType.Int32, Length = 4 },
-							new SQLColumn { Name = "Level", DataType = MySqlDbType.Int32, Length = 4 },
-							new SQLColumn { Name = "Exp", DataType = MySqlDbType.Int32, Length = 4 },
-							new SQLColumn { Name = "TBCodes", DataType = MySqlDbType.Text, Length = 20 },
-							new SQLColumn { Name = "Skills", DataType = MySqlDbType.VarBinary, Length = 30 },
-							new SQLColumn { Name = "Weapons", DataType = MySqlDbType.Text, Length = 80 }
-							);
-						creator.CreateTable(Table);
+						CreateTable();
 						break;
 					}
 				case SaveModes.Json:
@@ -1542,6 +1513,7 @@ namespace Starvers
 			TSPlayer.Server.SendInfoMessage("Config.SaveMode:{0}", StarverConfig.Config.SaveMode);
 			TSPlayer.Server.SendInfoMessage("SaveMode:{0}", SaveMode);
 		}
+
 		#endregion
 		#endregion
 	}

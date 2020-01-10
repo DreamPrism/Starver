@@ -24,23 +24,22 @@ namespace Starvers.DB
 		{
 			try
 			{
-				string CreateSTR = string.Format("CREATE TABLE IF NOT EXISTS {0}(", table.Name);
+				StringBuilder CreateSTR = new StringBuilder($"CREATE TABLE IF NOT EXISTS {table.Name}(");
 				int i = 0;
 				string type;
 				foreach (var Column in table.Columns)
 				{
 					type = GetDBType(Column.DataType, Column.Length);
-					CreateSTR += string.Format("{0} {1} ", Column.Name, type);
-					if(++i != table.Columns.Count)
+					CreateSTR.AppendFormat("{0} {1} ", Column.Name, type);
+					if (++i != table.Columns.Count)
 					{
-						CreateSTR += ",";
+						CreateSTR.Append(",");
 					}
 				}
-				CreateSTR += ")";
-				using (MySqlCommand cmd = new MySqlCommand(CreateSTR, conn))
-				{
-					cmd.ExecuteNonQuery();
-				}
+				CreateSTR.Append(")");
+				using MySqlCommand cmd = new MySqlCommand(CreateSTR.ToString(), conn);
+				cmd.ExecuteNonQuery();
+				conn.Dispose();
 			}
 			catch (Exception e)
 			{
@@ -50,19 +49,19 @@ namespace Starvers.DB
 		#endregion
 		#region Fields
 		private MySqlConnection conn;
-		private static string GetDBType(MySqlDbType type,int? len)
+		private static string GetDBType(MySqlDbType type, int? len)
 		{
-			switch(type)
+			switch (type)
 			{
 				case MySqlDbType.Int32:
-					return "INT";
+					return "INT(32)";
 				case MySqlDbType.String:
 					return string.Format("CHAR({0})", len);
 				case MySqlDbType.Float:
 				case MySqlDbType.Double:
 					return string.Format(type.ToString().ToUpper());
 				default:
-					return string.Format("{0}({1})",type.ToString().ToUpper(),len);
+					return string.Format("{0}({1})", type.ToString().ToUpper(), len);
 			}
 		}
 		#endregion

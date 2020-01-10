@@ -103,7 +103,7 @@ namespace Starvers
 		#endregion
 
 		#region Equals
-		public static bool operator!=(Data16 left,Data16 right)
+		public static bool operator !=(Data16 left, Data16 right)
 		{
 			return !(left.DecimalValue0 == right.DecimalValue0);
 		}
