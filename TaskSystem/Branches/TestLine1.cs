@@ -17,7 +17,7 @@ namespace Starvers.TaskSystem.Branches
 
 		private Task[] tasks;
 
-		public TestLine1() : base(BranchLines.TestLine1)
+		public TestLine1() : base(BLFlags.TestLine1)
 		{
 			tasks = new Task[taskCount];
 			for (int i = 0; i < tasks.Length; i++)

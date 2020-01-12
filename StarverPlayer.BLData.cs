@@ -1,15 +1,33 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Starvers
 {
+    using TaskSystem;
 	public partial class StarverPlayer
 	{
+		// 64 bytes
 		public struct BLData
 		{
 			private Data16 data0;
 			private Data16 data1;
 			private Data16 data2;
 			private Data16 data3;
+
+			public BLFlags AvaiablleBLs
+			{
+				get => (BLFlags)data0.ByteValue0;
+				set => data0.ByteValue0 = (byte)value;
+			}
+			[IndexerName("Process")]
+			public byte this[BLFlags bl]
+			{
+				get
+				{
+					throw new NotImplementedException();
+				}
+			}
 
 			public static BLData Deserialize(byte[] binary)
 			{
@@ -35,7 +53,7 @@ namespace Starvers
 				}
 				return data;
 			}
-			public byte[] Serialize()
+			public static byte[] Serialize(in BLData data)
 			{
 				byte[] value = new byte[16 * 4];
 				void Write(int index, in Data16 data)
@@ -57,10 +75,10 @@ namespace Starvers
 					value[index + 14] = data.ByteValue14;
 					value[index + 15] = data.ByteValue15;
 				}
-				Write(0, data0);
-				Write(1, data1);
-				Write(2, data2);
-				Write(3, data3);
+				Write(0, data.data0);
+				Write(1, data.data1);
+				Write(2, data.data2);
+				Write(3, data.data3);
 				return value;
 			}
 		}

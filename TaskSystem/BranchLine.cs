@@ -8,7 +8,7 @@ namespace Starvers.TaskSystem
 {
 	public abstract class BranchLine
 	{
-		protected BranchLine(BranchLines whichLine)
+		protected BranchLine(BLFlags whichLine)
 		{
 			WhichLine = whichLine;
 		}
@@ -16,7 +16,7 @@ namespace Starvers.TaskSystem
 		/// <summary>
 		/// 是那条支线?
 		/// </summary>
-		public BranchLines WhichLine { get; }
+		public BLFlags WhichLine { get; }
 		/// <summary>
 		/// 该支线的任务数量
 		/// </summary>

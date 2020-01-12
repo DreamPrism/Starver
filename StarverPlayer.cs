@@ -727,7 +727,7 @@ namespace Starvers
 				db.Excute("UPDATE Starver SET Skills=@0 WHERE UserID=@1;", skills, UserID);
 				db.Excute("UPDATE Starver SET Level=@0 WHERE UserID=@1;", level, UserID);
 				db.Excute("UPDATE Starver SET Exp=@0 WHERE UserID=@1;", Exp, UserID);
-				db.Excute("UPDATE Starver SET BranchTaskDatas=@0 WHERE UserID=@1;", BranchLineData.Serialize(), UserID);
+				db.Excute("UPDATE Starver SET BranchTaskDatas=@0 WHERE UserID=@1;", BLData.Serialize(BranchLineData), UserID);
 			}
 			else
 			{

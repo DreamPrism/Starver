@@ -15,7 +15,7 @@ namespace Starvers.TaskSystem
 		/// <summary>
 		/// 属于哪条支线?
 		/// </summary>
-		public abstract BranchLines WhichLine { get; }
+		public abstract BLFlags WhichLine { get; }
 
 		protected BranchTask(StarverPlayer player)
 		{
