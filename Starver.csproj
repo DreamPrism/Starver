@@ -223,6 +223,7 @@
     <Compile Include="StarverPlayer.BLData.cs" />
     <Compile Include="StarverPlayer.cs" />
     <Compile Include="HelpTexts.cs" />
+    <Compile Include="TaskSystem\BLID.cs" />
     <Compile Include="TaskSystem\Branches\TestLine1.cs" />
     <Compile Include="TaskSystem\Branches\TestLine1.Task.cs" />
     <Compile Include="TaskSystem\BranchLine.cs" />

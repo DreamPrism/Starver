@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace Starvers.TaskSystem
 {
 	/// <summary>
-	/// 表示是支线当中的哪一部分
+	/// 标识单一支线
 	/// </summary>
-	[Flags]
-	public enum BLFlags : byte
+	public enum BLID : byte
 	{
 		None = 0,
+		TestLine1 = 1,
 		/// <summary>
-		/// 测试: 指定武器击杀NPC
+		/// 用于标识支线最大数目(开放边界)
 		/// </summary>
-		TestLine1 = 1
+		Max = 2
 	}
 }

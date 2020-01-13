@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace Starvers
@@ -8,78 +9,87 @@ namespace Starvers
 	public partial class StarverPlayer
 	{
 		// 64 bytes
+		[StructLayout(LayoutKind.Explicit)]
 		public struct BLData
 		{
+			[FieldOffset(16 * 0)]
+			private unsafe fixed byte buffer[16 * 4];
+			[FieldOffset(16 * 0)]
 			private Data16 data0;
+			[FieldOffset(16 * 1)]
 			private Data16 data1;
+			[FieldOffset(16 * 2)]
 			private Data16 data2;
+			[FieldOffset(16 * 3)]
 			private Data16 data3;
 
-			public BLFlags AvaiablleBLs
+			public BLFlags AvaiableBLs
 			{
 				get => (BLFlags)data0.ByteValue0;
 				set => data0.ByteValue0 = (byte)value;
 			}
 			[IndexerName("Process")]
-			public byte this[BLFlags bl]
+			public unsafe byte this[BLID id]
 			{
 				get
 				{
-					throw new NotImplementedException();
+					if(id == BLID.None)
+					{
+						throw new ArgumentException("id is BLID.None", nameof(id));
+					}
+					if(id >= BLID.Max)
+					{
+						throw new ArgumentException("id >= BLID.Max", nameof(id));
+					}
+					return buffer[(int)id];
+				}
+				set
+				{
+					if (id == BLID.None)
+					{
+						throw new ArgumentException("id is BLID.None", nameof(id));
+					}
+					if (id >= BLID.Max)
+					{
+						throw new ArgumentException("id >= BLID.Max", nameof(id));
+					}
+					buffer[(int)id] = value;
 				}
 			}
 
-			public static BLData Deserialize(byte[] binary)
+			public unsafe static BLData Deserialize(byte[] binary)
 			{
-				if(binary.Length != 4 * 16)
+				if (binary.Length != 16 * 4)
 				{
 					throw new ArgumentException("binary.Length != 4 * 16", nameof(binary));
 				}
-				unsafe void SetValue(int index, Data16* data)
+				BLData data = default;
+				for (int i = 0; i < 16 * 4; i++)
 				{
-					byte* ptr = &data->ByteValue0;
-					for (int i = 0; i < sizeof(Data16); i++)
-					{
-						ptr[i] = binary[index * sizeof(Data16) + i];
-					}
-				}
-				BLData data;
-				unsafe
-				{
-					SetValue(0, &data.data0);
-					SetValue(1, &data.data1);
-					SetValue(2, &data.data2);
-					SetValue(3, &data.data3);
+					data.buffer[i] = binary[i];
 				}
 				return data;
 			}
-			public static byte[] Serialize(in BLData data)
+			public unsafe static byte[] Serialize(in BLData data)
 			{
 				byte[] value = new byte[16 * 4];
-				void Write(int index, in Data16 data)
+				for (int i = 0; i < 16 * 4; i++)
 				{
-					value[index + 0] = data.ByteValue0;
-					value[index + 1] = data.ByteValue1;
-					value[index + 2] = data.ByteValue2;
-					value[index + 3] = data.ByteValue3;
-					value[index + 4] = data.ByteValue4;
-					value[index + 5] = data.ByteValue5;
-					value[index + 6] = data.ByteValue6;
-					value[index + 7] = data.ByteValue7;
-					value[index + 8] = data.ByteValue8;
-					value[index + 9] = data.ByteValue9;
-					value[index + 10] = data.ByteValue10;
-					value[index + 11] = data.ByteValue11;
-					value[index + 12] = data.ByteValue12;
-					value[index + 13] = data.ByteValue13;
-					value[index + 14] = data.ByteValue14;
-					value[index + 15] = data.ByteValue15;
+					value[i] = data.buffer[i];
 				}
-				Write(0, data.data0);
-				Write(1, data.data1);
-				Write(2, data.data2);
-				Write(3, data.data3);
 				return value;
+			}
+			public unsafe static void Serialize(in BLData data, byte[] target)
+			{
+				if(target.Length != 16 * 4)
+				{
+					throw new ArgumentException("target.Length != 16 * 4", nameof(target));
+				}
+				byte[] value = target;
+				for (int i = 0; i < 16 * 4; i++)
+				{
+					value[i] = data.buffer[i];
+				}
 			}
 		}
 	}
