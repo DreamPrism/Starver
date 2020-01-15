@@ -26,6 +26,7 @@ namespace Starvers
 	using Vector = TOFOUT.Terraria.Server.Vector2;
 	using Skill = AuraSystem.Skills.Base.Skill;
 	using System.Diagnostics;
+	using TerrariaApi.Server;
 
 	public partial class StarverPlayer
 	{
@@ -57,9 +58,9 @@ namespace Starvers
 		public void RemoveBuff(int type)
 		{
 			int idx = -1;
-			for(int i=0;i<TPlayer.buffType.Length;i++)
+			for (int i = 0; i < TPlayer.buffType.Length; i++)
 			{
-				if(TPlayer.buffType[i] == type)
+				if (TPlayer.buffType[i] == type)
 				{
 					idx = i;
 					break;
@@ -131,10 +132,20 @@ namespace Starvers
 		{
 			SendMessage(msg, Color.Blue);
 		}
-		public void SendDeBugMessage(string msg)
+		public void SendDeBugMessage(string msg, bool console = false)
 		{
 #if DEBUG
 			SendMessage(msg, Color.Blue);
+			if (console)
+			{
+				var fore = Console.ForegroundColor;
+				var back = Console.BackgroundColor;
+				Console.ForegroundColor = ConsoleColor.Blue;
+				Console.BackgroundColor = ConsoleColor.Yellow;
+				Console.WriteLine(msg);
+				Console.ForegroundColor = fore;
+				Console.BackgroundColor = back;
+			}
 #endif
 		}
 		public void SendMessage(string msg, Color color)
@@ -318,7 +329,7 @@ namespace Starvers
 		#region BranchTaskEnd
 		public void BranchTaskEnd(bool success)
 		{
-			if(success)
+			if (success)
 			{
 				SendInfoMessage($"支线任务{BranchTask}已完成");
 				RandomRocket(3, 10);
@@ -328,6 +339,16 @@ namespace Starvers
 				SendFailMessage($"支线任务{BranchTask}失败");
 			}
 			BranchTask = null;
+		}
+		#endregion
+		#region BLAvaiable
+		public bool BLAvaiable(BLID id)
+		{
+			return BLdata.AvaiableBLs.HasFlag(id.ToBLFLags());
+		}
+		public bool BLAvaiable(BLFlags flag)
+		{
+			return BLdata.AvaiableBLs.HasFlag(flag);
 		}
 		#endregion
 		#region RandRocket
@@ -680,7 +701,7 @@ namespace Starvers
 			player.Skills = JsonConvert.DeserializeObject<int[]>(reader.GetString("Skills"));
 			player.level = reader.GetInt32("Level");
 			player.exp = reader.GetInt32("Exp");
-			player.BranchLineData = BLData.Deserialize(reader.GetFieldValue<byte[]>(reader.GetOrdinal("BranchTaskDatas")));
+			player.BLdata = BLData.Deserialize(reader.GetFieldValue<byte[]>(reader.GetOrdinal("BranchTaskDatas")));
 			return player;
 		}
 		private void ReadFromReader(MySqlDataReader reader)
@@ -689,7 +710,7 @@ namespace Starvers
 			Skills = JsonConvert.DeserializeObject<int[]>(reader.GetString("Skills"));
 			level = reader.GetInt32("Level");
 			exp = reader.GetInt32("Exp");
-			BranchLineData = BLData.Deserialize(reader.GetFieldValue<byte[]>(reader.GetOrdinal("BranchTaskDatas")));
+			BLdata = BLData.Deserialize(reader.GetFieldValue<byte[]>(reader.GetOrdinal("BranchTaskDatas")));
 		}
 		#endregion
 		#region Add
@@ -727,7 +748,7 @@ namespace Starvers
 				db.Excute("UPDATE Starver SET Skills=@0 WHERE UserID=@1;", skills, UserID);
 				db.Excute("UPDATE Starver SET Level=@0 WHERE UserID=@1;", level, UserID);
 				db.Excute("UPDATE Starver SET Exp=@0 WHERE UserID=@1;", Exp, UserID);
-				db.Excute("UPDATE Starver SET BranchTaskDatas=@0 WHERE UserID=@1;", BLData.Serialize(BranchLineData), UserID);
+				db.Excute("UPDATE Starver SET BranchTaskDatas=@0 WHERE UserID=@1;", BLData.Serialize(BLdata), UserID);
 			}
 			else
 			{
@@ -754,7 +775,7 @@ namespace Starvers
 			Skills = tempplayer.Skills;
 			Exp = tempplayer.Exp;
 			Weapon = tempplayer.Weapon;
-			BranchLineData = tempplayer.BranchLineData;
+			BLdata = tempplayer.BLdata;
 			Save();
 		}
 		#endregion
@@ -1084,7 +1105,7 @@ namespace Starvers
 		public void Kick(string reason, bool silence = false)
 		{
 			Disconnect(reason);
-			if(!silence)
+			if (!silence)
 			{
 				StarverPlayer.All.SendErrorMessage($"玩家{Name} 被 Kick了: {reason}");
 			}
@@ -1156,6 +1177,88 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region Hooks
+		public void OnUpdateItemDrop(UpdateItemDropEventArgs args)
+		{
+			BranchTask?.OnUpdateItemDrop(args);
+		}
+		public void OnPickItem(int idx)
+		{
+#if DEBUG
+			Item item = Main.item[idx];
+			SendDeBugMessage($"{item}");
+			if (item.prefix == 0)
+				SendDeBugMessage($"[i/s{item.stack}:{item.type}]", true);
+			else
+				SendDeBugMessage($"[i/p{item.prefix}:{item.type}]", true);
+#endif
+			BranchTask?.OnPickItem(idx);
+		}
+		public void OnGetData(GetDataEventArgs args)
+		{
+#if false
+			if(args.MsgID == PacketTypes.UpdateItemDrop)
+			{
+				using var stream = new MemoryStream(args.Msg.readBuffer);
+				using var reader = new BinaryReader(stream);
+				using var writer = new BinaryWriter(stream);
+
+				stream.Position = 1;
+
+				int itemIndex = reader.ReadInt16();
+				Vector2 position = reader.ReadVector2();
+				Vector2 velocity = reader.ReadVector2();
+				int stack = reader.ReadInt16();
+				int prefix = reader.ReadByte();
+				int num218 = reader.ReadByte(); // 我一直不知道这是什么
+				int netID = reader.ReadInt16();
+
+				var arg = new UpdateItemDropEventArgs(itemIndex)
+				{
+					ID = netID,
+					Stack = stack,
+					Prefix = prefix,
+					Position = position,
+					Velocity = velocity,
+				};
+
+				OnUpdateItemDrop(arg);
+
+				netID = arg.ID;
+				stack = arg.Stack;
+				prefix = arg.Prefix;
+				position = arg.Position;
+				velocity = arg.Velocity;
+
+				stream.Position = 1;
+
+				writer.Write((short)itemIndex);
+				writer.WriteVector2(position);
+				writer.WriteVector2(velocity);
+				writer.Write((short)stack);
+				writer.Write((byte)prefix);
+				writer.Write((byte)num218);
+				writer.Write((short)netID);
+
+				args.Handled = arg.Handled;
+			}
+			if (args.MsgID == PacketTypes.ItemOwner)
+			{
+				int idx = args.Msg.readBuffer[1];
+				idx <<= 8;
+				idx += args.Msg.readBuffer[2];
+				if (Main.item[idx].owner != this)
+				{
+					SendDeBugMessage(idx.ToString(), true);
+				}
+				else
+				{
+					SendDeBugMessage("R", true);
+				}
+				OnPickItem(idx);
+			}
+#endif
+			BranchTask?.OnGetData(args);
+		}
 		public void StrikingNPC(NPCStrikeEventArgs args)
 		{
 			BranchTask?.StrikingNPC(args);
@@ -1318,7 +1421,7 @@ namespace Starvers
 				SendData(PacketTypes.PlayerHp, string.Empty, Index);
 			}
 		}
-		public BLData BranchLineData { get; set; }
+		public BLData BLdata { get; set; }
 		/// <summary>
 		/// 数据库连接
 		/// </summary>
@@ -1487,7 +1590,7 @@ namespace Starvers
 				new SQLColumn { Name = "Skills", DataType = MySqlDbType.Text, Length = 30 },
 				new SQLColumn { Name = "Weapons", DataType = MySqlDbType.Text, Length = 80 },
 				new SQLColumn { Name = "BranchTaskDatas", DataType = MySqlDbType.VarBinary, Length = 4 * 16 },
-				new SQLColumn { Name = "ExtensionDatas", DataType = MySqlDbType.VarBinary, Length = 256}
+				new SQLColumn { Name = "ExtensionDatas", DataType = MySqlDbType.VarBinary, Length = 256 }
 				);
 			creator.CreateTable(Table);
 		}

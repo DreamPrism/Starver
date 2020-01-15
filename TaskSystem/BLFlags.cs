@@ -16,6 +16,7 @@ namespace Starvers.TaskSystem
 		/// <summary>
 		/// 测试: 指定武器击杀NPC
 		/// </summary>
-		TestLine1 = 1
+		TestLine1 = 1 << 0,
+		YrtAEvah = 1 << 1
 	}
 }

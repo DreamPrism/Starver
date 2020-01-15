@@ -8,15 +8,15 @@ namespace Starvers.TaskSystem
 {
 	public abstract class BranchLine
 	{
-		protected BranchLine(BLFlags whichLine)
+		protected BranchLine(BLID whichLine)
 		{
-			WhichLine = whichLine;
+			ID = whichLine;
 		}
 
 		/// <summary>
 		/// 是那条支线?
 		/// </summary>
-		public BLFlags WhichLine { get; }
+		public BLID ID { get; }
 		/// <summary>
 		/// 该支线的任务数量
 		/// </summary>

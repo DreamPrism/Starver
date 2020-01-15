@@ -13,9 +13,10 @@ namespace Starvers.TaskSystem
 	{
 		None = 0,
 		TestLine1 = 1,
+		YrtAEvah = 2,
 		/// <summary>
 		/// 用于标识支线最大数目(开放边界)
 		/// </summary>
-		Max = 2
+		Max = 3
 	}
 }

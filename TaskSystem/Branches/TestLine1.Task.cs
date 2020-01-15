@@ -17,7 +17,7 @@ namespace Starvers.TaskSystem.Branches
 			private TaskData data;
 
 			public int? ID { get; }
-			public override BLFlags WhichLine => BLFlags.TestLine1;
+			public override BLID BLID => BLID.TestLine1;
 
 			public Task(int? id, StarverPlayer player = null) : base(player)
 			{

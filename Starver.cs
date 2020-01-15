@@ -228,6 +228,8 @@ namespace Starvers
 				ServerApi.Hooks.GameUpdate.Register(this, OnUpdate);
 				ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreet);
 				ServerApi.Hooks.ServerLeave.Register(this, OnLeave);
+				ServerApi.Hooks.NetGetData.Register(this, OnGetData);
+				ServerApi.Hooks.NetSendData.Register(this, OnSendData);
 				if (Config.EnableAura)
 				{
 					ServerApi.Hooks.ServerChat.Register(this, OnChat);
@@ -279,6 +281,8 @@ namespace Starvers
 			{
 				Config.Write();
 				ServerApi.Hooks.GameUpdate.Deregister(this, OnUpdate);
+				ServerApi.Hooks.NetGetData.Deregister(this, OnGetData);
+				ServerApi.Hooks.NetSendData.Deregister(this, OnSendData);
 				ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnGreet);
 				ServerApi.Hooks.ServerLeave.Deregister(this, OnLeave);
 				ServerApi.Hooks.ServerChat.Deregister(this, OnChat);
@@ -325,6 +329,28 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region Event
+		#region OnSendData
+		private void OnSendData(SendDataEventArgs args)
+		{
+			if (args.MsgId == PacketTypes.ItemOwner)
+			{
+				if (0 <= args.remoteClient && args.remoteClient < Players.Length)
+				{
+					Players[args.remoteClient]?.OnPickItem(args.number);
+				}
+			}
+		}
+		#endregion
+		#region OnGetData
+		private void OnGetData(GetDataEventArgs args)
+		{
+			if(0 <= args.Msg.whoAmI && args.Msg.whoAmI < Players.Length && Players[args.Msg.whoAmI] != null)
+			{
+				StarverPlayer player = Players[args.Msg.whoAmI];
+				player.OnGetData(args);
+			}
+		}
+		#endregion
 		#region OnDeath
 		private static void OnDeath(object sender, GetDataHandlers.KillMeEventArgs args)
 		{

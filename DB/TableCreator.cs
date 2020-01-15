@@ -54,7 +54,9 @@ namespace Starvers.DB
 			switch (type)
 			{
 				case MySqlDbType.Int32:
-					return "INT(32)";
+					return "INT";
+				case MySqlDbType.Int64:
+					return "BIGINT";
 				case MySqlDbType.String:
 					return string.Format("CHAR({0})", len);
 				case MySqlDbType.Float:

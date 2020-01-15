@@ -151,6 +151,7 @@
     <Compile Include="Data16.cs" />
     <Compile Include="Events\NPCStrikeEventArgs.cs" />
     <Compile Include="Events\ReleaseSkillEventArgs.cs" />
+    <Compile Include="Events\UpdateItemDropEventArgs.cs" />
     <Compile Include="LockedSkill.cs" />
     <Compile Include="ProjContainers\IProjSet.cs" />
     <Compile Include="ProjContainers\ProjPair.cs" />
@@ -226,9 +227,12 @@
     <Compile Include="TaskSystem\BLID.cs" />
     <Compile Include="TaskSystem\Branches\TestLine1.cs" />
     <Compile Include="TaskSystem\Branches\TestLine1.Task.cs" />
+    <Compile Include="TaskSystem\Branches\YrtAEvah.cs" />
+    <Compile Include="TaskSystem\Branches\YrtAEvah.Task.cs" />
     <Compile Include="TaskSystem\BranchLine.cs" />
     <Compile Include="TaskSystem\BLFlags.cs" />
     <Compile Include="TaskSystem\BranchTask.cs" />
+    <Compile Include="TaskSystem\Ext.cs" />
     <Compile Include="TaskSystem\ITask.cs" />
     <Compile Include="TaskSystem\MainLineTask.cs" />
     <Compile Include="TaskSystem\StarverTaskManager.cs" />

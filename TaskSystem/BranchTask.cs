@@ -4,18 +4,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerrariaApi.Server;
 using TShockAPI;
 
 namespace Starvers.TaskSystem
 {
+	using Color = Microsoft.Xna.Framework.Color;
 	public abstract class BranchTask : ITask
 	{
+		protected string name;
+		protected Color? colorOfName;
 		public StarverPlayer TargetPlayer { get; }
 		public string Description { get; protected set; }
 		/// <summary>
 		/// 属于哪条支线?
 		/// </summary>
-		public abstract BLFlags WhichLine { get; }
+		public abstract BLID BLID { get; }
+		public BranchLine LineBelongTo
+		{
+			get
+			{
+				return Starver.Instance.TSKS.BranchTaskLines[(byte)BLID];
+			}
+		}
 
 		protected BranchTask(StarverPlayer player)
 		{
@@ -24,9 +35,26 @@ namespace Starvers.TaskSystem
 
 		public virtual void Start()
 		{
+			if(name != null)
+			{
+				TargetPlayer.SendCombatMSsg(name, colorOfName ?? Color.Silver);
+			}
+		}
+
+		public virtual void OnPickItem(int idx)
+		{
 
 		}
 
+		public virtual void OnUpdateItemDrop(UpdateItemDropEventArgs args)
+		{
+
+		}
+
+		public virtual void OnGetData(GetDataEventArgs args)
+		{
+
+		}
 
 		public virtual void Updating(int Timer)
 		{
