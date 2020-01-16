@@ -10,8 +10,17 @@ namespace Starvers.TaskSystem.Branches
 		private class Task : BranchTask
 		{
 			private string[] startMsgs;
-			private int msgInterval;
-			private int t;
+			private Data16 data;
+			private short MsgInterval
+			{
+				get => data.ShortValue0;
+				set => data.ShortValue0 = value;
+			}
+			private byte MsgCurrent
+			{
+				get => data.ByteValue2;
+				set => data.ByteValue2 = value;
+			}
 			public int? ID { get; }
 			public override BLID BLID => BLID.YrtAEvah;
 
@@ -22,7 +31,7 @@ namespace Starvers.TaskSystem.Branches
 
 			public void SetDefault()
 			{
-				msgInterval = 60 * 3 / 2;
+				MsgInterval = 60 * 3 / 2;
 				switch(ID)
 				{
 					case 0:
@@ -43,7 +52,7 @@ namespace Starvers.TaskSystem.Branches
 							{
 								"这几天晚上总是有僵尸来打扰我睡觉",
 								"你去替我好好收拾下它们",
-								"[c/008800:(你需要消灭10只僵尸)]"
+								"[c/008800:你需要消灭10只僵尸]"
 							};
 							break;
 						}
@@ -60,6 +69,14 @@ namespace Starvers.TaskSystem.Branches
 							break;
 						}
 					case 3:
+						{
+							name = "美妙碎片";
+							startMsgs = new[]
+							{
+								"看看这个漂浮在空中的碎片"
+							};
+							break;
+						}
 					case 4:
 					case 5:
 					default:
@@ -75,9 +92,9 @@ namespace Starvers.TaskSystem.Branches
 			public override void Updating(int Timer)
 			{
 				base.Updating(Timer);
-				if(t < startMsgs.Length && Timer % msgInterval == 0)
+				if(MsgCurrent < startMsgs.Length && Timer % MsgInterval == 0)
 				{
-					TargetPlayer.SendMessage(startMsgs[t++], new Color(255, 233, 233));
+					TargetPlayer.SendMessage(startMsgs[MsgCurrent++], new Color(255, 233, 233));
 				}
 			}
 		}

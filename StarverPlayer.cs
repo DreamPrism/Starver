@@ -1183,14 +1183,6 @@ namespace Starvers
 		}
 		public void OnPickItem(int idx)
 		{
-#if DEBUG
-			Item item = Main.item[idx];
-			SendDeBugMessage($"{item}");
-			if (item.prefix == 0)
-				SendDeBugMessage($"[i/s{item.stack}:{item.type}]", true);
-			else
-				SendDeBugMessage($"[i/p{item.prefix}:{item.type}]", true);
-#endif
 			BranchTask?.OnPickItem(idx);
 		}
 		public void OnGetData(GetDataEventArgs args)

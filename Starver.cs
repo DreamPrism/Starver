@@ -334,9 +334,10 @@ namespace Starvers
 		{
 			if (args.MsgId == PacketTypes.ItemOwner)
 			{
-				if (0 <= args.remoteClient && args.remoteClient < Players.Length)
+				int who = Main.item[args.number].owner;
+				if (0 <= who && who < Players.Length)
 				{
-					Players[args.remoteClient]?.OnPickItem(args.number);
+					Players[who]?.OnPickItem(args.number);
 				}
 			}
 		}
