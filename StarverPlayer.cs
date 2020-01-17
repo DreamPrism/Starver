@@ -1181,74 +1181,16 @@ namespace Starvers
 		{
 			BranchTask?.OnUpdateItemDrop(args);
 		}
-		public void OnPickItem(int idx)
+		public void OnDeath()
 		{
-			BranchTask?.OnPickItem(idx);
+			BranchTask?.OnDeath();
+		}
+		public void OnPickAnalogItem(AuraSystem.Realms.AnalogItem item)
+		{
+			BranchTask?.OnPickAnalogItem(item);
 		}
 		public void OnGetData(GetDataEventArgs args)
 		{
-#if false
-			if(args.MsgID == PacketTypes.UpdateItemDrop)
-			{
-				using var stream = new MemoryStream(args.Msg.readBuffer);
-				using var reader = new BinaryReader(stream);
-				using var writer = new BinaryWriter(stream);
-
-				stream.Position = 1;
-
-				int itemIndex = reader.ReadInt16();
-				Vector2 position = reader.ReadVector2();
-				Vector2 velocity = reader.ReadVector2();
-				int stack = reader.ReadInt16();
-				int prefix = reader.ReadByte();
-				int num218 = reader.ReadByte(); // 我一直不知道这是什么
-				int netID = reader.ReadInt16();
-
-				var arg = new UpdateItemDropEventArgs(itemIndex)
-				{
-					ID = netID,
-					Stack = stack,
-					Prefix = prefix,
-					Position = position,
-					Velocity = velocity,
-				};
-
-				OnUpdateItemDrop(arg);
-
-				netID = arg.ID;
-				stack = arg.Stack;
-				prefix = arg.Prefix;
-				position = arg.Position;
-				velocity = arg.Velocity;
-
-				stream.Position = 1;
-
-				writer.Write((short)itemIndex);
-				writer.WriteVector2(position);
-				writer.WriteVector2(velocity);
-				writer.Write((short)stack);
-				writer.Write((byte)prefix);
-				writer.Write((byte)num218);
-				writer.Write((short)netID);
-
-				args.Handled = arg.Handled;
-			}
-			if (args.MsgID == PacketTypes.ItemOwner)
-			{
-				int idx = args.Msg.readBuffer[1];
-				idx <<= 8;
-				idx += args.Msg.readBuffer[2];
-				if (Main.item[idx].owner != this)
-				{
-					SendDeBugMessage(idx.ToString(), true);
-				}
-				else
-				{
-					SendDeBugMessage("R", true);
-				}
-				OnPickItem(idx);
-			}
-#endif
 			BranchTask?.OnGetData(args);
 		}
 		public void StrikingNPC(NPCStrikeEventArgs args)

@@ -42,7 +42,7 @@ namespace Starvers.TaskSystem.Branches
 			}
 		}
 
-		public override (bool Success, string Message) TryStartTask(StarverPlayer player, int index)
+		public override (bool success, string msg) TryStartTask(StarverPlayer player, int index)
 		{
 			var result = tasks[index].CanStartTask(player);
 			if (result.Success)

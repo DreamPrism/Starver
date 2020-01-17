@@ -30,7 +30,8 @@ namespace Starvers.TaskSystem
 		public BranchLine[] BranchTaskLines { get; } = new BranchLine[]
 		{
 			null,
-			new TestLine1()
+			new TestLine1(),
+			new YrtAEvah()
 		};
 		public ITask CurrentTask => MainLine[Config.TaskNow];
 

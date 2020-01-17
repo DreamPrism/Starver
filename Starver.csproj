@@ -82,6 +82,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuraSystem\Realms\AnalogItem.cs" />
     <Compile Include="AuraSystem\Realms\ApoptoticRealm.cs" />
     <Compile Include="AuraSystem\Realms\BlindingRealm.cs" />
     <Compile Include="AuraSystem\Realms\CircleRealm.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="AuraSystem\Realms\Generics\ReflectingRealm.cs" />
     <Compile Include="AuraSystem\Realms\InternalShapes.cs" />
     <Compile Include="AuraSystem\Realms\IRealm.cs" />
+    <Compile Include="AuraSystem\Realms\RectRealm.cs" />
     <Compile Include="AuraSystem\Realms\StarverRealm.cs" />
     <Compile Include="AuraSystem\Realms\ReflectingRealm.cs" />
     <Compile Include="AuraSystem\Skills\AlcoholFeast.cs" />

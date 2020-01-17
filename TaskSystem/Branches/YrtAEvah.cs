@@ -8,18 +8,32 @@ namespace Starvers.TaskSystem.Branches
 {
 	public partial class YrtAEvah : BranchLine
 	{
+		private Task[] tasks;
+
 		public override int Count => 6;
 
-		public override BranchTask this[int index] => throw new NotImplementedException();
+		public override BranchTask this[int index] => tasks[index];
 
 		public YrtAEvah() : base(BLID.YrtAEvah)
 		{
-			throw new NotImplementedException();
+			tasks = new Task[Count];
+			for (int i = 0; i < tasks.Length; i++)
+			{
+				tasks[i] = new Task(i);
+			}
 		}
 
-		public override (bool Success, string Message) TryStartTask(StarverPlayer player, int index)
+		public override (bool success, string msg) TryStartTask(StarverPlayer player, int index)
 		{
-			throw new NotImplementedException();
+			var result = tasks[index].CanStartTask(player);
+			if(result.success)
+			{
+				var task = new Task(index, player);
+				task.SetDefault();
+				task.Start();
+				player.BranchTask = task;
+			}
+			return result;
 		}
 	}
 }

@@ -58,8 +58,7 @@ namespace Starvers
 #if DEBUG
 				StarverPlayer.All.SendMessage(string.Format("掉落:{0},{1}:[i/s{1}:{0}]", itemid, itemstack), Color.Blue);
 #endif
-				int idx = Utils.NewItem(pos, itemid, itemstack);
-				NetMessage.SendData((int)PacketTypes.ItemDrop, -1, -1, null, idx);
+				Utils.NewItem(pos, itemid, itemstack);
 			}
 
 		}

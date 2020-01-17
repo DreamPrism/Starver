@@ -41,7 +41,12 @@ namespace Starvers.TaskSystem
 			}
 		}
 
-		public virtual void OnPickItem(int idx)
+		public virtual void OnDeath()
+		{
+
+		}
+
+		public virtual void OnPickAnalogItem(AuraSystem.Realms.AnalogItem item)
 		{
 
 		}

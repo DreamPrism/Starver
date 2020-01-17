@@ -239,11 +239,15 @@ namespace Starvers
 		}
 		#endregion
 		#region NewProj
-		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack, int Owner, float ai0 = 0, float ai1 = 0)
+		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage = 0, float KnockBack = 0, int Owner = 255, float ai0 = 0, float ai1 = 0)
 		{
 			if(Type >= Main.projectileTexture.Length)
 			{
 				Type = 0;
+			}
+			if (Owner == 255)
+			{
+				Owner = Main.myPlayer;
 			}
 			Damage = Math.Max(1, Math.Min(30000, Damage));
 			int idx = Projectile.NewProjectile(position.X, position.Y, velocity.X, velocity.Y, Type, Damage, KnockBack, Owner, ai0, ai1);
@@ -268,11 +272,15 @@ namespace Starvers
 		{
 			NetMessage.SendData(Starver.CombatTextPacket, -1, -1, NetworkText.FromLiteral(msg), (int)color.PackedValue, entity.position.X + Rand.Next(entity.width), entity.position.Y + Rand.Next(entity.height), 0.0f, 0, 0, 0);
 		}
+		public static void SendCombatMsg(Vector2 pos, string msg, Color color)
+		{
+			NetMessage.SendData(Starver.CombatTextPacket, -1, -1, NetworkText.FromLiteral(msg), (int)color.PackedValue, pos.X, pos.Y, 0.0f, 0, 0, 0);
+		}
 		#endregion
 		#region Vector2
-		public static Vector2 FromPolar(double rad, float length)
+		public static Vector2 FromPolar(double angle, float length)
 		{
-			return new Vector2((float)(Math.Cos(rad) * length), (float)(Math.Sin(rad) * length));
+			return new Vector2((float)(Math.Cos(angle) * length), (float)(Math.Sin(angle) * length));
 		}
 		public static double Angle(this Vector2 vector)
 		{
@@ -357,6 +365,11 @@ namespace Starvers
 		{
 			return rand.NextDouble() * Math.PI * 2;
 		}
+		public static T NextValue<T>(this Random rand, params T[] args)
+		{
+			int idx = rand.Next(args.Length);
+			return args[idx];
+		}
 		/// <summary>
 		/// 使用样例:
 		/// <para>Range = PI / 12</para>
@@ -435,7 +448,26 @@ namespace Starvers
 		}
 		public static int NewItem(Vector2 position, int type, int stack = 1, int prefix = 0)
 		{
-			return Item.NewItem((int)position.X, (int)position.Y, 0, 0, type, stack, false, prefix);
+			int idx = Item.NewItem((int)position.X, (int)position.Y, 0, 0, type, stack, false, prefix);
+			return idx;
+		}
+		public static int AnalogNewItem(Vector2 position, int type, int stack = 1, int keepTime = 60 * 60)
+		{
+			int idx = 400;
+			for (int i = 0; i < Main.item.Length; i++)
+			{
+				if (!Main.item[i].active)
+				{
+					idx = i;
+					Main.item[i].netDefaults(type);
+					Main.item[i].stack = stack;
+					Main.item[i].keepTime = keepTime;
+					Main.item[i].position = position;
+					StarverPlayer.All.SendData(PacketTypes.UpdateItemDrop, "", i);
+					break;
+				}
+			}
+			return idx;
 		}
 		public static int NewItem(Vector position, int type, int stack = 1, int prefix = 0)
 		{

@@ -244,6 +244,8 @@ namespace Starvers
 					GetDataHandlers.KillMe += OnDeath;
 				}
 			}
+
+
 			TSKS = Plugins[0] as StarverTaskManager;
 			Aura = Plugins[2] as StarverAuraManager;
 			if(Config.EnableNPC)
@@ -332,12 +334,22 @@ namespace Starvers
 		#region OnSendData
 		private void OnSendData(SendDataEventArgs args)
 		{
+#if false
 			if (args.MsgId == PacketTypes.ItemOwner)
 			{
 				int who = Main.item[args.number].owner;
 				if (0 <= who && who < Players.Length)
 				{
 					Players[who]?.OnPickItem(args.number);
+				}
+			}
+#endif
+			if(args.MsgId == PacketTypes.PlayerDeathV2)
+			{
+				int who = args.number;
+				if (0 <= who && who < Players.Length)
+				{
+					Players[who]?.OnDeath();
 				}
 			}
 		}
