@@ -33,11 +33,11 @@ namespace Starvers
 			{
 				get
 				{
-					if(id == BLID.None)
+					if (id == BLID.None)
 					{
 						throw new ArgumentException("id is BLID.None", nameof(id));
 					}
-					if(id >= BLID.Max)
+					if (id >= BLID.Max)
 					{
 						throw new ArgumentException("id >= BLID.Max", nameof(id));
 					}
@@ -81,7 +81,7 @@ namespace Starvers
 			}
 			public unsafe static void Serialize(in BLData data, byte[] target)
 			{
-				if(target.Length != 16 * 4)
+				if (target.Length != 16 * 4)
 				{
 					throw new ArgumentException("target.Length != 16 * 4", nameof(target));
 				}

@@ -247,6 +247,23 @@ namespace Starvers
 				SendData(PacketTypes.PlayerTeam, "", Index);
 			}
 		}
+		public int LifeMax
+		{
+			get => TPlayer.statLifeMax;
+			set => SetLifeMax(value);
+		}
+		public int ManaMax
+		{
+			get
+			{
+				return TPlayer.statManaMax;
+			}
+			set
+			{
+				TPlayer.statManaMax = value;
+				SendData(PacketTypes.PlayerMana, "", Index);
+			}
+		}
 		#endregion
 		#region Center
 		public Vector2 Center
@@ -318,6 +335,13 @@ namespace Starvers
 			}
 		}
 		#endregion
+		#region AppendixMsg
+		public string AppendixMsg
+		{
+			get;
+			set;
+		}
+		#endregion
 		#endregion
 		#region Methods
 		#region Spawn
@@ -332,6 +356,7 @@ namespace Starvers
 			if (success)
 			{
 				SendInfoMessage($"支线任务{BranchTask}已完成");
+				BLdata[BranchTask.BLID]++;
 				RandomRocket(3, 10);
 			}
 			else
@@ -356,10 +381,15 @@ namespace Starvers
 		{
 			short[] rockets =
 			{
-				ProjectileID.RocketFireworkBlue,
-				ProjectileID.RocketFireworkGreen,
-				ProjectileID.RocketFireworkRed,
-				ProjectileID.RocketFireworkYellow
+				ProjectileID.RocketFireworksBoxGreen,
+				ProjectileID.RocketFireworksBoxYellow,
+				ProjectileID.RocketFireworksBoxRed,
+				ProjectileID.RocketFireworksBoxBlue,
+				ProjectileID.RocketFireworksBoxGreen,
+				ProjectileID.RocketFireworksBoxYellow,
+				ProjectileID.RocketFireworksBoxRed,
+				ProjectileID.RocketFireworksBoxBlue,
+				ProjectileID.FireworkFountainRainbow
 			};
 			int count = Starver.Rand.Next(min, Max);
 			while (count-- > 0)
@@ -739,7 +769,6 @@ namespace Starvers
 			{
 				return;
 			}
-			//byte[] buffer = SerializeSkill();
 			if (SaveMode == SaveModes.MySQL)
 			{
 				string wps = JsonConvert.SerializeObject(Weapon);
@@ -747,7 +776,7 @@ namespace Starvers
 				db.Excute("UPDATE Starver SET Weapons=@0 WHERE UserID=@1;", wps, UserID);
 				db.Excute("UPDATE Starver SET Skills=@0 WHERE UserID=@1;", skills, UserID);
 				db.Excute("UPDATE Starver SET Level=@0 WHERE UserID=@1;", level, UserID);
-				db.Excute("UPDATE Starver SET Exp=@0 WHERE UserID=@1;", Exp, UserID);
+				db.Excute("UPDATE Starver SET Exp=@0 WHERE UserID=@1;", exp, UserID);
 				db.Excute("UPDATE Starver SET BranchTaskDatas=@0 WHERE UserID=@1;", BLData.Serialize(BLdata), UserID);
 			}
 			else
@@ -781,6 +810,14 @@ namespace Starvers
 		#endregion
 		#endregion
 		#region SetLifeMax
+		public void SetLifeMax(int value)
+		{
+			int Life = value;
+			TPlayer.SetLife(Life);
+		}
+		/// <summary>
+		/// 根据等级自动计算
+		/// </summary>
 		public void SetLifeMax()
 		{
 			if (TPlayer.statLifeMax2 < 500)
@@ -1355,7 +1392,7 @@ namespace Starvers
 				SendData(PacketTypes.PlayerHp, string.Empty, Index);
 			}
 		}
-		public BLData BLdata { get; set; }
+		public ref BLData BLdata => ref bldata;
 		/// <summary>
 		/// 数据库连接
 		/// </summary>
@@ -1382,6 +1419,7 @@ namespace Starvers
 		internal int LastSkill;
 		internal int mp;
 		internal int exp;
+		internal BLData bldata;
 		/// <summary>
 		/// 获取对应Terraria.Player
 		/// </summary>

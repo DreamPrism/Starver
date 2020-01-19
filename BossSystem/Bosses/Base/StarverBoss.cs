@@ -75,7 +75,6 @@ namespace Starvers.BossSystem.Bosses.Base
 		}
 		public int RawType { get; protected set; } = NPCID.BlueSlime;
 		public float MaxDistance { get; protected set; } = 500f;
-		public bool IgnoreDistance { get; protected set; } = true;
 		public bool Downed { get; protected set; }
 		public virtual bool CanSpawn => StarverConfig.Config.TaskNow >= TaskNeed;
 		/// <summary>
@@ -159,6 +158,7 @@ namespace Starvers.BossSystem.Bosses.Base
 			DefaultLife = 40000;
 			DefaultDefense = 60;
 			DefaultLifes = 90;
+			IgnoreDistance = true;
 		}
 		#endregion
 		#region KillMe

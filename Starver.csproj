@@ -155,6 +155,7 @@
     <Compile Include="Events\ReleaseSkillEventArgs.cs" />
     <Compile Include="Events\UpdateItemDropEventArgs.cs" />
     <Compile Include="LockedSkill.cs" />
+    <Compile Include="NPCSystem\NPCs\ElfHeliEx.cs" />
     <Compile Include="ProjContainers\IProjSet.cs" />
     <Compile Include="ProjContainers\ProjPair.cs" />
     <Compile Include="ProjContainers\ProjQueue.cs" />

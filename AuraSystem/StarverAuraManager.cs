@@ -216,6 +216,12 @@ namespace Starvers.AuraSystem
 		}
 		#endregion
 		#endregion
+		#region OperateRealms
+		public void OperateRealms(Action<IRealm> operation)
+		{
+			TheRealms.ForEach(operation);
+		}
+		#endregion
 		#region Hooks
 		#region OnUpdate
 		private void OnUpdate(object args)

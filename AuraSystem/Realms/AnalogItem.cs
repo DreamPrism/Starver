@@ -48,7 +48,12 @@ namespace Starvers.AuraSystem.Realms
 				StarverPlayer.All.SendData(PacketTypes.UpdateItemDrop, "", itemIndex);
 			}
 		}
-		public bool IgnoreGravity
+		public bool LockPos
+		{
+			get;
+			set;
+		}
+		public bool LockStack
 		{
 			get;
 			set;
@@ -61,6 +66,9 @@ namespace Starvers.AuraSystem.Realms
 			this.TimeLeft = timeLeft;
 		}
 
+		/// <summary>
+		/// 清除这个物品
+		/// </summary>
 		public override void Kill()
 		{
 			RealItem.netDefaults(0);
@@ -86,11 +94,11 @@ namespace Starvers.AuraSystem.Realms
 				}
 				itemIndex = Utils.NewItem(Center, id, stack);
 			}
-			else
+			else if (!LockStack)
 			{
 				stack = RealItem.stack;
 			}
-			if (IgnoreGravity)
+			if (LockPos)
 			{
 				RealItem.Center = Center;
 				StarverPlayer.All.SendData(PacketTypes.UpdateItemDrop, "", itemIndex);

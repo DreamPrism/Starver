@@ -160,7 +160,7 @@ namespace Starvers.Forms
 		#region Save
 		private void SaveButton_Click(object sender, EventArgs args)
 		{
-			if (PlayerList.SelectedIndex == -1 || PlayerSelected == null)
+			if (PlayerList.SelectedIndex == -1 && PlayerSelected == null)
 			{
 				return;
 			}

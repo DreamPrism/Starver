@@ -54,6 +54,11 @@ namespace Starvers.NPCSystem
 			SpawnChance = 0.2f,
 			Task = TaskID.MoonLord + 1
 		};
+		public static SpawnChecker SpecialSpawn { get; } = new SpawnChecker
+		{
+			SpawnChance = 0,
+			SpawnRate = 60 * 60 * 60
+		};
 		/// <summary>
 		/// 晚上出生的稀有怪;
 		/// </summary>

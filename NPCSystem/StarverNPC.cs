@@ -188,6 +188,11 @@ namespace Starvers.NPCSystem
 		{
 			if (!Active)
 			{
+				if (0 <= Index && Index < NPCs.Length)
+				{
+					NPCs[Index] = null;
+					Starver.NPCs[Index] = null;
+				}
 				return;
 			}
 			try
@@ -197,7 +202,7 @@ namespace Starvers.NPCSystem
 					if (Target < 0 || Target >= Starver.Players.Length || TargetPlayer == null || !TargetPlayer.Active)
 					{
 						TargetClosest();
-						if (Target == None || Target >= Starver.Players.Length || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500)
+						if (Target == None || Target >= Starver.Players.Length || (Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500 && !IgnoreDistance))
 						{
 							StarverPlayer.All.SendDeBugMessage($"{Name} killed by Invalid Target: {Target}");
 							KillMe();
@@ -217,11 +222,11 @@ namespace Starvers.NPCSystem
 					RealAI();
 				}
 			}
-			catch(IndexOutOfRangeException exception)
+			catch (IndexOutOfRangeException)
 			{
 				StarverPlayer.All.SendDeBugMessage($"{Name} Invalid Target: {Target}");
 				TargetClosest();
-				if (Target == None || Target >= Starver.Players.Length || Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500)
+				if (Target == None || Target >= Starver.Players.Length || (Vector2.Distance(TargetPlayer.Center, Center) > 16 * 500 && !IgnoreDistance))
 				{
 					StarverPlayer.All.SendDeBugMessage($"{Name} killed by Invalid Target: {Target}");
 					KillMe();
@@ -230,6 +235,12 @@ namespace Starvers.NPCSystem
 			}
 			SendData();
 			++Timer;
+		}
+		#endregion
+		#region DistanceToTarget
+		public float DistanceToTarget()
+		{
+			return Vector2.Distance(Center, TargetPlayer.Center);
 		}
 		#endregion
 		#region CalcSpawnPos
@@ -518,7 +529,7 @@ namespace Starvers.NPCSystem
 		protected static int Alives;
 		protected static List<System.Reflection.Assembly> NPCPlugins { get; private set; } = new List<System.Reflection.Assembly>();
 		protected static List<Type> NPCTypes { get; private set; } = new List<Type>();
-		protected static List<StarverNPC> RootNPCs { get; private set; } = new List<StarverNPC>();
+		protected internal static List<StarverNPC> RootNPCs { get; private set; } = new List<StarverNPC>();
 		protected static int NewNPC<T>(Vector where, Vector Velocity)
 			where T : StarverNPC, new()
 		{
@@ -545,7 +556,7 @@ namespace Starvers.NPCSystem
 				throw new ArgumentException($"{NPCType.Name}不是StarverNPC的子类或是抽象类");
 			}
 		}
-		protected static int NewNPC(Vector where, Vector Velocity, StarverNPC Root)
+		protected internal static int NewNPC(Vector where, Vector Velocity, StarverNPC Root)
 		{
 			StarverNPC npc = Root.Clone() as StarverNPC;
 			npc._active = true;

@@ -51,6 +51,7 @@ namespace Starvers
 			get => RealNPC.dontTakeDamage;
 			set => RealNPC.dontTakeDamage = value;
 		}
+		public bool IgnoreDistance { get; set; } 
 		#endregion
 		#region Fields
 		internal bool _active;
@@ -74,22 +75,22 @@ namespace Starvers
 		public StarverEntity(int idx)
 		{
 			Index = idx;
-			ExpGive =  Main.npc[Index].lifeMax * StarverConfig.Config.TaskNow;
+			ExpGive = Main.npc[Index].lifeMax * StarverConfig.Config.TaskNow;
 		}
 		#endregion
 		#region Utils
 		#region FromPolar
-		public static Vector FromPolar(double rad,float length)
+		public static Vector FromPolar(double rad, float length)
 		{
 			return Vector.FromPolar(rad, length);
 		}
 		#endregion
 		#region NewProj
-		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack = 3f,float ai0 = 0, float ai1 = 0)
+		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack = 3f, float ai0 = 0, float ai1 = 0)
 		{
 			return Utils.NewProj(position, velocity, Type, Damage, KnockBack, Main.myPlayer, ai0, ai1);
 		}
-		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage,int owner, float KnockBack, float ai0 = 0, float ai1 = 0)
+		public static int NewProj(Vector2 position, Vector2 velocity, int Type, int Damage, int owner, float KnockBack, float ai0 = 0, float ai1 = 0)
 		{
 			return Utils.NewProj(position, velocity, Type, Damage, KnockBack, owner, ai0, ai1);
 		}
@@ -107,29 +108,47 @@ namespace Starvers
 		/// </summary>
 		/// <param name="Center"></param>
 		/// <param name="r"></param>
-		/// <param name="Vel">速率</param>
+		/// <param name="speed">速率</param>
 		/// <param name="Type"></param>
 		/// <param name="number">弹幕总数</param>
 		/// <param name="Damage">伤害</param>
 		/// <param name="direction">0:不动 1:向内 2:向外</param>
-		public static void NewProjCircle(Vector2 Center, int r, float Vel, int Type, int number,int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
+		public static void NewProjCircle(Vector2 Center, int r, float speed, int Type, int number, int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
 		{
-			switch(direction)
+			switch (direction)
 			{
 				case 0:
-					Vel = 0;
+					speed = 0;
 					break;
 				case 1:
-					Vel *= 1;
+					speed *= 1;
 					break;
 				case 2:
-					Vel *= -1;
+					speed *= -1;
 					break;
 			}
 			double averagerad = Math.PI * 2 / number;
-			for(int i = 0; i < number; i++)
+			for (int i = 0; i < number; i++)
 			{
-				NewProj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -speed), Type, Damage, 4f, ai0, ai1);
+			}
+		}
+		/// <summary>
+		/// 多向发射
+		/// </summary>
+		/// <param name="speed">速率</param>
+		/// <param name="rotation">旋转角</param>
+		/// <param name="type">类型</param>
+		/// <param name="number">数量</param>
+		/// <param name="damage">伤害</param>
+		/// <param name="ai0"></param>
+		/// <param name="ai1"></param>
+		public void LaunchProjs(float speed, double rotation, int type, int number, int damage, float ai0 = 0, float ai1 = 0)
+		{
+			double averagerad = Math.PI * 2 / number;
+			for (int i = 0; i < number; i++)
+			{
+				NewProj(Center, FromPolar(averagerad * i, -speed), type, damage, 4f, ai0, ai1);
 			}
 		}
 		/// <summary>
@@ -137,29 +156,29 @@ namespace Starvers
 		/// </summary>
 		/// <param name="Center"></param>
 		/// <param name="r"></param>
-		/// <param name="Vel">速率</param>
+		/// <param name="speed">速率</param>
 		/// <param name="Type"></param>
 		/// <param name="number">弹幕总数</param>
 		/// <param name="Damage">伤害</param>
 		/// <param name="direction">0:不动 1:向内 2:向外</param>
-		public static void NewProjCircle(int owner,Vector2 Center, int r, float Vel, int Type, int number, int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
+		public static void NewProjCircle(int owner, Vector2 Center, int r, float speed, int Type, int number, int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
 		{
 			switch (direction)
 			{
 				case 0:
-					Vel = 0;
+					speed = 0;
 					break;
 				case 1:
-					Vel *= 1;
+					speed *= 1;
 					break;
 				case 2:
-					Vel *= -1;
+					speed *= -1;
 					break;
 			}
 			double averagerad = Math.PI * 2 / number;
 			for (int i = 0; i < number; i++)
 			{
-				NewProj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage,owner, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -speed), Type, Damage, owner, 4f, ai0, ai1);
 			}
 		}
 		#endregion
@@ -169,29 +188,29 @@ namespace Starvers
 		/// </summary>
 		/// <param name="Center"></param>
 		/// <param name="r"></param>
-		/// <param name="Vel">速率</param>
+		/// <param name="speed">速率</param>
 		/// <param name="Type"></param>
 		/// <param name="number">弹幕总数</param>
 		/// <param name="Damage">伤害(已被加成)</param>
 		/// <param name="direction">0:不动 1:向内 2:向外</param>
-		public void ProjCircle(Vector2 Center, float r, float Vel, int Type, int number, int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
+		public void ProjCircle(Vector2 Center, float r, float speed, int Type, int number, int Damage, byte direction = 1, float ai0 = 0, float ai1 = 0)
 		{
 			switch (direction)
 			{
 				case 0:
-					Vel = 0;
+					speed = 0;
 					break;
 				case 1:
-					Vel *= 1;
+					speed *= 1;
 					break;
 				case 2:
-					Vel *= -1;
+					speed *= -1;
 					break;
 			}
 			double averagerad = Math.PI * 2 / number;
 			for (int i = 0; i < number; i++)
 			{
-				Proj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -Vel), Type, Damage, 4f, ai0, ai1);
+				Proj(Center + FromPolar(averagerad * i, r), FromPolar(averagerad * i, -speed), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		/// <summary>
@@ -252,7 +271,7 @@ namespace Starvers
 		/// 扇形弹幕
 		/// </summary>
 		/// <param name="Center">圆心</param>
-		/// <param name="Vel">速率</param>
+		/// <param name="speed">速率</param>
 		/// <param name="r">半径</param>
 		/// <param name="interrad">中心半径的方向</param>
 		/// <param name="rad">张角</param>
@@ -262,29 +281,29 @@ namespace Starvers
 		/// <param name="direction">0:不动 1:向内 2:向外</param>
 		/// <param name="ai0"></param>
 		/// <param name="ai1"></param>
-		public static void NewProjSector(Vector2 Center, float Vel, float r,double interrad,double rad,int Damage, int Type, int num, byte direction = 2, float ai0 = 0, float ai1 = 0)
+		public static void NewProjSector(Vector2 Center, float speed, float r, double interrad, double rad, int Damage, int Type, int num, byte direction = 2, float ai0 = 0, float ai1 = 0)
 		{
-			if(num == 1)
+			if (num == 1)
 			{
-				NewProj(Center, FromPolar(interrad, Vel * -direction), Type, Damage);
+				NewProj(Center, FromPolar(interrad, speed * -direction), Type, Damage);
 			}
 			double start = interrad - rad / 2;
 			double average = rad / (num - 1);
-			switch(direction)
+			switch (direction)
 			{
 				case 0:
-					Vel *= 0;
+					speed *= 0;
 					break;
 				case 1:
-					Vel *= 1;
+					speed *= 1;
 					break;
 				case 2:
-					Vel *= -1;
+					speed *= -1;
 					break;
 			}
 			for (int i = 0; i < num; i++)
 			{
-				NewProj(Center + FromPolar(start + i * average, r), FromPolar(start + i * average, Vel), Type, Damage, 4f, ai0, ai1);
+				NewProj(Center + FromPolar(start + i * average, r), FromPolar(start + i * average, speed), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		#endregion
@@ -293,7 +312,7 @@ namespace Starvers
 		/// 扇形弹幕
 		/// </summary>
 		/// <param name="Center">圆心</param>
-		/// <param name="Vel">速率</param>
+		/// <param name="speed">速率</param>
 		/// <param name="r">半径</param>
 		/// <param name="interrad">中心半径的方向</param>
 		/// <param name="rad">张角</param>
@@ -303,11 +322,11 @@ namespace Starvers
 		/// <param name="direction">0:不动 1:向内 2:向外</param>
 		/// <param name="ai0"></param>
 		/// <param name="ai1"></param>
-		public void ProjSector(Vector2 Center, float Vel, float r, double interrad, double rad, int Damage, int Type, int num, byte direction = 2, float ai0 = 0, float ai1 = 0)
+		public void ProjSector(Vector2 Center, float speed, float r, double interrad, double rad, int Damage, int Type, int num, byte direction = 2, float ai0 = 0, float ai1 = 0)
 		{
-			if(num == 1)
+			if (num == 1)
 			{
-				Proj(Center, FromPolar(interrad, Vel * -direction), Type, Damage);
+				Proj(Center, FromPolar(interrad, speed * -direction), Type, Damage);
 				return;
 			}
 			double start = interrad - rad / 2;
@@ -315,23 +334,23 @@ namespace Starvers
 			switch (direction)
 			{
 				case 0:
-					Vel *= 0;
+					speed *= 0;
 					break;
 				case 1:
-					Vel *= -1;
+					speed *= -1;
 					break;
 				case 2:
-					Vel *= 1;
+					speed *= 1;
 					break;
 			}
 			for (int i = 0; i < num; i++)
 			{
-				Proj(Center + FromPolar(start + i * average, r), FromPolar(start + i * average, Vel), Type, Damage, 4f, ai0, ai1);
+				Proj(Center + FromPolar(start + i * average, r), FromPolar(start + i * average, speed), Type, Damage, 4f, ai0, ai1);
 			}
 		}
 		#endregion
 		#region NewProjLine
-		public static void NewProjLine(Vector2 Begin, Vector2 End, Vector2 Vel,int num, int Damage, int type, float ai0 = 0, float ai1 = 0)
+		public static void NewProjLine(Vector2 Begin, Vector2 End, Vector2 Vel, int num, int Damage, int type, float ai0 = 0, float ai1 = 0)
 		{
 			Vector2 average = Begin - End;
 			average /= num;
@@ -353,7 +372,7 @@ namespace Starvers
 		}
 		#endregion
 		#region SendCombatText
-		public void SendCombatMsg(string msg,Color color)
+		public void SendCombatMsg(string msg, Color color)
 		{
 			RealNPC.SendCombatMsg(msg, color);
 		}
@@ -364,7 +383,7 @@ namespace Starvers
 		public delegate void AIDelegate();
 		public virtual void AI(object args = null)
 		{
-			if(!Active)
+			if (!Active)
 			{
 				return;
 			}
@@ -389,7 +408,7 @@ namespace Starvers
 		}
 		#endregion
 		#region StrikeMe
-		public virtual void StrikeMe(int Damage,float knockback,StarverPlayer player)
+		public virtual void StrikeMe(int Damage, float knockback, StarverPlayer player)
 		{
 			RealNPC.playerInteraction[player.Index] = true;
 			int realdamage = (int)(Damage * (Rand.NextDouble() - 0.5) / 4 - RealNPC.defense * 0.5);
@@ -407,7 +426,7 @@ namespace Starvers
 				SendData();
 			}
 		}
-		public virtual void OnStrike(int RealDamage,float KnockBack,StarverPlayer player)
+		public virtual void OnStrike(int RealDamage, float KnockBack, StarverPlayer player)
 		{
 
 		}
@@ -428,7 +447,7 @@ namespace Starvers
 		public void TargetClosest()
 		{
 			Target = -1;
-			for(int i = 0; i < Starver.Players.Length; i++)
+			for (int i = 0; i < Starver.Players.Length; i++)
 			{
 				if (Starver.Players[i] == null || !Starver.Players[i].Active)
 				{
@@ -449,7 +468,7 @@ namespace Starvers
 		public static int AlivePlayers()
 		{
 			int total = 0;
-			for(int i = 0; i < Starver.Players.Length; i++)
+			for (int i = 0; i < Starver.Players.Length; i++)
 			{
 				if (Starver.Players[i] == null || !Starver.Players[i].Active)
 				{
@@ -469,7 +488,7 @@ namespace Starvers
 				_active = false;
 				SendData();
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 #if DEBUG
 				StarverPlayer.All.SendMessage(e.ToString(), Color.Red);
@@ -486,9 +505,9 @@ namespace Starvers
 			SendData(idx);
 			return idx;
 		}
-		protected int NewNPC(Vector pos, Vector vel, int type, int lifeMax, int defense,int start = 0)
+		protected int NewNPC(Vector pos, Vector vel, int type, int lifeMax, int defense, int start = 0)
 		{
-			int idx = NPC.NewNPC((int)pos.X, (int)pos.Y, type,start);
+			int idx = NPC.NewNPC((int)pos.X, (int)pos.Y, type, start);
 			Main.npc[idx].velocity = vel;
 			Main.npc[idx].lifeMax = lifeMax;
 			Main.npc[idx].life = lifeMax;

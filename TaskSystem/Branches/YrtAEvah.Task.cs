@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Terraria.ID;
 using Terraria;
@@ -10,13 +11,19 @@ namespace Starvers.TaskSystem.Branches
 {
 	using Events;
 	using Vector = TOFOUT.Terraria.Server.Vector2;
+	using AnalogItem = AuraSystem.Realms.AnalogItem;
+	using ElfHeliEx = NPCSystem.NPCs.ElfHeliEx;
 	public partial class YrtAEvah
 	{
 		private class Task : BranchTask
 		{
 			private const int ShardRegionRadium = 125;
+			private const int BattleRegionRadium = 50;
+			private const int EscapeRegionRadium = 10;
 
+			private LinkedList<int> enemies;
 			private string[] startMsgs;
+			private string[] words;
 			private short msgInterval;
 			private short msgCurrent;
 			private short count;
@@ -26,6 +33,7 @@ namespace Starvers.TaskSystem.Branches
 			private Vector2 targetPosition;
 			private short taskProcess;
 			private short spawnedCount;
+			private int TimeTicker;
 
 			private static Random Rand => Starver.Rand;
 
@@ -139,10 +147,32 @@ namespace Starvers.TaskSystem.Branches
 					case 3:
 						{
 							targetPosition = FindPos1();
+							TimeTicker = (int)(Vector2.Distance(targetPosition, TargetPlayer.Center) / TargetPlayer.TPlayer.maxRunSpeed);
+							TimeTicker += 60 * 20;
 #if DEBUG
 							TargetPlayer.SendDeBugMessage($"targetPos: {targetPosition}");
 							TargetPlayer.SendDeBugMessage($"myPos: {TargetPlayer.Center}");
 #endif
+							break;
+						}
+					case 4:
+						{
+							targetPosition = FindPos2();
+#if DEBUG
+							TargetPlayer.SendDeBugMessage($"targetPos: {targetPosition}");
+							TargetPlayer.SendDeBugMessage($"myPos: {TargetPlayer.Center}");
+#endif
+							break;
+						}
+					case 5:
+						{
+							targetPosition = FindPos4();
+#if DEBUG
+							TargetPlayer.SendDeBugMessage($"targetPos: {targetPosition}");
+							TargetPlayer.SendDeBugMessage($"myPos: {TargetPlayer.Center}");
+#endif
+							enemies = new LinkedList<int>();
+							countRequire = 5;
 							break;
 						}
 				}
@@ -213,7 +243,7 @@ namespace Starvers.TaskSystem.Branches
 										Vector2 where = TargetPlayer.Center;
 										where.Y -= 16 * 50;
 										where.X += Rand.Next(-16 * 90, 16 * 80);
-										var item = new AuraSystem.Realms.AnalogItem(ItemID.FallenStar);
+										var item = new AnalogItem(ItemID.FallenStar);
 										item.Center = where;
 										item.TimeLeft = 60 * 15;
 										Starver.Instance.Aura.AddRealm(item);
@@ -224,8 +254,25 @@ namespace Starvers.TaskSystem.Branches
 						}
 					case 3:
 						{
+							if (TimeTicker > 0)
+							{
+								if (TimeTicker-- == 1)
+								{
+									TargetPlayer.SendInfoMessage("碎片出现了!");
+								}
+								if (TimeTicker % 60 == 0)
+								{
+									TargetPlayer.AppendixMsg = $"碎片将在{TimeTicker / 60}s后出现";
+								}
+							}
 							if (taskProcess == 0)
 							{
+								if(TimeTicker == 0)
+								{
+									TargetPlayer.SendFailMessage("太慢了, 太慢了");
+									Fail();
+									return;
+								}
 								if (msgCurrent >= startMsgs.Length && Timer % 90 == 0)
 								{
 									var distance = targetPosition - TargetPlayer.Center;
@@ -246,14 +293,15 @@ namespace Starvers.TaskSystem.Branches
 							else if (taskProcess == 1)
 							{
 								TargetPlayer.SetBuff(BuffID.UFOMount);
-								if (Timer % 40 == 0)
+								if (TimeTicker == 0 && Timer % 40 == 0)
 								{
-									if (spawnedCount < countRequire)
+									if (spawnedCount < countRequire * 3 / 2)
 									{
-										float length = Rand.Next(ShardRegionRadium * 16);
-										var realm = new AuraSystem.Realms.AnalogItem(ItemID.FragmentStardust);
-										realm.Center = targetPosition + Rand.NextVector2(length);
-										Starver.Instance.Aura.AddRealm(realm);
+										float r = Rand.NextFloat();
+										float length = r * r * r * r * ShardRegionRadium * 16;
+										var item = new AnalogItem(ItemID.FragmentStardust);
+										item.Center = targetPosition + Rand.NextVector2(length);
+										Starver.Instance.Aura.AddRealm(item);
 										/*
 										int idx = Utils.NewItem(targetPosition + Rand.NextVector2(length), ItemID.FragmentStardust);
 										Main.item[idx].keepTime = int.MaxValue;
@@ -289,6 +337,178 @@ namespace Starvers.TaskSystem.Branches
 							}
 							break;
 						}
+					case 4:
+						{
+							if (taskProcess == 0)
+							{
+								if (msgCurrent >= startMsgs.Length && Timer % 90 == 0)
+								{
+									var distance = targetPosition - TargetPlayer.Center;
+									var len = distance.Length();
+									if (len > BattleRegionRadium * 16)
+									{
+										string tip = $"还有{len / 16}块方格距离";
+										Utils.SendCombatMsg(TargetPlayer.Center + distance.ToLenOf(16 * 30), tip, Color.GreenYellow);
+									}
+									else
+									{
+										words = new[]
+										{
+											"奇怪",
+											"碎片哪去了",
+											"",
+											"!",
+											"果然",
+											"有埋伏",
+											"来吧...",
+											"[c/008800:消灭在场所有敌人]"
+										};
+										taskProcess++;
+									}
+								}
+							}
+							else if (taskProcess == 1)
+							{
+								if (msgCurrent - startMsgs.Length < words.Length)
+								{
+									if (Timer % msgInterval == 0)
+									{
+										TargetPlayer.SendMessage(words[msgCurrent++ - startMsgs.Length], new Color(255, 233, 233));
+									}
+								}
+								else
+								{
+									Task_4_SpawnEnemies();
+									taskProcess++;
+								}
+							}
+							else if (taskProcess == 2)
+							{
+								if (enemies.Count == 0)
+								{
+									TargetPlayer.SendInfoMessage("带上碎片回去");
+									taskProcess++;
+									break;
+								}
+								unsafe
+								{
+									var t = 0;
+									var span = stackalloc int[enemies.Count];
+									foreach (var idx in enemies)
+									{
+										if (!Main.npc[idx].active)
+										{
+											span[t++] = idx;
+										}
+									}
+									for (int i = 0; i < t; i++)
+									{
+										enemies.Remove(span[i]);
+									}
+								}
+							}
+							else if(taskProcess == 3 && Timer % 90 == 0)
+							{
+								var distance = startPosition - TargetPlayer.Center;
+								var len = distance.Length();
+								if (len > 10 * 16)
+								{
+									string tip = $"还有{len / 16}块方格距离";
+									Utils.SendCombatMsg(TargetPlayer.Center + distance.ToLenOf(16 * 30), tip, Color.GreenYellow);
+								}
+								else
+								{
+									Success();
+								}
+							}
+							if (taskProcess < 2 && Timer % 150 == 0)
+							{
+								const int limit = BattleRegionRadium * 2 * 3 / 4;
+								for (int i = 0; i < limit; i++)
+								{
+									double angle = Math.PI * 2 * i / limit;
+									int idx = Utils.NewProj(targetPosition + Utils.FromPolar(angle, BattleRegionRadium * 16), Vector2.Zero, ProjectileID.VortexVortexPortal);
+									Main.projectile[idx].timeLeft = 150;
+									Main.projectile[idx].aiStyle = -1;
+								}
+							}
+							break;
+						}
+					case 5:
+						{
+							if (msgCurrent >= startMsgs.Length)
+							{
+								Vector2 total = targetPosition - startPosition;
+								Vector2 valid = total;
+								Vector2 ofPlayer = TargetPlayer.Center - startPosition;
+								valid.Normalize();
+								valid *= Vector2.Dot(valid, ofPlayer);
+								if (valid.Length() / (total.Length() / countRequire) > count)
+								{
+									count++;
+									TargetPlayer.SendDeBugMessage("AMbusher spawned");
+									Task_5_SpawnEnemyAmbusher();
+								}
+								if (Timer % 150 == 0)
+								{
+									const int limit = EscapeRegionRadium * 2 * 3 / 4;
+									for (int i = 0; i < limit; i++)
+									{
+										double angle = Math.PI * 2 * i / limit;
+										int idx = Utils.NewProj(targetPosition + Utils.FromPolar(angle, EscapeRegionRadium * 16), Vector2.Zero, ProjectileID.Flames);
+										Main.projectile[idx].timeLeft = 150;
+										Main.projectile[idx].aiStyle = -1;
+									}
+								}
+								if (Timer % 210 == 0)
+								{
+									unsafe
+									{
+										var t = 0;
+										var span = stackalloc int[enemies.Count];
+										foreach (var idx in enemies)
+										{
+											if (!Main.npc[idx].active)
+											{
+												span[t++] = idx;
+											}
+										}
+										for (int i = 0; i < t; i++)
+										{
+											enemies.Remove(span[i]);
+										}
+									}
+									if (enemies.Count < 5)
+									{
+										while (enemies.Count < 5)
+										{
+											Task_5_SpawnEnemyAttacker();
+										}
+										int rand = Rand.Next(5);
+										for (int i = 0; i < rand; i++)
+										{
+											Task_5_SpawnEnemyAttacker();
+										}
+									}
+								}
+								if (Timer % 90 == 0)
+								{
+									var distance = targetPosition - TargetPlayer.Center;
+									var len = distance.Length();
+									if (len > EscapeRegionRadium * 16)
+									{
+										string tip = $"还有{len / 16}块方格距离";
+										Utils.SendCombatMsg(TargetPlayer.Center + distance.ToLenOf(16 * 30), tip, Color.GreenYellow);
+									}
+									else
+									{
+										ClearEnemies();
+										Success();
+									}
+								}
+							}
+							break;
+						}
 				}
 			}
 
@@ -314,6 +534,23 @@ namespace Starvers.TaskSystem.Branches
 							}
 							break;
 						}
+					case 4:
+						{
+							if (taskProcess == 2 && !args.NPC.active && IsHeli(args.NPC))
+							{
+								var idx = args.NPC.whoAmI;
+								if (enemies.Contains(idx))
+								{
+									enemies.Remove(idx);
+									count++;
+									if (count - countRequire > 0)
+									{
+										TargetPlayer.SendCombatMSsg($"还剩{countRequire - count}个敌人", Color.Maroon);
+									}
+								}
+							}
+							break;
+						}
 				}
 			}
 
@@ -324,7 +561,7 @@ namespace Starvers.TaskSystem.Branches
 				Fail();
 			}
 
-			public override void OnPickAnalogItem(AuraSystem.Realms.AnalogItem item)
+			public override void OnPickAnalogItem(AnalogItem item)
 			{
 				base.OnPickAnalogItem(item);
 				switch (ID)
@@ -353,7 +590,7 @@ namespace Starvers.TaskSystem.Branches
 							{
 								if (item.ID == ItemID.FragmentStardust)
 								{
-									count = (short)(count + item.Stack);
+									count++;
 									item.Kill();
 									TargetPlayer.SendCombatMSsg($"已收集碎片: {count} / {countRequire}", Color.LimeGreen);
 									if (count >= countRequire)
@@ -361,6 +598,7 @@ namespace Starvers.TaskSystem.Branches
 										TargetPlayer.RemoveBuff(BuffID.UFOMount);
 										TargetPlayer.SendCombatMSsg("收集完成", Color.MintCream);
 										TargetPlayer.SendInfoMessage("快把碎片带回去");
+										ClearStardustShards();
 										taskProcess++;
 									}
 								}
@@ -384,6 +622,11 @@ namespace Starvers.TaskSystem.Branches
 							TargetPlayer.SendFailMessage("太少了, 太少了");
 							break;
 						}
+					case 3:
+						{
+							ClearStardustShards();
+							break;
+						}
 				}
 				TargetPlayer.BranchTaskEnd(false);
 			}
@@ -394,9 +637,88 @@ namespace Starvers.TaskSystem.Branches
 				TargetPlayer.BranchTaskEnd(true);
 			}
 
+			private void RewardLevel(int lvl)
+			{
+				TargetPlayer.Level += lvl;
+				TargetPlayer.SendInfoMessage("获得奖励: 等级提升" + lvl);
+			}
+
 			private void RewardPlayer()
 			{
-				
+				switch(ID)
+				{
+					case 0:
+						{
+							RewardLevel(20);
+							if (TargetPlayer.LifeMax < 420)
+							{
+								TargetPlayer.LifeMax = 420;
+								TargetPlayer.SendInfoMessage("获得奖励: 生命上限提升至420");
+							}
+							break;
+						}
+					case 1:
+						{
+							RewardLevel(80);
+							if (TargetPlayer.LifeMax < 440)
+							{
+								TargetPlayer.LifeMax = 440;
+								TargetPlayer.SendInfoMessage("获得奖励: 生命上限提升至440");
+							}
+							break;
+						}
+					case 2:
+						{
+							RewardLevel(130);
+							TargetPlayer.GiveItem(AuraSystem.StarverAuraManager.SkillSlot[2].Item);
+							TargetPlayer.GiveItem(ItemID.CelestialMagnet);
+							TargetPlayer.GiveItem(ItemID.ManaCrystal, 10);
+							break;
+						}
+					case 3:
+						{
+							RewardLevel(150);
+							if(TargetPlayer.ManaMax < 220)
+							{
+								TargetPlayer.ManaMax = 220;
+								TargetPlayer.SendInfoMessage("获得奖励: 魔力上限提升至220");
+							}
+							break;
+						}
+					case 4:
+						{
+							RewardLevel(270);
+							if (TargetPlayer.LifeMax < 460)
+							{
+								TargetPlayer.LifeMax = 460;
+								TargetPlayer.SendInfoMessage("获得奖励: 生命上限提升至460");
+							}
+							if (TargetPlayer.ManaMax < 260)
+							{
+								TargetPlayer.ManaMax = 260;
+								TargetPlayer.SendInfoMessage("获得奖励: 魔力上限提升至260");
+							}
+							break;
+						}
+					case 5:
+						{
+							if(TargetPlayer.Level < 1200)
+							{
+								TargetPlayer.Level = 1200;
+								TargetPlayer.SendInfoMessage("获得奖励: 等级提升至1200");
+							}
+							else
+							{
+								RewardLevel(500);
+							}
+							if (TargetPlayer.LifeMax < 500)
+							{
+								TargetPlayer.LifeMax = 500;
+								TargetPlayer.SendInfoMessage("获得奖励: 生命上限提升至500");
+							}
+							break;
+						}
+				}
 			}
 
 			public override string ToString()
@@ -405,6 +727,27 @@ namespace Starvers.TaskSystem.Branches
 			}
 
 			#region Utils
+			private void ClearStardustShards()
+			{
+				Starver.Instance.Aura.OperateRealms(realm =>
+				{
+					if (realm is AnalogItem item)
+					{
+						if (Vector2.Distance(item.Center, targetPosition) < ShardRegionRadium * 16 + 32)
+						{
+							item.Kill();
+						}
+					}
+				});
+			}
+			private void ClearEnemies()
+			{
+				foreach (var idx in enemies)
+				{
+					Main.npc[idx].active = false;
+				}
+			}
+
 			private Vector2 FindPos1()
 			{
 				const int radium = ShardRegionRadium;
@@ -513,6 +856,192 @@ namespace Starvers.TaskSystem.Branches
 				result = new Vector2(X * 16, Y * 16);
 				return result;
 			}
+			private Vector2 FindPos2()
+			{
+				Vector2 result = TargetPlayer.Center + Vector.FromPolar(Rand.NextAngle() / 12 - Math.PI / 6, Rand.Next(16 * 400, 16 * 900));
+				if (Rand.Next(2) == 1)
+				{
+					result *= -1;
+				}
+
+				if (result.X < 0)
+				{
+					result.X *= -1;
+				}
+				if (result.X < BattleRegionRadium * 16 * 2)
+				{
+					result.X = BattleRegionRadium * 16 * 2;
+				}
+				else if (result.X >= Main.maxTilesX * 16 - BattleRegionRadium * 16 * 2)
+				{
+					result.X = Main.maxTilesX * 16 - BattleRegionRadium * 16 * 2;
+				}
+
+				if (result.Y < 0)
+				{
+					result.Y *= -1;
+				}
+				if (result.Y < BattleRegionRadium * 16 * 2)
+				{
+					result.Y = BattleRegionRadium * 16 * 2;
+				}
+				else if (result.Y >= Main.maxTilesY * 16 - BattleRegionRadium * 16 * 2)
+				{
+					result.Y = Main.maxTilesY * 16 - BattleRegionRadium * 16 * 2;
+				}
+
+				return result;
+			}
+			private Vector2 FindPos3(Vector2 pos2)
+			{
+				Vector2 result = 2 * TargetPlayer.Center - pos2;
+				if (Rand.Next(2) == 1)
+				{
+					result *= -1;
+				}
+
+				if (result.X < ShardRegionRadium * 16 * 2)
+				{
+					result.X = ShardRegionRadium * 16 * 2;
+				}
+				else if (result.X >= Main.maxTilesX * 16 - ShardRegionRadium * 16 * 2)
+				{
+					result.X = Main.maxTilesX * 16 - ShardRegionRadium * 16 * 2;
+				}
+
+				if (result.Y < ShardRegionRadium * 16 * 2)
+				{
+					result.Y = ShardRegionRadium * 16 * 2;
+				}
+				else if (result.Y >= Main.maxTilesY * 16 - ShardRegionRadium * 16 * 2)
+				{
+					result.Y = Main.maxTilesY * 16 - ShardRegionRadium * 16 * 2;
+				}
+
+				return result;
+			}
+			private Vector2 FindPos4()
+			{
+				return new Vector2(Main.dungeonX * 16 + 8, Main.dungeonY * 16);
+			}
+
+			private void Task_4_SpawnEnemies()
+			{
+				enemies = new LinkedList<int>();
+				Vector2 escapeTo = targetPosition;
+				escapeTo.X = Main.maxTilesX * 16 - escapeTo.X;
+				ElfHeliEx heli;
+				for (int i = 0; i < 3; i++)
+				{
+					heli = NewEnemy(targetPosition + Rand.NextVector2(16 * 20, 16 * 20), default);
+					heli.RealNPC.boss = true;
+					heli.Escape(escapeTo);
+				}
+				for (int i = 0; i < 4; i++)
+				{
+					heli = NewEnemy(TargetPlayer.Center + Rand.NextVector2(16 * BattleRegionRadium + 16 * 4), default);
+					heli.RealNPC.boss = true;
+					heli.Attack(TargetPlayer);
+					enemies.AddLast(heli.Index);
+				}
+				countRequire += 4;
+
+				Vector2 offSet;
+
+				offSet = new Vector2(BattleRegionRadium * 2 / 3 * 16, BattleRegionRadium * 3 / 5 * 16);
+
+				heli = NewEnemy(targetPosition - offSet, default);
+				heli.RealNPC.boss = true;
+				heli.SetShot(1);
+				heli.Wonder(heli.Center, offSet.Vertical().ToLenOf(BattleRegionRadium * 16 * 2 / 5));
+				enemies.AddLast(heli.Index);
+
+				heli = NewEnemy(targetPosition + offSet, default);
+				heli.RealNPC.boss = true;
+				heli.SetShot(1);
+				heli.Wonder(heli.Center, offSet.Vertical().ToLenOf(BattleRegionRadium * 16 * 2 / 5));
+				enemies.AddLast(heli.Index);
+
+				offSet.Y *= -1;
+
+				heli = NewEnemy(targetPosition - offSet, default);
+				heli.RealNPC.boss = true;
+				heli.SetShot(1);
+				heli.Wonder(heli.Center, offSet.Vertical().ToLenOf(BattleRegionRadium * 16 * 2 / 5));
+				enemies.AddLast(heli.Index);
+
+				heli = NewEnemy(targetPosition + offSet, default);
+				heli.RealNPC.boss = true;
+				heli.SetShot(1);
+				heli.Wonder(heli.Center, offSet.Vertical().ToLenOf(BattleRegionRadium * 16 * 2 / 5));
+				enemies.AddLast(heli.Index);
+
+				countRequire += 4;
+			}
+			private void Task_5_SpawnEnemyAmbusher()
+			{
+				/*
+				Vector2 u = targetPosition - startPosition;
+				Vector2 ofPlayer = TargetPlayer.Center - startPosition;
+				u.Normalize();
+				u *= Vector2.Dot(u, ofPlayer) / ofPlayer.Length();
+				*/
+				Vector2 u = TargetPlayer.Center;
+				ElfHeliEx heli;
+
+				heli = NewEnemy(u + new Vector2(16 * 40, 16 * 30));
+				heli.SetShot(1);
+				heli.Wonder(new Vector2(0, 16 * 3), 16 * 50);
+
+				heli = NewEnemy(u + new Vector2(16 * 40, -16 * 30));
+				heli.SetShot(1);
+				heli.Wonder(new Vector2(0, -16 * 3), 16 * 50);
+
+				heli = NewEnemy(u + new Vector2(-16 * 40, 16 * 30));
+				heli.SetShot(1);
+				heli.Wonder(new Vector2(0, 16 * 3), 16 * 50);
+
+				heli = NewEnemy(u + new Vector2(-16 * 40, -16 * 30));
+				heli.SetShot(1);
+				heli.Wonder(new Vector2(0, -16 * 3), 16 * 50);
+			}
+			private void Task_5_SpawnEnemyAttacker()
+			{
+				Vector2 u = TargetPlayer.Center + Rand.NextVector2(16 * 60);
+				var heli = NewEnemy(u);
+				heli.Attack(TargetPlayer);
+				int shot = Rand.Next(2 * ElfHeliEx.MaxShots) switch
+				{
+					0 => 0,
+					1 => 2,
+					2 => 2,
+					3 => 3,
+					4 => 4,
+					5 => 5,
+					6 => 6,
+					7 => 7,
+					_ => 2
+				};
+				heli.SetShot(shot);
+				enemies.AddLast(heli.Index);
+			}
+			private static bool IsHeli(NPC npc)
+			{
+				bool result = NPCSystem.StarverNPC.NPCs[npc.whoAmI] as ElfHeliEx != null;
+				return result;
+			}
+			private static ElfHeliEx NewEnemy(Vector2 where, Vector2 vel = default)
+			{
+				if(HeliRoot == null)
+				{
+					HeliRoot = NPCSystem.StarverNPC.RootNPCs.Where(npc => npc is ElfHeliEx).First() as ElfHeliEx;
+				}
+				int idx = NPCSystem.StarverNPC.NewNPC((Vector)where, (Vector)vel, HeliRoot);
+				var heli = (ElfHeliEx)NPCSystem.StarverNPC.NPCs[idx];
+				heli.IgnoreDistance = true;
+				return heli;
+			}
+			private static ElfHeliEx HeliRoot;
 			#endregion
 		}
 	}

@@ -646,6 +646,11 @@ namespace Starvers
 							MsgBuilder.Append($"Lv.{player.Level}, ");
 							MsgBuilder.AppendLine($"Exp: {player.exp}/{player.UpGradeExp / (player.LessCost ? 3 : 1)}");
 							MsgBuilder.AppendLine($"MP: [{player.MP}/{player.MaxMP}]");
+							if (!string.IsNullOrWhiteSpace(player.AppendixMsg))
+							{
+								MsgBuilder.AppendLine(player.AppendixMsg);
+								player.AppendixMsg = null;
+							}
 						}
 						else
 						{
@@ -714,7 +719,7 @@ namespace Starvers
 					}
 					UpdateForm(Players[args.Player.Index]);
 				}
-				if (Players[args.Player.Index].Level < Config.LevelNeed)
+				if (Players[args.Player.Index].Level < Config.LevelNeed && !Players[args.Player.Index].HasPerm(Perms.Test))
 				{
 					Players[args.Player.Index].Kick($"你的等级不足,该端口要求玩家最低等级为{Config.LevelNeed}", true);
 				}
@@ -748,7 +753,7 @@ namespace Starvers
 					{
 						ID = ply.Account.ID;
 					}
-					Players[args.Who] = StarverPlayer.Read(ID);
+					Players[args.Who] ??= StarverPlayer.Read(ID);
 					Console.WriteLine($"Added:{Players[args.Who].Name}");
 					UpdateForm(Players[args.Who]);
 					if (Config.EnableTestMode && !Players[args.Who].HasPerm(Perms.Test))
@@ -761,7 +766,7 @@ namespace Starvers
 					Players[args.Who] = StarverPlayer.Guest;
 					Players[args.Who].Index = args.Who;
 				}
-				if (player.IsLoggedIn && Players[args.Who].Level < Config.LevelNeed)
+				if (player.IsLoggedIn && Players[args.Who].Level < Config.LevelNeed && !player.HasPermission(Perms.Test))
 				{
 					player.Disconnect($"你的等级不足,该处需要至少{Config.LevelNeed}级");
 				}
@@ -779,7 +784,7 @@ namespace Starvers
 				{
 					Name = ply.Account.Name;
 				}
-				Players[args.Who] = StarverPlayer.Read(Name);
+				Players[args.Who] ??= StarverPlayer.Read(Name);
 			}
 #if DEBUG
 			Players[args.Who].ShowInfos();
