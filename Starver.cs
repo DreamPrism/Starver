@@ -709,6 +709,7 @@ namespace Starvers
 					try
 					{
 						Players[args.Player.Index] = StarverPlayer.Read(ID);
+						Players[args.Player.Index].Index = args.Player.Index;
 					}
 					catch(Exception e)
 					{
@@ -754,6 +755,7 @@ namespace Starvers
 						ID = ply.Account.ID;
 					}
 					Players[args.Who] ??= StarverPlayer.Read(ID);
+					Players[args.Who].Index = args.Who;
 					Console.WriteLine($"Added:{Players[args.Who].Name}");
 					UpdateForm(Players[args.Who]);
 					if (Config.EnableTestMode && !Players[args.Who].HasPerm(Perms.Test))
