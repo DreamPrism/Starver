@@ -305,7 +305,9 @@ namespace Starvers
 			// 不确定是否会出现问题
 			if (false)
 			{
+#pragma warning disable CS0162 // 检测到无法访问的代码
 				Instance = null;
+#pragma warning restore CS0162 // 检测到无法访问的代码
 				Players = null;
 				Exchanges = null;
 				Rand = null;

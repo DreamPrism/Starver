@@ -111,7 +111,6 @@ namespace Starvers.TaskSystem
 				#region Eye
 				case 2:
 					{
-						TaskID.Eye = ID;
 						Name = "凝视";
 						Story = "希望站在我们和克苏鲁之眼间的不是弱小的你";
 
@@ -893,7 +892,6 @@ namespace Starvers.TaskSystem
 				#region Vortex
 				case 21:
 					{
-						TaskID.MoonLord = ID;
 						Name = "漩涡能量";
 						Story = "月亮末日慢慢靠近...";
 
@@ -1033,7 +1031,6 @@ namespace Starvers.TaskSystem
 				#region SkeletonEx
 				case 25:
 					{
-						TaskID.SkeletronEx = ID;
 						Boss = Bosses[2];
 						Name = "失落骨架-Hyperosteogeny";
 						Story = "脱胎于某个高等存在的残骸，仍然残存有些许威力。力量不会随着肉体的消亡而蒸发，而是如同跗骨之蛆一般留存";

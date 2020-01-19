@@ -94,8 +94,10 @@ namespace Starvers.BossSystem.Bosses.Base
 		{
 			get
 			{
+#pragma warning disable CS1030 // #警告:“"boss难度削弱"”
 #warning "boss难度削弱"
 				return (float)(Math.Sqrt(Math.Sqrt(Math.Sqrt(LifesMax / (Lifes + 1)))) + (float)Level / CriticalLevel);
+#pragma warning restore CS1030 // #警告:“"boss难度削弱"”
 				// 下面是原来的
 				// return (float)(Math.Sqrt(LifesMax / (Lifes + 1)) + (float)Level / CriticalLevel);
 			}

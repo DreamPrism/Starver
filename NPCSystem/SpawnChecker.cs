@@ -67,7 +67,7 @@ namespace Starvers.NPCSystem
 			Condition = SpawnConditions.Night,
 			Biome = BiomeType.Grass,
 			SpawnRate = (60 * 2 + 30)*2,
-			SpawnChance = 0.6f / 4,
+			SpawnChance = 0.6f / 8,
 			Task = TaskID.MoonLord + 1
 		};
 		#endregion
