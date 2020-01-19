@@ -481,7 +481,7 @@ namespace Starvers.TaskSystem
 							{
 								if (player.BLAvaiable((BLID)id))
 								{
-									if (id < BranchTaskLines[id].Count)
+									if (player.bldata[(BLID)id] < BranchTaskLines[id].Count)
 									{
 										(bool success,string msg) = BranchTaskLines[id].TryStartTask(player, player.bldata[(BLID)id]);
 										if (success)
