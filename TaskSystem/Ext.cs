@@ -18,7 +18,7 @@ namespace Starvers.TaskSystem
 			{
 				throw new ArgumentException("Invalid BLID", nameof(id));
 			}
-			return (BLFlags)(1 << (int)id);
+			return (BLFlags)(1 << (int)(id - 1));
 		}
 	}
 }

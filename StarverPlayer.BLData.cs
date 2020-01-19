@@ -13,7 +13,7 @@ namespace Starvers
 		public struct BLData
 		{
 			[FieldOffset(16 * 0)]
-			private unsafe fixed byte buffer[16 * 4];
+			internal unsafe fixed byte buffer[Size];
 			[FieldOffset(16 * 0)]
 			private Data16 data0;
 			[FieldOffset(16 * 1)]
@@ -22,6 +22,8 @@ namespace Starvers
 			private Data16 data2;
 			[FieldOffset(16 * 3)]
 			private Data16 data3;
+
+			public const int Size = 16 * 4;
 
 			public BLFlags AvaiableBLs
 			{
@@ -59,12 +61,12 @@ namespace Starvers
 
 			public unsafe static BLData Deserialize(byte[] binary)
 			{
-				if (binary.Length != 16 * 4)
+				if (binary.Length != Size)
 				{
-					throw new ArgumentException("binary.Length != 4 * 16", nameof(binary));
+					throw new ArgumentException("binary.Length != 16 * 4", nameof(binary));
 				}
 				BLData data = default;
-				for (int i = 0; i < 16 * 4; i++)
+				for (int i = 0; i < Size; i++)
 				{
 					data.buffer[i] = binary[i];
 				}
@@ -72,8 +74,8 @@ namespace Starvers
 			}
 			public unsafe static byte[] Serialize(in BLData data)
 			{
-				byte[] value = new byte[16 * 4];
-				for (int i = 0; i < 16 * 4; i++)
+				byte[] value = new byte[Size];
+				for (int i = 0; i < Size; i++)
 				{
 					value[i] = data.buffer[i];
 				}
@@ -81,12 +83,12 @@ namespace Starvers
 			}
 			public unsafe static void Serialize(in BLData data, byte[] target)
 			{
-				if (target.Length != 16 * 4)
+				if (target.Length != Size)
 				{
 					throw new ArgumentException("target.Length != 16 * 4", nameof(target));
 				}
 				byte[] value = target;
-				for (int i = 0; i < 16 * 4; i++)
+				for (int i = 0; i < Size; i++)
 				{
 					value[i] = data.buffer[i];
 				}

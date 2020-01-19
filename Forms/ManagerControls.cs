@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace Starvers.Forms
 {
+	using AuraSystem.Skills.Base;
 	public class ManagerControls : IDisposable
 	{
 		#region Interfece
@@ -49,7 +50,7 @@ namespace Starvers.Forms
 			}
 			#endregion
 			#region Ctor
-			public ManagerControl(ManagerControls ManagerControls, Point Loc, string Name, int index = 0, bool numonly = false)
+			public ManagerControl(ManagerControls ManagerControls, Point Loc, string Name, int index = 0, bool numberOnly = false)
 			{
 				Manager = ManagerControls.Manager;
 				int X = Loc.X;
@@ -96,7 +97,7 @@ namespace Starvers.Forms
 					}
 				}
 				Index = index;
-				if (numonly)
+				if (numberOnly)
 				{
 					_TextBox.MaxLength = 11;
 					_TextBox.KeyPress += OnPress;
@@ -134,6 +135,16 @@ namespace Starvers.Forms
 				}
 			}
 			#endregion
+			#region Methods
+			public void AddToPanel(Panel panel)
+			{
+				panel.Controls.Add(_Label);
+				panel.Controls.Add(_TextBox);
+				_Label.Width /= 2;
+				_Label.Location = new Point(0, 0 + Index * Manager.SaveButton.Size.Height + 3 * Index);
+				_TextBox.Location = new Point(0 + _Label.Width, 0 + Index * Manager.PlayerSearch.Size.Height + 3 * Index);
+			}
+			#endregion
 			#region privates
 			private ManagerControl()
 			{
@@ -169,18 +180,29 @@ namespace Starvers.Forms
 				player = value;
 				if (player == null)
 				{
-					for (int i = 0; i < 5; i++)
+					for (int i = 0; i < Skills.Length; i++)
 					{
 						Skills[i].Text = string.Empty;
+					}
+					for (int i = 0; i < BLDatas.Length; i++)
+					{
+						BLDatas[i].Text = string.Empty;
 					}
 					Level.Text = string.Empty;
 					Exp.Text = string.Empty;
 				}
 				else
 				{
-					for (int i = 0; i < 5; i++)
+					for (int i = 0; i < Skills.Length; i++)
 					{
 						Skills[i].Text = player.GetSkill(i).Name;
+					}
+					unsafe
+					{
+						for (int i = 0; i < BLDatas.Length; i++)
+						{
+							BLDatas[i].Text = player.bldata.buffer[i].ToString();
+						}
 					}
 					Level.Text = player.Level.ToString();
 					Exp.Text = player.Exp.ToString();
@@ -201,10 +223,14 @@ namespace Starvers.Forms
 		public ManagerControls(StarverManagerForm manager)
 		{
 			Manager = manager;
-			int i;
-			for (i = 0; i < 5; i++)
+			for (int i = 0; i < Skills.Length; i++)
 			{
 				Skills[i] = new ManagerControl(this, Manager.Mark_Skill.Location, "技能" + (i + 1), i);
+			}
+			for (int i = 0; i < BLDatas.Length; i++)
+			{
+				BLDatas[i] = new ManagerControl(this, manager.Mark_TB.Location, i.ToString(), i, true);
+				BLDatas[i].AddToPanel(manager.TBs);
 			}
 			Level = new ManagerControl(this, manager.Mark_Level.Location, "等级", 0, true);
 			Exp = new ManagerControl(this, manager.Mark_Level.Location, "经验", -1, true);
@@ -217,12 +243,13 @@ namespace Starvers.Forms
 		{
 			SetSkill();
 			SetTask();
+			SetTB();
 			SetOthers();
 			player.Save();
 		}
 		#endregion
 		#region SetOthers
-		public void SetOthers()
+		private void SetOthers()
 		{
 			int value = Level.Value;
 			if (value != -1)
@@ -237,7 +264,7 @@ namespace Starvers.Forms
 		}
 		#endregion
 		#region SetTask
-		public void SetTask()
+		private void SetTask()
 		{
 			int now = TaskNow.Value;
 			if (now < 0 || now > TaskSystem.StarverTaskManager.MainLineCount)
@@ -249,7 +276,7 @@ namespace Starvers.Forms
 		}
 		#endregion
 		#region SetSkill
-		public void SetSkill()
+		private void SetSkill()
 		{
 			for (int i = 0; i < 5; i++)
 			{
@@ -257,21 +284,27 @@ namespace Starvers.Forms
 			}
 		}
 		#endregion
-		#endregion
-		#endregion
-		#region Fake_ctor
-		private ManagerControls()
+		#region SetTB
+		private unsafe void SetTB()
 		{
-
+			for (int i = 0; i < BLDatas.Length; i++)
+			{
+				if (!byte.TryParse(BLDatas[i].Text, out player.bldata.buffer[i]))
+				{
+					MessageBox.Show($"BLData[{i}] error");
+				}
+			}
 		}
+		#endregion
+		#endregion
 		#endregion
 		#region Privates
 		private StarverPlayer player;
 		private ManagerControl TaskNow;
 		private ManagerControl Exp;
 		private ManagerControl Level;
-		private ManagerControl[,] Weapons = new ManagerControl[5, 4];
-		private ManagerControl[] Skills = new ManagerControl[5];
+		private ManagerControl[] BLDatas = new ManagerControl[StarverPlayer.BLData.Size];
+		private ManagerControl[] Skills = new ManagerControl[Skill.MaxSlots];
 		private StarverManagerForm Manager;
 		#endregion
 	}

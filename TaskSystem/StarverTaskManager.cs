@@ -468,6 +468,60 @@ namespace Starvers.TaskSystem
 						break;
 					}
 				#endregion
+				#region Branch
+				case "branch":
+					{
+						if (player.bldata.AvaiableBLs == BLFlags.None)
+						{
+							player.bldata.AvaiableBLs = BLFlags.YrtAEvah;
+						}
+						if (args.Parameters.Count > 1 && int.TryParse(args.Parameters[1], out int id))
+						{
+							if (0 <= id && id < (int)BLID.Max)
+							{
+								if (player.BLAvaiable((BLID)id))
+								{
+									if (id < BranchTaskLines[id].Count)
+									{
+										(bool success,string msg) = BranchTaskLines[id].TryStartTask(player, player.bldata[(BLID)id]);
+										if (success)
+										{
+											player.SendInfoMessage($"任务开始: {player.BranchTask}");
+											if (msg != null)
+											{
+												player.SendSuccessMessage(msg);
+											}
+										}
+										else
+										{
+											player.SendFailMessage("任务开启失败");
+											player.SendFailMessage($"详细原因: {msg}");
+										}
+									}
+									else
+									{
+										player.SendInfoMessage("你已经完成该支线");
+									}
+								}
+								else
+								{
+									player.SendInfoMessage("当前支线尚未开启");
+								}
+								break;
+							}
+						}
+						player.SendInfoMessage("已开启任务:");
+						for (BLID i = (BLID)1; i < BLID.Max; i++)
+						{
+							if (player.BLAvaiable(i))
+							{
+								var branch = BranchTaskLines[(int)i];
+								player.SendInfoMessage($"    {(int)i}: {branch}({player.bldata[i]} / {branch.Count})");
+							}
+						}
+						break;
+					}
+				#endregion
 				#region SendHelpText
 				default:
 					player.SendInfoMessage(HelpTexts.Task);

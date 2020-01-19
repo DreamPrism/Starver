@@ -10,7 +10,8 @@ namespace Starvers
 	{
 		public static string Task { get; } = @"用法:
     check:  检查任务
-    list:   列出任务";
+    list:   列出任务
+    branch: 支线任务";
 		public static string Aura { get; } = @"用法:
     up:	升级
     toexp: 兑换经验
@@ -23,9 +24,9 @@ namespace Starvers
     toexp: 兑换经验";
 		public static string Weapon { get; } =
 			"用法错误\n" +
-			"正确用法:\n"+
-			"  <Career> <Name> : Career 武器类型;Name 武器名\n"+
-			"武器类型为:\n"+
+			"正确用法:\n" +
+			"  <Career> <Name> : Career 武器类型;Name 武器名\n" +
+			"武器类型为:\n" +
 			"  Melee\n  Ranged\n  Magic\n  Minion\n +" +
 			" <Career> : 查看该类型武器";
 	}

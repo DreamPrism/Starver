@@ -298,7 +298,7 @@ namespace Starvers.TaskSystem.Branches
 									if (spawnedCount < countRequire * 3 / 2)
 									{
 										float r = Rand.NextFloat();
-										float length = r * r * r * r * ShardRegionRadium * 16;
+										float length = r * ShardRegionRadium * 16;
 										var item = new AnalogItem(ItemID.FragmentStardust);
 										item.Center = targetPosition + Rand.NextVector2(length);
 										Starver.Instance.Aura.AddRealm(item);

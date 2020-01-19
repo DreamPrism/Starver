@@ -51,6 +51,8 @@
 			this.Template = new System.Windows.Forms.Button();
 			this.StarverManagerTip = new System.Windows.Forms.Label();
 			this.TheBorder = new TOFOUT.Windows.Forms.Border();
+			this.TBs = new System.Windows.Forms.Panel();
+			this.BLDatasTip = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// PlayerList
@@ -177,7 +179,7 @@
 			this.Mark_TB_BT.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
 			this.Mark_TB_BT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
 			this.Mark_TB_BT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.Mark_TB_BT.Location = new System.Drawing.Point(430, 59);
+			this.Mark_TB_BT.Location = new System.Drawing.Point(583, 475);
 			this.Mark_TB_BT.Name = "Mark_TB_BT";
 			this.Mark_TB_BT.Size = new System.Drawing.Size(108, 36);
 			this.Mark_TB_BT.TabIndex = 5;
@@ -190,7 +192,7 @@
 			this.Mark_TB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this.Mark_TB.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.Mark_TB.Font = new System.Drawing.Font("微软雅黑", 19.9F);
-			this.Mark_TB.Location = new System.Drawing.Point(302, 59);
+			this.Mark_TB.Location = new System.Drawing.Point(455, 475);
 			this.Mark_TB.Name = "Mark_TB";
 			this.Mark_TB.Size = new System.Drawing.Size(128, 36);
 			this.Mark_TB.TabIndex = 6;
@@ -295,6 +297,7 @@
 			this.Template.TabIndex = 5;
 			this.Template.Text = "高级";
 			this.Template.UseVisualStyleBackColor = false;
+			this.Template.Visible = false;
 			// 
 			// StarverManagerTip
 			// 
@@ -326,6 +329,27 @@
 			this.TheBorder.TitleColor = System.Drawing.SystemColors.ControlText;
 			this.TheBorder.TitleFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
 			// 
+			// TBs
+			// 
+			this.TBs.AutoScroll = true;
+			this.TBs.BackColor = System.Drawing.Color.Transparent;
+			this.TBs.Location = new System.Drawing.Point(302, 94);
+			this.TBs.Name = "TBs";
+			this.TBs.Size = new System.Drawing.Size(190, 292);
+			this.TBs.TabIndex = 8;
+			// 
+			// BLDatasTip
+			// 
+			this.BLDatasTip.BackColor = System.Drawing.Color.Transparent;
+			this.BLDatasTip.Font = new System.Drawing.Font("华文新魏", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+			this.BLDatasTip.ForeColor = System.Drawing.Color.Cyan;
+			this.BLDatasTip.Location = new System.Drawing.Point(302, 45);
+			this.BLDatasTip.Name = "BLDatasTip";
+			this.BLDatasTip.Size = new System.Drawing.Size(190, 46);
+			this.BLDatasTip.TabIndex = 3;
+			this.BLDatasTip.Text = "BLDatas";
+			this.BLDatasTip.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// StarverManagerForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -333,6 +357,7 @@
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(82)))), ((int)(((byte)(72)))));
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
 			this.ClientSize = new System.Drawing.Size(801, 426);
+			this.Controls.Add(this.TBs);
 			this.Controls.Add(this.Mark_Level);
 			this.Controls.Add(this.Mark_Level_BT);
 			this.Controls.Add(this.Mark_TB);
@@ -348,6 +373,7 @@
 			this.Controls.Add(this.Searcher);
 			this.Controls.Add(this.SaveButton);
 			this.Controls.Add(this.SLT);
+			this.Controls.Add(this.BLDatasTip);
 			this.Controls.Add(this.PlayerListTip);
 			this.Controls.Add(this.PlayerList);
 			this.Controls.Add(this.StarverManagerTip);
@@ -373,7 +399,6 @@
 		internal System.Windows.Forms.TextBox PlayerSearch;
 		private System.Windows.Forms.Button Mark_Skill_BT;
 		internal System.Windows.Forms.TextBox Mark_Skill;
-		private System.Windows.Forms.Button Mark_TB_BT;
 		internal System.Windows.Forms.TextBox Mark_TB;
 		private System.Windows.Forms.Button Mark_Level_BT;
 		internal System.Windows.Forms.TextBox Mark_Level;
@@ -384,5 +409,8 @@
 		private System.Windows.Forms.Button Template;
 		private System.Windows.Forms.Label StarverManagerTip;
 		internal TOFOUT.Windows.Forms.Border TheBorder;
+		protected internal System.Windows.Forms.Panel TBs;
+		private System.Windows.Forms.Button Mark_TB_BT;
+		private System.Windows.Forms.Label BLDatasTip;
 	}
 }
