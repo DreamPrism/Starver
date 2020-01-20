@@ -16,7 +16,8 @@ namespace Starvers.BossSystem.Bosses
 	public class EyeEx : StarverBoss
 	{
 		#region Fields
-		private Vector _unit = (0, -16 * 24);
+		private byte GazingState;
+		private int ModesLoopCount;
 		private const int StartCollideDamage = 210;
 		#endregion
 		#region Properties
@@ -24,7 +25,7 @@ namespace Starvers.BossSystem.Bosses
 		{
 			get
 			{
-				return _unit + (0, 16 * 10 * Math.Sin(Timer * Math.PI / 45));
+				return new Vector(0, -16 * 24) + (0, 16 * 10 * Math.Sin(Timer * Math.PI / 45));
 			}
 		}
 		#endregion
@@ -36,9 +37,9 @@ namespace Starvers.BossSystem.Bosses
 			TaskNeed = 22;
 			RawType = NPCID.EyeofCthulhu;
 			Name = "克苏鲁之眼";
-			DefaultDefense = 450;
-			DefaultLife = 630000;
-			DefaultLifes = 50;
+			DefaultDefense = 150;
+			DefaultLife = 63000;
+			DefaultLifes = 20;
 			vector.X = 16 * 20;
 			Drops = new DropItem[]
 			{
@@ -52,6 +53,10 @@ namespace Starvers.BossSystem.Bosses
 			base.Spawn(where, lvl);
 			Mode = BossMode.Explosive;
 			RealNPC.damage = StartCollideDamage;
+			GazingState = 0;
+			ModesLoopCount = 0;
+			DontTakeDamage = false;
+			Defense = 6000;
 		}
 		#endregion
 		#region LifeDown
@@ -131,6 +136,23 @@ namespace Starvers.BossSystem.Bosses
 					}
 					break;
 				#endregion
+				#region Gazing
+				case BossMode.Gazing:
+					{
+						if (modetime > 60 * 9)
+						{
+							DontTakeDamage = false;
+							RushBegin();
+						}
+						else
+						{
+							FakeVelocity = default;
+							DontTakeDamage = true;
+							Gazing();
+						}
+						break;
+					}
+				#endregion
 				#region Explosive
 				case BossMode.Explosive:
 					if(StarverAI[1] > 9)
@@ -171,8 +193,12 @@ namespace Starvers.BossSystem.Bosses
 					int idx;
 					for (int i = 0; i < 6; i++)
 					{
-						idx = Proj(vector + FromPolar(PI / 3 * i, 16 * 20), Vector.Zero, ProjectileID.Explosives, 1000);
-						Main.projectile[idx].owner = Target;
+						if (0 <= Target && Target < Starver.Players.Length && (TargetPlayer?.Active ?? false))
+						{
+							idx = Proj(vector + FromPolar(PI / 3 * i, 16 * 20), Vector.Zero, ProjectileID.Explosives, 1000);
+							Main.projectile[idx].aiStyle = -1;
+							Main.projectile[idx].owner = Target;
+						}
 					}
 				}
 				catch(Exception e)
@@ -191,13 +217,13 @@ namespace Starvers.BossSystem.Bosses
 				return;
 			}
 			++StarverAI[1];
-			NewNPC((Vector)Center, FromPolar(PI / 2, 9), NPCID.WanderingEye, 6235, 98);
-			NewNPC((Vector)Center, FromPolar(PI / 2 + PI / 6, 9), NPCID.WanderingEye, 6235, 98);
-			NewNPC((Vector)Center, FromPolar(PI / 2 - PI / 6, 9), NPCID.WanderingEye, 6235, 98);
+			NewNPC((Vector)Center, FromPolar(PI / 2, 9), NPCID.WanderingEye, 6235, 3000);
+			NewNPC((Vector)Center, FromPolar(PI / 2 + PI / 6, 9), NPCID.WanderingEye, 6235, 3000);
+			NewNPC((Vector)Center, FromPolar(PI / 2 - PI / 6, 9), NPCID.WanderingEye, 6235, 3000);
 		}
 		#endregion
 		#region Sharknado
-		private unsafe void Sharknode()
+		private void Sharknode()
 		{
 			StarverAI[1] += PI / 14;
 			vector = -(Vector)RelativePos;
@@ -209,10 +235,34 @@ namespace Starvers.BossSystem.Bosses
 			Proj(Center, Vel, ProjectileID.SharknadoBolt, 80);
 		}
 		#endregion
+		#region Gazing
+		private void Gazing()
+		{
+			TargetPlayer.SetBuff(BuffID.Obstructed, 90);
+			if (modetime % 60 == 0)
+			{
+				ProjCircle(TargetPlayer.Center, 16 * 30, 10, ProjectileID.RuneBlast, Rand.Next(4, 6), 120);
+			}
+		}
+		#endregion
 		#region SelectMode
 		private void SelectMode()
 		{
-			switch(lastMode)
+			#region GazingSpecial
+			if (GazingState == 0 && Lifes <= LifesMax / 2)
+			{
+				Mode = BossMode.Gazing;
+				GazingState |= 0b00000001;
+				return;
+			}
+			else if (GazingState == 0b00000001 && Lifes <= LifesMax / 4)
+			{
+				Mode = BossMode.Gazing;
+				GazingState |= 0b00000011;
+				return;
+			}
+			#endregion
+			switch (lastMode)
 			{
 				#region Sharknado
 				case BossMode.Sharknado:
@@ -226,11 +276,24 @@ namespace Starvers.BossSystem.Bosses
 				#endregion
 				#region Trident
 				case BossMode.RedDevilTrident:
+					ModesLoopCount++;
+					if (ModesLoopCount % 3 == 0 && Lifes <= LifesMax / 2)
+					{
+						Mode = BossMode.Gazing;
+					}
+					else
+					{
+						Mode = BossMode.Explosive;
+					}
+					break;
+				#endregion
+				#region Gazing
+				case BossMode.Gazing:
 					Mode = BossMode.Explosive;
 					break;
 				#endregion
 				#region Explosive
-				default://case BossMode.Explosive:
+				case BossMode.Explosive:
 					Mode = BossMode.Sharknado;
 					break;
 					#endregion

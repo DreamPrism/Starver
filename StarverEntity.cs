@@ -52,6 +52,21 @@ namespace Starvers
 			set => RealNPC.dontTakeDamage = value;
 		}
 		public bool IgnoreDistance { get; set; } 
+		public int Life
+		{
+			get => RealNPC.life;
+			set => RealNPC.life = value;
+		}
+		public int LifeMax
+		{
+			get => RealNPC.lifeMax;
+			set => RealNPC.lifeMax = value;
+		}
+		public int Defense
+		{
+			get => RealNPC.defense;
+			set => RealNPC.defense = value;
+		}
 		#endregion
 		#region Fields
 		internal bool _active;

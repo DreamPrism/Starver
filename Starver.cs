@@ -78,7 +78,7 @@ namespace Starvers
 		public static bool IsPE { get; private set; }
 		public static MySqlConnection DB => StarverPlayer.DB;
 		public static Starver Instance { get; private set; }
-		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20 + (Config.EvilWorld ? 10000 : 0));
+		public static int NPCLevel => (int)(Math.Pow(2, Config.TaskNow / 3.0 + 2) + Config.TaskNow * Config.TaskNow * 20 + (Config.EvilWorld ? 2000 : 0));
 		#endregion
 		#region Ctor & Initialize & Dispose
 		#region Ctor
@@ -362,7 +362,7 @@ namespace Starvers
 			if(0 <= args.Msg.whoAmI && args.Msg.whoAmI < Players.Length && Players[args.Msg.whoAmI] != null)
 			{
 				StarverPlayer player = Players[args.Msg.whoAmI];
-				player.OnGetData(args);
+				player.OnGetData(args); 
 			}
 		}
 		#endregion
@@ -818,7 +818,7 @@ namespace Starvers
 				//	NPCs[npc.whoAmI] = new BaseNPC(npc.whoAmI);
 			}
 			//BaseNPC snpc = NPCs[npc.whoAmI];
-			if (Config.EnableBoss && BossSystem.Bosses.Base.StarverBoss.AliveBoss > 0)
+			if (Config.EnableBoss && StarverBoss.AliveBoss > 0)
 			{
 				foreach (var boss in StarverBossManager.Bosses)
 				{

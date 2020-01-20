@@ -11,6 +11,7 @@ namespace Starvers.BossSystem.Bosses
 		WaitForMode,
 		Explosive,
 		Rush,
+		Gazing,
 		/// <summary>
 		/// projID中选这个
 		/// </summary>

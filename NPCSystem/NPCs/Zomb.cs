@@ -12,15 +12,14 @@ namespace Starvers.NPCSystem.NPCs
 		#region Fields
 		private static int[] ZombieTypes =
 		{
-			NPCID.BloodZombie,
 			NPCID.Zombie,
-			NPCID.ZombieDoctor,
-			NPCID.ZombieElf,
-			NPCID.ZombieElf,
 			NPCID.ZombieMushroom,
+			NPCID.ZombieDoctor,
+			NPCID.ZombieSuperman,
 			NPCID.ZombiePixie,
 			NPCID.ZombieSweater,
-			NPCID.ZombieSuperman
+			NPCID.ZombieElf,
+			NPCID.BloodZombie,
 		};
 		#endregion
 		#region Properties
@@ -50,7 +49,10 @@ namespace Starvers.NPCSystem.NPCs
 		#region RealAI
 		protected override void RealAI()
 		{
-			
+			if (Array.BinarySearch(Types, RealNPC.type) < 0)
+			{
+				RemoveFromNPCs();
+			}
 		}
 		#endregion
 		#region OnDead
@@ -78,6 +80,13 @@ namespace Starvers.NPCSystem.NPCs
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
+		}
+		#endregion
+		#region RemoveFromNPCs
+		protected void RemoveFromNPCs()
+		{
+			Starver.NPCs[Index] = NPCs[Index] = null;
+			_active = false;
 		}
 		#endregion
 	}

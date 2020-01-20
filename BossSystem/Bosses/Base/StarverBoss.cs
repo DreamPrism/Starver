@@ -57,22 +57,7 @@ namespace Starvers.BossSystem.Bosses.Base
 		private const int WallDamage = 2250;
 		#endregion
 		#region Properties
-		public int TaskNeed { get; protected set; } = 0;
-		public int Life
-		{
-			get => RealNPC.life;
-			set => RealNPC.life = value;
-		}
-		public int LifeMax
-		{
-			get => RealNPC.lifeMax;
-			set => RealNPC.lifeMax = value;
-		}
-		public int Defense
-		{
-			get => RealNPC.defense;
-			set => RealNPC.defense = value;
-		}
+		public int TaskNeed { get; protected set; }
 		public int RawType { get; protected set; } = NPCID.BlueSlime;
 		public float MaxDistance { get; protected set; } = 500f;
 		public bool Downed { get; protected set; }

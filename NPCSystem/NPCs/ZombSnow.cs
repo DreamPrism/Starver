@@ -16,5 +16,14 @@ namespace Starvers.NPCSystem.NPCs
 			Checker.Biome = BiomeType.Icy;
 		}
 		#endregion
+		#region RealAI
+		protected override void RealAI()
+		{
+			if(RealNPC.type != Terraria.ID.NPCID.ZombieEskimo)
+			{
+				RemoveFromNPCs();
+			}
+		}
+		#endregion
 	}
 }

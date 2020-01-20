@@ -1423,11 +1423,11 @@ namespace Starvers
 		/// <summary>
 		/// 获取对应Terraria.Player
 		/// </summary>
-		internal Player TPlayer => TSPlayer.TPlayer;
+		public Player TPlayer => TSPlayer.TPlayer;
 		/// <summary>
 		/// 获取对应TSPlayer
 		/// </summary>
-		internal TSPlayer TSPlayer => UserID switch
+		public TSPlayer TSPlayer => UserID switch
 		{
 			-2 => TSPlayer.Server,
 			-1 => TSPlayer.All,

@@ -10,7 +10,7 @@ namespace Starvers.TaskSystem
 	/// 表示是支线当中的哪一部分
 	/// </summary>
 	[Flags]
-	public enum BLFlags : byte
+	public enum BLFlags : int
 	{
 		None = 0,
 		/// <summary>
