@@ -13,14 +13,14 @@ namespace Starvers
     list:   列出任务
     branch: 支线任务";
 		public static string Aura { get; } = @"用法:
-    up:	升级
+    up:    升级
     toexp: 兑换经验
     set <slot> <skill> :设置技能
     list:  查看技能列表
     buy <slot> 获取技能槽位对应的武器
     help <skillName/SkillID> 查看技能说明";
 		public static string LevelSystem { get; } = @"用法:
-    up:	升级
+    up:    升级
     toexp: 兑换经验";
 		public static string Weapon { get; } =
 			"用法错误\n" +

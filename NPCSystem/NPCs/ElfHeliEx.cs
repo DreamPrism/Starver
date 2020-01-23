@@ -61,6 +61,12 @@ namespace Starvers.NPCSystem.NPCs
 		#region AI
 		protected override void RealAI()
 		{
+			if(RealNPC.type != NPCID.ElfCopter)
+			{
+				Starver.NPCs[Index] = NPCs[Index] = null;
+				_active = false;
+				return;
+			}
 			switch (work)
 			{
 				case 0:

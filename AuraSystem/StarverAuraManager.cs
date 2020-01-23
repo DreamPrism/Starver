@@ -137,7 +137,7 @@ namespace Starvers.AuraSystem
 						idx = k + j * column + i * column * line;
 						if (idx < SkillManager.Skills.Length)
 						{
-							SB.Append($"{SkillManager.Skills[idx].Name}	");
+							SB.Append($"{SkillManager.Skills[idx].Name}    ");
 						}
 						else
 						{
@@ -528,7 +528,7 @@ namespace Starvers.AuraSystem
 								}
 							}
 							args.Player.SendErrorMessage("技能名称错误");
-							args.Player.SendErrorMessage("	list:  查看技能列表");
+							args.Player.SendErrorMessage(" list:  查看技能列表");
 							break;
 						}
 						goto default;
@@ -540,11 +540,11 @@ namespace Starvers.AuraSystem
 					player.SendInfoMessage(HelpTexts.Aura);
 					if (player.HasPerm(Perms.Aura.ForceUp))
 					{
-						player.SendInfoMessage("	forceup <levelup>:强制升级");
+						player.SendInfoMessage("    forceup <levelup>:强制升级");
 					}
 					if (player.HasPerm(Perms.Aura.SetLvl))
 					{
-						player.SendInfoMessage("	setlvl <level>:设置等级");
+						player.SendInfoMessage("    setlvl <level>:设置等级");
 					}
 					break;
 					#endregion
