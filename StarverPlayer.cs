@@ -414,7 +414,7 @@ namespace Starvers
 		#region GetUser
 		public static int? GetUserIDByName(string name)
 		{
-			var reader = TShockAPI.DB.DbExt.QueryReader(TShock.DB, "select * from users where Username=@0", name);
+			using var reader = TShockAPI.DB.DbExt.QueryReader(TShock.DB, "select * from users where Username=@0", name);
 			if (reader.Read())
 			{
 				return reader.Get<int?>("ID");
@@ -423,7 +423,7 @@ namespace Starvers
 		}
 		public static string GetUserNameByID(int id)
 		{
-			var reader = TShockAPI.DB.DbExt.QueryReader(TShock.DB, "select * from users where ID=@0", id);
+			using var reader = TShockAPI.DB.DbExt.QueryReader(TShock.DB, "select * from users where ID=@0", id);
 			if (reader.Read())
 			{
 				return reader.Get<string>("Username");
@@ -1530,23 +1530,6 @@ namespace Starvers
 		private static bool CheckTableExist()
 		{
 			return db.GetSchema("Tables").AsEnumerable().Any(value => value.Table.TableName == "Starver");
-		}
-		#endregion
-		#region CreateTableOld
-		private static void CreateTableOld()
-		{
-			var db2 = db.Clone() as MySqlConnection;
-			db2.Open();
-			var creator = new TableCreator(db2);
-			var Table = new SQLTable("Starver",
-				new SQLColumn { Name = "UserID", DataType = MySqlDbType.Int32, Length = 4 },
-				new SQLColumn { Name = "Level", DataType = MySqlDbType.Int32, Length = 4 },
-				new SQLColumn { Name = "Exp", DataType = MySqlDbType.Int32, Length = 4 },
-				new SQLColumn { Name = "TBCodes", DataType = MySqlDbType.Text, Length = 20 },
-				new SQLColumn { Name = "Skills", DataType = MySqlDbType.VarBinary, Length = 30 },
-				new SQLColumn { Name = "Weapons", DataType = MySqlDbType.Text, Length = 80 }
-				);
-			creator.CreateTable(Table);
 		}
 		#endregion
 		#region CreateTable

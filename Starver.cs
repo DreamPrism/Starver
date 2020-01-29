@@ -694,13 +694,17 @@ namespace Starvers
 			try
 			{
 				//Thread.Sleep(2000);
+				if (Players[args.Player.Index]?.Name == args.Player.Name)
+				{
+					return;
+				}
 				Players[args.Player.Index] = null;
 				if (Config.SaveMode == SaveModes.MySQL)
 				{
 					int ID;
 					//由于TrPE的TS里是TSPlayer.Account,所以只能这么做
 					dynamic ply = args.Player;
-					if(!IsPE)
+					if (!IsPE)
 					{
 						ID = ply.User.ID;
 					}
@@ -713,7 +717,7 @@ namespace Starvers
 						Players[args.Player.Index] = StarverPlayer.Read(ID);
 						Players[args.Player.Index].Index = args.Player.Index;
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
 						string msg = e.ToString();
 						StarverPlayer.Server.SendErrorMessage($"玩家{args.Player.Name}({args.Player.Index})Read StarverPlayer失败");
@@ -741,58 +745,76 @@ namespace Starvers
 		#region OnGreet
 		private void OnGreet(GreetPlayerEventArgs args)
 		{
-			TSPlayer player = TShock.Players[args.Who];
-			if (Config.SaveMode == SaveModes.MySQL)
+			if (Players[args.Who]?.Name == TShock.Players[args.Who].Name)
 			{
-				if (player.IsLoggedIn)
+				return;
+			}
+			try
+			{
+				TSPlayer player = TShock.Players[args.Who];
+				if (Config.SaveMode == SaveModes.MySQL)
 				{
-					int ID;
-					dynamic ply = player;
-					if(!IsPE)
+					if (player.IsLoggedIn)
 					{
-						ID = ply.User.ID;
+						int ID;
+						dynamic ply = player;
+						if (!IsPE)
+						{
+							ID = ply.User.ID;
+						}
+						else
+						{
+							ID = ply.Account.ID;
+						}
+						Players[args.Who] ??= StarverPlayer.Read(ID);
+						Players[args.Who].Index = args.Who;
+						Console.WriteLine($"Added:{Players[args.Who].Name}");
+						UpdateForm(Players[args.Who]);
+						if (Config.EnableTestMode && !Players[args.Who].HasPerm(Perms.Test))
+						{
+							Players[args.Who].TSPlayer.Disconnect("当前端口处于测试模式");
+						}
 					}
 					else
 					{
-						ID = ply.Account.ID;
+						Players[args.Who] = StarverPlayer.Guest;
+						Players[args.Who].Index = args.Who;
 					}
-					Players[args.Who] ??= StarverPlayer.Read(ID);
-					Players[args.Who].Index = args.Who;
-					Console.WriteLine($"Added:{Players[args.Who].Name}");
-					UpdateForm(Players[args.Who]);
-					if (Config.EnableTestMode && !Players[args.Who].HasPerm(Perms.Test))
+					if (player.IsLoggedIn && Players[args.Who].Level < Config.LevelNeed && !player.HasPermission(Perms.Test))
 					{
-						Players[args.Who].TSPlayer.Disconnect("当前端口处于测试模式");
+						player.Disconnect($"你的等级不足,该处需要至少{Config.LevelNeed}级");
 					}
+
 				}
 				else
 				{
-					Players[args.Who] = StarverPlayer.Guest;
-					Players[args.Who].Index = args.Who;
+					string Name;
+					dynamic ply = TShock.Players[args.Who];
+					try
+					{
+						Name = ply.User.Name;
+					}
+					catch
+					{
+						Name = ply.Account.Name;
+					}
+					Players[args.Who] = StarverPlayer.Read(Name);
 				}
-				if (player.IsLoggedIn && Players[args.Who].Level < Config.LevelNeed && !player.HasPermission(Perms.Test))
-				{
-					player.Disconnect($"你的等级不足,该处需要至少{Config.LevelNeed}级");
-				}
-
-			}
-			else
-			{
-				string Name;
-				dynamic ply = TShock.Players[args.Who];
-				try
-				{
-					Name = ply.User.Name;
-				}
-				catch
-				{
-					Name = ply.Account.Name;
-				}
-				Players[args.Who] ??= StarverPlayer.Read(Name);
-			}
 #if DEBUG
 			Players[args.Who].ShowInfos();
 #endif
+			}
+			catch (Exception e)
+			{
+				try
+				{
+					TShock.Players[args.Who].Disconnect(e.ToString());
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.ToString());
+				}
+			}
 		}
 		#endregion
 		#region OnLeave
