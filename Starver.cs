@@ -479,7 +479,14 @@ namespace Starvers
 				{
 					Vector knockback = (Vector)(args.Npc.Center - player.Center);
 					knockback.Length = args.KnockBack * RealNPC.knockBackResist;
-					knockback *= Math.Min(Math.Max(player.Level - NPCLevel, 0), 10);
+					if (player.Level - NPCLevel > 0)
+					{
+						knockback *= (float)Math.Log10(Math.Min(Math.Max(player.Level - NPCLevel, 0), 10));
+					}
+					else
+					{
+						knockback /= (float)Math.Log10(Math.Min(Math.Max(NPCLevel - player.Level, 0), 10));
+					}
 					RealNPC.velocity += knockback;
 					if (!(snpc is null))
 					{
@@ -489,7 +496,6 @@ namespace Starvers
 					{
 						NetMessage.SendData((int)PacketTypes.NpcUpdate, -1, -1, null, RealNPC.whoAmI);
 					}
-
 				}
 				snpc?.OnStrike(realdamage, args.KnockBack, player);
 				TheBoss?.OnStrike(realdamage, args.KnockBack, player);

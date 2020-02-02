@@ -1330,7 +1330,7 @@ namespace Starvers
 					exp = value;
 					return;
 				}
-				if (Temp)
+				if (Temp || Level < 100)
 				{
 					exp = value;
 					return;
