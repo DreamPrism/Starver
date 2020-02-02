@@ -177,8 +177,8 @@ namespace Starvers
 					FileInfo[] files = Starver.PlayerFolder.GetFiles("*.json");
 					foreach (var file in files)
 					{
-						StarverPlayer player = StarverPlayer.Read(file.Name);
-						level += player.Level;
+						var data = JsonConvert.DeserializeObject<StarverPlayer.PlayerData>(File.ReadAllText(file.FullName));
+						level += data.Level;
 						num++;
 					}
 				}

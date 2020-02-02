@@ -696,29 +696,26 @@ namespace Starvers
 			player.MP = (player.MaxMP = player.level / 3 + 100) / 2;
 			return player;
 		}
-		public static StarverPlayer Read(string Name, bool suffixed = false)
+		public static StarverPlayer Read(int who, string Name)
 		{
-			StarverPlayer player = new StarverPlayer();
-			string tmp = SavePath + "//" + Name;
-			if (!suffixed)
-			{
-				tmp += ".json";
-			}
+			StarverPlayer player;
+			string tmp = SavePath + "//" + Name + ".json";
 			if (File.Exists(tmp))
 			{
-				player = JsonConvert.DeserializeObject<StarverPlayer>(File.ReadAllText(tmp));
+				player = FromJson(who, File.ReadAllText(tmp));
 #if DEBUG
 				TSPlayer.Server.SendInfoMessage("Name:{0}", player.Name);
 #endif
 			}
 			else
 			{
-				player.Name = Name;
+				player = new StarverPlayer
+				{
+					Index = who,
+					Name = Name
+				};
 			}
-			if (!suffixed)
-			{
-				player.Name = Name;
-			}
+			player.Name = Name;
 			player.MP = (player.MaxMP = player.level / 3 + 100) / 2;
 			return player;
 		}
@@ -765,12 +762,12 @@ namespace Starvers
 		/// </summary>
 		public void Save()
 		{
-			if (UserID == -1 || IsServer || IsGuest)
-			{
-				return;
-			}
 			if (SaveMode == SaveModes.MySQL)
 			{
+				if (UserID == -1 || IsServer || IsGuest)
+				{
+					return;
+				}
 				string wps = JsonConvert.SerializeObject(Weapon);
 				string skills = JsonConvert.SerializeObject(Skills);
 				db.Excute("UPDATE Starver SET Weapons=@0 WHERE UserID=@1;", wps, UserID);
@@ -781,7 +778,7 @@ namespace Starvers
 			}
 			else
 			{
-				File.WriteAllText(SavePath + "//" + Name + ".json", JsonConvert.SerializeObject(this, Formatting.Indented));
+				File.WriteAllText(SavePath + "//" + Name + ".json", ToJson());
 			}
 		}
 		#endregion
@@ -791,21 +788,59 @@ namespace Starvers
 		/// </summary>
 		public void Reload()
 		{
-			StarverPlayer tempplayer;
 			if (SaveMode == SaveModes.MySQL)
 			{
-				tempplayer = Read(UserID);
+				StarverPlayer tempplayer = Read(UserID);
+				level = tempplayer.level;
+				Skills = tempplayer.Skills;
+				Exp = tempplayer.Exp;
+				Weapon = tempplayer.Weapon;
+				BLdata = tempplayer.BLdata;
 			}
 			else
 			{
-				tempplayer = Read(Name);
+				PlayerData data = ReadData();
+				Level = data.Level;
+				exp = data.Exp;
+				for (int i = 0; i < Skills.Length; i++)
+				{
+					Skills[i] = data.Skills[i];
+				}
+				bldata = BLData.Deserialize(data.BLDatas);
 			}
-			level = tempplayer.level;
-			Skills = tempplayer.Skills;
-			Exp = tempplayer.Exp;
-			Weapon = tempplayer.Weapon;
-			BLdata = tempplayer.BLdata;
 			Save();
+		}
+		#endregion
+		#region FromJson
+		private static StarverPlayer FromJson(int who, string text)
+		{
+			var player = new StarverPlayer();
+			player.Index = who;
+			var data = JsonConvert.DeserializeObject<PlayerData>(text);
+			player.exp = data.Exp;
+			player.Level = data.Level;
+			player.Skills = data.Skills.Clone() as int[];
+			player.bldata = BLData.Deserialize(data.BLDatas);
+			player.MaxMP = data.MaxMP;
+			return player;
+		}
+		private PlayerData ReadData()
+		{
+			string path = SavePath + "//" + Name + ".json";
+			PlayerData data = JsonConvert.DeserializeObject<PlayerData>(File.ReadAllText(path));
+			return data;
+		}
+		#endregion
+		#region ToJson
+		private string ToJson()
+		{
+			var data = new PlayerData();
+			data.Level = level;
+			data.Exp = exp;
+			data.Skills = Skills;
+			data.BLDatas = BLData.Serialize(bldata);
+			data.MaxMP = MaxMP;
+			return JsonConvert.SerializeObject(data);
 		}
 		#endregion
 		#endregion
@@ -1260,8 +1295,10 @@ namespace Starvers
 		public bool Temp { get; set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public BranchTask BranchTask { get; set; }
+		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public int AvalonGradation { get; set; }
 		public string Name { get; set; }
+		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		/// <summary>
 		/// 上一次捕获到释放技能
 		/// </summary>
@@ -1275,7 +1312,9 @@ namespace Starvers
 		/// </summary>
 		public bool Active => TPlayer.active && !TPlayer.dead;
 		public bool Dead => TPlayer.dead;
+		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public bool IgnoreCD { get; set; }
+		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public bool ForceIgnoreCD { get; set; }
 		public bool IsGuest => UserID == -3;
 		/// <summary>
@@ -1571,5 +1610,13 @@ namespace Starvers
 
 		#endregion
 		#endregion
+		public class PlayerData
+		{
+			public int Level { get; set; }
+			public int Exp { get; set; }
+			public int[] Skills { get; set; }
+			public byte[] BLDatas { get; set; }
+			public int MaxMP { get; set; }
+		}
 	}
 }

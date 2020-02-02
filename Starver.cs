@@ -226,7 +226,7 @@ namespace Starvers
 			}
 			{
 				ServerApi.Hooks.GameUpdate.Register(this, OnUpdate);
-				ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreet);
+				ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreet, 0);
 				ServerApi.Hooks.ServerLeave.Register(this, OnLeave);
 				ServerApi.Hooks.NetGetData.Register(this, OnGetData);
 				ServerApi.Hooks.NetSendData.Register(this, OnSendData);
@@ -732,6 +732,20 @@ namespace Starvers
 					}
 					UpdateForm(Players[args.Player.Index]);
 				}
+				else
+				{
+					string Name;
+					dynamic ply = args.Player;
+					if (!IsPE)
+					{
+						Name = ply.User.Name;
+					}
+					else
+					{
+						Name = ply.Account.Name;
+					}
+					Players[args.Player.Index] = StarverPlayer.Read(args.Player.Index, Name);
+				}
 				if (Players[args.Player.Index].Level < Config.LevelNeed && !Players[args.Player.Index].HasPerm(Perms.Test))
 				{
 					Players[args.Player.Index].Kick($"你的等级不足,该端口要求玩家最低等级为{Config.LevelNeed}", true);
@@ -794,17 +808,20 @@ namespace Starvers
 				}
 				else
 				{
-					string Name;
-					dynamic ply = TShock.Players[args.Who];
-					try
+					if (player.IsLoggedIn)
 					{
-						Name = ply.User.Name;
+						string Name;
+						dynamic ply = TShock.Players[args.Who];
+						if (!IsPE)
+						{
+							Name = ply.User.Name;
+						}
+						else
+						{
+							Name = ply.Account.Name;
+						}
+						Players[args.Who] = StarverPlayer.Read(args.Who, Name);
 					}
-					catch
-					{
-						Name = ply.Account.Name;
-					}
-					Players[args.Who] = StarverPlayer.Read(Name);
 				}
 #if DEBUG
 			Players[args.Who].ShowInfos();
