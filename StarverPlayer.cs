@@ -1433,9 +1433,6 @@ namespace Starvers
 			-1 => TSPlayer.All,
 			_ => TShock.Players[Index]
 		};
-		/// <summary>
-		/// 支线任务使用,暂时没用
-		/// </summary>
 		private int level = StarverConfig.Config.DefaultLevel;
 		#endregion
 		#region Privates
