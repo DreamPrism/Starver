@@ -233,7 +233,10 @@ namespace Starvers.NPCSystem
 					return;
 				}
 			}
-			SendData();
+			if (Index != -1)
+			{
+				SendData();
+			}
 			++Timer;
 		}
 		#endregion
