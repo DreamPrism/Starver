@@ -235,7 +235,7 @@ namespace Starvers.NPCSystem
 			}
 			if (Index != -1)
 			{
-				SendData();
+				SendData(); //
 			}
 			++Timer;
 		}
